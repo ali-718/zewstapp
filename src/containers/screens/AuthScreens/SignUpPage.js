@@ -1,21 +1,32 @@
 import React, { useState } from "react";
 import { TouchableOpacity, View } from "react-native";
-import { Input } from "../../components/Inputs/Input";
-import { AuthScreenContainer } from "../AuthScreenContainer";
+import { Input } from "../../../components/Inputs/Input";
+import { AuthScreenContainer } from "../../AuthScreenContainer";
 import { MaterialIcons } from "@expo/vector-icons";
-import { Text } from "../../components/Text/Text";
-import { primaryColor, primaryShade1, primaryShade2 } from "../../theme/colors";
-import { PasswordInput } from "../../components/Inputs/PasswordInput";
-import { RoundButton } from "../../components/Buttons/RoundButton";
+import { Text } from "../../../components/Text/Text";
+import { primaryColor } from "../../../theme/colors";
+import { PasswordInput } from "../../../components/Inputs/PasswordInput";
+import { RegularButton } from "../../../components/Buttons/RegularButton";
 
-export const SignUpPage = () => {
+export const SignUpPage = (props) => {
   const [selectedType, setSelectedType] = useState("");
+  const [resturantName, setResturantName] = useState("");
+  const [location, setLocation] = useState("");
+  const [name, setName] = useState("");
+  const [contact, setContact] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   return (
     <AuthScreenContainer title={"Sign Up"}>
       <View style={{ width: "90%", marginVertical: 20, marginBottom: 40 }}>
         <View style={{ width: "100%" }}>
-          <Input placeholder={"Resturant name*"} />
+          <Input
+            value={resturantName}
+            onChangeText={(val) => setResturantName(val)}
+            placeholder={"Resturant name*"}
+          />
         </View>
 
         <View style={{ width: "100%", marginTop: 20 }}>
@@ -23,6 +34,8 @@ export const SignUpPage = () => {
             placeholder={"Resturant location*"}
             iconName={"my-location"}
             iconType={MaterialIcons}
+            value={location}
+            onChangeText={(val) => setLocation(val)}
           />
         </View>
 
@@ -120,33 +133,54 @@ export const SignUpPage = () => {
         </View>
 
         <View style={{ width: "100%", marginTop: 20 }}>
-          <Input placeholder={"Your full name*"} />
+          <Input
+            value={name}
+            onChangeText={(val) => setName(val)}
+            placeholder={"Your full name*"}
+          />
         </View>
 
         <View style={{ width: "100%", marginTop: 20 }}>
-          <Input keyboardType={"number-pad"} placeholder={"Contact number*"} />
+          <Input
+            value={contact}
+            onChangeText={(val) => setContact(val)}
+            keyboardType={"number-pad"}
+            placeholder={"Contact number*"}
+          />
         </View>
 
         <View style={{ width: "100%", marginTop: 20 }}>
           <Input
             keyboardType={"email-address"}
             placeholder={"Email address*"}
+            value={email}
+            onChangeText={(val) => setEmail(val)}
           />
         </View>
 
         <View style={{ width: "100%", marginTop: 20 }}>
-          <PasswordInput placeholder={"Password*"} />
+          <PasswordInput
+            value={password}
+            onChangeText={(val) => setPassword(val)}
+            placeholder={"Password*"}
+          />
         </View>
 
         <View style={{ width: "100%", marginTop: 20 }}>
-          <PasswordInput placeholder={"Confirm Password*"} />
+          <PasswordInput
+            value={confirmPassword}
+            onChangeText={(val) => setConfirmPassword(val)}
+            placeholder={"Confirm Password*"}
+          />
         </View>
 
         <View style={{ width: "100%", marginTop: 20 }}>
-          <RoundButton
+          <RegularButton
+            onPress={() =>
+              props.navigation.navigate("Verification", { phone: contact })
+            }
             text={"Sign up"}
-            style={{ backgroundColor: primaryColor }}
-            textStyle={{ color: "white" }}
+            style={{ borderRadius: 50 }}
           />
         </View>
       </View>

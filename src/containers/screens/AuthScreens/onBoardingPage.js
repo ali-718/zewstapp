@@ -1,17 +1,17 @@
 import React, { useState } from "react";
 import { View, Image, TouchableOpacity } from "react-native";
 import Carousel, { Pagination } from "react-native-snap-carousel";
-import { carouselData, WIDTH } from "../../helpers/utlils";
+import { carouselData, WIDTH } from "../../../helpers/utlils";
 import {
   primaryColor,
   primaryShade1,
   primaryShade2,
   textColor,
-} from "../../theme/colors";
-import logo from "../../assets/images/logoWhite.png";
+} from "../../../theme/colors";
+import logo from "../../../assets/images/logoWhite.png";
 import { LinearGradient } from "expo-linear-gradient";
 import { useNavigation } from "@react-navigation/native";
-import { Text } from "../../components/Text/Text";
+import { Text } from "../../../components/Text/Text";
 
 export const OnBoardingPage = () => {
   const navigation = useNavigation();
@@ -131,6 +131,7 @@ export const OnBoardingPage = () => {
             justifyContent: "center",
             backgroundColor: "white",
           }}
+          onPress={() => navigation.navigate("Signup")}
         >
           <Text
             style={{
@@ -151,6 +152,7 @@ export const OnBoardingPage = () => {
             justifyContent: "center",
             backgroundColor: "white",
           }}
+          onPress={() => navigation.navigate("Login")}
         >
           <Text
             style={{

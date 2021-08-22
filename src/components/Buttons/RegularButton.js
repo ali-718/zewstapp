@@ -1,7 +1,8 @@
 import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
-import { Text, TouchableOpacity } from "react-native";
+import { TouchableOpacity } from "react-native";
 import { primaryColor, primaryShade1 } from "../../theme/colors";
+import { Text } from "../Text/Text";
 
 export const RegularButton = ({ text, style, textStyle, colors, ...props }) => {
   return (
@@ -32,6 +33,7 @@ export const RegularButton = ({ text, style, textStyle, colors, ...props }) => {
             color: "white",
             fontWeight: "bold",
             fontSize: 20,
+            fontFamily: "openSans_bold",
             ...textStyle,
           }}
         >

@@ -1,11 +1,19 @@
 import React, { useState } from "react";
-import { View, TextInput } from "react-native";
+import { View, TextInput, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { Icon } from "native-base";
 import { primaryColor } from "../../theme/colors";
 import { Text } from "../Text/Text";
 
-export const Input = ({ placeholder, iconName, iconType, ...props }) => {
+export const Input = ({
+  placeholder,
+  iconName,
+  iconType,
+  value,
+  onChangeText,
+  onIconClick = () => null,
+  ...props
+}) => {
   const [isFocused, setIsFocused] = useState(false);
 
   return (
@@ -35,16 +43,26 @@ export const Input = ({ placeholder, iconName, iconType, ...props }) => {
           placeholder={isFocused ? "" : placeholder}
           placeholderTextColor={"gray"}
           onFocus={() => setIsFocused(true)}
+          value={value}
+          onChangeText={(val) => {
+            onChangeText(val);
+            if (val.length === 0) {
+              setIsFocused(false);
+              return;
+            }
+            setIsFocused(true);
+          }}
           {...props}
         />
       </View>
-      <View
+      <TouchableOpacity
         style={{
           width: "10%",
           flex: 1,
           alignItems: "center",
           justifyContent: "center",
         }}
+        onPress={onIconClick}
       >
         {iconName && (
           <Icon
@@ -53,7 +71,7 @@ export const Input = ({ placeholder, iconName, iconType, ...props }) => {
             style={{ fontSize: 20, color: primaryColor }}
           />
         )}
-      </View>
+      </TouchableOpacity>
     </View>
   );
 };
