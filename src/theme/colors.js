@@ -1,0 +1,11 @@
+export const darkPurple = "#231d54";
+export const purple = "#8100ff";
+export const lightPurple = "#9388db";
+export const lightGrayPurple = "#f7f7fb";
+export const pink = "#ff3d69";
+export const gray = "#797777";
+export const primaryColor = "#a284bf";
+export const primaryShade1 = "#745b8c";
+export const primaryShade2 = "#D2BAE9";
+export const textColor = "#5E4872";
+export const grayColor = "#ececec";
