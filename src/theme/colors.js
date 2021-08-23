@@ -12,3 +12,4 @@ export const textColor = "#5E4872";
 export const grayColor = "#ececec";
 export const grayShade1 = "#F7F7F7";
 export const grayTextColor = "#666666";
+export const grayMenuText = "#4d4d4d";

@@ -12,6 +12,9 @@ export const Input = ({
   value,
   onChangeText,
   onIconClick = () => null,
+  iconStyle,
+  inputStyle,
+  style,
   ...props
 }) => {
   const [isFocused, setIsFocused] = useState(false);
@@ -27,6 +30,7 @@ export const Input = ({
         justifyContent: "center",
         alignItems: "center",
         flexDirection: "row",
+        ...style,
       }}
     >
       <View
@@ -39,7 +43,7 @@ export const Input = ({
         )}
 
         <TextInput
-          style={{ width: "100%", fontSize: 16 }}
+          style={{ width: "100%", fontSize: 16, ...inputStyle }}
           placeholder={isFocused ? "" : placeholder}
           placeholderTextColor={"gray"}
           onFocus={() => setIsFocused(true)}
@@ -68,7 +72,7 @@ export const Input = ({
           <Icon
             name={iconName}
             as={iconType || Ionicons}
-            style={{ fontSize: 20, color: primaryColor }}
+            style={{ fontSize: 20, color: primaryColor, ...iconStyle }}
           />
         )}
       </TouchableOpacity>
