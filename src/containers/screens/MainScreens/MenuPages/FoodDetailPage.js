@@ -1,14 +1,17 @@
 import React, { useState } from "react";
-import { View, Image, TouchableOpacity } from "react-native";
+import { View, Image, TouchableOpacity, FlatList } from "react-native";
 import { MainScreenContainer } from "../../../MainScreenContainers";
 import leftImage from "../../../../assets/images/backIcon.png";
 import rightImage from "../../../../assets/images/editIcon.png";
 import dollarBill from "../../../../assets/images/dollarBill.png";
 import switchOn from "../../../../assets/images/switchOn.png";
 import switchOff from "../../../../assets/images/switchOff.png";
+import check from "../../../../assets/images/check.png";
+import dash from "../../../../assets/images/dash.png";
 import placeholder from "../../../../assets/images/placeholderImage.jpeg";
 import { Text } from "../../../../components/Text/Text";
 import { grayTextColor, primaryColor } from "../../../../theme/colors";
+import { IconBox } from "../../../../components/IconBox/IconBox";
 
 export const FoodDetailPage = ({ changeAvailability, ...props }) => {
   const { image, name, available: av, desc } = props.route.params.item;
@@ -322,6 +325,187 @@ export const FoodDetailPage = ({ changeAvailability, ...props }) => {
                     Since May 4, 2021
                   </Text>
                 </View>
+              </View>
+            </View>
+
+            <View
+              style={{
+                width: "100%",
+                marginTop: 10,
+                backgroundColor: "white",
+                borderRadius: 10,
+                padding: 10,
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "space-around",
+              }}
+            >
+              <View style={{ alignItems: "center" }}>
+                <Text style={{ color: "black" }}>M</Text>
+
+                <Image
+                  source={check}
+                  style={{
+                    width: 15,
+                    height: 15,
+                    resizeMode: "contain",
+                    marginTop: 10,
+                  }}
+                />
+              </View>
+
+              <View style={{ alignItems: "center" }}>
+                <Text style={{ color: "black" }}>T</Text>
+
+                <Image
+                  source={check}
+                  style={{
+                    width: 15,
+                    height: 15,
+                    resizeMode: "contain",
+                    marginTop: 10,
+                  }}
+                />
+              </View>
+
+              <View style={{ alignItems: "center" }}>
+                <Text style={{ color: "black" }}>W</Text>
+
+                <Image
+                  source={dash}
+                  style={{
+                    width: 15,
+                    height: 15,
+                    resizeMode: "contain",
+                    marginTop: 10,
+                  }}
+                />
+              </View>
+
+              <View style={{ alignItems: "center" }}>
+                <Text style={{ color: "black" }}>T</Text>
+
+                <Image
+                  source={dash}
+                  style={{
+                    width: 15,
+                    height: 15,
+                    resizeMode: "contain",
+                    marginTop: 10,
+                  }}
+                />
+              </View>
+
+              <View style={{ alignItems: "center" }}>
+                <Text style={{ color: "black" }}>F</Text>
+
+                <Image
+                  source={check}
+                  style={{
+                    width: 15,
+                    height: 15,
+                    resizeMode: "contain",
+                    marginTop: 10,
+                  }}
+                />
+              </View>
+
+              <View style={{ alignItems: "center" }}>
+                <Text style={{ color: "black" }}>S</Text>
+
+                <Image
+                  source={check}
+                  style={{
+                    width: 15,
+                    height: 15,
+                    resizeMode: "contain",
+                    marginTop: 10,
+                  }}
+                />
+              </View>
+
+              <View style={{ alignItems: "center" }}>
+                <Text style={{ color: "black" }}>S</Text>
+
+                <Image
+                  source={check}
+                  style={{
+                    width: 15,
+                    height: 15,
+                    resizeMode: "contain",
+                    marginTop: 10,
+                  }}
+                />
+              </View>
+            </View>
+
+            <View style={{ width: "100%", marginTop: 20 }}>
+              <Text
+                style={{
+                  color: grayTextColor,
+                  fontSize: 16,
+                  textTransform: "uppercase",
+                  fontFamily: "openSans_bold",
+                  marginLeft: 5,
+                }}
+              >
+                Categories
+              </Text>
+
+              <View
+                style={{
+                  width: "100%",
+                  marginTop: 10,
+                  backgroundColor: "white",
+                  borderRadius: 10,
+                  padding: 10,
+                  paddingHorizontal: 20,
+                }}
+              >
+                <FlatList
+                  data={["Vegeterian", "Baked"]}
+                  numColumns={2}
+                  keyExtractor={(val) => val}
+                  renderItem={({ item }, i) => (
+                    <IconBox type={"categories"} text={item} />
+                  )}
+                  columnWrapperStyle={{ justifyContent: "space-between" }}
+                />
+              </View>
+            </View>
+
+            <View style={{ width: "100%", marginTop: 20 }}>
+              <Text
+                style={{
+                  color: grayTextColor,
+                  fontSize: 16,
+                  textTransform: "uppercase",
+                  fontFamily: "openSans_bold",
+                  marginLeft: 5,
+                }}
+              >
+                Allergens
+              </Text>
+
+              <View
+                style={{
+                  width: "100%",
+                  marginTop: 10,
+                  backgroundColor: "white",
+                  borderRadius: 10,
+                  padding: 10,
+                  paddingHorizontal: 20,
+                }}
+              >
+                <FlatList
+                  data={["Lactose", "Gluten"]}
+                  numColumns={2}
+                  keyExtractor={(val) => val}
+                  renderItem={({ item }, i) => (
+                    <IconBox type={"allergens"} text={item} />
+                  )}
+                  columnWrapperStyle={{ justifyContent: "space-between" }}
+                />
               </View>
             </View>
           </View>

@@ -7,7 +7,7 @@ import { BottomTabs } from "./components/BottomTabs/BottomTabs";
 const Stack = createNativeStackNavigator();
 
 export const TabRoutes = () => {
-  const [selected, setselected] = useState(0);
+  const [selected, setselected] = useState(3);
 
   return (
     <View style={{ width: "100%", flex: 1 }}>

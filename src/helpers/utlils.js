@@ -5,6 +5,10 @@ import food3 from "../assets/images/food3.png";
 import food4 from "../assets/images/food4.png";
 import food5 from "../assets/images/food5.png";
 import food6 from "../assets/images/food6.png";
+import vegeterian from "../assets/images/categories/vegeterian.png";
+import baked from "../assets/images/categories/baked.png";
+import lactose from "../assets/images/categories/lactose.png";
+import gluten from "../assets/images/categories/gluten.png";
 
 export const WIDTH = Dimensions.get("window").width;
 
@@ -70,4 +74,14 @@ export const MapStyle = [
       },
     ],
   },
+];
+
+export const categories = [
+  { name: "vegeterian", icon: vegeterian },
+  { name: "baked", icon: baked },
+];
+
+export const allergens = [
+  { name: "lactose", icon: lactose },
+  { name: "gluten", icon: gluten },
 ];
