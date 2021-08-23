@@ -120,7 +120,7 @@ export const BottomTabs = ({ selected, setselected }) => {
           </LinearGradient>
         </View>
         <Text style={{ fontSize: 10, color: grayMenuText, marginTop: 10 }}>
-          Insights
+          Scan QR
         </Text>
       </TouchableOpacity>
 

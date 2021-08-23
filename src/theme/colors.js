@@ -11,5 +11,6 @@ export const primaryShade3 = "#8B6FA5";
 export const textColor = "#5E4872";
 export const grayColor = "#ececec";
 export const grayShade1 = "#F7F7F7";
+export const grayShade2 = "#E5E5E5";
 export const grayTextColor = "#666666";
 export const grayMenuText = "#4d4d4d";
