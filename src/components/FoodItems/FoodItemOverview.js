@@ -17,54 +17,159 @@ export const FoodOverview = ({
   available,
   isEdit,
   onClickAvailable,
-}) => (
-  <View
-    style={{
-      width: "100%",
-      borderRadius: 10,
-      backgroundColor: "white",
-      marginTop: 2,
-      opacity: available ? 1 : 0.6,
-    }}
-  >
-    <TouchableOpacity
+  onPress,
+}) => {
+  return (
+    <View
       style={{
         width: "100%",
-        flexDirection: "row",
-        justifyContent: "space-between",
-        padding: 10,
+        borderRadius: 10,
+        backgroundColor: "white",
+        marginTop: 2,
+        opacity: available ? 1 : 0.6,
       }}
     >
-      <Image
+      <TouchableOpacity
         style={{
-          width: 50,
-          height: 50,
-          borderRadius: 100,
+          width: "100%",
+          flexDirection: "row",
+          justifyContent: "space-between",
+          padding: 10,
         }}
-        source={image}
-      />
-
-      <View style={{ flex: 1, marginLeft: 10 }}>
-        <View
+        onPress={onPress}
+      >
+        <Image
           style={{
-            width: "100%",
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "space-between",
+            width: 50,
+            height: 50,
+            borderRadius: 100,
           }}
-        >
-          <Text
-            numberOfLines={1}
+          source={image}
+        />
+
+        <View style={{ flex: 1, marginLeft: 10 }}>
+          <View
             style={{
-              flex: 0.9,
-              fontSize: 18,
-              fontFamily: "openSans_bold",
+              width: "100%",
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-between",
             }}
           >
-            {name}
-          </Text>
+            <Text
+              numberOfLines={1}
+              style={{
+                flex: 0.9,
+                fontSize: 18,
+                fontFamily: "openSans_bold",
+              }}
+            >
+              {name}
+            </Text>
 
-          {!isEdit && (
+            {!isEdit && (
+              <View
+                style={{
+                  paddingVertical: 3,
+                  paddingHorizontal: 5,
+                  borderColor: available ? primaryColor : grayTextColor,
+                  borderWidth: 1,
+                  borderRadius: 50,
+                }}
+              >
+                <Text
+                  style={{
+                    color: available ? primaryColor : grayTextColor,
+                    fontSize: 12,
+                    fontFamily: "openSans_semiBold",
+                  }}
+                >
+                  {available ? "Available" : "Hidden"}
+                </Text>
+              </View>
+            )}
+          </View>
+
+          <View style={{ width: "100%", marginTop: 5 }}>
+            <Text
+              numberOfLines={1}
+              style={{ fontSize: 14, color: grayTextColor }}
+            >
+              {desc}
+            </Text>
+          </View>
+
+          <View
+            style={{
+              width: "100%",
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-between",
+              marginTop: 5,
+            }}
+          >
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
+                <Image
+                  style={{ width: 15, height: 20, resizeMode: "contain" }}
+                  source={dollarIcon}
+                />
+                {!isEdit && (
+                  <Text style={{ color: "black", marginLeft: 5 }}>Cost</Text>
+                )}
+              </View>
+
+              <Text
+                style={{
+                  color: "black",
+                  marginLeft: 10,
+                  fontFamily: "openSans_bold",
+                }}
+              >
+                ${cost}
+              </Text>
+            </View>
+
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "center",
+                marginRight: 10,
+              }}
+            >
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
+                <Image
+                  style={{ width: 15, height: 20, resizeMode: "contain" }}
+                  source={walletIcon}
+                />
+
+                {!isEdit && (
+                  <Text style={{ color: "black", marginLeft: 5 }}>Savings</Text>
+                )}
+              </View>
+
+              <Text
+                style={{
+                  color: "black",
+                  marginLeft: 10,
+                  fontFamily: "openSans_bold",
+                }}
+              >
+                ${savings}
+              </Text>
+            </View>
+          </View>
+        </View>
+
+        {isEdit && (
+          <View style={{ width: "30%" }}>
             <View
               style={{
                 paddingVertical: 3,
@@ -72,6 +177,8 @@ export const FoodOverview = ({
                 borderColor: available ? primaryColor : grayTextColor,
                 borderWidth: 1,
                 borderRadius: 50,
+                alignItems: "center",
+                justifyContent: "center",
               }}
             >
               <Text
@@ -84,146 +191,43 @@ export const FoodOverview = ({
                 {available ? "Available" : "Hidden"}
               </Text>
             </View>
-          )}
-        </View>
 
-        <View style={{ width: "100%", marginTop: 5 }}>
-          <Text
-            numberOfLines={1}
-            style={{ fontSize: 14, color: grayTextColor }}
-          >
-            {desc}
-          </Text>
-        </View>
+            <View
+              style={{
+                width: "100%",
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "space-between",
+                marginTop: 20,
+              }}
+            >
+              <TouchableOpacity>
+                <Image
+                  source={deleteIcon}
+                  style={{
+                    width: 15,
+                    height: 20,
+                    marginLeft: 5,
+                    resizeMode: "contain",
+                  }}
+                />
+              </TouchableOpacity>
 
-        <View
-          style={{
-            width: "100%",
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "space-between",
-            marginTop: 5,
-          }}
-        >
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <Image
-                style={{ width: 15, height: 20, resizeMode: "contain" }}
-                source={dollarIcon}
-              />
-              {!isEdit && (
-                <Text style={{ color: "black", marginLeft: 5 }}>Cost</Text>
-              )}
+              <TouchableOpacity onPress={onClickAvailable}>
+                <Image
+                  source={available ? switchOn : switchOff}
+                  style={{
+                    width: 40,
+                    height: 30,
+                    marginRight: 5,
+                    resizeMode: "contain",
+                  }}
+                />
+              </TouchableOpacity>
             </View>
-
-            <Text
-              style={{
-                color: "black",
-                marginLeft: 10,
-                fontFamily: "openSans_bold",
-              }}
-            >
-              ${cost}
-            </Text>
           </View>
-
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "center",
-              marginRight: 10,
-            }}
-          >
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <Image
-                style={{ width: 15, height: 20, resizeMode: "contain" }}
-                source={walletIcon}
-              />
-
-              {!isEdit && (
-                <Text style={{ color: "black", marginLeft: 5 }}>Savings</Text>
-              )}
-            </View>
-
-            <Text
-              style={{
-                color: "black",
-                marginLeft: 10,
-                fontFamily: "openSans_bold",
-              }}
-            >
-              ${savings}
-            </Text>
-          </View>
-        </View>
-      </View>
-
-      {isEdit && (
-        <View style={{ width: "30%" }}>
-          <View
-            style={{
-              paddingVertical: 3,
-              paddingHorizontal: 5,
-              borderColor: available ? primaryColor : grayTextColor,
-              borderWidth: 1,
-              borderRadius: 50,
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <Text
-              style={{
-                color: available ? primaryColor : grayTextColor,
-                fontSize: 12,
-                fontFamily: "openSans_semiBold",
-              }}
-            >
-              {available ? "Available" : "Hidden"}
-            </Text>
-          </View>
-
-          <View
-            style={{
-              width: "100%",
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "space-between",
-              marginTop: 20,
-            }}
-          >
-            <TouchableOpacity>
-              <Image
-                source={deleteIcon}
-                style={{
-                  width: 15,
-                  height: 20,
-                  marginLeft: 5,
-                  resizeMode: "contain",
-                }}
-              />
-            </TouchableOpacity>
-
-            <TouchableOpacity onPress={onClickAvailable}>
-              <Image
-                source={available ? switchOn : switchOff}
-                style={{
-                  width: 40,
-                  height: 30,
-                  marginRight: 5,
-                  resizeMode: "contain",
-                }}
-              />
-            </TouchableOpacity>
-          </View>
-        </View>
-      )}
-    </TouchableOpacity>
-  </View>
-);
+        )}
+      </TouchableOpacity>
+    </View>
+  );
+};

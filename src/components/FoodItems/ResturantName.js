@@ -1,56 +1,17 @@
 import { Icon } from "native-base";
 import React, { useState } from "react";
-import { Image, TouchableOpacity, View } from "react-native";
-import { Text } from "../../../components/Text/Text";
-import {
-  grayShade1,
-  grayShade2,
-  grayTextColor,
-  primaryColor,
-  primaryShade1,
-} from "../../../theme/colors";
-import { MainScreenContainer } from "../../MainScreenContainers";
+import { TouchableOpacity, View } from "react-native";
+import { Text } from "../../components/Text/Text";
+import { grayShade1, grayTextColor, primaryShade1 } from "../../theme/colors";
 import { MaterialIcons } from "@expo/vector-icons";
-import { Input } from "../../../components/Inputs/Input";
-import food1 from "../../../assets/images/food3.png";
-import dollarIcon from "../../../assets/images/dollarIcon.png";
-import walletIcon from "../../../assets/images/walletIcon.png";
-import switchOn from "../../../assets/images/switchOn.png";
-import switchOff from "../../../assets/images/switchOff.png";
-import deleteIcon from "../../../assets/images/deleteIcon.png";
-import noMealAdded from "../../../assets/images/noMealAdded.png";
-import magnifier from "../../../assets/images/magnifier.png";
-import { NoMealBox } from "../../../components/NoMealBox/NoMealBox";
-import { FoodOverview } from "../../../components/FoodItems/FoodItemOverview";
+import { Input } from "../../components/Inputs/Input";
+import noMealAdded from "../../assets/images/noMealAdded.png";
+import magnifier from "../../assets/images/magnifier.png";
+import { NoMealBox } from "../../components/NoMealBox/NoMealBox";
+import { FoodOverview } from "../../components/FoodItems/FoodItemOverview";
+import { useNavigation } from "@react-navigation/native";
 
-const dummyData = [
-  {
-    name: "Grilled Chicken & Vegetable",
-    desc: "Chicken topped with asparagus and mozarella",
-    image: food1,
-    cost: 8.99,
-    savings: 2.99,
-    available: true,
-  },
-  {
-    name: "Veal Amore",
-    desc: "Chicken topped with asparagus and mozarella",
-    image: food1,
-    cost: 8.99,
-    savings: 2.99,
-    available: true,
-  },
-  {
-    name: "Shrim Pomodoro",
-    desc: "Chicken topped with asparagus and mozarella",
-    image: food1,
-    cost: 8.99,
-    savings: 2.99,
-    available: false,
-  },
-];
-
-const ResturantName = ({
+export const ResturantName = ({
   name,
   address,
   setSelected,
@@ -62,6 +23,7 @@ const ResturantName = ({
   filteredFoodItems,
 }) => {
   const [isEdit, setisEdit] = useState(false);
+  const navigation = useNavigation();
 
   return (
     <View style={{ width: "100%", marginTop: 30 }}>
@@ -220,6 +182,9 @@ const ResturantName = ({
                         available: item.available ? false : true,
                       })
                     }
+                    onPress={() =>
+                      !isEdit && navigation.navigate("foodDetailPage", { item })
+                    }
                   />
                 ))
               ) : (
@@ -232,100 +197,5 @@ const ResturantName = ({
         </View>
       ) : null}
     </View>
-  );
-};
-
-export const MenuPage = () => {
-  const [selected, setSelected] = useState("");
-  const [search, setSearch] = useState("");
-  const [dummyFoodItems, setDummyFoodItems] = useState(dummyData);
-  const [filteredFoodItems, setFilteredFoodItems] = useState(dummyData);
-
-  const searchKeyword = (text) => {
-    const keyword = text?.toLowerCase();
-    const realData = dummyFoodItems;
-    const finalData = realData.filter((item) =>
-      item.name?.toLowerCase()?.includes(keyword)
-    );
-
-    setFilteredFoodItems(finalData);
-  };
-
-  const openResturant = (val) => {
-    if (val === selected) {
-      setSelected("");
-      return;
-    }
-
-    setSelected(val);
-  };
-
-  const onClickAvailable = (index, data) => {
-    const item = [...filteredFoodItems];
-
-    item[index] = data;
-
-    console.log(data);
-    setFilteredFoodItems(item);
-  };
-
-  return (
-    <MainScreenContainer>
-      <View
-        style={{
-          width: "90%",
-          marginBottom: 60,
-          alignItems: "center",
-        }}
-      >
-        <View style={{ width: "100%", alignItems: "center" }}>
-          <ResturantName
-            name={"Rocco Italian Grill - Arcadia"}
-            address={"17080 Northwood Hwy, Arcadia, MI 49613"}
-            selected={selected === 0}
-            setSelected={() => openResturant(0)}
-            search={search}
-            setSearch={(val) => {
-              setSearch(val);
-              searchKeyword(val);
-            }}
-            foodItems={dummyFoodItems}
-            onClickAvailable={(i, data) => onClickAvailable(i, data)}
-            searchKeyword={searchKeyword}
-            filteredFoodItems={filteredFoodItems}
-          />
-          <ResturantName
-            name={"Chinese Grill"}
-            address={"17080 Northwood Hwy, Arcadia, MI 49613"}
-            selected={selected === 1}
-            setSelected={() => openResturant(1)}
-            search={search}
-            setSearch={(val) => {
-              setSearch(val);
-              searchKeyword(val);
-            }}
-            foodItems={dummyFoodItems}
-            onClickAvailable={(i, data) => onClickAvailable(i, data)}
-            searchKeyword={searchKeyword}
-            filteredFoodItems={filteredFoodItems}
-          />
-          <ResturantName
-            name={"Texas Wings"}
-            address={"17080 Northwood Hwy, Arcadia, MI 49613"}
-            selected={selected === 2}
-            setSelected={() => openResturant(2)}
-            search={search}
-            setSearch={(val) => {
-              setSearch(val);
-              searchKeyword(val);
-            }}
-            foodItems={[]}
-            onClickAvailable={(i, data) => onClickAvailable(i, data)}
-            searchKeyword={searchKeyword}
-            filteredFoodItems={filteredFoodItems}
-          />
-        </View>
-      </View>
-    </MainScreenContainer>
   );
 };

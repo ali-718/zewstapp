@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { MenuPage } from "./containers/screens/MainScreens/MenuPage";
+import { MenuPage } from "./containers/screens/MainScreens/MenuPages/MenuPage";
 import { View } from "react-native";
 import { BottomTabs } from "./components/BottomTabs/BottomTabs";
 

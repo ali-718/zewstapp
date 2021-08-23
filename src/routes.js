@@ -6,10 +6,8 @@ import { SignUpPage } from "./containers/screens/AuthScreens/SignUpPage";
 import { VerificationPage } from "./containers/screens/AuthScreens/Verificationpage";
 import { LoginPage } from "./containers/screens/AuthScreens/LoginPage";
 import { ForgotPassword } from "./containers/screens/AuthScreens/ForgotPassword";
-import { View } from "react-native";
-import { MenuPage } from "./containers/screens/MainScreens/MenuPage";
-import { BottomTabs } from "./components/BottomTabs/BottomTabs";
 import { TabRoutes } from "./TabRoutes";
+import { FoodDetailPage } from "./containers/screens/MainScreens/MenuPages/FoodDetailPage";
 
 const Stack = createNativeStackNavigator();
 
@@ -35,6 +33,7 @@ const MainRoutes = () => {
         screenOptions={{ headerShown: false }}
       >
         <Stack.Screen name="test" component={TabRoutes} />
+        <Stack.Screen name="foodDetailPage" component={FoodDetailPage} />
       </Stack.Navigator>
     </NavigationContainer>
   );
