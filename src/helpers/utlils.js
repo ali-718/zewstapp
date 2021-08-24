@@ -7,8 +7,8 @@ import food5 from "../assets/images/food5.png";
 import food6 from "../assets/images/food6.png";
 import vegeterian from "../assets/images/categories/vegeterian.png";
 import baked from "../assets/images/categories/baked.png";
-import lactose from "../assets/images/categories/lactose.png";
-import gluten from "../assets/images/categories/gluten.png";
+import lactose from "../assets/images/allergens/lactose.png";
+import gluten from "../assets/images/allergens/gluten.png";
 
 export const WIDTH = Dimensions.get("window").width;
 
@@ -84,4 +84,52 @@ export const categories = [
 export const allergens = [
   { name: "lactose", icon: lactose },
   { name: "gluten", icon: gluten },
+];
+
+export const days = [
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+  "Sunday",
+];
+
+export const categoriesList = [
+  "Keto",
+  "Paleo",
+  "Vegetarian",
+  "Vegan",
+  "Mediterranean",
+  "Raw",
+  "Low carb",
+  "No sugar",
+  "Gluten-free",
+  "Kosher",
+  "Halal",
+  "High protein",
+];
+
+export const allergensList = [
+  "Lactose",
+  "Tree nuts",
+  "Eggs",
+  "Peanuts",
+  "Fish",
+  "Wheat",
+  "Shellfish",
+  "Soybeans",
+  "Gluten",
+  "Sesame",
+];
+
+export const addonsList = [
+  "Garlic bread",
+  "Bread sticks",
+  "Tomato sauce",
+  "Mayonaise",
+  "BBQ Hickory sauce",
+  "Water bottle",
+  "Ginger Ale",
 ];

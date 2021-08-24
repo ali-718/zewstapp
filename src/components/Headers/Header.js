@@ -3,13 +3,18 @@ import React from "react";
 import { View, Text, TouchableOpacity, Image } from "react-native";
 import { primaryColor, primaryShade1 } from "../../theme/colors";
 
-export const Header = ({ leftImage, rightImage, heading, onPressLeft }) => {
+export const Header = ({
+  leftImage,
+  rightImage,
+  heading,
+  onPressLeft,
+  onPressRight,
+}) => {
   return (
     <LinearGradient
       colors={[primaryColor, primaryShade1]}
       style={{
         width: "100%",
-        flex: 1,
         alignItems: "center",
         justifyContent: "center",
       }}
@@ -35,16 +40,23 @@ export const Header = ({ leftImage, rightImage, heading, onPressLeft }) => {
             color: "white",
             fontSize: 20,
             fontFamily: "openSans_semiBold",
+            width: "80%",
+            textAlign: "center",
           }}
+          numberOfLines={1}
         >
           {heading}
         </Text>
 
-        <TouchableOpacity>
-          <Image
-            source={rightImage}
-            style={{ width: 20, height: 20, resizeMode: "contain" }}
-          />
+        <TouchableOpacity onPress={onPressRight}>
+          {rightImage ? (
+            <Image
+              source={rightImage}
+              style={{ width: 20, height: 20, resizeMode: "contain" }}
+            />
+          ) : (
+            <View style={{ width: 20 }} />
+          )}
         </TouchableOpacity>
       </View>
     </LinearGradient>

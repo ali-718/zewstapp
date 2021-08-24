@@ -37,6 +37,7 @@ export const FoodOverview = ({
           padding: 10,
         }}
         onPress={onPress}
+        activeOpacity={isEdit ? 1 : 0.2}
       >
         <Image
           style={{
@@ -44,7 +45,7 @@ export const FoodOverview = ({
             height: 50,
             borderRadius: 100,
           }}
-          source={image}
+          source={{ uri: image }}
         />
 
         <View style={{ flex: 1, marginLeft: 10 }}>

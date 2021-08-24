@@ -130,7 +130,10 @@ export const ResturantName = ({
                     </TouchableOpacity>
                   )}
 
-                  <TouchableOpacity style={{ marginLeft: 10 }}>
+                  <TouchableOpacity
+                    onPress={() => navigation.navigate("addMeal")}
+                    style={{ marginLeft: 10 }}
+                  >
                     <Text
                       style={{
                         fontSize: 16,

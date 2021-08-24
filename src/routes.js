@@ -8,6 +8,7 @@ import { LoginPage } from "./containers/screens/AuthScreens/LoginPage";
 import { ForgotPassword } from "./containers/screens/AuthScreens/ForgotPassword";
 import { TabRoutes } from "./TabRoutes";
 import { FoodDetailPage } from "./containers/screens/MainScreens/MenuPages/FoodDetailPage";
+import { AddMeal } from "./containers/screens/MainScreens/MenuPages/AddMeal";
 
 const Stack = createNativeStackNavigator();
 
@@ -34,6 +35,7 @@ const MainRoutes = () => {
       >
         <Stack.Screen name="test" component={TabRoutes} />
         <Stack.Screen name="foodDetailPage" component={FoodDetailPage} />
+        <Stack.Screen name="addMeal" component={AddMeal} />
       </Stack.Navigator>
     </NavigationContainer>
   );

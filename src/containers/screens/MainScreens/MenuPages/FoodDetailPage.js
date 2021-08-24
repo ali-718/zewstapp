@@ -12,8 +12,16 @@ import placeholder from "../../../../assets/images/placeholderImage.jpeg";
 import { Text } from "../../../../components/Text/Text";
 import { grayTextColor, primaryColor } from "../../../../theme/colors";
 import { IconBox } from "../../../../components/IconBox/IconBox";
+import { useNavigation } from "@react-navigation/native";
+import {
+  addonsList,
+  allergensList,
+  categoriesList,
+  days,
+} from "../../../../helpers/utlils";
 
 export const FoodDetailPage = ({ changeAvailability, ...props }) => {
+  const navigation = useNavigation();
   const { image, name, available: av, desc } = props.route.params.item;
 
   const [available, setavailable] = useState(av);
@@ -22,12 +30,23 @@ export const FoodDetailPage = ({ changeAvailability, ...props }) => {
     <MainScreenContainer
       leftImage={leftImage}
       rightImage={rightImage}
-      title={"daynamic"}
+      title={name}
+      onPressRight={() =>
+        navigation.navigate("addMeal", {
+          data: {
+            ...props.route.params.item,
+            categories: categoriesList,
+            allergens: allergensList,
+            addons: addonsList,
+            days: days,
+          },
+        })
+      }
     >
       <View style={{ width: "100%", flex: 1, alignItems: "center" }}>
         <Image
-          style={{ width: "100%", height: 200 }}
-          source={image ?? placeholder}
+          style={{ width: "100%", height: 250 }}
+          source={image ? { uri: image } : placeholder}
         />
         <View
           style={{

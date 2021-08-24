@@ -20,6 +20,7 @@ export const MainScreenContainer = ({
   rightImage,
   title,
   onPressLeft,
+  onPressRight = () => null,
   ...props
 }) => {
   const navigation = useNavigation();
@@ -40,9 +41,10 @@ export const MainScreenContainer = ({
         <View style={{ width: "100%", flex: 1, alignItems: "center" }}>
           <Header
             heading={title}
-            leftImage={leftImage ?? person}
-            rightImage={rightImage ?? plus}
+            leftImage={leftImage}
+            rightImage={rightImage}
             onPressLeft={() => onPressLeft ?? navigation.goBack()}
+            onPressRight={onPressRight}
           />
 
           {props.children}
