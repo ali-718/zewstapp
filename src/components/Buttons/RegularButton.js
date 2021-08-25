@@ -1,10 +1,18 @@
 import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
-import { TouchableOpacity } from "react-native";
+import { Image, TouchableOpacity } from "react-native";
 import { primaryColor, primaryShade1 } from "../../theme/colors";
 import { Text } from "../Text/Text";
 
-export const RegularButton = ({ text, style, textStyle, colors, ...props }) => {
+export const RegularButton = ({
+  text,
+  style,
+  textStyle,
+  colors,
+  iconLeft,
+  iconStyle,
+  ...props
+}) => {
   return (
     <TouchableOpacity
       {...props}
@@ -26,14 +34,17 @@ export const RegularButton = ({ text, style, textStyle, colors, ...props }) => {
           flex: 1,
           alignItems: "center",
           justifyContent: "center",
+          flexDirection: "row",
         }}
       >
+        {iconLeft ? <Image style={{ ...iconStyle }} source={iconLeft} /> : null}
         <Text
           style={{
             color: "white",
             fontWeight: "bold",
             fontSize: 20,
             fontFamily: "openSans_bold",
+            marginLeft: iconLeft ? 10 : 0,
             ...textStyle,
           }}
         >

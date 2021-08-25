@@ -18,6 +18,7 @@ import {
   allergensList,
   categoriesList,
   days,
+  HEIGHT,
 } from "../../../../helpers/utlils";
 
 export const FoodDetailPage = ({ changeAvailability, ...props }) => {
@@ -45,7 +46,7 @@ export const FoodDetailPage = ({ changeAvailability, ...props }) => {
     >
       <View style={{ width: "100%", flex: 1, alignItems: "center" }}>
         <Image
-          style={{ width: "100%", height: 250 }}
+          style={{ width: "100%", height: HEIGHT > 1000 ? 400 : 250 }}
           source={image ? { uri: image } : placeholder}
         />
         <View

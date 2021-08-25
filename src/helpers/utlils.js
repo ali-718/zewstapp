@@ -11,6 +11,7 @@ import lactose from "../assets/images/allergens/lactose.png";
 import gluten from "../assets/images/allergens/gluten.png";
 
 export const WIDTH = Dimensions.get("window").width;
+export const HEIGHT = Dimensions.get("window").height;
 
 export const carouselData = [
   {

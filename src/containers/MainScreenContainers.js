@@ -34,19 +34,18 @@ export const MainScreenContainer = ({
         backgroundColor: grayColor,
       }}
     >
+      <Header
+        heading={title}
+        leftImage={leftImage}
+        rightImage={rightImage}
+        onPressLeft={() => onPressLeft ?? navigation.goBack()}
+        onPressRight={onPressRight}
+      />
       <ScrollView
         showsVerticalScrollIndicator={false}
         style={{ width: "100%", flex: 1 }}
       >
         <View style={{ width: "100%", flex: 1, alignItems: "center" }}>
-          <Header
-            heading={title}
-            leftImage={leftImage}
-            rightImage={rightImage}
-            onPressLeft={() => onPressLeft ?? navigation.goBack()}
-            onPressRight={onPressRight}
-          />
-
           {props.children}
         </View>
       </ScrollView>

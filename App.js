@@ -1,11 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { View } from "react-native";
 import * as SplashScreen from "expo-splash-screen";
-import { NativeBaseProvider } from "native-base";
-
-// assets
+import { NativeBaseProvider, extendTheme } from "native-base";
 import { fontAssets } from "./src/theme/fonts";
 import { Routes } from "./src/routes";
+import { primaryShade1 } from "./src/theme/colors";
+
+const theme = extendTheme({
+  colors: {
+    app: {
+      600: primaryShade1,
+    },
+  },
+});
 
 const App = () => {
   // state
@@ -32,7 +39,7 @@ const App = () => {
   // rendering
   if (!didLoad) return <View />;
   return (
-    <NativeBaseProvider>
+    <NativeBaseProvider theme={theme}>
       <Routes />
     </NativeBaseProvider>
   );
