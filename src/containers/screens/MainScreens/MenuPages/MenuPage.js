@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View } from "react-native";
 import { MainScreenContainer } from "../../../MainScreenContainers";
 import person from "../../../../assets/images/person.png";

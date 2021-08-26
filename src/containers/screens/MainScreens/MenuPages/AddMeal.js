@@ -258,7 +258,6 @@ export const AddMeal = (props) => {
               .replace(/["']/g, "")
               .replace(",", ", ")}
             icon={forwardIcon}
-            onIconClick={() => setavailable(!available)}
             touchable
             onPress={() => setdaysModal(true)}
             iconStyle={{ width: 20, height: 20 }}
@@ -274,7 +273,6 @@ export const AddMeal = (props) => {
               .replace(/["']/g, "")
               .replace(",", ", ")}
             icon={forwardIcon}
-            onIconClick={() => setselectedCategories(!available)}
             touchable
             onPress={() => setcategoriesModal(true)}
             iconStyle={{ width: 20, height: 20 }}
@@ -290,7 +288,6 @@ export const AddMeal = (props) => {
               .replace(/["']/g, "")
               .replace(",", ", ")}
             icon={forwardIcon}
-            onIconClick={() => setselectedAllergens(!available)}
             touchable
             onPress={() => setallergensModal(true)}
             iconStyle={{ width: 20, height: 20 }}
@@ -306,7 +303,6 @@ export const AddMeal = (props) => {
               .replace(/["']/g, "")
               .replace(",", ", ")}
             icon={forwardIcon}
-            onIconClick={() => setselectedAddons(!available)}
             touchable
             onPress={() => setaddonsModal(true)}
             iconStyle={{ width: 20, height: 20 }}

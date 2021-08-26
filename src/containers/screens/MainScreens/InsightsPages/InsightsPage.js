@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Image, TouchableOpacity, View } from "react-native";
 import { MainScreenContainer } from "../../../MainScreenContainers";
 import person from "../../../../assets/images/person.png";
@@ -16,7 +16,7 @@ import grayCalender from "../../../../assets/images/grayCalender.png";
 import { Text } from "../../../../components/Text/Text";
 import { ProgressBarBox } from "../../../../components/ProgressBarBox/ProgressBarBox";
 
-export const InsightsPage = () => {
+export const InsightsPage = ({ setselected }) => {
   const [selectedAnnual, setselectedAnnual] = useState(0);
 
   return (

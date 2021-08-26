@@ -10,6 +10,11 @@ import { TabRoutes } from "./TabRoutes";
 import { FoodDetailPage } from "./containers/screens/MainScreens/MenuPages/FoodDetailPage";
 import { AddMeal } from "./containers/screens/MainScreens/MenuPages/AddMeal";
 import { OrderDetailPage } from "./containers/screens/MainScreens/HomePages/OrderDetailPage";
+import { ResturantDetails } from "./containers/screens/MainScreens/AdminsPages/ResturantDetails";
+import { ResturantLogo } from "./containers/screens/MainScreens/AdminsPages/ResturantLogo";
+import { ProfilePage } from "./containers/screens/MainScreens/AdminsPages/ProfilePage";
+import { ChangePasswordPage } from "./containers/screens/MainScreens/AdminsPages/ChangePassword";
+import { BankDetailsPage } from "./containers/screens/MainScreens/AdminsPages/BankDetails";
 
 const Stack = createNativeStackNavigator();
 
@@ -38,6 +43,11 @@ const MainRoutes = () => {
         <Stack.Screen name="foodDetailPage" component={FoodDetailPage} />
         <Stack.Screen name="addMeal" component={AddMeal} />
         <Stack.Screen name="orderDetail" component={OrderDetailPage} />
+        <Stack.Screen name="resturantDetail" component={ResturantDetails} />
+        <Stack.Screen name="resturantLogo" component={ResturantLogo} />
+        <Stack.Screen name="profile" component={ProfilePage} />
+        <Stack.Screen name="changePass" component={ChangePasswordPage} />
+        <Stack.Screen name="bankDetails" component={BankDetailsPage} />
       </Stack.Navigator>
     </NavigationContainer>
   );

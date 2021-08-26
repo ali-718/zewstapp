@@ -1,19 +1,9 @@
 import React from "react";
-import {
-  View,
-  SafeAreaView,
-  Image,
-  ScrollView,
-  StatusBar,
-  TouchableOpacity,
-} from "react-native";
-import { grayColor, primaryColor, primaryShade1 } from "../theme/colors";
+import { View, SafeAreaView, ScrollView, StatusBar } from "react-native";
+import { grayColor } from "../theme/colors";
 import { useNavigation } from "@react-navigation/native";
-import { LinearGradient } from "expo-linear-gradient";
-import person from "../assets/images/person.png";
-import plus from "../assets/images/plus.png";
-import { Text } from "../components/Text/Text";
 import { Header } from "../components/Headers/Header";
+import back from "../assets/images/backIcon.png";
 
 export const MainScreenContainer = ({
   leftImage,
@@ -36,7 +26,7 @@ export const MainScreenContainer = ({
     >
       <Header
         heading={title}
-        leftImage={leftImage}
+        leftImage={leftImage ?? back}
         rightImage={rightImage}
         onPressLeft={() => onPressLeft ?? navigation.goBack()}
         onPressRight={onPressRight}

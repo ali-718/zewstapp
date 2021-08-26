@@ -21,6 +21,7 @@ export const ResturantName = ({
   foodItems,
   onClickAvailable,
   filteredFoodItems,
+  isAdmin = false,
 }) => {
   const [isEdit, setisEdit] = useState(false);
   const navigation = useNavigation();
@@ -49,26 +50,28 @@ export const ResturantName = ({
           >
             {name}
           </Text>
-          <Text
-            style={{
-              fontSize: 14,
-              color: grayTextColor,
-              marginTop: 5,
-            }}
-          >
-            {address}
-          </Text>
+          {address && (
+            <Text
+              style={{
+                fontSize: 14,
+                color: grayTextColor,
+                marginTop: 5,
+              }}
+            >
+              {address}
+            </Text>
+          )}
         </View>
         <View style={{ width: "10%", alignItems: "flex-end" }}>
           <Icon
-            style={{ fontSize: 20, color: grayTextColor }}
-            name={"arrow-forward-ios"}
+            style={{ fontSize: 25, color: grayTextColor }}
+            name={selected ? "keyboard-arrow-down" : "keyboard-arrow-right"}
             as={MaterialIcons}
           />
         </View>
       </TouchableOpacity>
 
-      {selected ? (
+      {!isAdmin && selected ? (
         <View style={{ width: "100%", flex: 1 }}>
           <View
             style={{

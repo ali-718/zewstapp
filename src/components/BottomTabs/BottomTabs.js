@@ -48,7 +48,6 @@ export const BottomTabs = ({ selected, setselected }) => {
           borderColor: primaryColor,
         }}
         onPress={() => {
-          navigation.navigate("Home");
           setselected(0);
         }}
       >
@@ -69,7 +68,6 @@ export const BottomTabs = ({ selected, setselected }) => {
           borderColor: primaryShade1,
         }}
         onPress={() => {
-          navigation.navigate("Insights");
           setselected(1);
         }}
       >
@@ -88,7 +86,6 @@ export const BottomTabs = ({ selected, setselected }) => {
           justifyContent: "center",
         }}
         onPress={() => {
-          navigation.navigate("QR");
           setselected(2);
         }}
       >
@@ -133,7 +130,6 @@ export const BottomTabs = ({ selected, setselected }) => {
           borderColor: primaryShade1,
         }}
         onPress={() => {
-          navigation.navigate("Menu");
           setselected(3);
         }}
       >
@@ -155,7 +151,6 @@ export const BottomTabs = ({ selected, setselected }) => {
           borderColor: primaryShade1,
         }}
         onPress={() => {
-          navigation.navigate("Admin");
           setselected(4);
         }}
       >

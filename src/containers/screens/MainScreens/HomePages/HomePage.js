@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Image, View } from "react-native";
 import { MainScreenContainer } from "../../../MainScreenContainers";
 import person from "../../../../assets/images/person.png";
@@ -15,14 +15,14 @@ import { Camera } from "expo-camera";
 import { useNavigation } from "@react-navigation/native";
 import { ProgressBarBox } from "../../../../components/ProgressBarBox/ProgressBarBox";
 
-export const HomePage = () => {
+export const HomePage = ({ setselected }) => {
   const navigation = useNavigation();
   const [qrModal, setQrModal] = useState(false);
 
   const openCamera = async () => {
     const { status } = await Camera.requestCameraPermissionsAsync();
     if (status !== "granted") {
-      alert("Sorry, we need camera roll permissions to make this work!");
+      alert("Sorry, we need camera  permissions to make this work!");
       return;
     }
     setQrModal(true);
@@ -50,7 +50,7 @@ export const HomePage = () => {
             justifyContent: "space-between",
           }}
         >
-          <Text style={{ fontSize: 30, collo: "black" }}>Hello!</Text>
+          <Text style={{ fontSize: 30, color: "black" }}>Hello!</Text>
 
           <View
             style={{ flexDirection: "row", alignItems: "center", flex: 0.9 }}
