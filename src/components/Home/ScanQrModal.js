@@ -7,7 +7,7 @@ import { BarCodeScanner } from "expo-barcode-scanner";
 import { Camera } from "expo-camera";
 import { useNavigation } from "@react-navigation/native";
 
-export const ScanQrModal = ({ onRequestClose, visible }) => {
+export const ScanQrModal = ({ onRequestClose, visible, closeModal }) => {
   const navigation = useNavigation();
   return (
     <Modal
@@ -48,6 +48,7 @@ export const ScanQrModal = ({ onRequestClose, visible }) => {
               style={{ width: "90%", flex: 0.9 }}
               type={Camera.Constants.Type.back}
               onBarCodeScanned={(val) => {
+                onRequestClose();
                 navigation.navigate("orderDetail", {
                   data: {
                     orderNo: "694-0879",

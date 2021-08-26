@@ -6,19 +6,14 @@ import bellIcon from "../../../../assets/images/bellIcon.png";
 import { Text } from "../../../../components/Text/Text";
 import forwardIcon from "../../../../assets/images/forwardIcon.png";
 import qrcodeIcon from "../../../../assets/images/qrcodeIcon.png";
-import shoppingBagIcon from "../../../../assets/images/shoppingBagIcon.png";
 import plusBorderIcon from "../../../../assets/images/plusBorderIcon.png";
 import { RegularButton } from "../../../../components/Buttons/RegularButton";
-import {
-  grayColor,
-  grayTextColor,
-  primaryShade1,
-} from "../../../../theme/colors";
-import { Progress } from "native-base";
+import { grayColor, primaryShade1 } from "../../../../theme/colors";
 import { PendingPickUps } from "../../../../components/Meals/PendingPickUps";
 import { ScanQrModal } from "../../../../components/Home/ScanQrModal";
 import { Camera } from "expo-camera";
 import { useNavigation } from "@react-navigation/native";
+import { ProgressBarBox } from "../../../../components/ProgressBarBox/ProgressBarBox";
 
 export const HomePage = () => {
   const navigation = useNavigation();
@@ -111,139 +106,30 @@ export const HomePage = () => {
             iconStyle={{ width: 20, height: 20, resizeMode: "contain" }}
             style={{ width: "48%" }}
             text={"Add Meal"}
+            onPress={() => navigation.navigate("addMeal")}
           />
         </View>
 
-        <View
-          style={{
-            width: "100%",
-            marginTop: 20,
-            padding: 20,
-            backgroundColor: "white",
-            borderRadius: 10,
-          }}
-        >
-          <View
-            style={{
-              width: "100%",
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "space-between",
-            }}
-          >
-            <View>
-              <Text style={{ fontSize: 16, fontFamily: "openSans_bold" }}>
-                Revenue
-              </Text>
-              <Text style={{ fontSize: 16, fontFamily: "openSans_bold" }}>
-                This Week
-              </Text>
-            </View>
-
-            <View
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <Text
-                style={{
-                  fontSize: 30,
-                  color: primaryShade1,
-                }}
-              >
-                $
-              </Text>
-              <Text
-                style={{
-                  fontSize: 32,
-                  color: primaryShade1,
-                  fontFamily: "openSans_bold",
-                }}
-              >
-                434.02
-              </Text>
-            </View>
-          </View>
-
-          <View style={{ width: "100%", marginTop: 20 }}>
-            <Progress colorScheme={"app"} bg={grayColor} value={80} />
-          </View>
-          <View
-            style={{
-              width: "100%",
-              marginTop: 5,
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "space-between",
-            }}
-          >
-            <Text style={{ fontSize: 14 }}>Cost $4,340.19</Text>
-            <Text style={{ fontSize: 14 }}>Refund 10%</Text>
-          </View>
+        <View style={{ width: "100%", marginTop: 20 }}>
+          <ProgressBarBox
+            leftTextTop={"Revenue"}
+            leftTextBottom={"This Week"}
+            rightText={`$${"434.02"}`}
+            leftProgressText={`Cost $${"4,340.19"}`}
+            rightProgressText={`Refund ${"10%"}`}
+            progressValue={80}
+          />
         </View>
 
-        <View
-          style={{
-            width: "100%",
-            marginTop: 20,
-            padding: 20,
-            backgroundColor: "white",
-            borderRadius: 10,
-          }}
-        >
-          <View
-            style={{
-              width: "100%",
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "space-between",
-            }}
-          >
-            <View>
-              <Text style={{ fontSize: 16, fontFamily: "openSans_bold" }}>
-                Meals
-              </Text>
-              <Text style={{ fontSize: 16, fontFamily: "openSans_bold" }}>
-                Served
-              </Text>
-            </View>
-
-            <View
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <Text
-                style={{
-                  fontSize: 32,
-                  color: primaryShade1,
-                  fontFamily: "openSans_bold",
-                }}
-              >
-                868
-              </Text>
-            </View>
-          </View>
-
-          <View style={{ width: "100%", marginTop: 20 }}>
-            <Progress colorScheme={"app"} bg={grayColor} value={80} />
-          </View>
-          <View
-            style={{
-              width: "100%",
-              marginTop: 5,
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "space-between",
-            }}
-          >
-            <Text style={{ fontSize: 14 }}>Current week 868</Text>
-            <Text style={{ fontSize: 14 }}>Last week 1,230</Text>
-          </View>
+        <View style={{ width: "100%", marginTop: 20 }}>
+          <ProgressBarBox
+            leftTextTop={"Meals"}
+            leftTextBottom={"Served"}
+            rightText={"868"}
+            leftProgressText={`Current week ${"868"}`}
+            rightProgressText={`Last week ${"1,230"}`}
+            progressValue={80}
+          />
         </View>
 
         <View

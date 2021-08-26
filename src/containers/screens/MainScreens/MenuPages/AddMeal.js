@@ -14,6 +14,7 @@ import {
   allergensList,
   categoriesList,
   days,
+  WIDTH,
 } from "../../../../helpers/utlils";
 import { MealItem } from "../../../../components/Meals/MealItem";
 import { ListModal } from "../../../../components/Meals/ListModal";
@@ -178,7 +179,7 @@ export const AddMeal = (props) => {
       <TouchableOpacity
         style={{
           width: "100%",
-          height: 250,
+          height: WIDTH > 600 ? 400 : 250,
           alignItems: "center",
           justifyContent: "center",
         }}
@@ -188,7 +189,7 @@ export const AddMeal = (props) => {
           source={foodImage.length > 0 ? { uri: foodImage } : addMealRectangle}
           style={{
             width: "100%",
-            height: 250,
+            height: WIDTH > 600 ? 400 : 250,
             alignItems: "center",
             justifyContent: "center",
           }}
@@ -197,7 +198,7 @@ export const AddMeal = (props) => {
             <View
               style={{
                 width: "100%",
-                height: 250,
+                height: WIDTH > 600 ? 400 : 250,
                 backgroundColor: "rgba(0,0,0,0.5)",
                 position: "absolute",
               }}

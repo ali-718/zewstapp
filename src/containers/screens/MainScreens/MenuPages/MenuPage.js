@@ -65,7 +65,6 @@ export const MenuPage = () => {
 
     item[index] = data;
 
-    console.log(data);
     setFilteredFoodItems(item);
   };
 
