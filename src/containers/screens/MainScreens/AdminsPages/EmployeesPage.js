@@ -4,30 +4,47 @@ import { Input } from "../../../../components/Inputs/Input";
 import { MainScreenContainer } from "../../../MainScreenContainers";
 import { MaterialIcons } from "@expo/vector-icons";
 import { AdminOverviewBox } from "../../../../components/AdminComponents/AdminOverviewBox";
-import storeIcon from "../../../../assets/images/storeIcon.png";
+import employeeIcon from "../../../../assets/images/employeeIcon.png";
 import { primaryColor } from "../../../../theme/colors";
 import { Text } from "../../../../components/Text/Text";
 import { useNavigation } from "@react-navigation/native";
 
-const dummylocations = ["Arcadia", "Detroit", "Ann Arbor", "Grand Rapids"];
+const dummyEmployees = [
+  {
+    name: "Ali Haider",
+    type: "Host",
+  },
+  {
+    name: "Fahad Khan",
+    type: "Manager",
+  },
+  {
+    name: "Zainab Khan",
+    type: "Cashier",
+  },
+  {
+    name: "Kanwal Allijah",
+    type: "Host",
+  },
+];
 
-export const LocationsPage = () => {
+export const EmployeesPage = () => {
   const navigation = useNavigation();
   const [search, setSearch] = useState("");
-  const [locations, setLocations] = useState(dummylocations);
+  const [employees, setLocations] = useState(dummyEmployees);
 
   const searchKeyword = (text) => {
     const keyword = text?.toLowerCase();
-    const realData = dummylocations;
+    const realData = dummyEmployees;
     const finalData = realData.filter((item) =>
-      item?.toLowerCase()?.includes(keyword)
+      item?.name.toLowerCase()?.includes(keyword)
     );
 
     setLocations(finalData);
   };
 
   return (
-    <MainScreenContainer title={"Locations"}>
+    <MainScreenContainer title={"employees"}>
       <View
         style={{
           width: "90%",
@@ -52,15 +69,15 @@ export const LocationsPage = () => {
           />
 
           <View style={{ width: "100%", marginTop: 10 }}>
-            {locations.map((item, i) => (
+            {employees.map((item, i) => (
               <View style={{ width: "100%", marginTop: 10 }}>
                 <AdminOverviewBox
                   key={i}
-                  label={`Location ${i + 1}`}
-                  name={item}
+                  label={item.type}
+                  name={item.name}
                   rightText={"Active"}
-                  image={storeIcon}
-                  onPress={() => navigation.navigate("addLocation")}
+                  image={employeeIcon}
+                  onPress={() => navigation.navigate("addEmployees")}
                 />
               </View>
             ))}
@@ -73,7 +90,7 @@ export const LocationsPage = () => {
                 borderRadius: 10,
                 padding: 15,
               }}
-              onPress={() => navigation.navigate("addLocation")}
+              onPress={() => navigation.navigate("addEmployees")}
             >
               <Text
                 style={{
@@ -82,7 +99,7 @@ export const LocationsPage = () => {
                   color: primaryColor,
                 }}
               >
-                Add Location
+                Add Employee
               </Text>
             </TouchableOpacity>
           </View>

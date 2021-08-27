@@ -19,6 +19,8 @@ import { LocationsPage } from "./containers/screens/MainScreens/AdminsPages/Loca
 import { AddLocationsPage } from "./containers/screens/MainScreens/AdminsPages/AddLocationsPage";
 import { TaxPage } from "./containers/screens/MainScreens/AdminsPages/TaxPage";
 import { TaxDocument } from "./containers/screens/MainScreens/AdminsPages/TaxDocument";
+import { EmployeesPage } from "./containers/screens/MainScreens/AdminsPages/EmployeesPage";
+import { AddEmployeesPage } from "./containers/screens/MainScreens/AdminsPages/AddEmployeesPage";
 
 const Stack = createNativeStackNavigator();
 
@@ -56,6 +58,8 @@ const MainRoutes = () => {
         <Stack.Screen name="addLocation" component={AddLocationsPage} />
         <Stack.Screen name="tax" component={TaxPage} />
         <Stack.Screen name="taxDocument" component={TaxDocument} />
+        <Stack.Screen name="employees" component={EmployeesPage} />
+        <Stack.Screen name="addEmployees" component={AddEmployeesPage} />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -1,8 +1,10 @@
 import React from "react";
-import { View, Text } from "react-native";
+import { View, Text, Platform } from "react-native";
 import { MainScreenContainer } from "../../../MainScreenContainers";
 import { WebView } from "react-native-webview";
 import { HEIGHT } from "../../../../helpers/utlils";
+
+const uri = "http://www.orimi.com/pdf-test.pdf";
 
 export const TaxDocument = (props) => {
   const { name } = props.route.params.data;
@@ -13,7 +15,10 @@ export const TaxDocument = (props) => {
         <WebView
           style={{ width: "100%", height: HEIGHT - 60 }}
           source={{
-            uri: "https://download1.fbr.gov.pk/Docs/20217141672549772IncomeTaxOrdinanceAmendedupto30.06.2021.pdf",
+            uri:
+              Platform.OS === "android"
+                ? `https://docs.google.com/viewer?url=${uri}`
+                : uri,
           }}
         />
       </View>

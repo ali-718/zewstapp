@@ -109,6 +109,9 @@ export const AdminPage = () => {
                     name={"Managers/Workers"}
                     rightText={"6 Users"}
                     image={multiplePeopleIcon}
+                    onPress={() =>
+                      navigation.navigate("employees", { data: item })
+                    }
                   />
                 </View>
 
