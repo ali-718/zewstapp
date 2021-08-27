@@ -15,6 +15,10 @@ import { ResturantLogo } from "./containers/screens/MainScreens/AdminsPages/Rest
 import { ProfilePage } from "./containers/screens/MainScreens/AdminsPages/ProfilePage";
 import { ChangePasswordPage } from "./containers/screens/MainScreens/AdminsPages/ChangePassword";
 import { BankDetailsPage } from "./containers/screens/MainScreens/AdminsPages/BankDetails";
+import { LocationsPage } from "./containers/screens/MainScreens/AdminsPages/LocationsPage";
+import { AddLocationsPage } from "./containers/screens/MainScreens/AdminsPages/AddLocationsPage";
+import { TaxPage } from "./containers/screens/MainScreens/AdminsPages/TaxPage";
+import { TaxDocument } from "./containers/screens/MainScreens/AdminsPages/TaxDocument";
 
 const Stack = createNativeStackNavigator();
 
@@ -48,6 +52,10 @@ const MainRoutes = () => {
         <Stack.Screen name="profile" component={ProfilePage} />
         <Stack.Screen name="changePass" component={ChangePasswordPage} />
         <Stack.Screen name="bankDetails" component={BankDetailsPage} />
+        <Stack.Screen name="location" component={LocationsPage} />
+        <Stack.Screen name="addLocation" component={AddLocationsPage} />
+        <Stack.Screen name="tax" component={TaxPage} />
+        <Stack.Screen name="taxDocument" component={TaxDocument} />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -47,7 +47,7 @@ export const AdminPage = () => {
     <MainScreenContainer leftImage={person} title={"Admin"}>
       <View style={{ width: "90%", alignItems: "center", marginBottom: 50 }}>
         {data.map((item, i) => (
-          <View style={{ width: "100%", alignItems: "center" }}>
+          <View key={i} style={{ width: "100%", alignItems: "center" }}>
             <ResturantName
               name={item.name}
               selected={selected === i}
@@ -87,6 +87,9 @@ export const AdminPage = () => {
                     name={item.location}
                     rightText={"1 Location"}
                     image={locationIcon}
+                    onPress={() =>
+                      navigation.navigate("location", { data: item })
+                    }
                   />
                 </View>
 
@@ -96,6 +99,7 @@ export const AdminPage = () => {
                     name={"2021 Available"}
                     rightText={"6 Available"}
                     image={taxIcon}
+                    onPress={() => navigation.navigate("tax", { data: item })}
                   />
                 </View>
 
