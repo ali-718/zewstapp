@@ -6,6 +6,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { Text } from "../../../components/Text/Text";
 import {
   grayColor,
+  grayMenuText,
   grayShade1,
   grayTextColor,
   primaryColor,
@@ -16,13 +17,20 @@ import { PasswordInput } from "../../../components/Inputs/PasswordInput";
 import { RegularButton } from "../../../components/Buttons/RegularButton";
 import { FontAwesome, AntDesign } from "@expo/vector-icons";
 import moment from "moment";
+import { ToastError, ToastSuccess } from "../../../helpers/Toast";
+import { confirmCode } from "../../../Redux/actions/AuthActions/authActions";
+import { useSelector } from "react-redux";
+import { useNavigation } from "@react-navigation/core";
 
 const time = 60;
 
 export const VerificationPage = (props) => {
+  const navigation = useNavigation();
+  const username = useSelector((state) => state.auth.user.user);
   const [isEdit, setIsEdit] = useState(false);
-
+  const [isLoading, setIsLoading] = useState(false);
   const [phone, setPhone] = useState(props.route.params.phone || "");
+  const [code, setcode] = useState("");
   const [isResendDisabled, setResendDisabled] = useState(true);
   const [duration, setDuration] = useState(
     moment.duration(time * 1000, "milliseconds")
@@ -56,10 +64,35 @@ export const VerificationPage = (props) => {
     countDown();
   };
 
+  const onVerification = () => {
+    if (code.length < 6) {
+      ToastError("Kindly Fill all Fields");
+      return;
+    }
+
+    setIsLoading(true);
+
+    confirmCode({ username, code })
+      .then((res) => {
+        setIsLoading(false);
+        ToastSuccess("Verified!", "Your email has been verified! kindly login");
+        navigation.reset({
+          index: 0,
+          routes: [{ name: "Login", params: { noBack: true } }],
+        });
+      })
+      .catch((e) => {
+        setIsLoading(false);
+        ToastError(
+          e.err?.message || "Some error occoured, please try again later"
+        );
+      });
+  };
+
   return (
     <AuthScreenContainer title={"Verify"}>
       <View style={{ width: "90%", marginVertical: 20, marginBottom: 40 }}>
-        <Input
+        {/* <Input
           value={phone}
           onChangeText={(val) => setPhone(val)}
           placeholder={"Code sent on"}
@@ -68,8 +101,10 @@ export const VerificationPage = (props) => {
           editable={isEdit}
           keyboardType={"number-pad"}
           onIconClick={() => setIsEdit(true)}
-        />
-
+        /> */}
+        <Text style={{ color: grayMenuText, fontSize: 12 }}>
+          *check your email for 6 digit code
+        </Text>
         <View
           style={{
             width: "100%",
@@ -95,11 +130,18 @@ export const VerificationPage = (props) => {
               letterSpacing: 10,
             }}
             placeholderTextColor={"black"}
+            value={code}
+            onChangeText={(val) => setcode(val)}
           />
         </View>
 
         <View style={{ width: "100%", marginTop: 20 }}>
-          <RegularButton text={"Verify"} style={{ borderRadius: 50 }} />
+          <RegularButton
+            onPress={onVerification}
+            isLoading={isLoading}
+            text={"Verify"}
+            style={{ borderRadius: 50 }}
+          />
         </View>
 
         <View

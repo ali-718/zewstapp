@@ -7,8 +7,20 @@ import { Text } from "../../../components/Text/Text";
 import { primaryColor } from "../../../theme/colors";
 import { PasswordInput } from "../../../components/Inputs/PasswordInput";
 import { RegularButton } from "../../../components/Buttons/RegularButton";
+import { signupAction } from "../../../Redux/actions/AuthActions/authActions";
+import {
+  emailValidator,
+  nameValidator,
+  passwordValidator,
+  phoneValidator,
+} from "../../../helpers/rules";
+import validator from "validator";
+import { ToastError } from "../../../helpers/Toast";
+import { useDispatch } from "react-redux";
+import { SIGNUP } from "../../../Redux/actions/AuthActions/Types";
 
 export const SignUpPage = (props) => {
+  const dispatch = useDispatch();
   const [selectedType, setSelectedType] = useState("");
   const [resturantName, setResturantName] = useState("");
   const [location, setLocation] = useState("");
@@ -16,7 +28,45 @@ export const SignUpPage = (props) => {
   const [contact, setContact] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  const SignUpClicked = () => {
+    if (
+      validator.isEmpty(resturantName, { ignore_whitespace: false }) ||
+      validator.isEmpty(location, { ignore_whitespace: false }) ||
+      validator.isEmpty(name, { ignore_whitespace: false }) ||
+      validator.isEmpty(contact, { ignore_whitespace: false }) ||
+      validator.isEmpty(email, { ignore_whitespace: false }) ||
+      validator.isEmpty(password, { ignore_whitespace: false }) ||
+      validator.isEmpty(selectedType, { ignore_whitespace: false })
+    ) {
+      ToastError("please fill all fields");
+      return;
+    }
+
+    setIsLoading(true);
+
+    signupAction({
+      restaurant_name: resturantName,
+      restaurant_location: location,
+      designation: selectedType,
+      owner_name: name,
+      contact_no: contact,
+      email: email,
+      password: password,
+    })
+      .then((data) => {
+        dispatch({ type: SIGNUP, payload: data.user });
+        props.navigation.navigate("Verification", { phone: contact });
+        setIsLoading(false);
+      })
+      .catch((e) => {
+        ToastError(
+          e.err?.message || "Some error occoured, please try again later"
+        );
+        setIsLoading(false);
+      });
+  };
 
   return (
     <AuthScreenContainer title={"Sign Up"}>
@@ -24,8 +74,9 @@ export const SignUpPage = (props) => {
         <View style={{ width: "100%" }}>
           <Input
             value={resturantName}
-            onChangeText={(val) => setResturantName(val)}
+            setValue={(val) => setResturantName(val)}
             placeholder={"Resturant name*"}
+            rule={nameValidator}
           />
         </View>
 
@@ -35,7 +86,7 @@ export const SignUpPage = (props) => {
             iconName={"my-location"}
             iconType={MaterialIcons}
             value={location}
-            onChangeText={(val) => setLocation(val)}
+            setValue={(val) => setLocation(val)}
           />
         </View>
 
@@ -66,13 +117,14 @@ export const SignUpPage = (props) => {
                   alignItems: "center",
                   justifyContent: "center",
                   marginTop: 10,
-                  backgroundColor: selectedType === 0 ? primaryColor : "white",
+                  backgroundColor:
+                    selectedType === "Owner" ? primaryColor : "white",
                 }}
-                onPress={() => setSelectedType(0)}
+                onPress={() => setSelectedType("Owner")}
               >
                 <Text
                   style={{
-                    color: selectedType === 0 ? "white" : primaryColor,
+                    color: selectedType === "Owner" ? "white" : primaryColor,
                     fontFamily: "openSans_semiBold",
                   }}
                 >
@@ -90,13 +142,14 @@ export const SignUpPage = (props) => {
                   alignItems: "center",
                   justifyContent: "center",
                   marginTop: 10,
-                  backgroundColor: selectedType === 1 ? primaryColor : "white",
+                  backgroundColor:
+                    selectedType === "Manager" ? primaryColor : "white",
                 }}
-                onPress={() => setSelectedType(1)}
+                onPress={() => setSelectedType("Manager")}
               >
                 <Text
                   style={{
-                    color: selectedType === 1 ? "white" : primaryColor,
+                    color: selectedType === "Manager" ? "white" : primaryColor,
                     fontFamily: "openSans_semiBold",
                   }}
                 >
@@ -115,13 +168,14 @@ export const SignUpPage = (props) => {
                   alignItems: "center",
                   justifyContent: "center",
                   marginTop: 10,
-                  backgroundColor: selectedType === 2 ? primaryColor : "white",
+                  backgroundColor:
+                    selectedType === "Other" ? primaryColor : "white",
                 }}
-                onPress={() => setSelectedType(2)}
+                onPress={() => setSelectedType("Other")}
               >
                 <Text
                   style={{
-                    color: selectedType === 2 ? "white" : primaryColor,
+                    color: selectedType === "Other" ? "white" : primaryColor,
                     fontFamily: "openSans_semiBold",
                   }}
                 >
@@ -135,17 +189,19 @@ export const SignUpPage = (props) => {
         <View style={{ width: "100%", marginTop: 20 }}>
           <Input
             value={name}
-            onChangeText={(val) => setName(val)}
+            setValue={(val) => setName(val)}
             placeholder={"Your full name*"}
+            rule={nameValidator}
           />
         </View>
 
         <View style={{ width: "100%", marginTop: 20 }}>
           <Input
             value={contact}
-            onChangeText={(val) => setContact(val)}
+            setValue={(val) => setContact(val)}
             keyboardType={"number-pad"}
             placeholder={"Contact number*"}
+            rule={phoneValidator}
           />
         </View>
 
@@ -154,31 +210,24 @@ export const SignUpPage = (props) => {
             keyboardType={"email-address"}
             placeholder={"Email address*"}
             value={email}
-            onChangeText={(val) => setEmail(val)}
+            setValue={(val) => setEmail(val)}
+            rule={emailValidator}
           />
         </View>
 
         <View style={{ width: "100%", marginTop: 20 }}>
           <PasswordInput
             value={password}
-            onChangeText={(val) => setPassword(val)}
+            setValue={(val) => setPassword(val)}
             placeholder={"Password*"}
-          />
-        </View>
-
-        <View style={{ width: "100%", marginTop: 20 }}>
-          <PasswordInput
-            value={confirmPassword}
-            onChangeText={(val) => setConfirmPassword(val)}
-            placeholder={"Confirm Password*"}
+            rule={passwordValidator}
           />
         </View>
 
         <View style={{ width: "100%", marginTop: 20 }}>
           <RegularButton
-            onPress={() =>
-              props.navigation.navigate("Verification", { phone: contact })
-            }
+            isLoading={isLoading}
+            onPress={SignUpClicked}
             text={"Sign up"}
             style={{ borderRadius: 50 }}
           />

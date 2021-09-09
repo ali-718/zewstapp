@@ -5,6 +5,9 @@ import { NativeBaseProvider, extendTheme } from "native-base";
 import { fontAssets } from "./src/theme/fonts";
 import { Routes } from "./src/routes";
 import { primaryShade1 } from "./src/theme/colors";
+import { Provider } from "react-redux";
+import store from "./store";
+import Toast from "react-native-toast-message";
 
 const theme = extendTheme({
   colors: {
@@ -39,9 +42,12 @@ const App = () => {
   // rendering
   if (!didLoad) return <View />;
   return (
-    <NativeBaseProvider theme={theme}>
-      <Routes />
-    </NativeBaseProvider>
+    <Provider store={store}>
+      <NativeBaseProvider theme={theme}>
+        <Routes />
+        <Toast ref={(ref) => Toast.setRef(ref)} />
+      </NativeBaseProvider>
+    </Provider>
   );
 };
 

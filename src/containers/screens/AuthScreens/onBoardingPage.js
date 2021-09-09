@@ -1,5 +1,11 @@
 import React, { useState } from "react";
-import { View, Image, TouchableOpacity } from "react-native";
+import {
+  View,
+  Image,
+  TouchableOpacity,
+  SafeAreaView,
+  StatusBar,
+} from "react-native";
 import Carousel, { Pagination } from "react-native-snap-carousel";
 import { carouselData, WIDTH } from "../../../helpers/utlils";
 import {
@@ -59,113 +65,122 @@ export const OnBoardingPage = () => {
         alignItems: "center",
       }}
     >
-      <View
+      <SafeAreaView
         style={{
-          width: "90%",
+          width: "100%",
           flex: 1,
+          paddingTop: StatusBar.currentHeight,
           alignItems: "center",
-          justifyContent: "space-between",
         }}
       >
         <View
           style={{
-            width: "100%",
-            alignItems: "center",
-            justifyContent: "center",
-            paddingVertical: 20,
-          }}
-        >
-          <Image
-            style={{ width: 250, height: 50, resizeMode: "contain" }}
-            source={logo}
-          />
-        </View>
-        <View
-          style={{
-            width: "100%",
+            width: "90%",
             flex: 1,
-            paddingVertical: 20,
             alignItems: "center",
             justifyContent: "space-between",
           }}
         >
-          <Carousel
-            onSnapToItem={(index) => setActiveIndex(index)}
-            data={carouselData}
-            renderItem={_renderItem}
-            sliderWidth={WIDTH}
-            itemWidth={WIDTH}
-            loop
-          />
-          <Pagination
-            dotsLength={carouselData.length}
-            activeDotIndex={activeIndex}
-            inactiveDotColor={primaryShade2}
-            dotStyle={{
-              width: 10,
-              height: 10,
-              borderRadius: 4,
-              marginHorizontal: 0,
+          <View
+            style={{
+              width: "100%",
+              alignItems: "center",
+              justifyContent: "center",
+              paddingVertical: 20,
             }}
-            containerStyle={{ paddingVertical: 0, margin: 0 }}
-            inactiveDotScale={1}
-            dotColor={"rgba(210, 186, 233, 0.92)"}
-            inactiveDotOpacity={0.5}
-          />
+          >
+            <Image
+              style={{ width: 250, height: 50, resizeMode: "contain" }}
+              source={logo}
+            />
+          </View>
+          <View
+            style={{
+              width: "100%",
+              flex: 1,
+              paddingVertical: 20,
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
+            <Carousel
+              onSnapToItem={(index) => setActiveIndex(index)}
+              data={carouselData}
+              renderItem={_renderItem}
+              sliderWidth={WIDTH}
+              itemWidth={WIDTH}
+              loop
+            />
+            <Pagination
+              dotsLength={carouselData.length}
+              activeDotIndex={activeIndex}
+              inactiveDotColor={primaryShade2}
+              dotStyle={{
+                width: 10,
+                height: 10,
+                borderRadius: 4,
+                marginHorizontal: 0,
+              }}
+              containerStyle={{ paddingVertical: 0, margin: 0 }}
+              inactiveDotScale={1}
+              dotColor={"rgba(210, 186, 233, 0.92)"}
+              inactiveDotOpacity={0.5}
+            />
+          </View>
         </View>
-      </View>
 
-      <View
-        style={{
-          width: "100%",
-          marginTop: 20,
-          flexDirection: "row",
-          justifyContent: "space-between",
-        }}
-      >
-        <TouchableOpacity
+        <View
           style={{
-            width: "50%",
-            padding: 15,
-            alignItems: "center",
-            justifyContent: "center",
-            backgroundColor: "white",
+            width: "100%",
+            marginTop: 20,
+            flexDirection: "row",
+            justifyContent: "space-between",
           }}
-          onPress={() => navigation.navigate("Signup")}
         >
-          <Text
+          <TouchableOpacity
             style={{
-              color: textColor,
-              fontSize: 20,
-              fontWeight: "bold",
-              fontFamily: "openSans_bold",
+              width: "50%",
+              padding: 15,
+              alignItems: "center",
+              justifyContent: "center",
+              backgroundColor: "white",
             }}
+            onPress={() => navigation.navigate("Signup")}
           >
-            Sign up
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={{
-            width: "49.5%",
-            padding: 15,
-            alignItems: "center",
-            justifyContent: "center",
-            backgroundColor: "white",
-          }}
-          onPress={() => navigation.navigate("Login")}
-        >
-          <Text
+            <Text
+              style={{
+                color: textColor,
+                fontSize: 20,
+                fontWeight: "bold",
+                fontFamily: "openSans_bold",
+              }}
+            >
+              Sign up
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
             style={{
-              color: textColor,
-              fontSize: 20,
-              fontWeight: "bold",
-              fontFamily: "openSans_bold",
+              width: "49.5%",
+              padding: 15,
+              alignItems: "center",
+              justifyContent: "center",
+              backgroundColor: "white",
             }}
+            onPress={() => navigation.navigate("Login")}
           >
-            Login
-          </Text>
-        </TouchableOpacity>
-      </View>
+            <Text
+              style={{
+                color: textColor,
+                fontSize: 20,
+                fontWeight: "bold",
+                fontFamily: "openSans_bold",
+              }}
+            >
+              Login
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
     </LinearGradient>
   );
 };

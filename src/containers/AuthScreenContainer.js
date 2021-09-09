@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export const AuthScreenContainer = ({ title, ...props }) => {
+export const AuthScreenContainer = ({ title, noBack, ...props }) => {
   const navigation = useNavigation();
   return (
     <SafeAreaView
@@ -57,15 +57,23 @@ export const AuthScreenContainer = ({ title, ...props }) => {
         showsVerticalScrollIndicator={false}
         style={{ width: "100%", flex: 1 }}
       >
-        <View style={{ width: "100%", flex: 1, alignItems: "center" }}>
+        <View
+          style={{
+            width: "100%",
+            flex: 1,
+            alignItems: "center",
+          }}
+        >
           <View style={styles.titleContainer}>
-            <TouchableOpacity onPress={() => navigation.goBack()}>
-              <Icon
-                as={Ionicons}
-                name={"arrow-back-outline"}
-                style={styles.icon}
-              />
-            </TouchableOpacity>
+            {!noBack && (
+              <TouchableOpacity onPress={() => navigation.goBack()}>
+                <Icon
+                  as={Ionicons}
+                  name={"arrow-back-outline"}
+                  style={styles.icon}
+                />
+              </TouchableOpacity>
+            )}
             <Text style={styles.title}>{title}</Text>
           </View>
 

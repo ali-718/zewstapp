@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { OnBoardingPage } from "./containers/screens/AuthScreens/onBoardingPage";
@@ -21,6 +21,8 @@ import { TaxPage } from "./containers/screens/MainScreens/AdminsPages/TaxPage";
 import { TaxDocument } from "./containers/screens/MainScreens/AdminsPages/TaxDocument";
 import { EmployeesPage } from "./containers/screens/MainScreens/AdminsPages/EmployeesPage";
 import { AddEmployeesPage } from "./containers/screens/MainScreens/AdminsPages/AddEmployeesPage";
+import { SigningCheck } from "./containers/screens/AuthScreens/SigningCheck";
+import { useSelector } from "react-redux";
 
 const Stack = createNativeStackNavigator();
 
@@ -28,6 +30,7 @@ const AuthRoutes = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="SigningCheck" component={SigningCheck} />
         <Stack.Screen name="OnBoardingPage" component={OnBoardingPage} />
         <Stack.Screen name="Signup" component={SignUpPage} />
         <Stack.Screen name="Verification" component={VerificationPage} />
@@ -65,4 +68,13 @@ const MainRoutes = () => {
   );
 };
 
-export const Routes = () => <MainRoutes />;
+export const Routes = () => {
+  const user = useSelector((state) => state.auth.user);
+
+  // console.log(user);
+
+  // if (user?.token) {
+  //   return <MainRoutes />;
+  // }
+  return <AuthRoutes />;
+};
