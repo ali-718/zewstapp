@@ -23,9 +23,13 @@ export const LoginPage = (props) => {
 
   useEffect(() => {
     const noBack = props.route.params?.noBack;
+    const email = props.route.params?.email;
 
     if (noBack) {
       setnoBack(true);
+    }
+    if (email) {
+      setEmail(email);
     }
   }, []);
 
@@ -48,7 +52,6 @@ export const LoginPage = (props) => {
         setIsLoading(false);
       })
       .catch((e) => {
-        console.log(e);
         ToastError(
           e.err?.message || "Some error occoured, please try again later"
         );

@@ -4,7 +4,7 @@ import { View, Text } from "react-native";
 import { primaryShade1 } from "../../../theme/colors";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/core";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { refreshTokenAction } from "../../../Redux/actions/AuthActions/authActions";
 import { USER } from "../../../Redux/actions/AuthActions/Types";
 

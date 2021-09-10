@@ -1,26 +1,28 @@
 import { SIGNUP, USER } from "../actions/AuthActions/Types";
+import produce from "immer";
 
 const initialState = {
   user: {},
 };
 
-export default function (state = initialState, action) {
-  const { payload, type } = action;
-  switch (type) {
-    case SIGNUP: {
-      state.user.user = payload;
-      break;
+export const authReducer = produce(
+  (state = initialState, { payload, type }) => {
+    switch (type) {
+      case SIGNUP: {
+        state.user.user = payload;
+        break;
+      }
+      case USER: {
+        state.user = payload;
+        break;
+      }
+      case "LOGOUT": {
+        state.user = {};
+        break;
+      }
+      default:
+        return state;
     }
-    case USER: {
-      state.user = payload;
-      break;
-    }
-    case "LOGOUT": {
-      state.user = {};
-      break;
-    }
-    default:
-      return state;
+    return state;
   }
-  return state;
-}
+);

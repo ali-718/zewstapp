@@ -78,7 +78,9 @@ export const VerificationPage = (props) => {
         ToastSuccess("Verified!", "Your email has been verified! kindly login");
         navigation.reset({
           index: 0,
-          routes: [{ name: "Login", params: { noBack: true } }],
+          routes: [
+            { name: "Login", params: { noBack: true, email: username } },
+          ],
         });
       })
       .catch((e) => {

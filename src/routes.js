@@ -71,10 +71,8 @@ const MainRoutes = () => {
 export const Routes = () => {
   const user = useSelector((state) => state.auth.user);
 
-  // console.log(user);
-
-  // if (user?.token) {
-  //   return <MainRoutes />;
-  // }
+  if (user?.token) {
+    return <MainRoutes />;
+  }
   return <AuthRoutes />;
 };
