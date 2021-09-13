@@ -1,24 +1,20 @@
 import React, { useEffect, useState } from "react";
-import { TextInput, TouchableOpacity, View } from "react-native";
-import { Input } from "../../../components/Inputs/Input";
+import { TextInput, View } from "react-native";
 import { AuthScreenContainer } from "../../AuthScreenContainer";
-import { MaterialIcons } from "@expo/vector-icons";
 import { Text } from "../../../components/Text/Text";
 import {
-  grayColor,
   grayMenuText,
   grayShade1,
   grayTextColor,
   primaryColor,
-  primaryShade1,
-  primaryShade2,
 } from "../../../theme/colors";
-import { PasswordInput } from "../../../components/Inputs/PasswordInput";
 import { RegularButton } from "../../../components/Buttons/RegularButton";
-import { FontAwesome, AntDesign } from "@expo/vector-icons";
 import moment from "moment";
 import { ToastError, ToastSuccess } from "../../../helpers/Toast";
-import { confirmCode } from "../../../Redux/actions/AuthActions/authActions";
+import {
+  confirmCode,
+  resendCode,
+} from "../../../Redux/actions/AuthActions/authActions";
 import { useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/core";
 
@@ -29,7 +25,6 @@ export const VerificationPage = (props) => {
   const username = useSelector((state) => state.auth.user.user);
   const [isEdit, setIsEdit] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [phone, setPhone] = useState(props.route.params.phone || "");
   const [code, setcode] = useState("");
   const [isResendDisabled, setResendDisabled] = useState(true);
   const [duration, setDuration] = useState(
@@ -58,10 +53,20 @@ export const VerificationPage = (props) => {
   };
 
   const resetCountDown = () => {
-    setDuration(moment.duration(time * 1000, "milliseconds"));
     setResendDisabled(true);
-    setIsEdit(false);
-    countDown();
+    resendCode({ email: username })
+      .then((res) => {
+        setDuration(moment.duration(time * 1000, "milliseconds"));
+        setIsEdit(false);
+        countDown();
+        ToastSuccess("Sent!", "Code sent again :)");
+      })
+      .catch((e) => {
+        setResendDisabled(false);
+        ToastError(
+          e.err?.message || "Some error occoured, please try again later"
+        );
+      });
   };
 
   const onVerification = () => {

@@ -22,8 +22,15 @@ import { PhotoModal } from "../../../../components/Meals/PhotoModal";
 import { RegularButton } from "../../../../components/Buttons/RegularButton";
 import * as ImagePicker from "expo-image-picker";
 import { DeleteModal } from "../../../../components/Meals/DeleteModal";
+import { useDispatch, useSelector } from "react-redux";
+import { getMealCategories } from "../../../../Redux/actions/HomeActions/MealActions";
 
 export const AddMeal = (props) => {
+  const dispatch = useDispatch();
+  const categories = useSelector((state) => state.meal.categories);
+  const allergens = useSelector((state) => state.meal.allergens);
+  const addons = useSelector((state) => state.meal.addons);
+
   const [name, setName] = useState("");
   const [desc, setdesc] = useState("");
   const [unitCost, setunitCost] = useState("");
@@ -91,6 +98,7 @@ export const AddMeal = (props) => {
       aspect: [4, 3],
       quality: 1,
       allowsMultipleSelection: false,
+      base64: true,
     });
 
     setphotoModal(false);
@@ -115,6 +123,7 @@ export const AddMeal = (props) => {
       aspect: [4, 3],
       quality: 1,
       allowsMultipleSelection: false,
+      base64: true,
     });
     setphotoModal(false);
 
@@ -332,7 +341,8 @@ export const AddMeal = (props) => {
         title={"Categories"}
         onSelect={(item) => onSelectCategories(item)}
         selected={selectedCategories}
-        list={categoriesList}
+        list={categories}
+        onPress={() => dispatch(getMealCategories())}
       />
 
       <ListModal
@@ -341,7 +351,7 @@ export const AddMeal = (props) => {
         title={"Allergens"}
         onSelect={(item) => onSelectAllergens(item)}
         selected={selectedAllergens}
-        list={allergensList}
+        list={allergens}
       />
 
       <ListModal
@@ -350,7 +360,7 @@ export const AddMeal = (props) => {
         title={"Add-ons"}
         onSelect={(item) => onSelectAddons(item)}
         selected={selectedAddons}
-        list={addonsList}
+        list={addons}
       />
 
       <PhotoModal

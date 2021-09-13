@@ -13,7 +13,9 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true,
       "infoPlist": {
@@ -21,8 +23,11 @@
         "NSLocationWhenInUseUsageDescription": "This app uses the location to find the Person near you.",
         "NSCameraUsageDescription": "This app uses the camera to take your profile picture.",
         "NSPhotoLibraryUsageDescription": "This app uses Photo Library for uploading your profile picture.",
-        "UIBackgroundModes": ["fetch"]
-      }
+        "UIBackgroundModes": [
+          "fetch"
+        ]
+      },
+      "bundleIdentifier": "com.hauraki.zewst"
     },
     "android": {
       "adaptiveIcon": {

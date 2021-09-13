@@ -13,12 +13,13 @@ export const RegularButton = ({
   iconLeft,
   iconStyle,
   isLoading,
+  disabled,
   ...props
 }) => {
   return (
     <TouchableOpacity
       {...props}
-      disabled={isLoading}
+      disabled={isLoading || disabled}
       style={{
         width: "100%",
         alignItems: "center",

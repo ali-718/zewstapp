@@ -64,3 +64,15 @@ export const refreshTokenAction = ({ refreshToken, email }) =>
       })
       .catch((e) => reject(e.response.data));
   });
+
+export const resendCode = ({ email }) =>
+  new Promise((resolve, reject) => {
+    client
+      .post("/auth/resendOtp", {
+        email,
+      })
+      .then((data) => {
+        resolve(data.data);
+      })
+      .catch((e) => reject(e.response.data));
+  });

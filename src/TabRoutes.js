@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { MenuPage } from "./containers/screens/MainScreens/MenuPages/MenuPage";
 import { SafeAreaView, View } from "react-native";
@@ -6,11 +6,26 @@ import { BottomTabs } from "./components/BottomTabs/BottomTabs";
 import { HomePage } from "./containers/screens/MainScreens/HomePages/HomePage";
 import { InsightsPage } from "./containers/screens/MainScreens/InsightsPages/InsightsPage";
 import { AdminPage } from "./containers/screens/MainScreens/AdminsPages/AdminPage";
+import {
+  getMealAddons,
+  getMealAllergens,
+  getMealCategories,
+} from "./Redux/actions/HomeActions/MealActions";
+import { useDispatch } from "react-redux";
 
 const Stack = createNativeStackNavigator();
 
 export const TabRoutes = () => {
+  const dispatch = useDispatch();
   const [selected, setselected] = useState(0);
+
+  useEffect(() => {
+    Promise.all([
+      // dispatch(getMealCategories()),
+      dispatch(getMealAddons()),
+      dispatch(getMealAllergens()),
+    ]);
+  }, []);
 
   return (
     <SafeAreaView style={{ width: "100%", flex: 1, backgroundColor: "white" }}>

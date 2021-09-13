@@ -1,16 +1,16 @@
 import axios from "axios";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { base_url } from "../../helpers/url";
+import store from "../../../store";
 
 const request = axios.create({
   baseURL: base_url,
 });
 
 request.interceptors.request.use(async (config) => {
-  const token = await AsyncStorage.getItem("refreshToken");
+  const token = store.getState().auth.user?.token?.accessToken.jwtToken || null;
 
   config.headers["Content-Type"] = "application/json";
-  if (token !== null) config.headers["x-token"] = `Bearer ${token}`;
+  if (token !== null) config.headers["accessToken"] = token;
   return config;
 });
 

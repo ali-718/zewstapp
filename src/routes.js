@@ -44,11 +44,8 @@ const AuthRoutes = () => {
 const MainRoutes = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator
-        initialRouteName={"test"}
-        screenOptions={{ headerShown: false }}
-      >
-        <Stack.Screen name="test" component={TabRoutes} />
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="tabRoutes" component={TabRoutes} />
         <Stack.Screen name="foodDetailPage" component={FoodDetailPage} />
         <Stack.Screen name="addMeal" component={AddMeal} />
         <Stack.Screen name="orderDetail" component={OrderDetailPage} />
