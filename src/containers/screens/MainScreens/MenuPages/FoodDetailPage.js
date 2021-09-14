@@ -18,13 +18,22 @@ import {
   allergensList,
   categoriesList,
   days,
-  HEIGHT,
   WIDTH,
 } from "../../../../helpers/utlils";
 
 export const FoodDetailPage = ({ changeAvailability, ...props }) => {
   const navigation = useNavigation();
-  const { image, name, available: av, desc } = props.route.params.item;
+  const {
+    mealMedia: image,
+    mealName: name,
+    mealAvailability: av,
+    mealDescription: desc,
+    mealPrice: price,
+    mealDaysAvailable,
+    mealCategory,
+    mealAllergens,
+    mealAddons,
+  } = props.route.params.item;
 
   const [available, setavailable] = useState(av);
 
@@ -48,7 +57,7 @@ export const FoodDetailPage = ({ changeAvailability, ...props }) => {
       <View style={{ width: "100%", flex: 1, alignItems: "center" }}>
         <Image
           style={{ width: "100%", height: WIDTH > 600 ? 400 : 250 }}
-          source={image ? { uri: image } : placeholder}
+          source={image[0] ? { uri: image[0] } : placeholder}
         />
         <View
           style={{
@@ -197,7 +206,7 @@ export const FoodDetailPage = ({ changeAvailability, ...props }) => {
                     fontFamily: "openSans_bold",
                   }}
                 >
-                  $8.49
+                  ${price}
                 </Text>
               </View>
               <View
@@ -364,99 +373,182 @@ export const FoodDetailPage = ({ changeAvailability, ...props }) => {
               <View style={{ alignItems: "center" }}>
                 <Text style={{ color: "black" }}>M</Text>
 
-                <Image
-                  source={check}
-                  style={{
-                    width: 15,
-                    height: 15,
-                    resizeMode: "contain",
-                    marginTop: 10,
-                  }}
-                />
+                {mealDaysAvailable.find((item) => item === "Monday") ? (
+                  <Image
+                    source={check}
+                    style={{
+                      width: 15,
+                      height: 15,
+                      resizeMode: "contain",
+                      marginTop: 10,
+                    }}
+                  />
+                ) : (
+                  <Image
+                    source={dash}
+                    style={{
+                      width: 15,
+                      height: 15,
+                      resizeMode: "contain",
+                      marginTop: 10,
+                    }}
+                  />
+                )}
               </View>
 
               <View style={{ alignItems: "center" }}>
                 <Text style={{ color: "black" }}>T</Text>
 
-                <Image
-                  source={check}
-                  style={{
-                    width: 15,
-                    height: 15,
-                    resizeMode: "contain",
-                    marginTop: 10,
-                  }}
-                />
+                {mealDaysAvailable.find((item) => item === "Tuesday") ? (
+                  <Image
+                    source={check}
+                    style={{
+                      width: 15,
+                      height: 15,
+                      resizeMode: "contain",
+                      marginTop: 10,
+                    }}
+                  />
+                ) : (
+                  <Image
+                    source={dash}
+                    style={{
+                      width: 15,
+                      height: 15,
+                      resizeMode: "contain",
+                      marginTop: 10,
+                    }}
+                  />
+                )}
               </View>
 
               <View style={{ alignItems: "center" }}>
                 <Text style={{ color: "black" }}>W</Text>
 
-                <Image
-                  source={dash}
-                  style={{
-                    width: 15,
-                    height: 15,
-                    resizeMode: "contain",
-                    marginTop: 10,
-                  }}
-                />
+                {mealDaysAvailable.find((item) => item === "Wednesday") ? (
+                  <Image
+                    source={check}
+                    style={{
+                      width: 15,
+                      height: 15,
+                      resizeMode: "contain",
+                      marginTop: 10,
+                    }}
+                  />
+                ) : (
+                  <Image
+                    source={dash}
+                    style={{
+                      width: 15,
+                      height: 15,
+                      resizeMode: "contain",
+                      marginTop: 10,
+                    }}
+                  />
+                )}
               </View>
 
               <View style={{ alignItems: "center" }}>
                 <Text style={{ color: "black" }}>T</Text>
 
-                <Image
-                  source={dash}
-                  style={{
-                    width: 15,
-                    height: 15,
-                    resizeMode: "contain",
-                    marginTop: 10,
-                  }}
-                />
+                {mealDaysAvailable.find((item) => item === "Thursday") ? (
+                  <Image
+                    source={check}
+                    style={{
+                      width: 15,
+                      height: 15,
+                      resizeMode: "contain",
+                      marginTop: 10,
+                    }}
+                  />
+                ) : (
+                  <Image
+                    source={dash}
+                    style={{
+                      width: 15,
+                      height: 15,
+                      resizeMode: "contain",
+                      marginTop: 10,
+                    }}
+                  />
+                )}
               </View>
 
               <View style={{ alignItems: "center" }}>
                 <Text style={{ color: "black" }}>F</Text>
 
-                <Image
-                  source={check}
-                  style={{
-                    width: 15,
-                    height: 15,
-                    resizeMode: "contain",
-                    marginTop: 10,
-                  }}
-                />
+                {mealDaysAvailable.find((item) => item === "Friday") ? (
+                  <Image
+                    source={check}
+                    style={{
+                      width: 15,
+                      height: 15,
+                      resizeMode: "contain",
+                      marginTop: 10,
+                    }}
+                  />
+                ) : (
+                  <Image
+                    source={dash}
+                    style={{
+                      width: 15,
+                      height: 15,
+                      resizeMode: "contain",
+                      marginTop: 10,
+                    }}
+                  />
+                )}
               </View>
 
               <View style={{ alignItems: "center" }}>
                 <Text style={{ color: "black" }}>S</Text>
 
-                <Image
-                  source={check}
-                  style={{
-                    width: 15,
-                    height: 15,
-                    resizeMode: "contain",
-                    marginTop: 10,
-                  }}
-                />
+                {mealDaysAvailable.find((item) => item === "Saturday") ? (
+                  <Image
+                    source={check}
+                    style={{
+                      width: 15,
+                      height: 15,
+                      resizeMode: "contain",
+                      marginTop: 10,
+                    }}
+                  />
+                ) : (
+                  <Image
+                    source={dash}
+                    style={{
+                      width: 15,
+                      height: 15,
+                      resizeMode: "contain",
+                      marginTop: 10,
+                    }}
+                  />
+                )}
               </View>
 
               <View style={{ alignItems: "center" }}>
                 <Text style={{ color: "black" }}>S</Text>
-
-                <Image
-                  source={check}
-                  style={{
-                    width: 15,
-                    height: 15,
-                    resizeMode: "contain",
-                    marginTop: 10,
-                  }}
-                />
+                {mealDaysAvailable.find((item) => item === "Sunday") ? (
+                  <Image
+                    source={check}
+                    style={{
+                      width: 15,
+                      height: 15,
+                      resizeMode: "contain",
+                      marginTop: 10,
+                    }}
+                  />
+                ) : (
+                  <Image
+                    source={dash}
+                    style={{
+                      width: 15,
+                      height: 15,
+                      resizeMode: "contain",
+                      marginTop: 10,
+                    }}
+                  />
+                )}
               </View>
             </View>
 
@@ -484,7 +576,7 @@ export const FoodDetailPage = ({ changeAvailability, ...props }) => {
                 }}
               >
                 <FlatList
-                  data={["Vegeterian", "Baked"]}
+                  data={mealCategory}
                   numColumns={2}
                   keyExtractor={(val) => val}
                   renderItem={({ item }, i) => (
@@ -519,11 +611,45 @@ export const FoodDetailPage = ({ changeAvailability, ...props }) => {
                 }}
               >
                 <FlatList
-                  data={["Lactose", "Gluten"]}
+                  data={mealAllergens}
                   numColumns={2}
                   keyExtractor={(val) => val}
                   renderItem={({ item }, i) => (
                     <IconBox type={"allergens"} text={item} />
+                  )}
+                  columnWrapperStyle={{ justifyContent: "space-between" }}
+                />
+              </View>
+            </View>
+            <View style={{ width: "100%", marginTop: 20 }}>
+              <Text
+                style={{
+                  color: grayTextColor,
+                  fontSize: 16,
+                  textTransform: "uppercase",
+                  fontFamily: "openSans_bold",
+                  marginLeft: 5,
+                }}
+              >
+                Addons
+              </Text>
+
+              <View
+                style={{
+                  width: "100%",
+                  marginTop: 10,
+                  backgroundColor: "white",
+                  borderRadius: 10,
+                  padding: 10,
+                  paddingHorizontal: 20,
+                }}
+              >
+                <FlatList
+                  data={mealAddons}
+                  numColumns={2}
+                  keyExtractor={(val) => val}
+                  renderItem={({ item }, i) => (
+                    <IconBox type={"addons"} text={item} />
                   )}
                   columnWrapperStyle={{ justifyContent: "space-between" }}
                 />

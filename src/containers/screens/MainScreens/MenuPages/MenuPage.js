@@ -4,6 +4,8 @@ import { MainScreenContainer } from "../../../MainScreenContainers";
 import person from "../../../../assets/images/person.png";
 import plus from "../../../../assets/images/plus.png";
 import { ResturantName } from "../../../../components/FoodItems/ResturantName";
+import { useSelector, useDispatch } from "react-redux";
+import * as actions from "../../../../Redux/actions/HomeActions/MealActions";
 
 const dummyData = [
   {
@@ -36,27 +38,18 @@ const dummyData = [
 ];
 
 export const MenuPage = () => {
+  const dispatch = useDispatch();
+  const hotels = useSelector((state) => state.meal.hotel.hotels);
+  const isLoading = useSelector((state) => state.meal.hotel.isLoading);
+  const isError = useSelector((state) => state.meal.hotel.isError);
   const [selected, setSelected] = useState("");
-  const [search, setSearch] = useState("");
-  const [dummyFoodItems, setDummyFoodItems] = useState(dummyData);
-  const [filteredFoodItems, setFilteredFoodItems] = useState(dummyData);
 
-  const searchKeyword = (text) => {
-    const keyword = text?.toLowerCase();
-    const realData = dummyFoodItems;
-    const finalData = realData.filter((item) =>
-      item.name?.toLowerCase()?.includes(keyword)
-    );
-
-    setFilteredFoodItems(finalData);
-  };
-
-  const openResturant = (val) => {
+  const openResturant = (val, id) => {
     if (val === selected) {
       setSelected("");
       return;
     }
-
+    onOpenResturant(id);
     setSelected(val);
   };
 
@@ -68,6 +61,8 @@ export const MenuPage = () => {
     setFilteredFoodItems(item);
   };
 
+  const onOpenResturant = (id) => dispatch(actions.getAllMeals({ id }));
+
   return (
     <MainScreenContainer leftImage={person} rightImage={plus} title={"Menu"}>
       <View
@@ -78,51 +73,20 @@ export const MenuPage = () => {
         }}
       >
         <View style={{ width: "100%", alignItems: "center" }}>
-          <ResturantName
-            name={"Rocco Italian Grill - Arcadia"}
-            address={"17080 Northwood Hwy, Arcadia, MI 49613"}
-            selected={selected === 0}
-            setSelected={() => openResturant(0)}
-            search={search}
-            setSearch={(val) => {
-              setSearch(val);
-              searchKeyword(val);
-            }}
-            foodItems={dummyFoodItems}
-            onClickAvailable={(i, data) => onClickAvailable(i, data)}
-            searchKeyword={searchKeyword}
-            filteredFoodItems={filteredFoodItems}
-          />
-          <ResturantName
-            name={"Chinese Grill"}
-            address={"17080 Northwood Hwy, Arcadia, MI 49613"}
-            selected={selected === 1}
-            setSelected={() => openResturant(1)}
-            search={search}
-            setSearch={(val) => {
-              setSearch(val);
-              searchKeyword(val);
-            }}
-            foodItems={dummyFoodItems}
-            onClickAvailable={(i, data) => onClickAvailable(i, data)}
-            searchKeyword={searchKeyword}
-            filteredFoodItems={filteredFoodItems}
-          />
-          <ResturantName
-            name={"Texas Wings"}
-            address={"17080 Northwood Hwy, Arcadia, MI 49613"}
-            selected={selected === 2}
-            setSelected={() => openResturant(2)}
-            search={search}
-            setSearch={(val) => {
-              setSearch(val);
-              searchKeyword(val);
-            }}
-            foodItems={[]}
-            onClickAvailable={(i, data) => onClickAvailable(i, data)}
-            searchKeyword={searchKeyword}
-            filteredFoodItems={filteredFoodItems}
-          />
+          {hotels.map((item, i) => (
+            <ResturantName
+              key={i}
+              name={item.name}
+              isLoading={item.meal?.isLoading}
+              isError={item.meal?.isError}
+              address={item.location}
+              selected={selected === 0}
+              setSelected={() => openResturant(i, item.id)}
+              foodItems={item.meal?.meals || []}
+              onClickAvailable={(i, data) => onClickAvailable(i, data)}
+              filteredFoodItems={item.meal?.meals || []}
+            />
+          ))}
         </View>
       </View>
     </MainScreenContainer>

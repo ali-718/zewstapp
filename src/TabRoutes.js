@@ -7,11 +7,12 @@ import { HomePage } from "./containers/screens/MainScreens/HomePages/HomePage";
 import { InsightsPage } from "./containers/screens/MainScreens/InsightsPages/InsightsPage";
 import { AdminPage } from "./containers/screens/MainScreens/AdminsPages/AdminPage";
 import {
+  getAllMeals,
   getMealAddons,
   getMealAllergens,
   getMealCategories,
 } from "./Redux/actions/HomeActions/MealActions";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 const Stack = createNativeStackNavigator();
 
@@ -21,7 +22,7 @@ export const TabRoutes = () => {
 
   useEffect(() => {
     Promise.all([
-      // dispatch(getMealCategories()),
+      dispatch(getMealCategories()),
       dispatch(getMealAddons()),
       dispatch(getMealAllergens()),
     ]);

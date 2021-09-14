@@ -94,7 +94,6 @@ export const Input = ({
               setIsFocused(true);
             }}
             autoCapitalize={"none"}
-            onChangeText={(val) => OnTextChange(val)}
             {...props}
           />
         </View>

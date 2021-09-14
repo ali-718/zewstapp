@@ -11,27 +11,13 @@ import bankIcon from "../../../../assets/images/bankIcon.png";
 import { ResturantName } from "../../../../components/FoodItems/ResturantName";
 import { AdminOverviewBox } from "../../../../components/AdminComponents/AdminOverviewBox";
 import { useNavigation } from "@react-navigation/native";
-
-const data = [
-  {
-    name: "Rocco Italian Grill",
-    location: "Arcadia",
-    owner: "Fahad Khan",
-  },
-  {
-    name: "Chinese Grill",
-    location: "Iowa",
-    owner: "Fahad Khan",
-  },
-  {
-    name: "Texas Wings",
-    location: "Houston",
-    owner: "Fahad Khan",
-  },
-];
+import { useSelector } from "react-redux";
 
 export const AdminPage = () => {
   const navigation = useNavigation();
+  const hotels = useSelector((state) => state.meal.hotel.hotels);
+  const isLoading = useSelector((state) => state.meal.hotel.isLoading);
+  const isError = useSelector((state) => state.meal.hotel.isError);
   const [selected, setSelected] = useState("");
 
   const openResturant = (val) => {
@@ -46,7 +32,7 @@ export const AdminPage = () => {
   return (
     <MainScreenContainer leftImage={person} title={"Admin"}>
       <View style={{ width: "90%", alignItems: "center", marginBottom: 50 }}>
-        {data.map((item, i) => (
+        {hotels.map((item, i) => (
           <View key={i} style={{ width: "100%", alignItems: "center" }}>
             <ResturantName
               name={item.name}

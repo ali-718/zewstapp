@@ -60,7 +60,7 @@ export const AddMeal = (props) => {
       available,
       allergens,
       addons,
-      image,
+      mealMedia: image,
     } = props.route?.params?.data;
 
     setIsEdit(true);
@@ -72,7 +72,7 @@ export const AddMeal = (props) => {
     setavailable(available);
     setselectedAllergens(allergens);
     setselectedAddons(addons);
-    setFoodImage(image);
+    setFoodImage(image[0] ?? "");
   }, []);
 
   const removeImage = () => {

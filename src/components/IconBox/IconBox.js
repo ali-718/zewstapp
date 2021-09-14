@@ -10,7 +10,7 @@ export const IconBox = ({ text, type }) => (
       justifyContent: "center",
     }}
   >
-    <Image
+    {/* <Image
       source={
         type === "categories"
           ? categories.find((item) => item.name === text.toLowerCase())?.icon
@@ -19,7 +19,7 @@ export const IconBox = ({ text, type }) => (
           : ""
       }
       style={{ width: 25, height: 25, resizeMode: "contain" }}
-    />
+    /> */}
     <Text style={{ marginLeft: 10, fontSize: 16 }}>{text}</Text>
   </View>
 );

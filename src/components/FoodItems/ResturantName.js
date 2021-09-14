@@ -1,8 +1,13 @@
-import { Icon } from "native-base";
-import React, { useState } from "react";
+import { Icon, Spinner } from "native-base";
+import React, { useEffect, useState } from "react";
 import { TouchableOpacity, View } from "react-native";
 import { Text } from "../../components/Text/Text";
-import { grayShade1, grayTextColor, primaryShade1 } from "../../theme/colors";
+import {
+  grayShade1,
+  grayTextColor,
+  primaryColor,
+  primaryShade1,
+} from "../../theme/colors";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Input } from "../../components/Inputs/Input";
 import noMealAdded from "../../assets/images/noMealAdded.png";
@@ -10,21 +15,40 @@ import magnifier from "../../assets/images/magnifier.png";
 import { NoMealBox } from "../../components/NoMealBox/NoMealBox";
 import { FoodOverview } from "../../components/FoodItems/FoodItemOverview";
 import { useNavigation } from "@react-navigation/native";
+import { RegularButton } from "../Buttons/RegularButton";
 
 export const ResturantName = ({
   name,
   address,
   setSelected,
   selected,
-  search,
-  setSearch,
   foodItems,
   onClickAvailable,
-  filteredFoodItems,
   isAdmin = false,
+  isLoading,
+  isError,
 }) => {
   const [isEdit, setisEdit] = useState(false);
   const navigation = useNavigation();
+  const [filteredFoodItems, setFilteredFoodItems] = useState([]);
+  const [search, setSearch] = useState("");
+
+  const searchKeyword = (text) => {
+    const keyword = text?.toLowerCase();
+    const realData = foodItems;
+
+    const finalData = realData.filter((item) =>
+      item.mealName?.toLowerCase()?.includes(keyword)
+    );
+
+    setFilteredFoodItems(finalData);
+  };
+
+  useEffect(() => {
+    if (foodItems.length === 0) return;
+
+    setFilteredFoodItems(foodItems);
+  }, [foodItems]);
 
   return (
     <View style={{ width: "100%", marginTop: 30 }}>
@@ -93,7 +117,7 @@ export const ResturantName = ({
                 textTransform: "uppercase",
               }}
             >
-              Menu items - 8
+              Menu items - {filteredFoodItems.length}
             </Text>
 
             <View
@@ -118,7 +142,7 @@ export const ResturantName = ({
                 </TouchableOpacity>
               ) : (
                 <>
-                  {foodItems.length > 0 && (
+                  {/* {foodItems.length > 0 && (
                     <TouchableOpacity onPress={() => setisEdit(true)}>
                       <Text
                         style={{
@@ -131,7 +155,7 @@ export const ResturantName = ({
                         Edit
                       </Text>
                     </TouchableOpacity>
-                  )}
+                  )} */}
 
                   <TouchableOpacity
                     onPress={() => navigation.navigate("addMeal")}
@@ -160,7 +184,10 @@ export const ResturantName = ({
                 iconName={search.length > 0 ? "cancel" : "search"}
                 iconType={MaterialIcons}
                 value={search}
-                onChangeText={(val) => setSearch(val)}
+                onChangeText={(val) => {
+                  setSearch(val);
+                  searchKeyword(val);
+                }}
                 style={{ height: 60 }}
                 iconStyle={{ fontSize: 30 }}
                 inputStyle={{ fontSize: 20 }}
@@ -172,30 +199,58 @@ export const ResturantName = ({
           <View style={{ width: "100%", marginTop: 10 }}>
             {foodItems.length > 0 ? (
               filteredFoodItems.length > 0 ? (
-                filteredFoodItems.map((item, i) => (
-                  <FoodOverview
-                    key={i}
-                    image={item.image}
-                    name={item.name}
-                    desc={item.desc}
-                    cost={item.cost}
-                    savings={item.savings}
-                    available={item.available}
-                    isEdit={isEdit}
-                    onClickAvailable={() =>
-                      onClickAvailable(i, {
-                        ...item,
-                        available: item.available ? false : true,
-                      })
-                    }
-                    onPress={() =>
-                      !isEdit && navigation.navigate("foodDetailPage", { item })
-                    }
-                  />
-                ))
+                <>
+                  {filteredFoodItems.map((item, i) => (
+                    <FoodOverview
+                      key={i}
+                      image={item.mealMedia[0] ?? ""}
+                      name={item.mealName}
+                      desc={item.mealDescription}
+                      cost={item.mealPrice}
+                      savings={item.savings ?? "0"}
+                      available={item.mealAvailability}
+                      isEdit={isEdit}
+                      onClickAvailable={() =>
+                        onClickAvailable(i, {
+                          ...item,
+                          mealAvailability: item.available ? false : true,
+                        })
+                      }
+                      onPress={() =>
+                        !isEdit &&
+                        navigation.navigate("foodDetailPage", { item })
+                      }
+                    />
+                  ))}
+                  {isLoading && (
+                    <Spinner
+                      style={{ marginTop: 20 }}
+                      size={"large"}
+                      color={primaryColor}
+                    />
+                  )}
+                </>
               ) : (
                 <NoMealBox image={magnifier} text={"No items found"} />
               )
+            ) : isLoading ? (
+              <Spinner
+                style={{ marginTop: 20 }}
+                size={"large"}
+                color={primaryColor}
+              />
+            ) : isError ? (
+              <View
+                style={{ width: "100%", marginTop: 20, alignItems: "center" }}
+              >
+                <Text style={{ fontSize: 20 }}>Unable to fetch data!</Text>
+                <RegularButton
+                  isLoading={isLoading}
+                  // onPress={OnClick}
+                  text={"Retry"}
+                  style={{ borderRadius: 10, width: "50%", marginTop: 20 }}
+                />
+              </View>
             ) : (
               <NoMealBox image={noMealAdded} text={"No meal is added"} />
             )}
