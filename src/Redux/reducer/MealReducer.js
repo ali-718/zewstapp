@@ -1,6 +1,7 @@
 import produce from "immer";
 import { USER } from "../actions/AuthActions/Types";
 import {
+  ADD_MEAL,
   GET_ADDONS,
   GET_ALLERGENS,
   GET_CATEGORIES,
@@ -16,11 +17,30 @@ const initialState = {
     isLoading: false,
     isError: false,
   },
+  addMeal: {
+    isLoading: false,
+    isError: false,
+  },
 };
 
 export const mealReducer = produce(
   (state = initialState, { payload, type }) => {
     switch (type) {
+      case ADD_MEAL.REQUESTED: {
+        state.addMeal.isLoading = true;
+        state.addMeal.isError = false;
+        break;
+      }
+      case ADD_MEAL.SUCCEEDED: {
+        state.addMeal.isLoading = false;
+        state.addMeal.isError = false;
+        break;
+      }
+      case ADD_MEAL.FAILED: {
+        state.addMeal.isLoading = false;
+        state.addMeal.isError = true;
+        break;
+      }
       case GET_MEALS.REQUESTED: {
         const index = state.hotel.hotels.findIndex(
           (item) => item.id === payload.id

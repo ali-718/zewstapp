@@ -5,7 +5,7 @@ export const nameValidator = (name) =>
     if (name.trim().length < 3) {
       return reject({
         success: false,
-        error: "name should be greater than 3 characters",
+        error: "it should be greater than 3 characters",
       });
     }
 

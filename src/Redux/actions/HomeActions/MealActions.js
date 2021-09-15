@@ -1,5 +1,12 @@
+import { ToastError, ToastSuccess } from "../../../helpers/Toast";
 import { client } from "../client";
-import { GET_ADDONS, GET_ALLERGENS, GET_CATEGORIES, GET_MEALS } from "./Types";
+import {
+  ADD_MEAL,
+  GET_ADDONS,
+  GET_ALLERGENS,
+  GET_CATEGORIES,
+  GET_MEALS,
+} from "./Types";
 
 export const getMealCategories = () => (dispatch) =>
   new Promise((resolve, reject) => {
@@ -49,5 +56,54 @@ export const getAllMeals =
       })
       .catch((e) => {
         dispatch({ type: GET_MEALS.FAILED, payload: { id } });
+      });
+  };
+
+export const addNewMeal =
+  ({
+    locationId,
+    mealName,
+    mealDescription,
+    mealPrice,
+    mealCurrency = "$",
+    mealAvailability,
+    mealDaysAvailable,
+    mealCategory,
+    mealAllergens,
+    mealAddons,
+    mealDiscount = "",
+    mealMedia,
+    navigation,
+  }) =>
+  (dispatch) => {
+    dispatch({ type: ADD_MEAL.REQUESTED, payload: { id } });
+
+    client
+      .post(`/meal/manual/add`, {
+        locationId,
+        mealName,
+        mealDescription,
+        mealPrice,
+        mealCurrency,
+        mealAvailability,
+        mealDaysAvailable,
+        mealCategory,
+        mealAllergens,
+        mealAddons,
+        mealDiscount,
+        mealMedia: [`data:image/jpeg;base64,${mealMedia}`],
+      })
+      .then((data) => {
+        dispatch({
+          type: ADD_MEAL.SUCCEEDED,
+        });
+
+        ToastSuccess("Sucess", "Meal has been added successfully");
+        navigation.goBack();
+      })
+      .catch((e) => {
+        console.log(e.response);
+        dispatch({ type: ADD_MEAL.FAILED });
+        ToastError("Some error occoured! please try again later");
       });
   };

@@ -86,7 +86,7 @@ export const Input = ({
             value={value}
             multiline={textarea}
             onChangeText={(val) => {
-              onChangeText(val);
+              OnTextChange(val);
               if (val.length === 0) {
                 setIsFocused(false);
                 return;

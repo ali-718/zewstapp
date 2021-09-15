@@ -85,6 +85,7 @@ export const MenuPage = () => {
               foodItems={item.meal?.meals || []}
               onClickAvailable={(i, data) => onClickAvailable(i, data)}
               filteredFoodItems={item.meal?.meals || []}
+              locationId={item.id}
             />
           ))}
         </View>

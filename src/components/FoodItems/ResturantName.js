@@ -27,6 +27,7 @@ export const ResturantName = ({
   isAdmin = false,
   isLoading,
   isError,
+  locationId,
 }) => {
   const [isEdit, setisEdit] = useState(false);
   const navigation = useNavigation();
@@ -158,7 +159,11 @@ export const ResturantName = ({
                   )} */}
 
                   <TouchableOpacity
-                    onPress={() => navigation.navigate("addMeal")}
+                    onPress={() =>
+                      navigation.navigate("addMeal", {
+                        locationId,
+                      })
+                    }
                     style={{ marginLeft: 10 }}
                   >
                     <Text
@@ -184,7 +189,7 @@ export const ResturantName = ({
                 iconName={search.length > 0 ? "cancel" : "search"}
                 iconType={MaterialIcons}
                 value={search}
-                onChangeText={(val) => {
+                setValue={(val) => {
                   setSearch(val);
                   searchKeyword(val);
                 }}

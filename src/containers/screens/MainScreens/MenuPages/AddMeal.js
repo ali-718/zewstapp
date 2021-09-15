@@ -9,13 +9,7 @@ import switchOn from "../../../../assets/images/switchOn.png";
 import switchOff from "../../../../assets/images/switchOff.png";
 import forwardIcon from "../../../../assets/images/forwardIcon.png";
 import deleteIconWhite from "../../../../assets/images/deleteIconWhite.png";
-import {
-  addonsList,
-  allergensList,
-  categoriesList,
-  days,
-  WIDTH,
-} from "../../../../helpers/utlils";
+import { days, WIDTH } from "../../../../helpers/utlils";
 import { MealItem } from "../../../../components/Meals/MealItem";
 import { ListModal } from "../../../../components/Meals/ListModal";
 import { PhotoModal } from "../../../../components/Meals/PhotoModal";
@@ -24,12 +18,18 @@ import * as ImagePicker from "expo-image-picker";
 import { DeleteModal } from "../../../../components/Meals/DeleteModal";
 import { useDispatch, useSelector } from "react-redux";
 import { getMealCategories } from "../../../../Redux/actions/HomeActions/MealActions";
+import { nameValidator } from "../../../../helpers/rules";
+import { ToastError } from "../../../../helpers/Toast";
+import * as actions from "../../../../Redux/actions/HomeActions/MealActions";
+import { useNavigation } from "@react-navigation/core";
 
 export const AddMeal = (props) => {
   const dispatch = useDispatch();
+  const navigation = useNavigation();
   const categories = useSelector((state) => state.meal.categories);
   const allergens = useSelector((state) => state.meal.allergens);
   const addons = useSelector((state) => state.meal.addons);
+  const isLoading = useSelector((state) => state.meal.addMeal.isLoading);
 
   const [name, setName] = useState("");
   const [desc, setdesc] = useState("");
@@ -47,6 +47,7 @@ export const AddMeal = (props) => {
   const [selectedAllergens, setselectedAllergens] = useState([]);
   const [selectedAddons, setselectedAddons] = useState([]);
   const [foodImage, setFoodImage] = useState("");
+  const [foodImageBase64, setfoodImageBase64] = useState("");
 
   useEffect(() => {
     if (!props.route?.params?.data) return;
@@ -77,6 +78,7 @@ export const AddMeal = (props) => {
 
   const removeImage = () => {
     setFoodImage("");
+    setfoodImageBase64("");
   };
 
   const openCamera = async () => {
@@ -108,6 +110,7 @@ export const AddMeal = (props) => {
     }
 
     setFoodImage(result.uri);
+    setfoodImageBase64(result.base64);
   };
 
   const pickImage = async () => {
@@ -132,6 +135,7 @@ export const AddMeal = (props) => {
     }
 
     setFoodImage(result.uri);
+    setfoodImageBase64(result.base64);
   };
 
   const onSelectDays = (val) => {
@@ -176,6 +180,40 @@ export const AddMeal = (props) => {
     }
 
     setselectedAddons([...selectedAddons, val]);
+  };
+
+  const onSaveMeal = () => {
+    if (
+      name.trim().length === 0 ||
+      desc.trim().length === 0 ||
+      selectedDays.length === 0 ||
+      selectedCategories.length === 0 ||
+      unitCost.length === 0
+    ) {
+      ToastError("Fill all fields marked with (*)");
+      return;
+    }
+
+    if (foodImage.length === 0 || foodImageBase64.length === 0) {
+      ToastError("Kindly select meal image");
+      return;
+    }
+
+    dispatch(
+      actions.addNewMeal({
+        locationId: props.route?.params?.locationId,
+        mealName: name,
+        mealDescription: desc,
+        mealPrice: parseFloat(unitCost),
+        mealAvailability: available,
+        mealDaysAvailable: selectedDays,
+        mealCategory: selectedCategories,
+        mealAllergens: selectedAllergens,
+        mealAddons: selectedAddons,
+        mealMedia: foodImageBase64,
+        navigation,
+      })
+    );
   };
 
   return (
@@ -225,8 +263,9 @@ export const AddMeal = (props) => {
           <Input
             isEdit={isEdit}
             value={name}
-            onChangeText={(val) => setName(val)}
+            setValue={(val) => setName(val)}
             placeholder={"Title*"}
+            rule={nameValidator}
           />
         </View>
 
@@ -234,9 +273,10 @@ export const AddMeal = (props) => {
           <Input
             isEdit={isEdit}
             value={desc}
-            onChangeText={(val) => setdesc(val)}
+            setValue={(val) => setdesc(val)}
             placeholder={"Description*"}
             textarea
+            rule={nameValidator}
           />
         </View>
 
@@ -244,8 +284,9 @@ export const AddMeal = (props) => {
           <Input
             isEdit={isEdit}
             value={unitCost}
-            onChangeText={(val) => setunitCost(val)}
+            setValue={(val) => setunitCost(val)}
             placeholder={"Unit Cost $*"}
+            keyboardType={"number-pad"}
           />
         </View>
 
@@ -290,7 +331,7 @@ export const AddMeal = (props) => {
 
         <View style={{ width: "100%", marginTop: 10 }}>
           <MealItem
-            label={"Allergens*"}
+            label={"Allergens"}
             text={JSON.stringify(selectedAllergens)
               .replace("[", "")
               .replace("]", "")
@@ -322,6 +363,8 @@ export const AddMeal = (props) => {
           <RegularButton
             style={{ borderRadius: 100 }}
             text={isEdit ? "SAVE" : "ADD"}
+            onPress={onSaveMeal}
+            isLoading={isLoading}
           />
         </View>
       </View>
