@@ -30,6 +30,10 @@ export const AddMeal = (props) => {
   const allergens = useSelector((state) => state.meal.allergens);
   const addons = useSelector((state) => state.meal.addons);
   const isLoading = useSelector((state) => state.meal.addMeal.isLoading);
+  const deleteMealLoading = useSelector(
+    (state) => state.meal.deleteMeal.isLoading
+  );
+  const deleteMealError = useSelector((state) => state.meal.deleteMeal.isError);
 
   const [name, setName] = useState("");
   const [desc, setdesc] = useState("");
@@ -50,17 +54,23 @@ export const AddMeal = (props) => {
   const [foodImageBase64, setfoodImageBase64] = useState("");
 
   useEffect(() => {
+    if (!deleteMealError) return;
+
+    setdeleteModal(false);
+  }, [deleteMealError]);
+
+  useEffect(() => {
     if (!props.route?.params?.data) return;
 
     const {
-      name,
-      desc,
-      cost,
-      days,
-      categories,
-      available,
-      allergens,
-      addons,
+      mealName: name,
+      mealDescription: desc,
+      mealPrice: cost,
+      mealDaysAvailable: days,
+      mealCategory: categories,
+      mealAvailability: available,
+      mealAllergens: allergens,
+      mealAddons: addons,
       mealMedia: image,
     } = props.route?.params?.data;
 
@@ -211,6 +221,16 @@ export const AddMeal = (props) => {
         mealAllergens: selectedAllergens,
         mealAddons: selectedAddons,
         mealMedia: foodImageBase64,
+        navigation,
+      })
+    );
+  };
+
+  const onDeleteMeal = () => {
+    dispatch(
+      actions.deleteSpecificMeal({
+        locationId: props.route?.params?.data?.locationId,
+        mealId: props.route?.params?.data?.mealId,
         navigation,
       })
     );
@@ -418,6 +438,8 @@ export const AddMeal = (props) => {
       <DeleteModal
         onRequestClose={() => setdeleteModal(false)}
         visible={deleteModal}
+        isLoading={deleteMealLoading}
+        onDelete={onDeleteMeal}
       />
     </MainScreenContainer>
   );

@@ -552,109 +552,116 @@ export const FoodDetailPage = ({ changeAvailability, ...props }) => {
               </View>
             </View>
 
-            <View style={{ width: "100%", marginTop: 20 }}>
-              <Text
-                style={{
-                  color: grayTextColor,
-                  fontSize: 16,
-                  textTransform: "uppercase",
-                  fontFamily: "openSans_bold",
-                  marginLeft: 5,
-                }}
-              >
-                Categories
-              </Text>
+            {mealCategory.length > 0 && (
+              <View style={{ width: "100%", marginTop: 20 }}>
+                <Text
+                  style={{
+                    color: grayTextColor,
+                    fontSize: 16,
+                    textTransform: "uppercase",
+                    fontFamily: "openSans_bold",
+                    marginLeft: 5,
+                  }}
+                >
+                  Categories
+                </Text>
 
-              <View
-                style={{
-                  width: "100%",
-                  marginTop: 10,
-                  backgroundColor: "white",
-                  borderRadius: 10,
-                  padding: 10,
-                  paddingHorizontal: 20,
-                }}
-              >
-                <FlatList
-                  data={mealCategory}
-                  numColumns={2}
-                  keyExtractor={(val) => val}
-                  renderItem={({ item }, i) => (
-                    <IconBox type={"categories"} text={item} />
-                  )}
-                  columnWrapperStyle={{ justifyContent: "space-between" }}
-                />
+                <View
+                  style={{
+                    width: "100%",
+                    marginTop: 10,
+                    backgroundColor: "white",
+                    borderRadius: 10,
+                    padding: 10,
+                    paddingHorizontal: 20,
+                  }}
+                >
+                  <FlatList
+                    data={mealCategory}
+                    numColumns={2}
+                    keyExtractor={(val) => val}
+                    renderItem={({ item }, i) => (
+                      <IconBox type={"categories"} text={item} />
+                    )}
+                    columnWrapperStyle={{ justifyContent: "space-between" }}
+                  />
+                </View>
               </View>
-            </View>
+            )}
 
-            <View style={{ width: "100%", marginTop: 20 }}>
-              <Text
-                style={{
-                  color: grayTextColor,
-                  fontSize: 16,
-                  textTransform: "uppercase",
-                  fontFamily: "openSans_bold",
-                  marginLeft: 5,
-                }}
-              >
-                Allergens
-              </Text>
+            {mealAllergens.length > 0 && (
+              <View style={{ width: "100%", marginTop: 20 }}>
+                <Text
+                  style={{
+                    color: grayTextColor,
+                    fontSize: 16,
+                    textTransform: "uppercase",
+                    fontFamily: "openSans_bold",
+                    marginLeft: 5,
+                  }}
+                >
+                  Allergens
+                </Text>
 
-              <View
-                style={{
-                  width: "100%",
-                  marginTop: 10,
-                  backgroundColor: "white",
-                  borderRadius: 10,
-                  padding: 10,
-                  paddingHorizontal: 20,
-                }}
-              >
-                <FlatList
-                  data={mealAllergens}
-                  numColumns={2}
-                  keyExtractor={(val) => val}
-                  renderItem={({ item }, i) => (
-                    <IconBox type={"allergens"} text={item} />
-                  )}
-                  columnWrapperStyle={{ justifyContent: "space-between" }}
-                />
+                <View
+                  style={{
+                    width: "100%",
+                    marginTop: 10,
+                    backgroundColor: "white",
+                    borderRadius: 10,
+                    padding: 10,
+                    paddingHorizontal: 20,
+                  }}
+                >
+                  <FlatList
+                    data={mealAllergens}
+                    numColumns={2}
+                    keyExtractor={(val) => val}
+                    renderItem={({ item }, i) => (
+                      <IconBox type={"allergens"} text={item} />
+                    )}
+                    columnWrapperStyle={{ justifyContent: "space-between" }}
+                  />
+                </View>
               </View>
-            </View>
-            <View style={{ width: "100%", marginTop: 20 }}>
-              <Text
-                style={{
-                  color: grayTextColor,
-                  fontSize: 16,
-                  textTransform: "uppercase",
-                  fontFamily: "openSans_bold",
-                  marginLeft: 5,
-                }}
-              >
-                Addons
-              </Text>
+            )}
 
-              <View
-                style={{
-                  width: "100%",
-                  marginTop: 10,
-                  backgroundColor: "white",
-                  borderRadius: 10,
-                  padding: 10,
-                  paddingHorizontal: 20,
-                }}
-              >
-                <FlatList
-                  data={mealAddons}
-                  numColumns={2}
-                  keyExtractor={(val) => val}
-                  renderItem={({ item }, i) => (
-                    <IconBox type={"addons"} text={item} />
-                  )}
-                  columnWrapperStyle={{ justifyContent: "space-between" }}
-                />
+            {mealAddons.length > 0 && (
+              <View style={{ width: "100%", marginTop: 20 }}>
+                <Text
+                  style={{
+                    color: grayTextColor,
+                    fontSize: 16,
+                    textTransform: "uppercase",
+                    fontFamily: "openSans_bold",
+                    marginLeft: 5,
+                  }}
+                >
+                  Addons
+                </Text>
+
+                <View
+                  style={{
+                    width: "100%",
+                    marginTop: 10,
+                    backgroundColor: "white",
+                    borderRadius: 10,
+                    padding: 10,
+                    paddingHorizontal: 20,
+                  }}
+                >
+                  <FlatList
+                    data={mealAddons}
+                    numColumns={2}
+                    keyExtractor={(val) => val}
+                    renderItem={({ item }, i) => (
+                      <IconBox type={"addons"} text={item} />
+                    )}
+                    columnWrapperStyle={{ justifyContent: "space-between" }}
+                  />
+                </View>
               </View>
-            </View>
+            )}
           </View>
         </View>
       </View>

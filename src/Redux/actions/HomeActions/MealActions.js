@@ -2,6 +2,7 @@ import { ToastError, ToastSuccess } from "../../../helpers/Toast";
 import { client } from "../client";
 import {
   ADD_MEAL,
+  DELETE_MEAL,
   GET_ADDONS,
   GET_ALLERGENS,
   GET_CATEGORIES,
@@ -59,6 +60,29 @@ export const getAllMeals =
       });
   };
 
+export const deleteSpecificMeal =
+  ({ locationId, mealId, navigation }) =>
+  (dispatch) => {
+    dispatch({ type: DELETE_MEAL.REQUESTED });
+
+    client
+      .post(`/meal/manual/delete`, {
+        locationId,
+        mealId,
+      })
+      .then((data) => {
+        dispatch({
+          type: DELETE_MEAL.SUCCEEDED,
+          payload: { mealId, locationId },
+        });
+        navigation.pop(2);
+      })
+      .catch((e) => {
+        dispatch({ type: DELETE_MEAL.FAILED });
+        ToastError("Some error occoured! please try again later");
+      });
+  };
+
 export const addNewMeal =
   ({
     locationId,
@@ -76,7 +100,7 @@ export const addNewMeal =
     navigation,
   }) =>
   (dispatch) => {
-    dispatch({ type: ADD_MEAL.REQUESTED, payload: { id } });
+    dispatch({ type: ADD_MEAL.REQUESTED });
 
     client
       .post(`/meal/manual/add`, {

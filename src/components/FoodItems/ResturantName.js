@@ -223,7 +223,9 @@ export const ResturantName = ({
                       }
                       onPress={() =>
                         !isEdit &&
-                        navigation.navigate("foodDetailPage", { item })
+                        navigation.navigate("foodDetailPage", {
+                          item: { ...item, locationId },
+                        })
                       }
                     />
                   ))}

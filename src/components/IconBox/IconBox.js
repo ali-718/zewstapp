@@ -8,6 +8,7 @@ export const IconBox = ({ text, type }) => (
       flexDirection: "row",
       alignItems: "center",
       justifyContent: "center",
+      marginTop: 10,
     }}
   >
     {/* <Image

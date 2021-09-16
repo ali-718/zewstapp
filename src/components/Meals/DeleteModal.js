@@ -10,9 +10,14 @@ import {
 import { RegularButton } from "../Buttons/RegularButton";
 import { Text } from "../Text/Text";
 
-export const DeleteModal = ({ onRequestClose, visible }) => (
+export const DeleteModal = ({
+  onRequestClose,
+  visible,
+  isLoading,
+  onDelete,
+}) => (
   <Modal
-    onRequestClose={onRequestClose}
+    onRequestClose={isLoading ? () => null : onRequestClose}
     visible={visible}
     animationType="slide"
     transparent
@@ -94,7 +99,7 @@ export const DeleteModal = ({ onRequestClose, visible }) => (
                 width: "48%",
               }}
               text={"Cancel"}
-              onPress={onRequestClose}
+              onPress={isLoading ? () => null : onRequestClose}
             />
             <RegularButton
               colors={[redShade1, redShade2]}
@@ -103,7 +108,8 @@ export const DeleteModal = ({ onRequestClose, visible }) => (
                 width: "48%",
               }}
               text={"Delete"}
-              onPress={onRequestClose}
+              onPress={onDelete}
+              isLoading={isLoading}
             />
           </View>
         </View>
