@@ -12,7 +12,7 @@ import {
   getMealAllergens,
   getMealCategories,
 } from "./Redux/actions/HomeActions/MealActions";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
 const Stack = createNativeStackNavigator();
 

@@ -41,6 +41,7 @@ export const AdminPage = () => {
               isAdmin
               customComponent
             />
+
             {selected === i && (
               <View style={{ width: "100%", marginTop: 20 }}>
                 <View style={{ width: "100%" }}>

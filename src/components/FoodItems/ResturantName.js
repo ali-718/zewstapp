@@ -46,7 +46,7 @@ export const ResturantName = ({
   };
 
   useEffect(() => {
-    if (foodItems.length === 0) return;
+    if (foodItems?.length === 0) return;
 
     setFilteredFoodItems(foodItems);
   }, [foodItems]);

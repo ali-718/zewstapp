@@ -33,7 +33,6 @@ export const SignUpPage = (props) => {
   const SignUpClicked = () => {
     if (
       validator.isEmpty(resturantName, { ignore_whitespace: false }) ||
-      validator.isEmpty(location, { ignore_whitespace: false }) ||
       validator.isEmpty(name, { ignore_whitespace: false }) ||
       validator.isEmpty(contact, { ignore_whitespace: false }) ||
       validator.isEmpty(email, { ignore_whitespace: false }) ||
@@ -48,7 +47,6 @@ export const SignUpPage = (props) => {
 
     signupAction({
       restaurant_name: resturantName,
-      restaurant_location: location,
       designation: selectedType,
       owner_name: name,
       contact_no: contact,
@@ -77,16 +75,6 @@ export const SignUpPage = (props) => {
             setValue={(val) => setResturantName(val)}
             placeholder={"Resturant name*"}
             rule={nameValidator}
-          />
-        </View>
-
-        <View style={{ width: "100%", marginTop: 20 }}>
-          <Input
-            placeholder={"Resturant location*"}
-            iconName={"my-location"}
-            iconType={MaterialIcons}
-            value={location}
-            setValue={(val) => setLocation(val)}
           />
         </View>
 

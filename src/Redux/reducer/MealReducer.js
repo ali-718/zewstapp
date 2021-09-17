@@ -2,10 +2,12 @@ import produce from "immer";
 import { USER } from "../actions/AuthActions/Types";
 import {
   ADD_MEAL,
+  ADD_NEW_LOCATION,
   DELETE_MEAL,
   GET_ADDONS,
   GET_ALLERGENS,
   GET_CATEGORIES,
+  GET_HOTEL_LOCATIONS,
   GET_MEALS,
 } from "../actions/HomeActions/Types";
 
@@ -26,11 +28,30 @@ const initialState = {
     isLoading: false,
     isError: false,
   },
+  addNewLocation: {
+    isLoading: false,
+    isError: false,
+  },
 };
 
 export const mealReducer = produce(
   (state = initialState, { payload, type }) => {
     switch (type) {
+      case ADD_NEW_LOCATION.REQUESTED: {
+        state.addNewLocation.isLoading = true;
+        state.addNewLocation.isError = false;
+        break;
+      }
+      case ADD_NEW_LOCATION.SUCCEEDED: {
+        state.addNewLocation.isLoading = false;
+        state.addNewLocation.isError = false;
+        break;
+      }
+      case ADD_NEW_LOCATION.FAILED: {
+        state.addNewLocation.isLoading = false;
+        state.addNewLocation.isError = true;
+        break;
+      }
       case DELETE_MEAL.REQUESTED: {
         state.deleteMeal.isLoading = true;
         state.deleteMeal.isError = false;
@@ -73,38 +94,28 @@ export const mealReducer = produce(
         break;
       }
       case GET_MEALS.REQUESTED: {
-        const index = state.hotel.hotels.findIndex(
-          (item) => item.id === payload.id
-        );
+        state.hotel.hotels[0] = {
+          ...state.hotel.hotels[0],
+          meal: {
+            ...state.hotel.hotels[0].meal,
+            isLoading: true,
+            isError: false,
+          },
+        };
 
-        if (index !== -1) {
-          state.hotel.hotels[index] = {
-            ...state.hotel.hotels[index],
-            meal: {
-              ...state.hotel.hotels[index].meal,
-              isLoading: true,
-              isError: false,
-            },
-          };
-        }
         break;
       }
 
       case GET_MEALS.SUCCEEDED: {
-        const index = state.hotel.hotels.findIndex(
-          (item) => item.id === payload.id
-        );
+        state.hotel.hotels[0] = {
+          ...state.hotel.hotels[0],
+          meal: {
+            isLoading: false,
+            isError: false,
+            meals: payload.meals,
+          },
+        };
 
-        if (index !== -1) {
-          state.hotel.hotels[index] = {
-            ...state.hotel.hotels[index],
-            meal: {
-              isLoading: false,
-              isError: false,
-              meals: payload.meals,
-            },
-          };
-        }
         break;
       }
 
@@ -130,18 +141,37 @@ export const mealReducer = produce(
           ...state.hotel.hotels,
           {
             name: payload.user.clientName,
-            location: payload.user?.locationName,
-            id: payload.user?.locationId,
             owner: payload.user?.owner_name,
             meal: {
               isLoading: false,
               isError: false,
               meals: [],
             },
+
+            locations: [],
           },
         ];
         state.hotel.isLoading = false;
         state.hotel.isError = false;
+        break;
+      }
+      case GET_HOTEL_LOCATIONS.REQUESTED: {
+        state.hotel.isLoading = true;
+        state.hotel.isError = false;
+        break;
+      }
+      case GET_HOTEL_LOCATIONS.SUCCEEDED: {
+        state.hotel.hotels[0] = {
+          ...state.hotel.hotels[0],
+          locations: payload.locations.locations.Items,
+        };
+        state.hotel.isLoading = false;
+        state.hotel.isError = false;
+        break;
+      }
+      case GET_HOTEL_LOCATIONS.FAILED: {
+        state.hotel.isLoading = false;
+        state.hotel.isError = true;
         break;
       }
       case GET_CATEGORIES: {

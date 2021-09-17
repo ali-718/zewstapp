@@ -6,43 +6,28 @@ import plus from "../../../../assets/images/plus.png";
 import { ResturantName } from "../../../../components/FoodItems/ResturantName";
 import { useSelector, useDispatch } from "react-redux";
 import * as actions from "../../../../Redux/actions/HomeActions/MealActions";
-
-const dummyData = [
-  {
-    name: "Grilled Chicken & Vegetable mix",
-    desc: "Crisp fried eggplant rolled with ricotta cheese and baked with tomato-basil sauce, and shredded cheese blend.",
-    image:
-      "https://food.fnr.sndimg.com/content/dam/images/food/fullset/2021/05/10/0/WU0502H_spicy-roasted-chicken-legs-recipe_s4x3.jpg.rend.hgtvcom.616.462.suffix/1620689296042.jpeg",
-    cost: 8.99,
-    savings: 2.99,
-    available: true,
-  },
-  {
-    name: "Veal Amore",
-    desc: "Crisp fried eggplant rolled with ricotta cheese and baked with tomato-basil sauce, and shredded cheese blend.",
-    image:
-      "https://food.fnr.sndimg.com/content/dam/images/food/fullset/2021/05/10/0/WU0502H_spicy-roasted-chicken-legs-recipe_s4x3.jpg.rend.hgtvcom.616.462.suffix/1620689296042.jpeg",
-    cost: 8.99,
-    savings: 2.99,
-    available: true,
-  },
-  {
-    name: "Shrim Pomodoro",
-    desc: "Crisp fried eggplant rolled with ricotta cheese and baked with tomato-basil sauce, and shredded cheese blend.",
-    image:
-      "https://food.fnr.sndimg.com/content/dam/images/food/fullset/2021/05/10/0/WU0502H_spicy-roasted-chicken-legs-recipe_s4x3.jpg.rend.hgtvcom.616.462.suffix/1620689296042.jpeg",
-    cost: 8.99,
-    savings: 2.99,
-    available: false,
-  },
-];
+import { Spinner } from "native-base";
+import { RegularButton } from "../../../../components/Buttons/RegularButton";
+import { primaryColor } from "../../../../theme/colors";
+import { Text } from "../../../../components/Text/Text";
+import { HEIGHT } from "../../../../helpers/utlils";
+import { useNavigation } from "@react-navigation/core";
 
 export const MenuPage = () => {
   const dispatch = useDispatch();
+  const navigation = useNavigation();
+  const user = useSelector((state) => state.auth.user.user);
   const hotels = useSelector((state) => state.meal.hotel.hotels);
   const isLoading = useSelector((state) => state.meal.hotel.isLoading);
   const isError = useSelector((state) => state.meal.hotel.isError);
   const [selected, setSelected] = useState("");
+
+  useEffect(() => {
+    fetchLocations();
+  }, []);
+
+  const fetchLocations = () =>
+    dispatch(actions.getAllLocations({ userId: user.clientId }));
 
   const openResturant = (val, id) => {
     if (val === selected) {
@@ -64,32 +49,89 @@ export const MenuPage = () => {
   const onOpenResturant = (id) => dispatch(actions.getAllMeals({ id }));
 
   return (
-    <MainScreenContainer leftImage={person} rightImage={plus} title={"Menu"}>
-      <View
-        style={{
-          width: "90%",
-          marginBottom: 60,
-          alignItems: "center",
-        }}
-      >
-        <View style={{ width: "100%", alignItems: "center" }}>
-          {hotels.map((item, i) => (
-            <ResturantName
-              key={i}
-              name={item.name}
-              isLoading={item.meal?.isLoading}
-              isError={item.meal?.isError}
-              address={item.location}
-              selected={selected === 0}
-              setSelected={() => openResturant(i, item.id)}
-              foodItems={item.meal?.meals || []}
-              onClickAvailable={(i, data) => onClickAvailable(i, data)}
-              filteredFoodItems={item.meal?.meals || []}
-              locationId={item.id}
-            />
-          ))}
+    <MainScreenContainer
+      onPressRight={() => navigation.navigate("addLocation", { isMenu: true })}
+      leftImage={person}
+      rightImage={plus}
+      title={"Menu"}
+    >
+      {isLoading ? (
+        <View
+          style={{
+            width: "100%",
+            flex: 1,
+            alignItems: "center",
+            justifyContent: "center",
+            height: HEIGHT - 100,
+          }}
+        >
+          <Spinner size={"large"} color={primaryColor} />
         </View>
-      </View>
+      ) : isError ? (
+        <View
+          style={{
+            width: "100%",
+            flex: 1,
+            alignItems: "center",
+            justifyContent: "center",
+            height: HEIGHT - 100,
+          }}
+        >
+          <Text style={{ fontSize: 20 }}>Unable to fetch data!</Text>
+          <RegularButton
+            isLoading={isLoading}
+            onPress={fetchLocations}
+            text={"Retry"}
+            style={{ borderRadius: 10, width: "50%", marginTop: 20 }}
+          />
+        </View>
+      ) : hotels[0]?.locations.length > 0 ? (
+        <View
+          style={{
+            width: "90%",
+            marginBottom: 60,
+            alignItems: "center",
+          }}
+        >
+          <View style={{ width: "100%", alignItems: "center" }}>
+            {hotels[0]?.locations.map((item, i) => (
+              <ResturantName
+                key={i}
+                name={hotels[0]?.name}
+                isLoading={hotels[0]?.meal?.isLoading}
+                isError={hotels[0]?.meal?.isError}
+                address={item.address}
+                selected={selected === 0}
+                setSelected={() => openResturant(i, item.locationId)}
+                foodItems={hotels[0]?.meal?.meals || []}
+                onClickAvailable={(i, data) => onClickAvailable(i, data)}
+                filteredFoodItems={hotels[0]?.meal?.meals || []}
+                locationId={item.locationId}
+              />
+            ))}
+          </View>
+        </View>
+      ) : (
+        <View
+          style={{
+            width: "100%",
+            flex: 1,
+            alignItems: "center",
+            justifyContent: "center",
+            height: HEIGHT - 100,
+          }}
+        >
+          <Text style={{ fontSize: 20, width: "80%", textAlign: "center" }}>
+            You need to add atleast one location to start the process 😃
+          </Text>
+          <RegularButton
+            isLoading={isLoading}
+            onPress={() => navigation.navigate("addLocation", { isMenu: true })}
+            text={"Add Location"}
+            style={{ borderRadius: 10, width: "50%", marginTop: 20 }}
+          />
+        </View>
+      )}
     </MainScreenContainer>
   );
 };

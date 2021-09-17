@@ -13,7 +13,6 @@ export const signupAction = ({
     client
       .post("/auth/signup", {
         restaurant_name,
-        restaurant_location,
         designation,
         owner_name,
         contact_no: `+${contact_no}`,
