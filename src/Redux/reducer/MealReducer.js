@@ -94,43 +94,56 @@ export const mealReducer = produce(
         break;
       }
       case GET_MEALS.REQUESTED: {
-        state.hotel.hotels[0] = {
-          ...state.hotel.hotels[0],
-          meal: {
-            ...state.hotel.hotels[0].meal,
-            isLoading: true,
-            isError: false,
-          },
-        };
+        const index = state.hotel.hotels[0].locations.findIndex(
+          (item) => item.locationId === payload.id
+        );
+
+        if (index !== -1) {
+          state.hotel.hotels[0].locations[index] = {
+            ...state.hotel.hotels[0].locations[index],
+            meal: {
+              ...state.hotel.hotels[0].locations[index].meal,
+              isLoading: true,
+              isError: false,
+            },
+          };
+        }
 
         break;
       }
 
       case GET_MEALS.SUCCEEDED: {
-        state.hotel.hotels[0] = {
-          ...state.hotel.hotels[0],
-          meal: {
-            isLoading: false,
-            isError: false,
-            meals: payload.meals,
-          },
-        };
+        const index = state.hotel.hotels[0].locations.findIndex(
+          (item) => item.locationId === payload.id
+        );
+
+        if (index !== -1) {
+          state.hotel.hotels[0].locations[index] = {
+            ...state.hotel.hotels[0].locations[index],
+            meal: {
+              ...state.hotel.hotels[0].locations[index].meal,
+              isLoading: false,
+              isError: false,
+              meals: payload.meals,
+            },
+          };
+        }
 
         break;
       }
 
       case GET_MEALS.FAILED: {
-        const index = state.hotel.hotels.findIndex(
-          (item) => item.id === payload.id
+        const index = state.hotel.hotels[0].locations.filter(
+          (item) => item.locationId === payload.id
         );
 
         if (index !== -1) {
-          state.hotel.hotels[index] = {
-            ...state.hotels[index],
+          state.hotel.hotels[0].locations[index] = {
+            ...state.hotel.hotels[0].locations[index],
             meal: {
+              ...state.hotel.hotels[0].locations[index].meal,
               isLoading: false,
               isError: true,
-              ...state.hotel.hotels[index].meal,
             },
           };
         }
@@ -140,13 +153,8 @@ export const mealReducer = produce(
         state.hotel.hotels = [
           ...state.hotel.hotels,
           {
-            name: payload.user.clientName,
+            name: payload.user.restaurantName,
             owner: payload.user?.owner_name,
-            meal: {
-              isLoading: false,
-              isError: false,
-              meals: [],
-            },
 
             locations: [],
           },
@@ -163,7 +171,7 @@ export const mealReducer = produce(
       case GET_HOTEL_LOCATIONS.SUCCEEDED: {
         state.hotel.hotels[0] = {
           ...state.hotel.hotels[0],
-          locations: payload.locations.locations.Items,
+          locations: [...payload.locations],
         };
         state.hotel.isLoading = false;
         state.hotel.isError = false;

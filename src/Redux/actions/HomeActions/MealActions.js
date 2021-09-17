@@ -77,6 +77,8 @@ export const deleteSpecificMeal =
           type: DELETE_MEAL.SUCCEEDED,
           payload: { mealId, locationId },
         });
+        dispatch(getAllMeals({ id: locationId }));
+
         navigation.pop(2);
       })
       .catch((e) => {
@@ -92,9 +94,24 @@ export const getAllLocations =
     client
       .get(`/location/findAll/${userId}`)
       .then((data) => {
+        const locations = data.data.locations.Items;
+        const arr = [];
+        locations.map((item) => {
+          arr.push({
+            ...item,
+            meal: {
+              isLoading: false,
+              isError: false,
+              meals: [],
+            },
+          });
+        });
+
         dispatch({
           type: GET_HOTEL_LOCATIONS.SUCCEEDED,
-          payload: { locations: data.data },
+          payload: {
+            locations: arr,
+          },
         });
       })
       .catch((e) => {
@@ -147,6 +164,7 @@ export const addNewMeal =
         navigation.goBack();
       })
       .catch((e) => {
+        console.log(e.response);
         dispatch({ type: ADD_MEAL.FAILED });
         ToastError("Some error occoured! please try again later");
       });

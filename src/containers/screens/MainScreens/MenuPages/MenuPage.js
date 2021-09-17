@@ -98,14 +98,14 @@ export const MenuPage = () => {
               <ResturantName
                 key={i}
                 name={hotels[0]?.name}
-                isLoading={hotels[0]?.meal?.isLoading}
-                isError={hotels[0]?.meal?.isError}
+                isLoading={item?.meal?.isLoading}
+                isError={item?.meal?.isError}
                 address={item.address}
-                selected={selected === 0}
+                selected={selected === i}
                 setSelected={() => openResturant(i, item.locationId)}
-                foodItems={hotels[0]?.meal?.meals || []}
+                foodItems={item?.meal?.meals || []}
                 onClickAvailable={(i, data) => onClickAvailable(i, data)}
-                filteredFoodItems={hotels[0]?.meal?.meals || []}
+                filteredFoodItems={item?.meal?.meals || []}
                 locationId={item.locationId}
               />
             ))}
