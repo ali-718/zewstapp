@@ -19,7 +19,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useNavigation } from "@react-navigation/native";
 import { Text } from "../../../components/Text/Text";
 
-export const OnBoardingPage = () => {
+export const OnBoardingPage = ({ inLogin = false }) => {
   const navigation = useNavigation();
   const [activeIndex, setActiveIndex] = useState(0);
 
@@ -78,7 +78,7 @@ export const OnBoardingPage = () => {
             width: "90%",
             flex: 1,
             alignItems: "center",
-            justifyContent: "space-between",
+            justifyContent: "center",
           }}
         >
           <View
@@ -97,20 +97,23 @@ export const OnBoardingPage = () => {
           <View
             style={{
               width: "100%",
-              flex: 1,
+
               paddingVertical: 20,
               alignItems: "center",
               justifyContent: "space-between",
+              height: 450,
             }}
           >
             <Carousel
               onSnapToItem={(index) => setActiveIndex(index)}
               data={carouselData}
               renderItem={_renderItem}
-              sliderWidth={WIDTH}
-              itemWidth={WIDTH}
+              sliderWidth={inLogin ? WIDTH / 2 - 30 : WIDTH > 500 ? 500 : WIDTH}
+              itemWidth={inLogin ? WIDTH / 2 - 30 : WIDTH > 500 ? 500 : WIDTH}
+              style={{ maxWidth: 500, width: "100%" }}
               loop
             />
+            <View style={{ marginTop: 20 }} />
             <Pagination
               dotsLength={carouselData.length}
               activeDotIndex={activeIndex}
@@ -129,57 +132,59 @@ export const OnBoardingPage = () => {
           </View>
         </View>
 
-        <View
-          style={{
-            width: "100%",
-            marginTop: 20,
-            flexDirection: "row",
-            justifyContent: "space-between",
-          }}
-        >
-          <TouchableOpacity
+        {!inLogin && (
+          <View
             style={{
-              width: "50%",
-              padding: 15,
-              alignItems: "center",
-              justifyContent: "center",
-              backgroundColor: "white",
+              width: "100%",
+              marginTop: 20,
+              flexDirection: "row",
+              justifyContent: "space-between",
             }}
-            onPress={() => navigation.navigate("Signup")}
           >
-            <Text
+            <TouchableOpacity
               style={{
-                color: textColor,
-                fontSize: 20,
-                fontWeight: "bold",
-                fontFamily: "openSans_bold",
+                width: "50%",
+                padding: 15,
+                alignItems: "center",
+                justifyContent: "center",
+                backgroundColor: "white",
               }}
+              onPress={() => navigation.navigate("Signup")}
             >
-              Sign up
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={{
-              width: "49.5%",
-              padding: 15,
-              alignItems: "center",
-              justifyContent: "center",
-              backgroundColor: "white",
-            }}
-            onPress={() => navigation.navigate("Login")}
-          >
-            <Text
+              <Text
+                style={{
+                  color: textColor,
+                  fontSize: 20,
+                  fontWeight: "bold",
+                  fontFamily: "openSans_bold",
+                }}
+              >
+                Sign up
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
               style={{
-                color: textColor,
-                fontSize: 20,
-                fontWeight: "bold",
-                fontFamily: "openSans_bold",
+                width: "49.5%",
+                padding: 15,
+                alignItems: "center",
+                justifyContent: "center",
+                backgroundColor: "white",
               }}
+              onPress={() => navigation.navigate("Login")}
             >
-              Login
-            </Text>
-          </TouchableOpacity>
-        </View>
+              <Text
+                style={{
+                  color: textColor,
+                  fontSize: 20,
+                  fontWeight: "bold",
+                  fontFamily: "openSans_bold",
+                }}
+              >
+                Login
+              </Text>
+            </TouchableOpacity>
+          </View>
+        )}
       </SafeAreaView>
     </LinearGradient>
   );

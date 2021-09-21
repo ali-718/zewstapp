@@ -2,6 +2,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { Spinner } from "native-base";
 import React from "react";
 import { Image, TouchableOpacity, View } from "react-native";
+import { useSelector } from "react-redux";
 import { primaryColor, primaryShade1 } from "../../theme/colors";
 import { Text } from "../Text/Text";
 
@@ -16,6 +17,8 @@ export const RegularButton = ({
   disabled,
   ...props
 }) => {
+  const device = useSelector((state) => state.system.device);
+
   return (
     <TouchableOpacity
       {...props}
@@ -24,7 +27,7 @@ export const RegularButton = ({
         width: "100%",
         alignItems: "center",
         justifyContent: "center",
-        height: 50,
+        height: device === "tablet" ? 60 : 50,
         borderRadius: 5,
         backgroundColor: primaryColor,
         overflow: "hidden",
@@ -62,7 +65,7 @@ export const RegularButton = ({
               style={{
                 color: "white",
                 fontWeight: "bold",
-                fontSize: 20,
+                fontSize: device === "tablet" ? 25 : 20,
                 fontFamily: "openSans_bold",
                 marginLeft: iconLeft ? 10 : 0,
                 ...textStyle,

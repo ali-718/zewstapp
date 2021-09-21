@@ -4,8 +4,10 @@ import { Icon } from "native-base";
 import { primaryColor } from "../../theme/colors";
 import { Text } from "../Text/Text";
 import { Feather } from "@expo/vector-icons";
+import { useSelector } from "react-redux";
 
 export const PasswordInput = ({ placeholder, setValue, rule, ...props }) => {
+  const device = useSelector((state) => state.system.device);
   const [isFocused, setIsFocused] = useState(false);
   const [isSecured, setIsSecured] = useState(true);
   const [isError, setIsError] = useState(false);
@@ -54,7 +56,7 @@ export const PasswordInput = ({ placeholder, setValue, rule, ...props }) => {
           )}
 
           <TextInput
-            style={{ width: "100%", fontSize: 16 }}
+            style={{ width: "100%", fontSize: device === "tablet" ? 20 : 16 }}
             placeholder={isFocused ? "" : placeholder}
             placeholderTextColor={"gray"}
             onFocus={() => setIsFocused(true)}
@@ -75,19 +77,29 @@ export const PasswordInput = ({ placeholder, setValue, rule, ...props }) => {
           <Icon
             name={isSecured ? "eye-off" : "eye"}
             as={Feather}
-            style={{ fontSize: 20, color: primaryColor }}
+            style={{
+              fontSize: device === "tablet" ? 30 : 20,
+              color: primaryColor,
+            }}
           />
         </TouchableOpacity>
       </View>
       {isError ? (
         typeof errorText === "object" ? (
           errorText.map((item, i) => (
-            <Text key={i} style={{ color: "red", fontSize: 12 }}>
+            <Text
+              key={i}
+              style={{ color: "red", fontSize: device === "tablet" ? 16 : 12 }}
+            >
               *{item.error}
             </Text>
           ))
         ) : (
-          <Text style={{ color: "red", fontSize: 12 }}>*{errorText}</Text>
+          <Text
+            style={{ color: "red", fontSize: device === "tablet" ? 16 : 12 }}
+          >
+            *{errorText}
+          </Text>
         )
       ) : null}
     </>

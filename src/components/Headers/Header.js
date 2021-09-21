@@ -1,6 +1,7 @@
 import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
 import { View, Text, TouchableOpacity, Image } from "react-native";
+import { useSelector } from "react-redux";
 import { primaryColor, primaryShade1 } from "../../theme/colors";
 
 export const Header = ({
@@ -10,6 +11,9 @@ export const Header = ({
   onPressLeft,
   onPressRight,
 }) => {
+  const orientation = useSelector((state) => state.system.orientation);
+  const device = useSelector((state) => state.system.device);
+
   return (
     <LinearGradient
       colors={[primaryColor, primaryShade1]}
@@ -23,7 +27,7 @@ export const Header = ({
         style={{
           width: "100%",
           flexDirection: "row",
-          padding: 15,
+          padding: device === "tablet" ? 25 : 15,
           justifyContent: "space-between",
           alignItems: "center",
         }}
@@ -31,14 +35,18 @@ export const Header = ({
         <TouchableOpacity onPress={onPressLeft}>
           <Image
             source={leftImage}
-            style={{ width: 20, height: 20, resizeMode: "contain" }}
+            style={{
+              width: device === "tablet" ? 30 : 20,
+              height: device === "tablet" ? 30 : 20,
+              resizeMode: "contain",
+            }}
           />
         </TouchableOpacity>
 
         <Text
           style={{
             color: "white",
-            fontSize: 20,
+            fontSize: device === "tablet" ? 25 : 20,
             fontFamily: "openSans_semiBold",
             width: "80%",
             textAlign: "center",
@@ -52,7 +60,11 @@ export const Header = ({
           {rightImage ? (
             <Image
               source={rightImage}
-              style={{ width: 20, height: 20, resizeMode: "contain" }}
+              style={{
+                width: device === "tablet" ? 30 : 20,
+                height: device === "tablet" ? 30 : 20,
+                resizeMode: "contain",
+              }}
             />
           ) : (
             <View style={{ width: 20 }} />

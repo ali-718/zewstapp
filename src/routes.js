@@ -22,7 +22,16 @@ import { TaxDocument } from "./containers/screens/MainScreens/AdminsPages/TaxDoc
 import { EmployeesPage } from "./containers/screens/MainScreens/AdminsPages/EmployeesPage";
 import { AddEmployeesPage } from "./containers/screens/MainScreens/AdminsPages/AddEmployeesPage";
 import { SigningCheck } from "./containers/screens/AuthScreens/SigningCheck";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import * as actions from "./Redux/actions/SystemActions/SystemActions";
+import * as Device from "expo-device";
+import {
+  LANDSCAPE,
+  MOBILE,
+  PORTRAIT,
+  TABLET,
+} from "./Redux/actions/SystemActions/Types";
+import { Dimensions } from "react-native";
 
 const Stack = createNativeStackNavigator();
 
@@ -67,6 +76,44 @@ const MainRoutes = () => {
 
 export const Routes = () => {
   const user = useSelector((state) => state.auth.user);
+
+  const dispatch = useDispatch();
+
+  const setOrientation = (widht, height) => {
+    if (widht > height) {
+      dispatch(actions.changeOrientationAction({ type: LANDSCAPE }));
+    } else {
+      dispatch(actions.changeOrientationAction({ type: PORTRAIT }));
+    }
+  };
+
+  useEffect(() => {
+    const ipad = Device.modelName.includes("iPad");
+    const width = Dimensions.get("screen").width;
+    const height = Dimensions.get("screen").height;
+
+    setOrientation(width, height);
+
+    Dimensions.addEventListener("change", (e) => {
+      if (ipad) {
+        setOrientation(e.screen.width, e.screen.height);
+
+        return;
+      }
+      dispatch(actions.changeOrientationAction({ type: PORTRAIT }));
+    });
+
+    if (Platform.OS === "ios") {
+      if (ipad) {
+        dispatch(actions.deviceType({ type: TABLET }));
+      } else {
+        dispatch(actions.deviceType({ type: MOBILE }));
+      }
+      return;
+    }
+
+    dispatch(actions.deviceType({ type: MOBILE }));
+  }, []);
 
   if (user?.token) {
     return <MainRoutes />;

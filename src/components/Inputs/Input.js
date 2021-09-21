@@ -4,6 +4,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { Icon } from "native-base";
 import { grayMenuText, primaryColor } from "../../theme/colors";
 import { Text } from "../Text/Text";
+import { useSelector } from "react-redux";
 
 export const Input = ({
   placeholder,
@@ -21,6 +22,7 @@ export const Input = ({
   setValue,
   ...props
 }) => {
+  const device = useSelector((state) => state.system.device);
   const [isFocused, setIsFocused] = useState(false);
   const [isError, setIsError] = useState(false);
   const [errorText, seterrorText] = useState("");
@@ -79,7 +81,12 @@ export const Input = ({
 
           <TextInput
             ref={ref}
-            style={{ width: "100%", fontSize: 16, ...inputStyle, flex: 1 }}
+            style={{
+              width: "100%",
+              fontSize: device === "tablet" ? 20 : 16,
+              ...inputStyle,
+              flex: 1,
+            }}
             placeholder={isFocused ? "" : placeholder}
             placeholderTextColor={"gray"}
             onFocus={() => setIsFocused(true)}
@@ -110,7 +117,11 @@ export const Input = ({
             <Icon
               name={iconName}
               as={iconType || Ionicons}
-              style={{ fontSize: 20, color: primaryColor, ...iconStyle }}
+              style={{
+                fontSize: device === "tablet" ? 30 : 20,
+                color: primaryColor,
+                ...iconStyle,
+              }}
             />
           )}
         </TouchableOpacity>
@@ -118,12 +129,19 @@ export const Input = ({
       {isError ? (
         typeof errorText === "array" ? (
           errorText.map((item, i) => (
-            <Text key={i} style={{ color: "red", fontSize: 12 }}>
+            <Text
+              key={i}
+              style={{ color: "red", fontSize: device === "tablet" ? 16 : 12 }}
+            >
               *{item.error}
             </Text>
           ))
         ) : (
-          <Text style={{ color: "red", fontSize: 12 }}>*{errorText}</Text>
+          <Text
+            style={{ color: "red", fontSize: device === "tablet" ? 16 : 12 }}
+          >
+            *{errorText}
+          </Text>
         )
       ) : null}
     </>

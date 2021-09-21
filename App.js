@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View } from "react-native";
+import { Platform, View } from "react-native";
 import * as SplashScreen from "expo-splash-screen";
 import { NativeBaseProvider, extendTheme } from "native-base";
 import { fontAssets } from "./src/theme/fonts";
