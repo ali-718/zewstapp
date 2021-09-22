@@ -16,6 +16,7 @@ import { NoMealBox } from "../../components/NoMealBox/NoMealBox";
 import { FoodOverview } from "../../components/FoodItems/FoodItemOverview";
 import { useNavigation } from "@react-navigation/native";
 import { RegularButton } from "../Buttons/RegularButton";
+import { useSelector } from "react-redux";
 
 export const ResturantName = ({
   name,
@@ -28,7 +29,10 @@ export const ResturantName = ({
   isLoading,
   isError,
   locationId,
+  isOriented,
+  setSelectedFoodItemForTab,
 }) => {
+  const device = useSelector((state) => state.system.device);
   const [isEdit, setisEdit] = useState(false);
   const navigation = useNavigation();
   const [filteredFoodItems, setFilteredFoodItems] = useState([]);
@@ -68,7 +72,7 @@ export const ResturantName = ({
         <View style={{ width: "85%" }}>
           <Text
             style={{
-              fontSize: 22,
+              fontSize: device === "tablet" ? 30 : 22,
               color: "black",
               fontFamily: "openSans_bold",
             }}
@@ -78,7 +82,7 @@ export const ResturantName = ({
           {address && (
             <Text
               style={{
-                fontSize: 14,
+                fontSize: device === "tablet" ? 20 : 14,
                 color: grayTextColor,
                 marginTop: 5,
               }}
@@ -89,7 +93,10 @@ export const ResturantName = ({
         </View>
         <View style={{ width: "10%", alignItems: "flex-end" }}>
           <Icon
-            style={{ fontSize: 25, color: grayTextColor }}
+            style={{
+              fontSize: device === "tablet" ? 45 : 25,
+              color: grayTextColor,
+            }}
             name={selected ? "keyboard-arrow-down" : "keyboard-arrow-right"}
             as={MaterialIcons}
           />
@@ -222,10 +229,12 @@ export const ResturantName = ({
                         })
                       }
                       onPress={() =>
-                        !isEdit &&
-                        navigation.navigate("foodDetailPage", {
-                          item: { ...item, locationId },
-                        })
+                        isOriented
+                          ? setSelectedFoodItemForTab(item)
+                          : !isEdit &&
+                            navigation.navigate("foodDetailPage", {
+                              item: { ...item, locationId },
+                            })
                       }
                     />
                   ))}

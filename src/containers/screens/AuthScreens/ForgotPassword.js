@@ -15,75 +15,75 @@ export const ForgotPassword = (props) => {
 
   const [email, setEmail] = useState("");
 
-  if (device === "tablet") {
-    return (
-      <View
-        style={{
-          width: "100%",
-          alignItems: "center",
-          justifyContent: "center",
-          flex: 1,
-          flexDirection: "row",
-        }}
-      >
-        <View
-          style={{
-            width: orientation === "landscape" ? "60%" : "50%",
-            alignItems: "center",
+  // if (device === "tablet") {
+  //   return (
+  //     <View
+  //       style={{
+  //         width: "100%",
+  //         alignItems: "center",
+  //         justifyContent: "center",
+  //         flex: 1,
+  //         flexDirection: "row",
+  //       }}
+  //     >
+  //       <View
+  //         style={{
+  //           width: orientation === "landscape" ? "60%" : "50%",
+  //           alignItems: "center",
 
-            justifyContent: "center",
-          }}
-        >
-          <OnBoardingPage inLogin />
-        </View>
-        <View
-          style={{
-            width: orientation === "landscape" ? "40%" : "50%",
-            alignItems: "center",
+  //           justifyContent: "center",
+  //         }}
+  //       >
+  //         <OnBoardingPage inLogin />
+  //       </View>
+  //       <View
+  //         style={{
+  //           width: orientation === "landscape" ? "40%" : "50%",
+  //           alignItems: "center",
 
-            justifyContent: "center",
-          }}
-        >
-          <AuthScreenContainer title={"Forgot Password"}>
-            <View
-              style={{ width: "90%", marginVertical: 20, marginBottom: 40 }}
-            >
-              <View style={{ width: "100%", marginTop: 20 }}>
-                <Input
-                  keyboardType={"email-address"}
-                  placeholder={"Email address*"}
-                  value={email}
-                  onChangeText={(val) => setEmail(val)}
-                />
-              </View>
+  //           justifyContent: "center",
+  //         }}
+  //       >
+  //         <AuthScreenContainer title={"Forgot Password"}>
+  //           <View
+  //             style={{ width: "90%", marginVertical: 20, marginBottom: 40 }}
+  //           >
+  //             <View style={{ width: "100%", marginTop: 20 }}>
+  //               <Input
+  //                 keyboardType={"email-address"}
+  //                 placeholder={"Email address*"}
+  //                 value={email}
+  //                 onChangeText={(val) => setEmail(val)}
+  //               />
+  //             </View>
 
-              <View style={{ width: "100%", marginTop: 20 }}>
-                <RegularButton text={"Submit"} style={{ borderRadius: 50 }} />
-              </View>
+  //             <View style={{ width: "100%", marginTop: 20 }}>
+  //               <RegularButton text={"Submit"} style={{ borderRadius: 50 }} />
+  //             </View>
 
-              <View
-                style={{ width: "100%", marginTop: 20, alignItems: "center" }}
-              >
-                <TouchableOpacity
-                  onPress={() => props.navigation.navigate("Login")}
-                >
-                  <Text
-                    style={{
-                      fontFamily: "openSans_bold",
-                      fontSize: 18,
-                      color: primaryShade3,
-                    }}
-                  >
-                    Login
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </AuthScreenContainer>
-        </View>
-      </View>
-    );
-  }
+  //             <View
+  //               style={{ width: "100%", marginTop: 20, alignItems: "center" }}
+  //             >
+  //               <TouchableOpacity
+  //                 onPress={() => props.navigation.navigate("Login")}
+  //               >
+  //                 <Text
+  //                   style={{
+  //                     fontFamily: "openSans_bold",
+  //                     fontSize: 18,
+  //                     color: primaryShade3,
+  //                   }}
+  //                 >
+  //                   Login
+  //                 </Text>
+  //               </TouchableOpacity>
+  //             </View>
+  //           </View>
+  //         </AuthScreenContainer>
+  //       </View>
+  //     </View>
+  //   );
+  // }
 
   return (
     <AuthScreenContainer title={"Forgot Password"}>

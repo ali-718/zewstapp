@@ -10,6 +10,7 @@ export const MainScreenContainer = ({
   rightImage,
   title,
   onPressLeft,
+  noScroll,
   onPressRight = () => null,
   ...props
 }) => {
@@ -31,14 +32,20 @@ export const MainScreenContainer = ({
         onPressLeft={() => onPressLeft ?? navigation.goBack()}
         onPressRight={onPressRight}
       />
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        style={{ width: "100%", flex: 1 }}
-      >
+      {noScroll ? (
         <View style={{ width: "100%", flex: 1, alignItems: "center" }}>
           {props.children}
         </View>
-      </ScrollView>
+      ) : (
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          style={{ width: "100%", flex: 1 }}
+        >
+          <View style={{ width: "100%", flex: 1, alignItems: "center" }}>
+            {props.children}
+          </View>
+        </ScrollView>
+      )}
     </SafeAreaView>
   );
 };
