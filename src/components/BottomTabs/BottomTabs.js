@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, Image } from "react-native";
 import {
   grayMenuText,
@@ -27,7 +27,7 @@ import InventorySelected from "../../assets/images/InventorySelected.png";
 import InventoryIcon from "../../assets/images/InventoryIcon.png";
 import MenuIcon from "../../assets/images/MenuIcon.png";
 
-const Menu = ({ image, name, setselected, selected }) => (
+const Menu = ({ image, name, setselected, selected, style }) => (
   <TouchableOpacity
     style={{
       width: "11%",
@@ -35,6 +35,7 @@ const Menu = ({ image, name, setselected, selected }) => (
       justifyContent: "center",
       borderTopWidth: selected ? 3 : 0,
       borderColor: primaryColor,
+      ...style,
     }}
     onPress={setselected}
   >
@@ -62,16 +63,20 @@ export const BottomTabs = ({ selected, setselected }) => {
   const insight = selected === 1 ? insightIconSelected : insightIcon;
   const qrcode = qrcodeIcon;
   const food = selected === 3 ? foodIconSelected : foodIcon;
-  const admin = selected === 4 ? adminIconSelected : adminIcon;
+  const RecipeEngineering = selected === 5 ? RecipeIconSelected : RecipeIcon;
+  const WasteEngineering = selected === 6 ? WasteIcon : WasteIcon;
+  const Inventory = selected === 7 ? InventorySelected : InventoryIcon;
+  const foodTab = selected === 8 ? foodIconSelected : foodIcon;
+  const insightTab = selected === 9 ? insightIconSelected : insightIcon;
+  const admin = selected === 10 ? adminIconSelected : adminIcon;
+
+  const [showMore, setshowmore] = useState(false);
+
+  useEffect(() => {
+    setshowmore(false);
+  }, [selected]);
 
   if (device === "tablet") {
-    const RecipeEngineering = selected === 1 ? RecipeIconSelected : RecipeIcon;
-    const WasteEngineering = selected === 2 ? WasteIcon : WasteIcon;
-    const Inventory = selected === 3 ? InventorySelected : InventoryIcon;
-    const food = selected === 5 ? foodIconSelected : foodIcon;
-    const insight = selected === 6 ? insightIconSelected : insightIcon;
-    const admin = selected === 7 ? adminIconSelected : adminIcon;
-
     return (
       <View
         style={{
@@ -91,22 +96,22 @@ export const BottomTabs = ({ selected, setselected }) => {
         />
 
         <Menu
-          selected={selected === 1}
-          setselected={() => setselected(1)}
+          selected={selected === 5}
+          setselected={() => setselected(5)}
           image={RecipeEngineering}
           name={"Recipe Engineering"}
         />
 
         <Menu
-          selected={selected === 2}
-          setselected={() => setselected(2)}
+          selected={selected === 6}
+          setselected={() => setselected(6)}
           image={WasteEngineering}
           name={"Waste Engineering"}
         />
 
         <Menu
-          selected={selected === 3}
-          setselected={() => setselected(3)}
+          selected={selected === 7}
+          setselected={() => setselected(7)}
           image={Inventory}
           name={"Inventory"}
         />
@@ -154,22 +159,22 @@ export const BottomTabs = ({ selected, setselected }) => {
         </TouchableOpacity>
 
         <Menu
-          selected={selected === 5}
-          setselected={() => setselected(5)}
-          image={food}
+          selected={selected === 8}
+          setselected={() => setselected(8)}
+          image={foodTab}
           name={"Menu"}
         />
 
         <Menu
-          selected={selected === 6}
-          setselected={() => setselected(6)}
+          selected={selected === 9}
+          setselected={() => setselected(9)}
           image={insight}
           name={"Sales"}
         />
 
         <Menu
-          selected={selected === 7}
-          setselected={() => setselected(7)}
+          selected={selected === 10}
+          setselected={() => setselected(10)}
           image={admin}
           name={"Admin"}
         />
@@ -190,6 +195,63 @@ export const BottomTabs = ({ selected, setselected }) => {
         borderColor: grayTextColor,
       }}
     >
+      {showMore && (
+        <View
+          style={{
+            width: 80,
+            position: "absolute",
+            right: 10,
+            zIndex: 2,
+            backgroundColor: "white",
+            bottom: 80,
+            borderRadius: 10,
+            paddingVertical: 20,
+            alignItems: "center",
+            justifyContent: "center",
+            shadowColor: "#000",
+            shadowOffset: {
+              width: 0,
+              height: 3,
+            },
+            shadowOpacity: 0.27,
+            shadowRadius: 4.65,
+
+            elevation: 6,
+          }}
+        >
+          <Menu
+            selected={selected === 5}
+            setselected={() => setselected(5)}
+            image={RecipeEngineering}
+            name={"Recipe Engineering"}
+            style={{ width: "90%", paddingTop: 10 }}
+          />
+
+          <Menu
+            selected={selected === 6}
+            setselected={() => setselected(6)}
+            image={WasteEngineering}
+            name={"Waste Engineering"}
+            style={{ width: "90%", marginTop: 20, paddingTop: 10 }}
+          />
+
+          <Menu
+            selected={selected === 7}
+            setselected={() => setselected(7)}
+            image={Inventory}
+            name={"Inventory"}
+            style={{ width: "90%", marginTop: 20, paddingTop: 10 }}
+          />
+
+          <Menu
+            selected={selected === 10}
+            setselected={() => setselected(10)}
+            image={admin}
+            name={"Admin"}
+            style={{ width: "90%", marginTop: 20, paddingTop: 10 }}
+          />
+        </View>
+      )}
       <TouchableOpacity
         style={{
           width: "20%",
@@ -298,19 +360,18 @@ export const BottomTabs = ({ selected, setselected }) => {
           width: "20%",
           alignItems: "center",
           justifyContent: "center",
-          borderTopWidth: selected === 4 ? 3 : 0,
           borderColor: primaryShade1,
         }}
         onPress={() => {
-          setselected(4);
+          setshowmore(!showMore);
         }}
       >
         <Image
-          source={admin}
+          source={MenuIcon}
           style={{ width: 25, height: 25, resizeMode: "contain" }}
         />
         <Text style={{ fontSize: 10, color: grayMenuText, marginTop: 10 }}>
-          Admin
+          More
         </Text>
       </TouchableOpacity>
     </View>

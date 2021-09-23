@@ -14,6 +14,8 @@ import { HEIGHT, WIDTH } from "../../../../helpers/utlils";
 import { useNavigation } from "@react-navigation/core";
 import editIcon from "../../../../assets/images/editIcon.png";
 import { FoodDetailPage } from "./FoodDetailPage";
+import { LoadingPage } from "../../../../components/LoadingPage/LoadingPage";
+import { RefetchDataError } from "../../../../components/ErrorPage/RefetchDataError";
 
 export const MenuPage = () => {
   const dispatch = useDispatch();
@@ -202,35 +204,9 @@ export const MenuPage = () => {
       title={"Menu"}
     >
       {isLoading ? (
-        <View
-          style={{
-            width: "100%",
-            flex: 1,
-            alignItems: "center",
-            justifyContent: "center",
-            height: HEIGHT - 100,
-          }}
-        >
-          <Spinner size={"large"} color={primaryColor} />
-        </View>
+        <LoadingPage />
       ) : isError ? (
-        <View
-          style={{
-            width: "100%",
-            flex: 1,
-            alignItems: "center",
-            justifyContent: "center",
-            height: HEIGHT - 100,
-          }}
-        >
-          <Text style={{ fontSize: 20 }}>Unable to fetch data!</Text>
-          <RegularButton
-            isLoading={isLoading}
-            onPress={fetchLocations}
-            text={"Retry"}
-            style={{ borderRadius: 10, width: "50%", marginTop: 20 }}
-          />
-        </View>
+        <RefetchDataError onPress={fetchLocations} isLoading={isLoading} />
       ) : hotels[0]?.locations.length > 0 ? (
         <View
           style={{
