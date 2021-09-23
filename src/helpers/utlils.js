@@ -10,8 +10,8 @@ import baked from "../assets/images/categories/baked.png";
 import lactose from "../assets/images/allergens/lactose.png";
 import gluten from "../assets/images/allergens/gluten.png";
 
-export const WIDTH = Dimensions.get("window").width;
-export const HEIGHT = Dimensions.get("window").height;
+export const WIDTH = Dimensions.get("screen").width;
+export const HEIGHT = Dimensions.get("screen").height;
 
 export const carouselData = [
   {

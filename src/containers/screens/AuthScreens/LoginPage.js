@@ -63,90 +63,90 @@ export const LoginPage = (props) => {
       });
   };
 
-  if (device === "tablet") {
-    return (
-      <View
-        style={{
-          width: "100%",
-          alignItems: "center",
-          justifyContent: "center",
-          flex: 1,
-          flexDirection: "row",
-        }}
-      >
-        <View
-          style={{
-            width: orientation === "landscape" ? "60%" : "50%",
-            alignItems: "center",
+  // if (device === "tablet") {
+  //   return (
+  //     <View
+  //       style={{
+  //         width: "100%",
+  //         alignItems: "center",
+  //         justifyContent: "center",
+  //         flex: 1,
+  //         flexDirection: "row",
+  //       }}
+  //     >
+  //       <View
+  //         style={{
+  //           width: orientation === "landscape" ? "60%" : "50%",
+  //           alignItems: "center",
 
-            justifyContent: "center",
-          }}
-        >
-          <OnBoardingPage inLogin />
-        </View>
-        <View
-          style={{
-            width: orientation === "landscape" ? "40%" : "50%",
-            alignItems: "center",
+  //           justifyContent: "center",
+  //         }}
+  //       >
+  //         <OnBoardingPage inLogin />
+  //       </View>
+  //       <View
+  //         style={{
+  //           width: orientation === "landscape" ? "40%" : "50%",
+  //           alignItems: "center",
 
-            justifyContent: "center",
-          }}
-        >
-          <AuthScreenContainer noBack={noBack} title={"Login"}>
-            <View
-              style={{ width: "90%", marginVertical: 20, marginBottom: 40 }}
-            >
-              <View style={{ width: "100%", marginTop: 20 }}>
-                <Input
-                  keyboardType={"email-address"}
-                  placeholder={"Email address*"}
-                  value={email}
-                  setValue={(val) => setEmail(val)}
-                  rule={emailValidator}
-                />
-              </View>
+  //           justifyContent: "center",
+  //         }}
+  //       >
+  //         <AuthScreenContainer noBack={noBack} title={"Login"}>
+  //           <View
+  //             style={{ width: "90%", marginVertical: 20, marginBottom: 40 }}
+  //           >
+  //             <View style={{ width: "100%", marginTop: 20 }}>
+  //               <Input
+  //                 keyboardType={"email-address"}
+  //                 placeholder={"Email address*"}
+  //                 value={email}
+  //                 setValue={(val) => setEmail(val)}
+  //                 rule={emailValidator}
+  //               />
+  //             </View>
 
-              <View style={{ width: "100%", marginTop: 20 }}>
-                <PasswordInput
-                  value={password}
-                  setValue={(val) => setPassword(val)}
-                  placeholder={"Password*"}
-                  rule={passwordValidator}
-                />
-              </View>
+  //             <View style={{ width: "100%", marginTop: 20 }}>
+  //               <PasswordInput
+  //                 value={password}
+  //                 setValue={(val) => setPassword(val)}
+  //                 placeholder={"Password*"}
+  //                 rule={passwordValidator}
+  //               />
+  //             </View>
 
-              <View style={{ width: "100%", marginTop: 20 }}>
-                <RegularButton
-                  isLoading={isLoading}
-                  onPress={onLogin}
-                  text={"Log in"}
-                  style={{ borderRadius: 50 }}
-                />
-              </View>
+  //             <View style={{ width: "100%", marginTop: 20 }}>
+  //               <RegularButton
+  //                 isLoading={isLoading}
+  //                 onPress={onLogin}
+  //                 text={"Log in"}
+  //                 style={{ borderRadius: 50 }}
+  //               />
+  //             </View>
 
-              <View
-                style={{ width: "100%", marginTop: 20, alignItems: "center" }}
-              >
-                <TouchableOpacity
-                  onPress={() => props.navigation.navigate("Forgot")}
-                >
-                  <Text
-                    style={{
-                      fontFamily: "openSans_bold",
-                      fontSize: device === "tablet" ? 20 : 18,
-                      color: primaryShade3,
-                    }}
-                  >
-                    Forgot Password?
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </AuthScreenContainer>
-        </View>
-      </View>
-    );
-  }
+  //             <View
+  //               style={{ width: "100%", marginTop: 20, alignItems: "center" }}
+  //             >
+  //               <TouchableOpacity
+  //                 onPress={() => props.navigation.navigate("Forgot")}
+  //               >
+  //                 <Text
+  //                   style={{
+  //                     fontFamily: "openSans_bold",
+  //                     fontSize: device === "tablet" ? 20 : 18,
+  //                     color: primaryShade3,
+  //                   }}
+  //                 >
+  //                   Forgot Password?
+  //                 </Text>
+  //               </TouchableOpacity>
+  //             </View>
+  //           </View>
+  //         </AuthScreenContainer>
+  //       </View>
+  //     </View>
+  //   );
+  // }
 
   return (
     <AuthScreenContainer noBack={noBack} title={"Login"}>

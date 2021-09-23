@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View } from "react-native";
+import { ScrollView, View } from "react-native";
 import { MainScreenContainer } from "../../../MainScreenContainers";
 import person from "../../../../assets/images/person.png";
 import plus from "../../../../assets/images/plus.png";
@@ -10,17 +10,23 @@ import { Spinner } from "native-base";
 import { RegularButton } from "../../../../components/Buttons/RegularButton";
 import { primaryColor } from "../../../../theme/colors";
 import { Text } from "../../../../components/Text/Text";
-import { HEIGHT } from "../../../../helpers/utlils";
+import { HEIGHT, WIDTH } from "../../../../helpers/utlils";
 import { useNavigation } from "@react-navigation/core";
+import editIcon from "../../../../assets/images/editIcon.png";
+import { FoodDetailPage } from "./FoodDetailPage";
 
 export const MenuPage = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
+  const device = useSelector((state) => state.system.device);
+  const orientation = useSelector((state) => state.system.orientation);
   const user = useSelector((state) => state.auth.user.user);
   const hotels = useSelector((state) => state.meal.hotel.hotels);
   const isLoading = useSelector((state) => state.meal.hotel.isLoading);
   const isError = useSelector((state) => state.meal.hotel.isError);
   const [selected, setSelected] = useState("");
+  // for tablet only
+  const [selectedFoodItemForTab, setSelectedFoodItemForTab] = useState({});
 
   useEffect(() => {
     fetchLocations();
@@ -47,6 +53,146 @@ export const MenuPage = () => {
   };
 
   const onOpenResturant = (id) => dispatch(actions.getAllMeals({ id }));
+
+  if (device === "tablet" && orientation === "landscape") {
+    return (
+      <MainScreenContainer
+        onPressRight={() =>
+          navigation.navigate("addMeal", {
+            data: {
+              ...selectedFoodItemForTab,
+              categories: selectedFoodItemForTab.mealCategory ?? [],
+              allergens: selectedFoodItemForTab.mealAllergens ?? [],
+              addons: selectedFoodItemForTab.mealAddons ?? [],
+              days: selectedFoodItemForTab.mealDaysAvailable ?? [],
+            },
+          })
+        }
+        leftImage={plus}
+        rightImage={selectedFoodItemForTab?.mealName && editIcon}
+        title={"Menu"}
+        noScroll
+        onPressLeft={() => navigation.navigate("addLocation", { isMenu: true })}
+      >
+        <View
+          style={{
+            width: "95%",
+            flex: 1,
+            flexDirection: "row",
+            justifyContent: "space-between",
+          }}
+        >
+          <View style={{ width: "40%" }}>
+            <ScrollView style={{ width: "100%" }}>
+              <View
+                style={{
+                  width: "100%",
+                  flex: 1,
+                  alignItems: "center",
+                }}
+              >
+                {isLoading ? (
+                  <View
+                    style={{
+                      width: "100%",
+                      flex: 1,
+                      alignItems: "center",
+                      justifyContent: "center",
+                      height: HEIGHT - 100,
+                    }}
+                  >
+                    <Spinner size={"large"} color={primaryColor} />
+                  </View>
+                ) : isError ? (
+                  <View
+                    style={{
+                      width: "100%",
+                      flex: 1,
+                      alignItems: "center",
+                      justifyContent: "center",
+                      height: HEIGHT - 100,
+                    }}
+                  >
+                    <Text style={{ fontSize: 20 }}>Unable to fetch data!</Text>
+                    <RegularButton
+                      isLoading={isLoading}
+                      onPress={fetchLocations}
+                      text={"Retry"}
+                      style={{ borderRadius: 10, width: "50%", marginTop: 20 }}
+                    />
+                  </View>
+                ) : hotels[0]?.locations.length > 0 ? (
+                  <View
+                    style={{
+                      width: "90%",
+                      marginBottom: 60,
+                      alignItems: "center",
+                    }}
+                  >
+                    <View style={{ width: "100%", alignItems: "center" }}>
+                      {hotels[0]?.locations.map((item, i) => (
+                        <ResturantName
+                          key={i}
+                          name={item?.locationName}
+                          isLoading={item?.meal?.isLoading}
+                          isError={item?.meal?.isError}
+                          address={item.address}
+                          selected={selected === i}
+                          setSelected={() => openResturant(i, item.locationId)}
+                          foodItems={item?.meal?.meals || []}
+                          onClickAvailable={(i, data) =>
+                            onClickAvailable(i, data)
+                          }
+                          filteredFoodItems={item?.meal?.meals || []}
+                          locationId={item.locationId}
+                          isOriented={true}
+                          setSelectedFoodItemForTab={setSelectedFoodItemForTab}
+                        />
+                      ))}
+                    </View>
+                  </View>
+                ) : (
+                  <View
+                    style={{
+                      width: "100%",
+                      flex: 1,
+                      alignItems: "center",
+                      justifyContent: "center",
+                      height: HEIGHT - 100,
+                    }}
+                  >
+                    <Text
+                      style={{
+                        fontSize: 20,
+                        width: "80%",
+                        textAlign: "center",
+                      }}
+                    >
+                      You need to add atleast one location to start the process
+                      😃
+                    </Text>
+                    <RegularButton
+                      isLoading={isLoading}
+                      onPress={() =>
+                        navigation.navigate("addLocation", { isMenu: true })
+                      }
+                      text={"Add Location"}
+                      style={{ borderRadius: 10, width: "50%", marginTop: 20 }}
+                    />
+                  </View>
+                )}
+              </View>
+            </ScrollView>
+          </View>
+          <View style={{ width: "60%" }}>
+            {selectedFoodItemForTab?.mealName && (
+              <FoodDetailPage isTab data={selectedFoodItemForTab} />
+            )}
+          </View>
+        </View>
+      </MainScreenContainer>
+    );
+  }
 
   return (
     <MainScreenContainer
@@ -97,7 +243,7 @@ export const MenuPage = () => {
             {hotels[0]?.locations.map((item, i) => (
               <ResturantName
                 key={i}
-                name={hotels[0]?.name}
+                name={item?.locationName}
                 isLoading={item?.meal?.isLoading}
                 isError={item?.meal?.isError}
                 address={item.address}
