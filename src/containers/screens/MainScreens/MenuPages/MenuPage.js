@@ -54,10 +54,6 @@ export const MenuPage = () => {
 
   const onOpenResturant = (id) => dispatch(actions.getAllMeals({ id }));
 
-  useEffect(() => {
-    console.log(selectedFoodItemForTab);
-  }, [selectedFoodItemForTab]);
-
   if (device === "tablet" && orientation === "landscape") {
     return (
       <MainScreenContainer
