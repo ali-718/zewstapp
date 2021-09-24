@@ -5,6 +5,8 @@ import { RegularButton } from "../../../../components/Buttons/RegularButton";
 import { MainScreenContainer } from "../../../MainScreenContainers";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Input } from "../../../../components/Inputs/Input";
+import { AdminOverviewBox } from "../../../../components/AdminComponents/AdminOverviewBox";
+import recipeVessel from "../../../../assets/images/recipeVessel.png";
 
 export const RecipeListPage = () => {
   const isLoading = useSelector((state) => state.recipe.recipe.isLoading);
@@ -57,6 +59,19 @@ export const RecipeListPage = () => {
               iconStyle={{ fontSize: 30 }}
               inputStyle={{ fontSize: 20 }}
               onIconClick={() => setSearch("")}
+            />
+          </View>
+
+          <View style={{ width: "100%", marginTop: 20 }}>
+            <AdminOverviewBox
+              label={"Alfredo Pasta"}
+              name={"Macro: Chicken"}
+              rightText={""}
+              image={recipeVessel}
+              recipe
+              // onPress={() =>
+              //   navigation.navigate("resturantDetail", { data: item })
+              // }
             />
           </View>
         </View>

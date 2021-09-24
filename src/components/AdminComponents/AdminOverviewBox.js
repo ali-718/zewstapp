@@ -1,6 +1,6 @@
 import React from "react";
 import { Image, TouchableOpacity, View } from "react-native";
-import { primaryColor } from "../../theme/colors";
+import { grayColor, grayTextColor, primaryColor } from "../../theme/colors";
 import { Text } from "../Text/Text";
 import forwardIcon from "../../assets/images/forwardIcon.png";
 
@@ -11,6 +11,7 @@ export const AdminOverviewBox = ({
   image,
   iconStyle,
   onPress,
+  recipe,
 }) => {
   return (
     <TouchableOpacity
@@ -31,17 +32,33 @@ export const AdminOverviewBox = ({
 
       <View style={{ flex: 1, marginLeft: 10, marginRight: 10 }}>
         <Text
-          style={{ fontSize: 16, fontFamily: "openSans_bold", color: "black" }}
+          style={
+            recipe
+              ? {
+                  fontSize: 20,
+                  fontFamily: "openSans_bold",
+                  color: "black",
+                }
+              : { fontSize: 16, fontFamily: "openSans_bold", color: "black" }
+          }
         >
           {label}
         </Text>
         <Text
           numberOfLines={1}
-          style={{
-            fontSize: 20,
-            fontFamily: "openSans_bold",
-            color: primaryColor,
-          }}
+          style={
+            recipe
+              ? {
+                  fontSize: 16,
+                  fontFamily: "openSans_bold",
+                  color: grayTextColor,
+                }
+              : {
+                  fontSize: 20,
+                  fontFamily: "openSans_bold",
+                  color: primaryColor,
+                }
+          }
         >
           {name}
         </Text>

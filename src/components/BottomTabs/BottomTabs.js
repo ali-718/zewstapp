@@ -252,46 +252,20 @@ export const BottomTabs = ({ selected, setselected }) => {
           />
         </View>
       )}
-      <TouchableOpacity
-        style={{
-          width: "20%",
-          alignItems: "center",
-          justifyContent: "center",
-          borderTopWidth: selected === 0 ? 3 : 0,
-          borderColor: primaryColor,
-        }}
-        onPress={() => {
-          setselected(0);
-        }}
-      >
-        <Image
-          source={home}
-          style={{ width: 25, height: 25, resizeMode: "contain" }}
-        />
-        <Text style={{ fontSize: 10, color: grayMenuText, marginTop: 10 }}>
-          Home
-        </Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={{
-          width: "20%",
-          alignItems: "center",
-          justifyContent: "center",
-          borderTopWidth: selected === 1 ? 3 : 0,
-          borderColor: primaryShade1,
-        }}
-        onPress={() => {
-          setselected(1);
-        }}
-      >
-        <Image
-          source={insight}
-          style={{ width: 25, height: 25, resizeMode: "contain" }}
-        />
-        <Text style={{ fontSize: 10, color: grayMenuText, marginTop: 10 }}>
-          Insights
-        </Text>
-      </TouchableOpacity>
+      <Menu
+        selected={selected === 0}
+        setselected={() => setselected(0)}
+        image={home}
+        name={"Dashboard"}
+        style={{ width: "20%" }}
+      />
+      <Menu
+        selected={selected === 1}
+        setselected={() => setselected(1)}
+        image={insight}
+        name={"Sales"}
+        style={{ width: "20%" }}
+      />
       <TouchableOpacity
         style={{
           width: "20%",
@@ -334,27 +308,13 @@ export const BottomTabs = ({ selected, setselected }) => {
         </Text>
       </TouchableOpacity>
 
-      <TouchableOpacity
-        style={{
-          width: "20%",
-          alignItems: "center",
-          justifyContent: "center",
-          borderTopWidth: selected === 3 ? 3 : 0,
-          borderColor: primaryShade1,
-        }}
-        onPress={() => {
-          setselected(3);
-        }}
-      >
-        <Image
-          source={food}
-          style={{ width: 25, height: 25, resizeMode: "contain" }}
-        />
-        <Text style={{ fontSize: 10, color: grayMenuText, marginTop: 10 }}>
-          Menu
-        </Text>
-      </TouchableOpacity>
-
+      <Menu
+        selected={selected === 3}
+        setselected={() => setselected(3)}
+        image={foodTab}
+        name={"Menu"}
+        style={{ width: "20%" }}
+      />
       <TouchableOpacity
         style={{
           width: "20%",
