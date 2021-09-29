@@ -4,6 +4,7 @@ import { grayColor } from "../theme/colors";
 import { useNavigation } from "@react-navigation/native";
 import { Header } from "../components/Headers/Header";
 import back from "../assets/images/backIcon.png";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 export const MainScreenContainer = ({
   leftImage,
@@ -37,14 +38,11 @@ export const MainScreenContainer = ({
           {props.children}
         </View>
       ) : (
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          style={{ width: "100%", flex: 1 }}
-        >
+        <KeyboardAwareScrollView style={{ width: "100%", flex: 1 }}>
           <View style={{ width: "100%", flex: 1, alignItems: "center" }}>
             {props.children}
           </View>
-        </ScrollView>
+        </KeyboardAwareScrollView>
       )}
     </SafeAreaView>
   );

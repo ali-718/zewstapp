@@ -40,7 +40,9 @@ export const TabRoutes = () => {
           <Stack.Screen name="Insights" component={InsightsPage} />
         )}
         {selected === 2 && <Stack.Screen name="Home" component={HomePage} />}
-        {selected === 3 && <Stack.Screen name="Menu" component={MenuPage} />}
+        {(selected === 3 || selected === 8) && (
+          <Stack.Screen name="Menu" component={MenuPage} />
+        )}
         {selected === 10 && <Stack.Screen name="Admin" component={AdminPage} />}
         {selected === 5 && (
           <Stack.Screen name="Recipe" component={RecipeListPage} />
