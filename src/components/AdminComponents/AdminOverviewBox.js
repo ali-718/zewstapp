@@ -3,6 +3,7 @@ import { Image, TouchableOpacity, View } from "react-native";
 import { grayColor, grayTextColor, primaryColor } from "../../theme/colors";
 import { Text } from "../Text/Text";
 import forwardIcon from "../../assets/images/forwardIcon.png";
+import { useSelector } from "react-redux";
 
 export const AdminOverviewBox = ({
   label,
@@ -13,13 +14,15 @@ export const AdminOverviewBox = ({
   onPress,
   recipe,
 }) => {
+  const device = useSelector((state) => state.system.device);
+
   return (
     <TouchableOpacity
       style={{
         width: "100%",
         backgroundColor: "white",
         flexDirection: "row",
-        padding: 10,
+        padding: device === "tablet" ? 20 : 10,
         borderRadius: 10,
         alignItems: "center",
       }}
@@ -27,7 +30,11 @@ export const AdminOverviewBox = ({
     >
       <Image
         source={image}
-        style={{ width: 30, height: 30, resizeMode: "contain" }}
+        style={{
+          width: device === "tablet" ? 40 : 30,
+          height: device === "tablet" ? 40 : 30,
+          resizeMode: "contain",
+        }}
       />
 
       <View style={{ flex: 1, marginLeft: 10, marginRight: 10 }}>
@@ -35,11 +42,15 @@ export const AdminOverviewBox = ({
           style={
             recipe
               ? {
-                  fontSize: 20,
+                  fontSize: device === "tablet" ? 30 : 20,
                   fontFamily: "openSans_bold",
                   color: "black",
                 }
-              : { fontSize: 16, fontFamily: "openSans_bold", color: "black" }
+              : {
+                  fontSize: device === "tablet" ? 20 : 16,
+                  fontFamily: "openSans_bold",
+                  color: "black",
+                }
           }
         >
           {label}
@@ -49,12 +60,12 @@ export const AdminOverviewBox = ({
           style={
             recipe
               ? {
-                  fontSize: 16,
+                  fontSize: device === "tablet" ? 20 : 16,
                   fontFamily: "openSans_bold",
                   color: grayTextColor,
                 }
               : {
-                  fontSize: 20,
+                  fontSize: device === "tablet" ? 30 : 20,
                   fontFamily: "openSans_bold",
                   color: primaryColor,
                 }
@@ -65,7 +76,14 @@ export const AdminOverviewBox = ({
       </View>
 
       <View style={{ flexDirection: "row", alignItems: "center" }}>
-        <Text style={{ textTransform: "uppercase" }}>{rightText}</Text>
+        <Text
+          style={{
+            textTransform: "uppercase",
+            fontSize: device === "tablet" ? 20 : 12,
+          }}
+        >
+          {rightText}
+        </Text>
         <Image
           source={forwardIcon}
           style={{

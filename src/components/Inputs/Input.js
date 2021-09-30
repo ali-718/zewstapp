@@ -34,6 +34,11 @@ export const Input = ({
     setIsFocused(true);
   }, [isEdit]);
 
+  useEffect(() => {
+    if (value.length === 0) return;
+    setIsFocused(true);
+  }, [value]);
+
   const OnTextChange = (val) => {
     setValue(val);
 

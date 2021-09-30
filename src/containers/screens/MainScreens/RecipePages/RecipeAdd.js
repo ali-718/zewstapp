@@ -1,24 +1,92 @@
 import React, { useState } from "react";
-import { TouchableOpacity, View } from "react-native";
+import { TouchableOpacity, View, Image } from "react-native";
 import { Input } from "../../../../components/Inputs/Input";
 import { grayColor, primaryColor } from "../../../../theme/colors";
-import { nameValidator } from "../../../../helpers/rules";
 import { MainScreenContainer } from "../../../MainScreenContainers";
 import { Text } from "../../../../components/Text/Text";
 import { Dropdown } from "../../../../components/Inputs/DropDown";
 import { Entypo } from "@expo/vector-icons";
 import { Icon } from "native-base";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { recipePacking, recipeUnit } from "../../../../helpers/utlils";
+import deleteIcon from "../../../../assets/images/deleteIcon.png";
+import { RegularButton } from "../../../../components/Buttons/RegularButton";
+import { ToastError } from "../../../../helpers/Toast";
+import { useNavigation } from "@react-navigation/core";
+import * as actions from "../../../../Redux/actions/RecipeActions/RecipeActions";
 
 export const RecipeAdd = () => {
   const device = useSelector((state) => state.system.device);
+  const user = useSelector((state) => state.auth.user.user);
+  const navigation = useNavigation();
+  const dispatch = useDispatch();
+
   const [title, setTitle] = useState("");
   const [macroIngredient, setMacroIngredient] = useState("");
   const [serving, setServing] = useState("");
   const [cookingTime, setCookingTime] = useState("");
   const [type, settype] = useState("");
   const [ingredients, setIngredients] = useState([]);
+  const [recipeList, setrecipeList] = useState([]);
+  const isLoading = useSelector((state) => state.recipe.addRecipe.isLoading);
+
+  const onAddData = () => {
+    if (
+      title.trim().length === 0 ||
+      macroIngredient.trim().length === 0 ||
+      serving.trim().length === 0 ||
+      cookingTime.trim().length === 0 ||
+      type.trim().length === 0
+    ) {
+      ToastError("Please fill all fields");
+      return;
+    }
+
+    if (ingredients.length === 0) {
+      ToastError("Please add atleast 1 ingredient");
+      return;
+    }
+
+    if (recipeList.length === 0) {
+      ToastError("Please add atleast 1 Step");
+      return;
+    }
+
+    const data = {
+      clientId: user.clientId,
+      locationId: "123",
+      recipeTitle: title,
+      macroIngredient: macroIngredient,
+      serving,
+      recipeType: type,
+      cookingTime: cookingTime,
+      ingredients,
+      recipeSteps: recipeList,
+      navigation,
+    };
+
+    dispatch(actions.addRecipeAction(data));
+  };
+
+  const addRecipe = (id) => {
+    setrecipeList([...recipeList, { id, order: id, description: "" }]);
+  };
+
+  const addRecipeDescription = (value, index) => {
+    const data = [...recipeList];
+
+    data[index] = { ...data[index], description: value };
+
+    setrecipeList(data);
+  };
+
+  const deleteRecipe = (index) => {
+    const data = [...recipeList];
+
+    data.splice(index, 1);
+
+    setrecipeList([...data]);
+  };
 
   const addIngredients = () => {
     setIngredients([
@@ -35,6 +103,14 @@ export const RecipeAdd = () => {
     setIngredients(data);
   };
 
+  const deleteIngredient = (index) => {
+    const data = [...ingredients];
+
+    data.splice(index, 1);
+
+    setIngredients(data);
+  };
+
   const updateQuantity = (value, index) => {
     const data = [...ingredients];
 
@@ -47,9 +123,6 @@ export const RecipeAdd = () => {
     const data = [...ingredients];
 
     data[index] = { ...data[index], type: value };
-
-    console.log(data);
-    console.log(ingredients);
 
     setIngredients(data);
   };
@@ -124,6 +197,7 @@ export const RecipeAdd = () => {
             />
 
             <Input
+              keyboardType={"number-pad"}
               placeholder={"Serving*"}
               value={serving}
               setValue={(val) => setServing(val)}
@@ -158,6 +232,93 @@ export const RecipeAdd = () => {
           </View>
 
           <View
+            style={{
+              width: "100%",
+              flexDirection: "column",
+              marginTop: 40,
+              zIndex: 0,
+            }}
+          >
+            <Text
+              style={{
+                fontSize: 20,
+                color: "black",
+                fontFamily: "openSans_bold",
+              }}
+            >
+              Recipe
+            </Text>
+
+            {recipeList.map((item, i) => (
+              <View
+                key={i}
+                style={{
+                  width: "100%",
+                  flexDirection: "row",
+                  zIndex: -1,
+                }}
+              >
+                <TouchableOpacity
+                  onPress={() => deleteRecipe(i)}
+                  style={{
+                    width: 40,
+                    height: 40,
+                    alignItems: "center",
+                    justifyContent: "center",
+                    marginTop: 20,
+                  }}
+                >
+                  <Image
+                    style={{ width: 30, height: 30, resizeMode: "contain" }}
+                    source={deleteIcon}
+                  />
+                </TouchableOpacity>
+
+                <Input
+                  placeholder={`Step ${i + 1}`}
+                  setValue={(val) => addRecipeDescription(val, i)}
+                  style={{
+                    borderColor: grayColor,
+                    borderBottomWidth: 2,
+                    borderRadius: 0,
+                    flex: 1,
+                    zIndex: 0,
+                  }}
+                  value={item.description}
+                />
+              </View>
+            ))}
+
+            <TouchableOpacity
+              style={{
+                marginTop: 20,
+                flexDirection: "row",
+                alignItems: "center",
+              }}
+              onPress={() => addRecipe(recipeList.length + 1)}
+            >
+              <Icon
+                name={"plus"}
+                as={Entypo}
+                style={{
+                  fontSize: device === "tablet" ? 30 : 20,
+                  color: primaryColor,
+                }}
+              />
+              <Text
+                style={{
+                  fontSize: 18,
+                  color: primaryColor,
+                  fontFamily: "openSans_bold",
+                  marginLeft: 10,
+                }}
+              >
+                Add Step
+              </Text>
+            </TouchableOpacity>
+          </View>
+
+          <View
             style={{ width: "100%", flexDirection: "column", marginTop: 20 }}
           >
             <Text
@@ -181,19 +342,21 @@ export const RecipeAdd = () => {
                   alignItems: device === "tablet" ? "center" : "flex-start",
                 }}
               >
-                <View
+                <TouchableOpacity
+                  onPress={() => deleteIngredient(i)}
                   style={{
                     width: 40,
                     height: 40,
-                    borderRadius: 100,
-                    backgroundColor: primaryColor,
                     alignItems: "center",
                     justifyContent: "center",
                     marginTop: 20,
                   }}
                 >
-                  <Text style={{ color: "white", fontSize: 16 }}>{i + 1}</Text>
-                </View>
+                  <Image
+                    style={{ width: 30, height: 30, resizeMode: "contain" }}
+                    source={deleteIcon}
+                  />
+                </TouchableOpacity>
                 <Input
                   placeholder={"Micro Ingredients*"}
                   setValue={(val) => updateName(val, i)}
@@ -203,6 +366,7 @@ export const RecipeAdd = () => {
                     borderRadius: 0,
                     flex: device === "tablet" ? 0.8 : 1,
                   }}
+                  value={item.microIngredient}
                 />
 
                 <Input
@@ -214,9 +378,9 @@ export const RecipeAdd = () => {
                     borderBottomWidth: 2,
                     marginVertical: device === "tablet" ? 0 : 10,
                     borderRadius: 0,
-                    width: device === "tablet" ? 100 : "100%",
-                    // marginLeft: device === "tablet" ? 10 : 0,
+                    width: device === "tablet" ? 120 : "100%",
                   }}
+                  value={item.quantity}
                 />
 
                 <Dropdown
@@ -271,6 +435,15 @@ export const RecipeAdd = () => {
                 Add Ingredients
               </Text>
             </TouchableOpacity>
+          </View>
+
+          <View style={{ width: "100%", marginTop: 20, zIndex: -1 }}>
+            <RegularButton
+              isLoading={isLoading}
+              onPress={onAddData}
+              text={"Add"}
+              style={{ borderRadius: 10 }}
+            />
           </View>
         </View>
       </View>

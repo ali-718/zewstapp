@@ -88,7 +88,7 @@ export const Dropdown = ({
           <View
             style={{
               width: "100%",
-              zIndex: 1,
+              zIndex: 10,
               position: "absolute",
               marginTop: 70,
               shadowColor: "#000",

@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text } from "react-native";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RegularButton } from "../../../../components/Buttons/RegularButton";
 import { MainScreenContainer } from "../../../MainScreenContainers";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -8,26 +8,48 @@ import { Input } from "../../../../components/Inputs/Input";
 import { AdminOverviewBox } from "../../../../components/AdminComponents/AdminOverviewBox";
 import recipeVessel from "../../../../assets/images/recipeVessel.png";
 import { useNavigation } from "@react-navigation/core";
+import { LoadingPage } from "../../../../components/LoadingPage/LoadingPage";
+import * as actions from "../../../../Redux/actions/RecipeActions/RecipeActions";
+import { RefetchDataError } from "../../../../components/ErrorPage/RefetchDataError";
+import { NoMealBox } from "../../../../components/NoMealBox/NoMealBox";
+import noRecipe from "../../../../assets/images/noRecipe.png";
 
 export const RecipeListPage = () => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.auth.user.user);
   const device = useSelector((state) => state.system.device);
   const orientation = useSelector((state) => state.system.orientation);
   const isLoading = useSelector((state) => state.recipe.recipe.isLoading);
   const isError = useSelector((state) => state.recipe.recipe.isError);
+  const list = useSelector((state) => state.recipe.recipe.list);
   const [search, setSearch] = useState("");
+  const [filteredItem, setFiltereditem] = useState([]);
   const [selectedRecipeItemForTab, setselectedRecipeItemForTab] = useState({});
 
-  //   const searchKeyword = (text) => {
-  //     const keyword = text?.toLowerCase();
-  //     const realData = foodItems;
+  useEffect(() => {
+    fetchRecipes();
+  }, []);
 
-  //     const finalData = realData.filter((item) =>
-  //       item.mealName?.toLowerCase()?.includes(keyword)
-  //     );
+  useEffect(() => {
+    if (list.length === 0) return;
 
-  //     setFilteredFoodItems(finalData);
-  //   };
+    setFiltereditem(list);
+  }, [list]);
+
+  const fetchRecipes = () =>
+    dispatch(actions.fetchRecipeActions({ clientId: user.clientId }));
+
+  const searchKeyword = (text) => {
+    const keyword = text?.toLowerCase();
+    const realData = list;
+
+    const finalData = realData.filter((item) =>
+      item.recipeTitle?.toLowerCase()?.includes(keyword)
+    );
+
+    setFiltereditem(finalData);
+  };
 
   // if (device === "tablet" && orientation === "landscape") {
   //   return (
@@ -131,7 +153,7 @@ export const RecipeListPage = () => {
       {isLoading ? (
         <LoadingPage />
       ) : isError ? (
-        <RefetchDataError onPress={fetchLocations} isLoading={isLoading} />
+        <RefetchDataError onPress={fetchRecipes} isLoading={isLoading} />
       ) : (
         <View
           style={{
@@ -155,6 +177,7 @@ export const RecipeListPage = () => {
               value={search}
               setValue={(val) => {
                 setSearch(val);
+                searchKeyword(val);
               }}
               style={{ height: 60, marginTop: 20 }}
               iconStyle={{ fontSize: 30 }}
@@ -163,19 +186,28 @@ export const RecipeListPage = () => {
             />
           </View>
 
-          <View style={{ width: "100%", marginTop: 20 }}>
-            <AdminOverviewBox
-              label={"Alfredo Pasta"}
-              name={"Macro: Chicken"}
-              rightText={""}
-              image={recipeVessel}
-              recipe
-              onPress={() =>
-                navigation.navigate("recipeDetailPage", {
-                  data: { name: "ali haider is a goodboy" },
-                })
-              }
-            />
+          <View style={{ width: "100%", marginTop: 10 }}>
+            {filteredItem.length === 0 ? (
+              <NoMealBox image={noRecipe} text={"No recipe added. "} />
+            ) : (
+              filteredItem.map((item, i) => (
+                <View style={{ width: "100%", marginTop: 10 }}>
+                  <AdminOverviewBox
+                    key={i}
+                    label={item.recipeTitle}
+                    name={`Macro: ${item.macroIngredient}`}
+                    rightText={""}
+                    image={recipeVessel}
+                    recipe
+                    onPress={() =>
+                      navigation.navigate("recipeDetailPage", {
+                        data: item,
+                      })
+                    }
+                  />
+                </View>
+              ))
+            )}
           </View>
         </View>
       )}

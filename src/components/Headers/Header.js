@@ -33,14 +33,16 @@ export const Header = ({
         }}
       >
         <TouchableOpacity onPress={onPressLeft}>
-          <Image
-            source={leftImage}
-            style={{
-              width: device === "tablet" ? 30 : 20,
-              height: device === "tablet" ? 30 : 20,
-              resizeMode: "contain",
-            }}
-          />
+          {leftImage ? (
+            <Image
+              source={leftImage}
+              style={{
+                width: device === "tablet" ? 30 : 20,
+                height: device === "tablet" ? 30 : 20,
+                resizeMode: "contain",
+              }}
+            />
+          ) : null}
         </TouchableOpacity>
 
         <Text

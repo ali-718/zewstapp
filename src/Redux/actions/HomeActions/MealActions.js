@@ -164,7 +164,6 @@ export const addNewMeal =
         navigation.goBack();
       })
       .catch((e) => {
-        console.log(e.response);
         dispatch({ type: ADD_MEAL.FAILED });
         ToastError("Some error occoured! please try again later");
       });
