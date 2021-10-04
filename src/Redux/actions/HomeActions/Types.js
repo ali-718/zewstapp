@@ -10,4 +10,3 @@ export const GET_HOTEL_LOCATIONS = requestActions(
   "meals",
   "GET_HOTEL_LOCATIONS"
 );
-export const ADD_NEW_LOCATION = requestActions("meals", "ADD_NEW_LOCATION");

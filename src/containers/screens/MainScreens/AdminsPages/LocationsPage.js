@@ -5,20 +5,28 @@ import { MainScreenContainer } from "../../../MainScreenContainers";
 import { MaterialIcons } from "@expo/vector-icons";
 import { AdminOverviewBox } from "../../../../components/AdminComponents/AdminOverviewBox";
 import storeIcon from "../../../../assets/images/storeIcon.png";
-import { primaryColor } from "../../../../theme/colors";
+import { grayColor, grayShade1, primaryColor } from "../../../../theme/colors";
 import { Text } from "../../../../components/Text/Text";
 import { useNavigation } from "@react-navigation/native";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { LoadingPage } from "../../../../components/LoadingPage/LoadingPage";
 import { RefetchDataError } from "../../../../components/ErrorPage/RefetchDataError";
-import { getAllUserLocations } from "../../../../Redux/actions/AdminActions/LocationActions";
+import {
+  getAllUserLocations,
+  setPrimaryLocationAction,
+} from "../../../../Redux/actions/AdminActions/LocationActions";
 
 export const LocationsPage = () => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user.user);
   const list = useSelector((state) => state.locations.locations);
   const isLoading = useSelector((state) => state.locations.isLoading);
   const isError = useSelector((state) => state.locations.isError);
+  const defaultLocation = useSelector(
+    (state) => state.locations.defaultLocation
+  );
+  const device = useSelector((state) => state.system.device);
   const [search, setSearch] = useState("");
   const [locations, setLocations] = useState([]);
 
@@ -46,7 +54,11 @@ export const LocationsPage = () => {
     setLocations(list);
   }, [list]);
 
-  const fetchLocations = () => getAllUserLocations({ userId: user.clientId });
+  const fetchLocations = () =>
+    dispatch(getAllUserLocations({ userId: user.clientId }));
+
+  const setPrimaryLocation = (payload) =>
+    dispatch(setPrimaryLocationAction(payload));
 
   return (
     <MainScreenContainer title={"Locations"}>
@@ -64,6 +76,55 @@ export const LocationsPage = () => {
           <RefetchDataError onPress={fetchLocations} isLoading={isLoading} />
         ) : (
           <View style={{ width: "100%" }}>
+            {/* <View style={{ width: "100%", marginTop: 0 }}>
+              <View
+                style={{
+                  width: "100%",
+                  padding: 10,
+                  backgroundColor: grayShade1,
+                  borderRadius: 10,
+                }}
+              >
+                <Text
+                  style={{ fontFamily: "openSans_bold", color: primaryColor }}
+                >
+                  Primary Location
+                </Text>
+              </View>
+
+              {defaultLocation.locationId ? (
+                <AdminOverviewBox
+                  label={defaultLocation.address}
+                  name={defaultLocation.locationName}
+                  rightText={"primary"}
+                  image={storeIcon}
+                  onPress={() => null}
+                />
+              ) : (
+                <View
+                  style={{
+                    width: "100%",
+                    backgroundColor: "white",
+                    flexDirection: "row",
+                    padding: device === "tablet" ? 20 : 10,
+                    borderRadius: 10,
+                    alignItems: "center",
+                    justifyContent: "center",
+                    marginTop: 10,
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: device === "tablet" ? 20 : 16,
+                      fontFamily: "openSans_bold",
+                      color: "black",
+                    }}
+                  >
+                    No default location selected
+                  </Text>
+                </View>
+              )}
+            </View> */}
             <Input
               placeholder={"Search"}
               iconName={"search"}
@@ -73,7 +134,7 @@ export const LocationsPage = () => {
                 setSearch(val);
                 searchKeyword(val);
               }}
-              style={{ height: 60 }}
+              style={{ height: 60, marginTop: 0 }}
               iconStyle={{ fontSize: 30 }}
               inputStyle={{ fontSize: 20 }}
             />
@@ -85,11 +146,16 @@ export const LocationsPage = () => {
                     key={i}
                     label={`Location ${i + 1}`}
                     name={item.locationName}
-                    rightText={""}
+                    rightText={
+                      defaultLocation.locationId === item.locationId
+                        ? "Primary"
+                        : ""
+                    }
                     image={storeIcon}
                     onPress={() =>
                       navigation.navigate("addLocation", { data: item })
                     }
+                    onLongPress={() => setPrimaryLocation(item)}
                   />
                 </View>
               ))}

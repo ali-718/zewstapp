@@ -1,6 +1,7 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { ToastSuccess } from "../../../helpers/Toast";
 import { client } from "../client";
-import { ADD_NEW_LOCATION } from "../HomeActions/Types";
-import { ALL_LOCATION } from "../RecipeActions/Types";
+import { ADD_NEW_LOCATION, ALL_LOCATION, PRIMARY_LOCATION } from "./Types";
 
 export const AddNewLocation =
   ({
@@ -78,20 +79,6 @@ export const updateLocation =
   (dispatch) => {
     dispatch({ type: ADD_NEW_LOCATION.REQUESTED });
 
-    console.log({
-      clientId,
-      locationName,
-      contact_no,
-      email,
-      address,
-      cordinates,
-      manager,
-      timmings,
-      default_location,
-      navigation,
-      locationId,
-    });
-
     client
       .post(`/location/update`, {
         clientId,
@@ -116,4 +103,15 @@ export const updateLocation =
         console.log(e);
         dispatch({ type: ADD_NEW_LOCATION.FAILED });
       });
+  };
+
+export const setPrimaryLocationAction =
+  (payload, noSuccess = false) =>
+  (dispatch) => {
+    dispatch({ type: PRIMARY_LOCATION, payload });
+    AsyncStorage.setItem("defaultLocation", JSON.stringify(payload));
+
+    if (!noSuccess) {
+      ToastSuccess("Primary location changed");
+    }
   };

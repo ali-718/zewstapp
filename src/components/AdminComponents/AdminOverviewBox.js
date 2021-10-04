@@ -13,6 +13,7 @@ export const AdminOverviewBox = ({
   iconStyle,
   onPress,
   recipe,
+  onLongPress = () => null,
 }) => {
   const device = useSelector((state) => state.system.device);
 
@@ -27,6 +28,7 @@ export const AdminOverviewBox = ({
         alignItems: "center",
       }}
       onPress={onPress}
+      onLongPress={onLongPress}
     >
       <Image
         source={image}

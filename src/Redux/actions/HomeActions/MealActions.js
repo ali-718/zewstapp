@@ -2,7 +2,6 @@ import { ToastError, ToastSuccess } from "../../../helpers/Toast";
 import { client } from "../client";
 import {
   ADD_MEAL,
-  ADD_NEW_LOCATION,
   DELETE_MEAL,
   GET_ADDONS,
   GET_ALLERGENS,
