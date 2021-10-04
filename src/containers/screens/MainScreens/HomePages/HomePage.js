@@ -14,6 +14,8 @@ import { ScanQrModal } from "../../../../components/Home/ScanQrModal";
 import { Camera } from "expo-camera";
 import { useNavigation } from "@react-navigation/native";
 import { ProgressBarBox } from "../../../../components/ProgressBarBox/ProgressBarBox";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { ToastError, ToastSuccess } from "../../../../helpers/Toast";
 
 export const HomePage = ({ setselected }) => {
   const navigation = useNavigation();
@@ -27,6 +29,19 @@ export const HomePage = ({ setselected }) => {
     }
     setQrModal(true);
   };
+
+  const checkDefaultLocation = async () => {
+    const location = await AsyncStorage.getItem("defaultLocation");
+
+    if (location === null) {
+      navigation.navigate("location");
+      ToastSuccess("Kindly select your default location");
+    }
+  };
+
+  useEffect(() => {
+    checkDefaultLocation();
+  }, []);
 
   return (
     <MainScreenContainer

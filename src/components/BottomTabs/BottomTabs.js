@@ -66,7 +66,8 @@ export const BottomTabs = ({ selected, setselected }) => {
   const RecipeEngineering = selected === 5 ? RecipeIconSelected : RecipeIcon;
   const WasteEngineering = selected === 6 ? WasteIcon : WasteIcon;
   const Inventory = selected === 7 ? InventorySelected : InventoryIcon;
-  const foodTab = selected === 8 ? foodIconSelected : foodIcon;
+  const foodTab =
+    selected === 8 || selected === 3 ? foodIconSelected : foodIcon;
   const insightTab = selected === 9 ? insightIconSelected : insightIcon;
   const admin = selected === 10 ? adminIconSelected : adminIcon;
 

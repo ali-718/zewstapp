@@ -2,7 +2,6 @@ import { client } from "../client";
 
 export const signupAction = ({
   restaurant_name,
-  restaurant_location,
   designation,
   owner_name,
   contact_no,

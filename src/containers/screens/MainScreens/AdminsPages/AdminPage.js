@@ -18,13 +18,15 @@ export const AdminPage = () => {
   const hotels = useSelector((state) => state.meal.hotel.hotels);
   const isLoading = useSelector((state) => state.meal.hotel.isLoading);
   const isError = useSelector((state) => state.meal.hotel.isError);
-  const [selected, setSelected] = useState("");
+  const [selected, setSelected] = useState(true);
 
   const openResturant = (val) => {
     if (val === selected) {
       setSelected("");
       return;
     }
+
+    console.log(hotels);
 
     setSelected(val);
   };
@@ -36,13 +38,13 @@ export const AdminPage = () => {
           <View key={i} style={{ width: "100%", alignItems: "center" }}>
             <ResturantName
               name={item.name}
-              selected={selected === i}
-              setSelected={() => openResturant(i)}
+              selected={selected}
+              setSelected={() => null}
               isAdmin
               customComponent
             />
 
-            {selected === i && (
+            {selected && (
               <View style={{ width: "100%", marginTop: 20 }}>
                 <View style={{ width: "100%" }}>
                   <AdminOverviewBox

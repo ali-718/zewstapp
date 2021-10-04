@@ -13,8 +13,9 @@ import {
 } from "../../../../helpers/rules";
 import { ToastError } from "../../../../helpers/Toast";
 import { useDispatch, useSelector } from "react-redux";
-import * as actions from "../../../../Redux/actions/HomeActions/MealActions";
+import * as actions from "../../../../Redux/actions/AdminActions/LocationActions";
 import { useNavigation } from "@react-navigation/core";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const emp = ["Ali", "Zainab", "Umer", "Kanwal", "Zaid", "Yahya"];
 const time = [
@@ -41,12 +42,33 @@ export const AddLocationsPage = (props) => {
   const [selectedTime, setselectedTime] = useState("");
   const [timeModal, settimeModal] = useState(false);
   const [isMenu, setIsMenu] = useState(false);
+  const [isEdit, setIsEdit] = useState(false);
 
   useEffect(() => {
-    const isMenu = props.route.params.isMenu;
+    const isMenu = props?.route?.params?.isMenu;
+    const isData = props?.route?.params?.data;
 
     if (isMenu) {
       setIsMenu(true);
+    }
+
+    if (isData) {
+      const {
+        locationName,
+        contact_no = "",
+        manager,
+        address,
+        email,
+        timmings,
+      } = isData;
+
+      setlocationName(locationName);
+      setphone(contact_no.replace("+", ""));
+      setSelectedManager(manager);
+      setAddress(address);
+      setEmail(email);
+      setselectedTime(timmings);
+      setIsEdit(true);
     }
   }, []);
 
@@ -61,6 +83,24 @@ export const AddLocationsPage = (props) => {
       return;
     }
 
+    if (isEdit) {
+      const data = {
+        clientId: user.clientId,
+        locationName,
+        contact_no: phone,
+        email,
+        address,
+        navigation,
+        locationId: props?.route?.params?.data?.locationId,
+        manager: selectedManager,
+        timmings: selectedTime,
+      };
+
+      dispatch(actions.updateLocation(data));
+
+      return;
+    }
+
     const data = {
       clientId: user.clientId,
       locationName,
@@ -68,6 +108,8 @@ export const AddLocationsPage = (props) => {
       email,
       address,
       navigation,
+      manager: selectedManager,
+      timmings: selectedTime,
     };
 
     dispatch(actions.AddNewLocation(data));

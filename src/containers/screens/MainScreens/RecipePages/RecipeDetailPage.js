@@ -1,5 +1,11 @@
-import React from "react";
-import { View, Image, FlatList } from "react-native";
+import React, { useEffect, useState } from "react";
+import {
+  View,
+  Image,
+  FlatList,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native";
 import {
   grayColor,
   grayMenuText,
@@ -13,8 +19,13 @@ import pdfIcon from "../../../../assets/images/pdfIcon.png";
 import multiplePeopleIcon from "../../../../assets/images/multiplePeopleIcon.png";
 import noMealAdded from "../../../../assets/images/noMealAdded.png";
 import clock from "../../../../assets/images/clock.png";
-import { useSelector } from "react-redux";
+import deletePurple from "../../../../assets/images/deletePurple.png";
+import { useDispatch, useSelector } from "react-redux";
 import { Text } from "../../../../components/Text/Text";
+import deleteIconWhite from "../../../../assets/images/deleteIconWhite.png";
+import { DeleteModal } from "../../../../components/Meals/DeleteModal";
+import * as actions from "../../../../Redux/actions/RecipeActions/RecipeActions";
+import { useNavigation } from "@react-navigation/core";
 
 const IconBox = ({ image, label, value, style }) => (
   <View
@@ -139,15 +150,323 @@ const RecipeBox = ({ step, recipe }) => {
   );
 };
 
-export const RecipeDetailPage = (props) => {
+export const RecipeDetailPage = ({ isTab, data, ...props }) => {
+  const navigation = useNavigation();
+  const dispatch = useDispatch();
   const device = useSelector((state) => state.system.device);
-  const { name = "Alfredo Pasta" } = props;
+  const deleteLoading = useSelector(
+    (state) => state.recipe.deleteRecipe.isLoading
+  );
+  const deleteError = useSelector((state) => state.recipe.deleteRecipe.isError);
+
+  const {
+    recipeTitle: name,
+    macroIngredient,
+    catalogId,
+    recipeType,
+    recipeSteps,
+    locationId,
+    ingredients,
+    cookingTime,
+    clientId,
+    serving,
+  } = isTab ? data : props?.route?.params?.data;
+
+  const [deleteModal, setdeleteModal] = useState(false);
+
+  const onDeleteRecipe = () => {
+    dispatch(
+      actions.deleteRecipeAction({
+        catalogId,
+        locationId,
+        clientId,
+        navigation,
+      })
+    );
+  };
+
+  useEffect(() => {
+    if (!deleteError) return;
+
+    setdeleteModal(false);
+  }, [deleteError]);
+
+  if (isTab) {
+    return (
+      <ScrollView style={{ flex: 1 }}>
+        <View
+          style={{
+            width: "100%",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <View
+            style={{
+              width: "95%",
+              flex: 1,
+              alignItems: "center",
+              backgroundColor: "white",
+              marginVertical: 20,
+              borderRadius: 10,
+              paddingBottom: 20,
+            }}
+          >
+            <View
+              style={{
+                width: "100%",
+                borderBottomWidth: 1,
+                borderColor: grayColor,
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "center",
+                padding: 10,
+                paddingVertical: 0,
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: 22,
+                  color: "black",
+                  fontFamily: "openSans_bold",
+                  flex: 0.9,
+                }}
+                numberOfLines={1}
+              >
+                {name}
+              </Text>
+
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                {isTab && (
+                  <TouchableOpacity
+                    style={{
+                      width: device === "tablet" ? 30 : 20,
+                      marginRight: 20,
+                    }}
+                    onPress={() => setdeleteModal(true)}
+                  >
+                    <Image
+                      source={deletePurple}
+                      style={{
+                        tintColor: primaryShade1,
+                        width: device === "tablet" ? 30 : 20,
+                        resizeMode: "contain",
+                      }}
+                    />
+                  </TouchableOpacity>
+                )}
+
+                <Image
+                  source={pdfIcon}
+                  style={{
+                    tintColor: primaryShade1,
+                    width: device === "tablet" ? 30 : 20,
+                    resizeMode: "contain",
+                  }}
+                />
+                <TouchableOpacity
+                  style={{
+                    width: device === "tablet" ? 30 : 20,
+                    marginRight: 20,
+                  }}
+                  onPress={() =>
+                    navigation.navigate("recipeAdd", {
+                      data: isTab ? data : props?.route?.params?.data,
+                    })
+                  }
+                >
+                  <Image
+                    source={editIcon}
+                    style={{
+                      tintColor: primaryShade1,
+                      width: device === "tablet" ? 30 : 20,
+                      resizeMode: "contain",
+                      marginLeft: 20,
+                    }}
+                  />
+                </TouchableOpacity>
+              </View>
+            </View>
+
+            {device === "tablet" ? (
+              <View
+                style={{
+                  width: "100%",
+                  marginTop: 10,
+                  padding: 10,
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  borderBottomWidth: 1,
+                  borderColor: grayColor,
+                }}
+              >
+                <View style={{ flex: 0.98 }}>
+                  <Text
+                    style={{
+                      fontSize: 20,
+                      color: "black",
+                      fontFamily: "openSans_bold",
+                    }}
+                  >
+                    Ingredients
+                  </Text>
+                  <Text
+                    style={{
+                      fontSize: 16,
+                      color: grayMenuText,
+                      fontFamily: "openSans_semiBold",
+                      marginTop: 5,
+                    }}
+                  >
+                    Macro ingredient: {macroIngredient}
+                  </Text>
+                </View>
+
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <IconBox
+                    image={multiplePeopleIcon}
+                    label={"Serving"}
+                    value={serving}
+                  />
+                  <IconBox
+                    style={{ marginLeft: 20 }}
+                    image={noMealAdded}
+                    label={"Type"}
+                    value={recipeType}
+                  />
+                  <IconBox
+                    style={{ marginLeft: 20 }}
+                    image={clock}
+                    label={"Cooking"}
+                    value={cookingTime}
+                  />
+                </View>
+              </View>
+            ) : (
+              <View
+                style={{
+                  width: "100%",
+                  marginTop: 10,
+                  padding: 10,
+                  borderBottomWidth: 1,
+                  borderColor: grayColor,
+                }}
+              >
+                <Text
+                  style={{
+                    fontSize: 20,
+                    color: "black",
+                    fontFamily: "openSans_bold",
+                  }}
+                >
+                  Ingredients
+                </Text>
+                <Text
+                  style={{
+                    fontSize: 16,
+                    color: grayMenuText,
+                    fontFamily: "openSans_semiBold",
+                    marginTop: 5,
+                  }}
+                  numberOfLines={1}
+                >
+                  Macro ingredient: {macroIngredient}
+                </Text>
+                <View style={{ width: "100%" }}>
+                  <IconBox
+                    image={multiplePeopleIcon}
+                    label={"Serving"}
+                    value={serving}
+                  />
+                  <IconBox
+                    image={noMealAdded}
+                    label={"Type"}
+                    value={recipeType}
+                  />
+                  <IconBox
+                    image={clock}
+                    label={"Cooking"}
+                    value={cookingTime}
+                  />
+                </View>
+              </View>
+            )}
+
+            <View style={{ width: "100%", marginTop: 10 }}>
+              <FlatList
+                numColumns={device === "tablet" ? 2 : 1}
+                data={ingredients}
+                renderItem={({ item }) => (
+                  <IngredientBox
+                    unit={item.unit}
+                    name={item.microIngredient}
+                    value={item.quantity}
+                  />
+                )}
+              />
+            </View>
+
+            <View
+              style={{ width: "100%", marginTop: 20, paddingHorizontal: 10 }}
+            >
+              <View
+                style={{
+                  width: "100%",
+                  paddingBottom: 10,
+                  borderBottomWidth: 1,
+                  borderColor: grayColor,
+                }}
+              >
+                <Text
+                  style={{
+                    fontSize: 20,
+                    color: "black",
+                    fontFamily: "openSans_bold",
+                  }}
+                >
+                  Recipe
+                </Text>
+              </View>
+
+              <View style={{ width: "100%", marginTop: 10 }}>
+                {recipeSteps.map((item, i) => (
+                  <RecipeBox step={i + 1} recipe={item.description} />
+                ))}
+              </View>
+            </View>
+          </View>
+
+          <DeleteModal
+            onRequestClose={() => setdeleteModal(false)}
+            visible={deleteModal}
+            isLoading={deleteLoading}
+            onDelete={onDeleteRecipe}
+            heading={"Delete Recipe?"}
+            deleteItemText={"this recipe?"}
+          />
+        </View>
+      </ScrollView>
+    );
+  }
 
   return (
     <MainScreenContainer
-      rightImage={""}
+      rightImage={deleteIconWhite}
       title={"Recipe Engineering"}
-      onPressRight={() => null}
+      onPressRight={() => setdeleteModal(true)}
     >
       <View
         style={{
@@ -199,15 +518,27 @@ export const RecipeDetailPage = (props) => {
                 resizeMode: "contain",
               }}
             />
-            <Image
-              source={editIcon}
+            <TouchableOpacity
               style={{
-                tintColor: primaryShade1,
                 width: device === "tablet" ? 30 : 20,
-                resizeMode: "contain",
-                marginLeft: 20,
+                marginRight: 20,
               }}
-            />
+              onPress={() =>
+                navigation.navigate("recipeAdd", {
+                  data: isTab ? data : props?.route?.params?.data,
+                })
+              }
+            >
+              <Image
+                source={editIcon}
+                style={{
+                  tintColor: primaryShade1,
+                  width: device === "tablet" ? 30 : 20,
+                  resizeMode: "contain",
+                  marginLeft: 20,
+                }}
+              />
+            </TouchableOpacity>
           </View>
         </View>
 
@@ -242,7 +573,7 @@ export const RecipeDetailPage = (props) => {
                   marginTop: 5,
                 }}
               >
-                Macro ingredient: Chicken Chicken Chicken
+                Macro ingredient: {macroIngredient}
               </Text>
             </View>
 
@@ -256,19 +587,19 @@ export const RecipeDetailPage = (props) => {
               <IconBox
                 image={multiplePeopleIcon}
                 label={"Serving"}
-                value={"4"}
+                value={serving}
               />
               <IconBox
                 style={{ marginLeft: 20 }}
                 image={noMealAdded}
                 label={"Type"}
-                value={"Complete"}
+                value={recipeType}
               />
               <IconBox
                 style={{ marginLeft: 20 }}
                 image={clock}
                 label={"Cooking"}
-                value={"10 mins"}
+                value={cookingTime}
               />
             </View>
           </View>
@@ -300,16 +631,16 @@ export const RecipeDetailPage = (props) => {
               }}
               numberOfLines={1}
             >
-              Macro ingredient: Chicken
+              Macro ingredient: {macroIngredient}
             </Text>
             <View style={{ width: "100%" }}>
               <IconBox
                 image={multiplePeopleIcon}
                 label={"Serving"}
-                value={"4"}
+                value={serving}
               />
-              <IconBox image={noMealAdded} label={"Type"} value={"Complete"} />
-              <IconBox image={clock} label={"Cooking"} value={"10 mins"} />
+              <IconBox image={noMealAdded} label={"Type"} value={recipeType} />
+              <IconBox image={clock} label={"Cooking"} value={cookingTime} />
             </View>
           </View>
         )}
@@ -317,22 +648,12 @@ export const RecipeDetailPage = (props) => {
         <View style={{ width: "100%", marginTop: 10 }}>
           <FlatList
             numColumns={device === "tablet" ? 2 : 1}
-            data={[
-              { unit: "oz", value: 3, name: "Pasta Unsalted" },
-              {
-                unit: "oz",
-                value: 3,
-                name: "Pasta Unsalted in a home of mine hah ha ha",
-              },
-              { unit: "cloves", value: 3, name: "Pasta Unsalted" },
-              { unit: "cup", value: 3, name: "Pasta Unsalted" },
-              { unit: "oz", value: 3, name: "Pasta Unsalted" },
-            ]}
+            data={ingredients}
             renderItem={({ item }) => (
               <IngredientBox
                 unit={item.unit}
-                name={item.name}
-                value={item.value}
+                name={item.microIngredient}
+                value={item.quantity}
               />
             )}
           />
@@ -359,23 +680,21 @@ export const RecipeDetailPage = (props) => {
           </View>
 
           <View style={{ width: "100%", marginTop: 10 }}>
-            <RecipeBox
-              step={1}
-              recipe={"Cook the pasta according to the package instructions"}
-            />
-            <RecipeBox
-              step={2}
-              recipe={
-                "Add the garlic and cook for 30 seconds, or until fragrant. Pour in the milk and cream. Stir consistently to Add the garlic and cook for 30 seconds, or until fragrant. Pour in the milk and cream. Stir consistently to"
-              }
-            />
-            <RecipeBox
-              step={3}
-              recipe={"Cook the pasta according to the package instructions"}
-            />
+            {recipeSteps.map((item, i) => (
+              <RecipeBox step={i + 1} recipe={item.description} />
+            ))}
           </View>
         </View>
       </View>
+
+      <DeleteModal
+        onRequestClose={() => setdeleteModal(false)}
+        visible={deleteModal}
+        isLoading={deleteLoading}
+        onDelete={onDeleteRecipe}
+        heading={"Delete Recipe?"}
+        deleteItemText={"this recipe?"}
+      />
     </MainScreenContainer>
   );
 };

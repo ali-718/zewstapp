@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { TouchableOpacity, View, Image } from "react-native";
 import { Input } from "../../../../components/Inputs/Input";
 import { grayColor, primaryColor } from "../../../../theme/colors";
@@ -15,9 +15,10 @@ import { ToastError } from "../../../../helpers/Toast";
 import { useNavigation } from "@react-navigation/core";
 import * as actions from "../../../../Redux/actions/RecipeActions/RecipeActions";
 
-export const RecipeAdd = () => {
+export const RecipeAdd = (props) => {
   const device = useSelector((state) => state.system.device);
   const user = useSelector((state) => state.auth.user.user);
+  const allLocations = useSelector((state) => state.locations.locations);
   const navigation = useNavigation();
   const dispatch = useDispatch();
 
@@ -26,9 +27,41 @@ export const RecipeAdd = () => {
   const [serving, setServing] = useState("");
   const [cookingTime, setCookingTime] = useState("");
   const [type, settype] = useState("");
+  const [selectedLocation, setselectedLocation] = useState({});
   const [ingredients, setIngredients] = useState([]);
   const [recipeList, setrecipeList] = useState([]);
+  const [isEdit, setIsEdit] = useState(false);
   const isLoading = useSelector((state) => state.recipe.addRecipe.isLoading);
+
+  useEffect(() => {
+    const data = props.route?.params?.data;
+    if (!data) return;
+
+    setIsEdit(true);
+
+    const {
+      clientId,
+      locationId,
+      recipeTitle,
+      macroIngredient,
+      serving,
+      recipeType,
+      cookingTime,
+      ingredients,
+      recipeSteps,
+    } = data;
+
+    setTitle(recipeTitle);
+    setMacroIngredient(macroIngredient);
+    setServing(serving);
+    setCookingTime(cookingTime);
+    settype(recipeType);
+    setIngredients(ingredients);
+    setrecipeList(recipeSteps);
+    setselectedLocation(
+      allLocations.find((item) => item.locationId === locationId)
+    );
+  }, []);
 
   const onAddData = () => {
     if (
@@ -36,7 +69,8 @@ export const RecipeAdd = () => {
       macroIngredient.trim().length === 0 ||
       serving.trim().length === 0 ||
       cookingTime.trim().length === 0 ||
-      type.trim().length === 0
+      type.trim().length === 0 ||
+      !selectedLocation?.locationId
     ) {
       ToastError("Please fill all fields");
       return;
@@ -52,9 +86,28 @@ export const RecipeAdd = () => {
       return;
     }
 
+    if (isEdit) {
+      const data = {
+        clientId: user.clientId,
+        locationId: selectedLocation?.locationId,
+        recipeTitle: title,
+        macroIngredient: macroIngredient,
+        serving,
+        recipeType: type,
+        cookingTime: cookingTime,
+        ingredients,
+        recipeSteps: recipeList,
+        navigation,
+        catalogId: props.route?.params?.data?.catalogId,
+      };
+
+      dispatch(actions.updateRecipeAction(data));
+      return;
+    }
+
     const data = {
       clientId: user.clientId,
-      locationId: "123",
+      locationId: selectedLocation?.locationId,
       recipeTitle: title,
       macroIngredient: macroIngredient,
       serving,
@@ -215,6 +268,19 @@ export const RecipeAdd = () => {
               setMenu={settype}
               placeholder={"Type*"}
               menus={["completed", "pending"]}
+              style={{ zIndex: 2 }}
+            />
+
+            <Dropdown
+              selectedMenu={selectedLocation?.locationName || ""}
+              setMenu={(val) =>
+                setselectedLocation(
+                  allLocations.find((item) => item.locationName === val)
+                )
+              }
+              placeholder={"Select Location*"}
+              menus={allLocations.map((item) => item.locationName)}
+              style={{ zIndex: 1, marginTop: 5 }}
             />
 
             <Input
@@ -441,7 +507,7 @@ export const RecipeAdd = () => {
             <RegularButton
               isLoading={isLoading}
               onPress={onAddData}
-              text={"Add"}
+              text={isEdit ? "Update" : "Add"}
               style={{ borderRadius: 10 }}
             />
           </View>
