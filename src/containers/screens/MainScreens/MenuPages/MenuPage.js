@@ -14,6 +14,8 @@ import { HEIGHT, WIDTH } from "../../../../helpers/utlils";
 import { useNavigation } from "@react-navigation/core";
 import editIcon from "../../../../assets/images/editIcon.png";
 import { FoodDetailPage } from "./FoodDetailPage";
+import { LoadingPage } from "../../../../components/LoadingPage/LoadingPage";
+import { RefetchDataError } from "../../../../components/ErrorPage/RefetchDataError";
 
 export const MenuPage = () => {
   const dispatch = useDispatch();
@@ -24,7 +26,11 @@ export const MenuPage = () => {
   const hotels = useSelector((state) => state.meal.hotel.hotels);
   const isLoading = useSelector((state) => state.meal.hotel.isLoading);
   const isError = useSelector((state) => state.meal.hotel.isError);
+  const defaultLocation = useSelector(
+    (state) => state.locations.defaultLocation
+  );
   const [selected, setSelected] = useState("");
+
   // for tablet only
   const [selectedFoodItemForTab, setSelectedFoodItemForTab] = useState({});
 
@@ -68,11 +74,9 @@ export const MenuPage = () => {
             },
           })
         }
-        leftImage={plus}
         rightImage={selectedFoodItemForTab?.mealName && editIcon}
         title={"Menu"}
         noScroll
-        onPressLeft={() => navigation.navigate("addLocation", { isMenu: true })}
       >
         <View
           style={{
@@ -121,7 +125,9 @@ export const MenuPage = () => {
                       style={{ borderRadius: 10, width: "50%", marginTop: 20 }}
                     />
                   </View>
-                ) : hotels[0]?.locations.length > 0 ? (
+                ) : hotels[0]?.locations.filter(
+                    (item) => item.locationId === defaultLocation.locationId
+                  ).length > 0 ? (
                   <View
                     style={{
                       width: "90%",
@@ -130,25 +136,34 @@ export const MenuPage = () => {
                     }}
                   >
                     <View style={{ width: "100%", alignItems: "center" }}>
-                      {hotels[0]?.locations.map((item, i) => (
-                        <ResturantName
-                          key={i}
-                          name={item?.locationName}
-                          isLoading={item?.meal?.isLoading}
-                          isError={item?.meal?.isError}
-                          address={item.address}
-                          selected={selected === i}
-                          setSelected={() => openResturant(i, item.locationId)}
-                          foodItems={item?.meal?.meals || []}
-                          onClickAvailable={(i, data) =>
-                            onClickAvailable(i, data)
-                          }
-                          filteredFoodItems={item?.meal?.meals || []}
-                          locationId={item.locationId}
-                          isOriented={true}
-                          setSelectedFoodItemForTab={setSelectedFoodItemForTab}
-                        />
-                      ))}
+                      {hotels[0]?.locations
+                        .filter(
+                          (item) =>
+                            item.locationId === defaultLocation.locationId
+                        )
+                        .map((item, i) => (
+                          <ResturantName
+                            key={i}
+                            name={item?.locationName}
+                            isLoading={item?.meal?.isLoading}
+                            isError={item?.meal?.isError}
+                            address={item.address}
+                            selected={selected === i}
+                            setSelected={() =>
+                              openResturant(i, item.locationId)
+                            }
+                            foodItems={item?.meal?.meals || []}
+                            onClickAvailable={(i, data) =>
+                              onClickAvailable(i, data)
+                            }
+                            filteredFoodItems={item?.meal?.meals || []}
+                            locationId={item.locationId}
+                            isOriented={true}
+                            setSelectedFoodItemForTab={
+                              setSelectedFoodItemForTab
+                            }
+                          />
+                        ))}
                     </View>
                   </View>
                 ) : (
@@ -195,43 +210,14 @@ export const MenuPage = () => {
   }
 
   return (
-    <MainScreenContainer
-      onPressRight={() => navigation.navigate("addLocation", { isMenu: true })}
-      leftImage={person}
-      rightImage={plus}
-      title={"Menu"}
-    >
+    <MainScreenContainer leftImage={person} title={"Menu"}>
       {isLoading ? (
-        <View
-          style={{
-            width: "100%",
-            flex: 1,
-            alignItems: "center",
-            justifyContent: "center",
-            height: HEIGHT - 100,
-          }}
-        >
-          <Spinner size={"large"} color={primaryColor} />
-        </View>
+        <LoadingPage />
       ) : isError ? (
-        <View
-          style={{
-            width: "100%",
-            flex: 1,
-            alignItems: "center",
-            justifyContent: "center",
-            height: HEIGHT - 100,
-          }}
-        >
-          <Text style={{ fontSize: 20 }}>Unable to fetch data!</Text>
-          <RegularButton
-            isLoading={isLoading}
-            onPress={fetchLocations}
-            text={"Retry"}
-            style={{ borderRadius: 10, width: "50%", marginTop: 20 }}
-          />
-        </View>
-      ) : hotels[0]?.locations.length > 0 ? (
+        <RefetchDataError onPress={fetchLocations} isLoading={isLoading} />
+      ) : hotels[0]?.locations.filter(
+          (item) => item.locationId === defaultLocation.locationId
+        ).length > 0 ? (
         <View
           style={{
             width: "90%",
@@ -240,21 +226,23 @@ export const MenuPage = () => {
           }}
         >
           <View style={{ width: "100%", alignItems: "center" }}>
-            {hotels[0]?.locations.map((item, i) => (
-              <ResturantName
-                key={i}
-                name={item?.locationName}
-                isLoading={item?.meal?.isLoading}
-                isError={item?.meal?.isError}
-                address={item.address}
-                selected={selected === i}
-                setSelected={() => openResturant(i, item.locationId)}
-                foodItems={item?.meal?.meals || []}
-                onClickAvailable={(i, data) => onClickAvailable(i, data)}
-                filteredFoodItems={item?.meal?.meals || []}
-                locationId={item.locationId}
-              />
-            ))}
+            {hotels[0]?.locations
+              .filter((item) => item.locationId === defaultLocation.locationId)
+              .map((item, i) => (
+                <ResturantName
+                  key={i}
+                  name={item?.locationName}
+                  isLoading={item?.meal?.isLoading}
+                  isError={item?.meal?.isError}
+                  address={item.address}
+                  selected={selected === i}
+                  setSelected={() => openResturant(i, item.locationId)}
+                  foodItems={item?.meal?.meals || []}
+                  onClickAvailable={(i, data) => onClickAvailable(i, data)}
+                  filteredFoodItems={item?.meal?.meals || []}
+                  locationId={item.locationId}
+                />
+              ))}
           </View>
         </View>
       ) : (

@@ -32,6 +32,8 @@ import {
   TABLET,
 } from "./Redux/actions/SystemActions/Types";
 import { Dimensions } from "react-native";
+import { RecipeDetailPage } from "./containers/screens/MainScreens/RecipePages/RecipeDetailPage";
+import { RecipeAdd } from "./containers/screens/MainScreens/RecipePages/RecipeAdd";
 
 const Stack = createNativeStackNavigator();
 
@@ -69,6 +71,8 @@ const MainRoutes = () => {
         <Stack.Screen name="taxDocument" component={TaxDocument} />
         <Stack.Screen name="employees" component={EmployeesPage} />
         <Stack.Screen name="addEmployees" component={AddEmployeesPage} />
+        <Stack.Screen name="recipeDetailPage" component={RecipeDetailPage} />
+        <Stack.Screen name="recipeAdd" component={RecipeAdd} />
       </Stack.Navigator>
     </NavigationContainer>
   );

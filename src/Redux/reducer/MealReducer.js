@@ -1,8 +1,8 @@
 import produce from "immer";
+import { ADD_NEW_LOCATION } from "../actions/AdminActions/Types";
 import { USER } from "../actions/AuthActions/Types";
 import {
   ADD_MEAL,
-  ADD_NEW_LOCATION,
   DELETE_MEAL,
   GET_ADDONS,
   GET_ALLERGENS,

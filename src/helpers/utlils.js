@@ -134,3 +134,7 @@ export const addonsList = [
   "Water bottle",
   "Ginger Ale",
 ];
+
+export const recipePacking = ["Packed", "Fresh"];
+
+export const recipeUnit = ["oz", "tbsp", "cloves", "cup", "tsp", "tbsp"];

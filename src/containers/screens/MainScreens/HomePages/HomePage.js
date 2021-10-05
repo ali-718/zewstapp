@@ -14,9 +14,14 @@ import { ScanQrModal } from "../../../../components/Home/ScanQrModal";
 import { Camera } from "expo-camera";
 import { useNavigation } from "@react-navigation/native";
 import { ProgressBarBox } from "../../../../components/ProgressBarBox/ProgressBarBox";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { ToastError, ToastSuccess } from "../../../../helpers/Toast";
+import { useDispatch } from "react-redux";
+import { setPrimaryLocationAction } from "../../../../Redux/actions/AdminActions/LocationActions";
 
 export const HomePage = ({ setselected }) => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
   const [qrModal, setQrModal] = useState(false);
 
   const openCamera = async () => {
@@ -27,6 +32,22 @@ export const HomePage = ({ setselected }) => {
     }
     setQrModal(true);
   };
+
+  const checkDefaultLocation = async () => {
+    const location = await AsyncStorage.getItem("defaultLocation");
+
+    if (location === null) {
+      navigation.navigate("location");
+      ToastSuccess("Kindly select your default location");
+      return;
+    }
+
+    dispatch(setPrimaryLocationAction(JSON.parse(location), true));
+  };
+
+  useEffect(() => {
+    checkDefaultLocation();
+  }, []);
 
   return (
     <MainScreenContainer

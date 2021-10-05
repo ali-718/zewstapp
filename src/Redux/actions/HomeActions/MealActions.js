@@ -2,7 +2,6 @@ import { ToastError, ToastSuccess } from "../../../helpers/Toast";
 import { client } from "../client";
 import {
   ADD_MEAL,
-  ADD_NEW_LOCATION,
   DELETE_MEAL,
   GET_ADDONS,
   GET_ALLERGENS,
@@ -164,48 +163,7 @@ export const addNewMeal =
         navigation.goBack();
       })
       .catch((e) => {
-        console.log(e.response);
         dispatch({ type: ADD_MEAL.FAILED });
         ToastError("Some error occoured! please try again later");
-      });
-  };
-
-export const AddNewLocation =
-  ({
-    clientId,
-    locationName,
-    contact_no,
-    email,
-    address,
-    cordinates = "",
-    manager = "",
-    timmings = "",
-    default_location = false,
-    navigation,
-  }) =>
-  (dispatch) => {
-    dispatch({ type: ADD_NEW_LOCATION.REQUESTED });
-
-    client
-      .post(`/location/add`, {
-        clientId,
-        locationName,
-        contact_no: `+${contact_no}`,
-        email,
-        address,
-        cordinates,
-        manager,
-        timmings,
-        default_location,
-      })
-      .then((data) => {
-        dispatch({
-          type: ADD_NEW_LOCATION.SUCCEEDED,
-        });
-        dispatch(getAllLocations({ userId: clientId }));
-        navigation.goBack();
-      })
-      .catch((e) => {
-        dispatch({ type: ADD_NEW_LOCATION.FAILED });
       });
   };

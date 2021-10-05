@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { TouchableOpacity, View } from "react-native";
 import { Input } from "../../../../components/Inputs/Input";
 import { Text } from "../../../../components/Text/Text";
@@ -8,14 +8,91 @@ import { MainScreenContainer } from "../../../MainScreenContainers";
 import switchOn from "../../../../assets/images/switchOn.png";
 import switchOff from "../../../../assets/images/switchOff.png";
 import { MealItem } from "../../../../components/Meals/MealItem";
+import { ToastError } from "../../../../helpers/Toast";
+import { useDispatch, useSelector } from "react-redux";
+import * as actions from "../../../../Redux/actions/EmployeeActions/EmployeeActions";
+import { useNavigation } from "@react-navigation/core";
 
 export const AddEmployeesPage = (props) => {
+  const dispatch = useDispatch();
+  const navigation = useNavigation();
+  const user = useSelector((state) => state.auth.user.user);
+  const isLoading = useSelector(
+    (state) => state.employee.addEmployee.isLoading
+  );
   const [selectedType, setSelectedType] = useState("");
   const [firstName, setfirstName] = useState("");
   const [lastName, setlastName] = useState("");
   const [contact, setContact] = useState("");
   const [email, setEmail] = useState("");
   const [available, setavailable] = useState(true);
+  const [isEdit, setIsEdit] = useState(false);
+
+  useEffect(() => {
+    const data = props?.route?.params?.data;
+
+    if (data) {
+      const {
+        active,
+        employeeId,
+        lastName,
+        email,
+        phone,
+        firstName,
+        clientId,
+        type,
+      } = data;
+
+      setIsEdit(true);
+      setavailable(active);
+      setEmail(email);
+      setContact(phone);
+      setlastName(lastName);
+      setfirstName(firstName);
+      setSelectedType(type);
+    }
+  }, []);
+
+  const addEmployee = () => {
+    if (
+      selectedType.trim().length === 0 ||
+      firstName.trim().length === 0 ||
+      lastName.trim().length === 0 ||
+      contact.trim().length === 0 ||
+      email.trim().length === 0
+    ) {
+      ToastError("Kindly all fields");
+      return;
+    }
+
+    if (isEdit) {
+      const data = {
+        clientId: user.clientId,
+        firstName,
+        lastName,
+        phone: contact,
+        email: email,
+        type: selectedType,
+        active: available,
+        navigation,
+        employeeId: props.route.params.data.employeeId,
+      };
+      return;
+    }
+
+    const data = {
+      clientId: user.clientId,
+      firstName,
+      lastName,
+      phone: contact,
+      email: email,
+      type: selectedType,
+      active: available,
+      navigation,
+    };
+
+    dispatch(actions.addEmployeeAction(data));
+  };
 
   return (
     <MainScreenContainer title={"Add Employee"}>
@@ -23,7 +100,7 @@ export const AddEmployeesPage = (props) => {
         <View style={{ width: "100%" }}>
           <Input
             value={firstName}
-            onChangeText={(val) => setfirstName(val)}
+            setValue={(val) => setfirstName(val)}
             placeholder={"First name*"}
           />
         </View>
@@ -32,14 +109,14 @@ export const AddEmployeesPage = (props) => {
           <Input
             placeholder={"Last Name*"}
             value={lastName}
-            onChangeText={(val) => setlastName(val)}
+            setValue={(val) => setlastName(val)}
           />
         </View>
 
         <View style={{ width: "100%", marginTop: 20 }}>
           <Input
             value={contact}
-            onChangeText={(val) => setContact(val)}
+            setValue={(val) => setContact(val)}
             keyboardType={"number-pad"}
             placeholder={"Contact number*"}
           />
@@ -50,7 +127,7 @@ export const AddEmployeesPage = (props) => {
             keyboardType={"email-address"}
             placeholder={"Email address*"}
             value={email}
-            onChangeText={(val) => setEmail(val)}
+            setValue={(val) => setEmail(val)}
           />
         </View>
 
@@ -79,13 +156,14 @@ export const AddEmployeesPage = (props) => {
                   alignItems: "center",
                   justifyContent: "center",
                   marginTop: 10,
-                  backgroundColor: selectedType === 0 ? primaryColor : "white",
+                  backgroundColor:
+                    selectedType === "Cashier" ? primaryColor : "white",
                 }}
-                onPress={() => setSelectedType(0)}
+                onPress={() => setSelectedType("Cashier")}
               >
                 <Text
                   style={{
-                    color: selectedType === 0 ? "white" : primaryColor,
+                    color: selectedType === "Cashier" ? "white" : primaryColor,
                     fontFamily: "openSans_semiBold",
                   }}
                 >
@@ -103,13 +181,14 @@ export const AddEmployeesPage = (props) => {
                   alignItems: "center",
                   justifyContent: "center",
                   marginTop: 10,
-                  backgroundColor: selectedType === 1 ? primaryColor : "white",
+                  backgroundColor:
+                    selectedType === "Manager" ? primaryColor : "white",
                 }}
-                onPress={() => setSelectedType(1)}
+                onPress={() => setSelectedType("Manager")}
               >
                 <Text
                   style={{
-                    color: selectedType === 1 ? "white" : primaryColor,
+                    color: selectedType === "Manager" ? "white" : primaryColor,
                     fontFamily: "openSans_semiBold",
                   }}
                 >
@@ -128,13 +207,14 @@ export const AddEmployeesPage = (props) => {
                   alignItems: "center",
                   justifyContent: "center",
                   marginTop: 10,
-                  backgroundColor: selectedType === 2 ? primaryColor : "white",
+                  backgroundColor:
+                    selectedType === "Host" ? primaryColor : "white",
                 }}
-                onPress={() => setSelectedType(2)}
+                onPress={() => setSelectedType("Host")}
               >
                 <Text
                   style={{
-                    color: selectedType === 2 ? "white" : primaryColor,
+                    color: selectedType === "Host" ? "white" : primaryColor,
                     fontFamily: "openSans_semiBold",
                   }}
                 >
@@ -156,10 +236,9 @@ export const AddEmployeesPage = (props) => {
 
         <View style={{ width: "100%", marginTop: 20 }}>
           <RegularButton
-            onPress={() =>
-              props.navigation.navigate("Verification", { phone: contact })
-            }
-            text={"Save"}
+            onPress={addEmployee}
+            isLoading={isLoading}
+            text={isEdit ? "Update" : "Save"}
             style={{ borderRadius: 50 }}
           />
         </View>

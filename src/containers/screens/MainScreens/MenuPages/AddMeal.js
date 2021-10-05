@@ -440,6 +440,7 @@ export const AddMeal = (props) => {
         visible={deleteModal}
         isLoading={deleteMealLoading}
         onDelete={onDeleteMeal}
+        deleteItemText={"this meal?"}
       />
     </MainScreenContainer>
   );
