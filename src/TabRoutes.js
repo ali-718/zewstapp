@@ -14,6 +14,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { RecipeListPage } from "./containers/screens/MainScreens/RecipePages/RecipeListPage";
 import { getAllUserLocations } from "./Redux/actions/AdminActions/LocationActions";
+import { getAllEmployees } from "./Redux/actions/EmployeeActions/EmployeeActions";
 
 const Stack = createNativeStackNavigator();
 
@@ -21,7 +22,6 @@ export const TabRoutes = () => {
   const dispatch = useDispatch();
   const [selected, setselected] = useState(0);
   const user = useSelector((state) => state.auth.user.user);
-  const [showMore, setShowMore] = useState(false);
 
   useEffect(() => {
     Promise.all([
@@ -29,6 +29,7 @@ export const TabRoutes = () => {
       dispatch(getMealAddons()),
       dispatch(getMealAllergens()),
       dispatch(getAllUserLocations({ userId: user.clientId })),
+      dispatch(getAllEmployees({ clientId: user.clientId })),
     ]);
   }, []);
 

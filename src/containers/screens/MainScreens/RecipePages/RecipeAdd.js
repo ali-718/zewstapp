@@ -27,11 +27,13 @@ export const RecipeAdd = (props) => {
   const [serving, setServing] = useState("");
   const [cookingTime, setCookingTime] = useState("");
   const [type, settype] = useState("");
-  const [selectedLocation, setselectedLocation] = useState({});
   const [ingredients, setIngredients] = useState([]);
   const [recipeList, setrecipeList] = useState([]);
   const [isEdit, setIsEdit] = useState(false);
   const isLoading = useSelector((state) => state.recipe.addRecipe.isLoading);
+  const defaultLocation = useSelector(
+    (state) => state.locations.defaultLocation
+  );
 
   useEffect(() => {
     const data = props.route?.params?.data;
@@ -58,19 +60,20 @@ export const RecipeAdd = (props) => {
     settype(recipeType);
     setIngredients(ingredients);
     setrecipeList(recipeSteps);
-    setselectedLocation(
-      allLocations.find((item) => item.locationId === locationId)
-    );
   }, []);
 
   const onAddData = () => {
+    if (!defaultLocation.locationId) {
+      ToastError("No primary location selected!");
+      return;
+    }
+
     if (
       title.trim().length === 0 ||
       macroIngredient.trim().length === 0 ||
       serving.trim().length === 0 ||
       cookingTime.trim().length === 0 ||
-      type.trim().length === 0 ||
-      !selectedLocation?.locationId
+      type.trim().length === 0
     ) {
       ToastError("Please fill all fields");
       return;
@@ -89,7 +92,7 @@ export const RecipeAdd = (props) => {
     if (isEdit) {
       const data = {
         clientId: user.clientId,
-        locationId: selectedLocation?.locationId,
+        locationId: defaultLocation?.locationId,
         recipeTitle: title,
         macroIngredient: macroIngredient,
         serving,
@@ -107,7 +110,7 @@ export const RecipeAdd = (props) => {
 
     const data = {
       clientId: user.clientId,
-      locationId: selectedLocation?.locationId,
+      locationId: defaultLocation?.locationId,
       recipeTitle: title,
       macroIngredient: macroIngredient,
       serving,
@@ -269,18 +272,6 @@ export const RecipeAdd = (props) => {
               placeholder={"Type*"}
               menus={["completed", "pending"]}
               style={{ zIndex: 2 }}
-            />
-
-            <Dropdown
-              selectedMenu={selectedLocation?.locationName || ""}
-              setMenu={(val) =>
-                setselectedLocation(
-                  allLocations.find((item) => item.locationName === val)
-                )
-              }
-              placeholder={"Select Location*"}
-              menus={allLocations.map((item) => item.locationName)}
-              style={{ zIndex: 1, marginTop: 5 }}
             />
 
             <Input

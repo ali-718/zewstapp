@@ -42,7 +42,6 @@ export const RecipeListPage = () => {
   const searchKeyword = (text) => {
     const keyword = text?.toLowerCase();
     const realData = list;
-
     const finalData = realData.filter((item) =>
       item.recipeTitle?.toLowerCase()?.includes(keyword)
     );

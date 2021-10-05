@@ -15,21 +15,15 @@ import { useSelector } from "react-redux";
 
 export const AdminPage = () => {
   const navigation = useNavigation();
+  const employeeList = useSelector(
+    (state) => state.employee.employee.employees
+  );
   const hotels = useSelector((state) => state.meal.hotel.hotels);
-  const isLoading = useSelector((state) => state.meal.hotel.isLoading);
-  const isError = useSelector((state) => state.meal.hotel.isError);
+  const defaultLocation = useSelector(
+    (state) => state.locations.defaultLocation
+  );
+  const locationsList = useSelector((state) => state.locations.locations);
   const [selected, setSelected] = useState(true);
-
-  const openResturant = (val) => {
-    if (val === selected) {
-      setSelected("");
-      return;
-    }
-
-    console.log(hotels);
-
-    setSelected(val);
-  };
 
   return (
     <MainScreenContainer leftImage={person} title={"Admin"}>
@@ -73,8 +67,8 @@ export const AdminPage = () => {
                 <View style={{ width: "100%", marginTop: 10 }}>
                   <AdminOverviewBox
                     label={"Locations"}
-                    name={item.location}
-                    rightText={"1 Location"}
+                    name={defaultLocation.locationName ?? ""}
+                    rightText={`${locationsList.length} Location`}
                     image={locationIcon}
                     onPress={() =>
                       navigation.navigate("location", { data: item })
@@ -96,7 +90,7 @@ export const AdminPage = () => {
                   <AdminOverviewBox
                     label={"Employees"}
                     name={"Managers/Workers"}
-                    rightText={"6 Users"}
+                    rightText={`${employeeList.length} Users`}
                     image={multiplePeopleIcon}
                     onPress={() =>
                       navigation.navigate("employees", { data: item })

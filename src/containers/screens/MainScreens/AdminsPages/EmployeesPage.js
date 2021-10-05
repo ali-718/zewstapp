@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { TouchableOpacity, View } from "react-native";
 import { Input } from "../../../../components/Inputs/Input";
 import { MainScreenContainer } from "../../../MainScreenContainers";
@@ -8,43 +8,47 @@ import employeeIcon from "../../../../assets/images/employeeIcon.png";
 import { primaryColor } from "../../../../theme/colors";
 import { Text } from "../../../../components/Text/Text";
 import { useNavigation } from "@react-navigation/native";
-
-const dummyEmployees = [
-  {
-    name: "Ali Haider",
-    type: "Host",
-  },
-  {
-    name: "Fahad Khan",
-    type: "Manager",
-  },
-  {
-    name: "Zainab Khan",
-    type: "Cashier",
-  },
-  {
-    name: "Kanwal Allijah",
-    type: "Host",
-  },
-];
+import { useDispatch, useSelector } from "react-redux";
+import { getAllEmployees } from "../../../../Redux/actions/EmployeeActions/EmployeeActions";
+import { LoadingPage } from "../../../../components/LoadingPage/LoadingPage";
+import { RefetchDataError } from "../../../../components/ErrorPage/RefetchDataError";
+import { NoMealBox } from "../../../../components/NoMealBox/NoMealBox";
 
 export const EmployeesPage = () => {
+  const dispatch = useDispatch();
   const navigation = useNavigation();
+  const user = useSelector((state) => state.auth.user.user);
+  const list = useSelector((state) => state.employee.employee.employees);
+  const isLoading = useSelector((state) => state.employee.employee.isLoading);
+  const isError = useSelector((state) => state.employee.employee.isError);
   const [search, setSearch] = useState("");
-  const [employees, setLocations] = useState(dummyEmployees);
+  const [filteredItem, setFiltereditem] = useState([]);
 
   const searchKeyword = (text) => {
     const keyword = text?.toLowerCase();
-    const realData = dummyEmployees;
-    const finalData = realData.filter((item) =>
-      item?.name.toLowerCase()?.includes(keyword)
+    const realData = list;
+    const finalData = realData.filter(
+      (item) =>
+        item?.firstName.toLowerCase()?.includes(keyword) ||
+        item?.lastName.toLowerCase()?.includes(keyword)
     );
 
-    setLocations(finalData);
+    setFiltereditem(finalData);
   };
 
+  useEffect(() => {
+    fetchEmployees();
+  }, []);
+
+  useEffect(() => {
+    setFiltereditem(list);
+  }, [list]);
+
+  const fetchEmployees = () =>
+    dispatch(getAllEmployees({ clientId: user.clientId }));
+
   return (
-    <MainScreenContainer title={"employees"}>
+    <MainScreenContainer title={"Employees"}>
       <View
         style={{
           width: "90%",
@@ -53,57 +57,72 @@ export const EmployeesPage = () => {
           marginBottom: 30,
         }}
       >
-        <View style={{ width: "100%" }}>
-          <Input
-            placeholder={"Search"}
-            iconName={"search"}
-            iconType={MaterialIcons}
-            value={search}
-            onChangeText={(val) => {
-              setSearch(val);
-              searchKeyword(val);
-            }}
-            style={{ height: 60 }}
-            iconStyle={{ fontSize: 30 }}
-            inputStyle={{ fontSize: 20 }}
-          />
-
-          <View style={{ width: "100%", marginTop: 10 }}>
-            {employees.map((item, i) => (
-              <View style={{ width: "100%", marginTop: 10 }}>
-                <AdminOverviewBox
-                  key={i}
-                  label={item.type}
-                  name={item.name}
-                  rightText={"Active"}
-                  image={employeeIcon}
-                  onPress={() => navigation.navigate("addEmployees")}
-                />
-              </View>
-            ))}
-
-            <TouchableOpacity
-              style={{
-                width: "100%",
-                marginTop: 10,
-                backgroundColor: "white",
-                borderRadius: 10,
-                padding: 15,
+        {isLoading ? (
+          <LoadingPage />
+        ) : isError ? (
+          <RefetchDataError onPress={fetchEmployees} isLoading={isLoading} />
+        ) : (
+          <View style={{ width: "100%" }}>
+            <Input
+              placeholder={"Search"}
+              iconName={"search"}
+              iconType={MaterialIcons}
+              value={search}
+              setValue={(val) => {
+                searchKeyword(val);
+                setSearch(val);
               }}
-              onPress={() => navigation.navigate("addEmployees")}
-            >
-              <Text
+              style={{ height: 60 }}
+              iconStyle={{ fontSize: 30 }}
+              inputStyle={{ fontSize: 20 }}
+            />
+
+            <View style={{ width: "100%", marginTop: 10 }}>
+              {list.length > 0 ? (
+                filteredItem.map((item, i) => (
+                  <View style={{ width: "100%", marginTop: 10 }}>
+                    <AdminOverviewBox
+                      key={i}
+                      label={item.type}
+                      name={`${item.firstName} ${item.lastName}`}
+                      rightText={item.active ? "Active" : "Inactive"}
+                      image={employeeIcon}
+                      onPress={() =>
+                        navigation.navigate("addEmployees", { data: item })
+                      }
+                    />
+                  </View>
+                ))
+              ) : (
+                <NoMealBox
+                  image={employeeIcon}
+                  text={"No employee added. Click on Add Employee"}
+                />
+              )}
+
+              <TouchableOpacity
                 style={{
-                  fontSize: 20,
-                  fontFamily: "openSans_bold",
-                  color: primaryColor,
+                  width: "100%",
+                  marginTop: 10,
+                  backgroundColor: "white",
+                  borderRadius: 10,
+                  padding: 15,
                 }}
+                onPress={() => navigation.navigate("addEmployees")}
               >
-                Add Employee
-              </Text>
-            </TouchableOpacity>
+                <Text
+                  style={{
+                    fontSize: 20,
+                    fontFamily: "openSans_bold",
+                    color: primaryColor,
+                  }}
+                >
+                  Add Employee
+                </Text>
+              </TouchableOpacity>
+            </View>
           </View>
-        </View>
+        )}
       </View>
     </MainScreenContainer>
   );

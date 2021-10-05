@@ -100,7 +100,6 @@ export const updateLocation =
         navigation.goBack();
       })
       .catch((e) => {
-        console.log(e);
         dispatch({ type: ADD_NEW_LOCATION.FAILED });
       });
   };
