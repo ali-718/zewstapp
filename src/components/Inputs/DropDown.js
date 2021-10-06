@@ -14,6 +14,7 @@ export const Dropdown = ({
   setMenu,
   selectedMenu,
   style,
+  colors,
 }) => {
   const device = useSelector((state) => state.system.device);
   const [isFocused, setIsFocused] = useState(false);
@@ -109,12 +110,25 @@ export const Dropdown = ({
                   backgroundColor: "white",
                   padding: 10,
                   paddingVertical: 15,
+                  flexDirection: "row",
                 }}
                 onPress={() => {
                   setMenu(item);
                   setIsOpen(false);
                 }}
               >
+                {colors && (
+                  <View
+                    style={{
+                      width: 30,
+                      height: 30,
+                      backgroundColor: colors.find((val) => val.title === item)
+                        .color,
+                      marginRight: 10,
+                      borderRadius: 100,
+                    }}
+                  />
+                )}
                 <Text
                   style={{
                     fontSize: device === "tablet" ? 20 : 16,

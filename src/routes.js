@@ -34,6 +34,8 @@ import {
 import { Dimensions } from "react-native";
 import { RecipeDetailPage } from "./containers/screens/MainScreens/RecipePages/RecipeDetailPage";
 import { RecipeAdd } from "./containers/screens/MainScreens/RecipePages/RecipeAdd";
+import { InventoryListPage } from "./containers/screens/MainScreens/InventoryPages/InventoryListPage";
+import { AddInventoryPage } from "./containers/screens/MainScreens/InventoryPages/AddInventoryPage";
 
 const Stack = createNativeStackNavigator();
 
@@ -73,6 +75,7 @@ const MainRoutes = () => {
         <Stack.Screen name="addEmployees" component={AddEmployeesPage} />
         <Stack.Screen name="recipeDetailPage" component={RecipeDetailPage} />
         <Stack.Screen name="recipeAdd" component={RecipeAdd} />
+        <Stack.Screen name="inventoryAdd" component={AddInventoryPage} />
       </Stack.Navigator>
     </NavigationContainer>
   );

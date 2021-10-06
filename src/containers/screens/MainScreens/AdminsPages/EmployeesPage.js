@@ -13,10 +13,12 @@ import { getAllEmployees } from "../../../../Redux/actions/EmployeeActions/Emplo
 import { LoadingPage } from "../../../../components/LoadingPage/LoadingPage";
 import { RefetchDataError } from "../../../../components/ErrorPage/RefetchDataError";
 import { NoMealBox } from "../../../../components/NoMealBox/NoMealBox";
+import { SearchInput } from "../../../../components/SearchInput/SearchInput";
 
 export const EmployeesPage = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
+  const device = useSelector((state) => state.system.device);
   const user = useSelector((state) => state.auth.user.user);
   const list = useSelector((state) => state.employee.employee.employees);
   const isLoading = useSelector((state) => state.employee.employee.isLoading);
@@ -63,18 +65,10 @@ export const EmployeesPage = () => {
           <RefetchDataError onPress={fetchEmployees} isLoading={isLoading} />
         ) : (
           <View style={{ width: "100%" }}>
-            <Input
-              placeholder={"Search"}
-              iconName={"search"}
-              iconType={MaterialIcons}
-              value={search}
-              setValue={(val) => {
-                searchKeyword(val);
-                setSearch(val);
-              }}
-              style={{ height: 60 }}
-              iconStyle={{ fontSize: 30 }}
-              inputStyle={{ fontSize: 20 }}
+            <SearchInput
+              search={search}
+              setSearch={setSearch}
+              searchKeyword={searchKeyword}
             />
 
             <View style={{ width: "100%", marginTop: 10 }}>

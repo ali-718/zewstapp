@@ -1,0 +1,175 @@
+import React, { useEffect, useState } from "react";
+import { View, Text, ScrollView } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
+import { RegularButton } from "../../../../components/Buttons/RegularButton";
+import { MainScreenContainer } from "../../../MainScreenContainers";
+import { MaterialIcons } from "@expo/vector-icons";
+import { Input } from "../../../../components/Inputs/Input";
+import { useNavigation } from "@react-navigation/core";
+import * as actions from "../../../../Redux/actions/RecipeActions/RecipeActions";
+import { SearchInput } from "../../../../components/SearchInput/SearchInput";
+
+export const InventoryListPage = () => {
+  const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.auth.user.user);
+  const device = useSelector((state) => state.system.device);
+  const orientation = useSelector((state) => state.system.orientation);
+  const list = useSelector((state) => state.recipe.recipe.list);
+  const [search, setSearch] = useState("");
+  const [filteredItem, setFiltereditem] = useState(list);
+  const [selectedRecipeItemForTab, setselectedRecipeItemForTab] = useState({});
+
+  useEffect(() => {
+    setFiltereditem(list);
+  }, [list]);
+
+  const fetchRecipes = () =>
+    dispatch(actions.fetchRecipeActions({ clientId: user.clientId }));
+
+  const searchKeyword = (text) => {
+    const keyword = text?.toLowerCase();
+    const realData = list;
+    const finalData = realData.filter((item) =>
+      item.recipeTitle?.toLowerCase()?.includes(keyword)
+    );
+
+    setFiltereditem(finalData);
+  };
+
+  //   if (device === "tablet" && orientation === "landscape") {
+  //     return (
+  //       <MainScreenContainer
+  //         leftImage={""}
+  //         rightImage={""}
+  //         title={"Recipe Engineering"}
+  //         noScroll
+  //       >
+  //         <View
+  //           style={{
+  //             width: "100%",
+  //             flex: 1,
+  //             flexDirection: "row",
+  //             justifyContent: "space-between",
+  //           }}
+  //         >
+  //           <View style={{ width: "40%" }}>
+  //             <ScrollView style={{ width: "100%" }}>
+  //               <View
+  //                 style={{
+  //                   width: "100%",
+  //                   flex: 1,
+  //                   alignItems: "center",
+  //                 }}
+  //               >
+  //                 {isLoading ? (
+  //                   <LoadingPage />
+  //                 ) : isError ? (
+  //                   <RefetchDataError
+  //                     onPress={fetchRecipes}
+  //                     isLoading={isLoading}
+  //                   />
+  //                 ) : (
+  //                   <View
+  //                     style={{
+  //                       width: "90%",
+  //                       marginBottom: 60,
+  //                       alignItems: "center",
+  //                       marginTop: 20,
+  //                     }}
+  //                   >
+  //                     <View style={{ width: "100%", flex: 1 }}>
+  //                       <RegularButton
+  //                         text={"Add Recipe"}
+  //                         style={{ borderRadius: 10 }}
+  //                       />
+
+  //                       <Input
+  //                         placeholder={"Search"}
+  //                         iconName={search.length > 0 ? "cancel" : "search"}
+  //                         iconType={MaterialIcons}
+  //                         value={search}
+  //                         setValue={(val) => {
+  //                           setSearch(val);
+  //                           searchKeyword(val);
+  //                         }}
+  //                         style={{ height: 60, marginTop: 20 }}
+  //                         iconStyle={{ fontSize: 30 }}
+  //                         inputStyle={{ fontSize: 20 }}
+  //                         onIconClick={() => setSearch("")}
+  //                       />
+  //                     </View>
+
+  //                     <View style={{ width: "100%", marginTop: 20 }}>
+  //                       {filteredItem.length === 0 ? (
+  //                         <NoMealBox
+  //                           image={noRecipe}
+  //                           text={"No recipe added. "}
+  //                         />
+  //                       ) : (
+  //                         filteredItem.map((item, i) => (
+  //                           <View
+  //                             key={i}
+  //                             style={{ width: "100%", marginTop: 10 }}
+  //                           >
+  //                             <AdminOverviewBox
+  //                               key={i}
+  //                               label={item.recipeTitle}
+  //                               name={`Macro: ${item.macroIngredient}`}
+  //                               rightText={""}
+  //                               image={recipeVessel}
+  //                               recipe
+  //                               onPress={() => setselectedRecipeItemForTab(item)}
+  //                             />
+  //                           </View>
+  //                         ))
+  //                       )}
+  //                     </View>
+  //                   </View>
+  //                 )}
+  //               </View>
+  //             </ScrollView>
+  //           </View>
+
+  //           <View style={{ width: "60%" }}>
+  //             {selectedRecipeItemForTab?.recipeTitle && (
+  //               <RecipeDetailPage isTab data={selectedRecipeItemForTab} />
+  //             )}
+  //           </View>
+  //         </View>
+  //       </MainScreenContainer>
+  //     );
+  //   }
+
+  return (
+    <MainScreenContainer
+      onPressRight={() => null}
+      leftImage={""}
+      rightImage={""}
+      title={"Inventory"}
+    >
+      <View
+        style={{
+          width: "90%",
+          marginBottom: 60,
+          alignItems: "center",
+          marginTop: 20,
+        }}
+      >
+        <View style={{ width: "100%", flex: 1 }}>
+          <RegularButton
+            onPress={() => navigation.navigate("inventoryAdd")}
+            text={"Add Item"}
+            style={{ borderRadius: 10 }}
+          />
+
+          <SearchInput
+            search={search}
+            setSearch={setSearch}
+            searchKeyword={searchKeyword}
+          />
+        </View>
+      </View>
+    </MainScreenContainer>
+  );
+};

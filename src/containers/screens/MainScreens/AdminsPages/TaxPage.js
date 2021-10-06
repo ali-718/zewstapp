@@ -6,11 +6,14 @@ import pdfIcon from "../../../../assets/images/pdfIcon.png";
 import { MaterialIcons } from "@expo/vector-icons";
 import { MealItem } from "../../../../components/Meals/MealItem";
 import { Input } from "../../../../components/Inputs/Input";
+import { useSelector } from "react-redux";
+import { SearchInput } from "../../../../components/SearchInput/SearchInput";
 
 const dummyTax = ["IRS-2019.pdf", "IRS-2019.pdf", "IRS-2019.pdf"];
 
 export const TaxPage = () => {
   const navigation = useNavigation();
+  const device = useSelector((state) => state.system.device);
   const [tax, settax] = useState(dummyTax);
   const [search, setSearch] = useState("");
 
@@ -28,19 +31,10 @@ export const TaxPage = () => {
     <MainScreenContainer title={"Tax Documents"}>
       <View style={{ width: "90%", marginTop: 20, marginBottom: 30 }}>
         <View style={{ width: "100%" }}>
-          <Input
-            placeholder={"Search"}
-            iconName={search.length > 0 ? "cancel" : "search"}
-            iconType={MaterialIcons}
-            value={search}
-            onChangeText={(val) => {
-              setSearch(val);
-              searchKeyword(val);
-            }}
-            style={{ height: 60 }}
-            iconStyle={{ fontSize: 30 }}
-            inputStyle={{ fontSize: 20 }}
-            onIconClick={() => setSearch("")}
+          <SearchInput
+            search={search}
+            setSearch={setSearch}
+            searchKeyword={searchKeyword}
           />
         </View>
 

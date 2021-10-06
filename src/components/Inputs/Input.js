@@ -5,6 +5,7 @@ import { Icon } from "native-base";
 import { grayMenuText, primaryColor } from "../../theme/colors";
 import { Text } from "../Text/Text";
 import { useSelector } from "react-redux";
+import { TextInputMask } from "react-native-masked-text";
 
 export const Input = ({
   placeholder,
@@ -20,6 +21,9 @@ export const Input = ({
   isEdit = false,
   rule,
   setValue,
+  masked,
+  maskType,
+  maskFormat,
   ...props
 }) => {
   const device = useSelector((state) => state.system.device);
@@ -84,30 +88,61 @@ export const Input = ({
             </Text>
           )}
 
-          <TextInput
-            ref={ref}
-            style={{
-              width: "100%",
-              fontSize: device === "tablet" ? 20 : 16,
-              ...inputStyle,
-              flex: 1,
-            }}
-            placeholder={isFocused ? "" : placeholder}
-            placeholderTextColor={"gray"}
-            onFocus={() => setIsFocused(true)}
-            value={value}
-            multiline={textarea}
-            onChangeText={(val) => {
-              OnTextChange(val);
-              if (val.length === 0) {
-                setIsFocused(false);
-                return;
-              }
-              setIsFocused(true);
-            }}
-            autoCapitalize={"none"}
-            {...props}
-          />
+          {masked ? (
+            <TextInputMask
+              type={maskType}
+              options={{
+                format: maskFormat,
+              }}
+              ref={ref}
+              style={{
+                width: "100%",
+                fontSize: device === "tablet" ? 20 : 16,
+                ...inputStyle,
+                flex: 1,
+              }}
+              placeholder={isFocused ? maskFormat : placeholder}
+              placeholderTextColor={"gray"}
+              onFocus={() => setIsFocused(true)}
+              value={value}
+              multiline={textarea}
+              onChangeText={(val) => {
+                OnTextChange(val);
+                if (val.length === 0) {
+                  setIsFocused(false);
+                  return;
+                }
+                setIsFocused(true);
+              }}
+              autoCapitalize={"none"}
+              {...props}
+            />
+          ) : (
+            <TextInput
+              ref={ref}
+              style={{
+                width: "100%",
+                fontSize: device === "tablet" ? 20 : 16,
+                ...inputStyle,
+                flex: 1,
+              }}
+              placeholder={isFocused ? "" : placeholder}
+              placeholderTextColor={"gray"}
+              onFocus={() => setIsFocused(true)}
+              value={value}
+              multiline={textarea}
+              onChangeText={(val) => {
+                OnTextChange(val);
+                if (val.length === 0) {
+                  setIsFocused(false);
+                  return;
+                }
+                setIsFocused(true);
+              }}
+              autoCapitalize={"none"}
+              {...props}
+            />
+          )}
         </View>
         <TouchableOpacity
           style={{
@@ -123,7 +158,7 @@ export const Input = ({
               name={iconName}
               as={iconType || Ionicons}
               style={{
-                fontSize: device === "tablet" ? 30 : 20,
+                fontSize: device === "tablet" ? 40 : 20,
                 color: primaryColor,
                 ...iconStyle,
               }}

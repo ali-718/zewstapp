@@ -32,16 +32,7 @@ export const AddEmployeesPage = (props) => {
     const data = props?.route?.params?.data;
 
     if (data) {
-      const {
-        active,
-        employeeId,
-        lastName,
-        email,
-        phone,
-        firstName,
-        clientId,
-        type,
-      } = data;
+      const { active, lastName, email, phone, firstName, type } = data;
 
       setIsEdit(true);
       setavailable(active);
@@ -95,7 +86,7 @@ export const AddEmployeesPage = (props) => {
   };
 
   return (
-    <MainScreenContainer title={"Add Employee"}>
+    <MainScreenContainer title={isEdit ? "Edit Employee" : "Add Employee"}>
       <View style={{ width: "90%", marginVertical: 20, marginBottom: 40 }}>
         <View style={{ width: "100%" }}>
           <Input

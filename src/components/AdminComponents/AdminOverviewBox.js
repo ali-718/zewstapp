@@ -39,7 +39,13 @@ export const AdminOverviewBox = ({
         }}
       />
 
-      <View style={{ flex: 1, marginLeft: 10, marginRight: 10 }}>
+      <View
+        style={{
+          flex: 1,
+          marginLeft: device === "tablet" ? 20 : 10,
+          marginRight: 10,
+        }}
+      >
         <Text
           style={
             recipe

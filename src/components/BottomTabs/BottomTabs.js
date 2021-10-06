@@ -27,7 +27,7 @@ import InventorySelected from "../../assets/images/InventorySelected.png";
 import InventoryIcon from "../../assets/images/InventoryIcon.png";
 import MenuIcon from "../../assets/images/MenuIcon.png";
 
-const Menu = ({ image, name, setselected, selected, style }) => (
+export const Menu = ({ image, name, setselected, selected, style }) => (
   <TouchableOpacity
     style={{
       width: "11%",
@@ -56,13 +56,17 @@ const Menu = ({ image, name, setselected, selected, style }) => (
   </TouchableOpacity>
 );
 
-export const BottomTabs = ({ selected, setselected }) => {
+export const BottomTabs = ({
+  selected,
+  setselected,
+  setshowmore,
+  showMore,
+}) => {
   const navigation = useNavigation();
   const device = useSelector((state) => state.system.device);
   const home = selected === 0 ? homeIconSelected : homeIcon;
   const insight = selected === 1 ? insightIconSelected : insightIcon;
   const qrcode = qrcodeIcon;
-  const food = selected === 3 ? foodIconSelected : foodIcon;
   const RecipeEngineering = selected === 5 ? RecipeIconSelected : RecipeIcon;
   const WasteEngineering = selected === 6 ? WasteIcon : WasteIcon;
   const Inventory = selected === 7 ? InventorySelected : InventoryIcon;
@@ -70,8 +74,6 @@ export const BottomTabs = ({ selected, setselected }) => {
     selected === 8 || selected === 3 ? foodIconSelected : foodIcon;
   const insightTab = selected === 9 ? insightIconSelected : insightIcon;
   const admin = selected === 10 ? adminIconSelected : adminIcon;
-
-  const [showMore, setshowmore] = useState(false);
 
   useEffect(() => {
     setshowmore(false);
@@ -194,65 +196,9 @@ export const BottomTabs = ({ selected, setselected }) => {
         backgroundColor: "white",
         borderTopWidth: 0.5,
         borderColor: grayTextColor,
+        zIndex: 999999999,
       }}
     >
-      {showMore && (
-        <View
-          style={{
-            width: 80,
-            position: "absolute",
-            right: 10,
-            zIndex: 2,
-            backgroundColor: "white",
-            bottom: 80,
-            borderRadius: 10,
-            paddingVertical: 20,
-            alignItems: "center",
-            justifyContent: "center",
-            shadowColor: "#000",
-            shadowOffset: {
-              width: 0,
-              height: 3,
-            },
-            shadowOpacity: 0.27,
-            shadowRadius: 4.65,
-
-            elevation: 6,
-          }}
-        >
-          <Menu
-            selected={selected === 5}
-            setselected={() => setselected(5)}
-            image={RecipeEngineering}
-            name={"Recipe Engineering"}
-            style={{ width: "90%", paddingTop: 10 }}
-          />
-
-          <Menu
-            selected={selected === 6}
-            setselected={() => setselected(6)}
-            image={WasteEngineering}
-            name={"Waste Engineering"}
-            style={{ width: "90%", marginTop: 20, paddingTop: 10 }}
-          />
-
-          <Menu
-            selected={selected === 7}
-            setselected={() => setselected(7)}
-            image={Inventory}
-            name={"Inventory"}
-            style={{ width: "90%", marginTop: 20, paddingTop: 10 }}
-          />
-
-          <Menu
-            selected={selected === 10}
-            setselected={() => setselected(10)}
-            image={admin}
-            name={"Admin"}
-            style={{ width: "90%", marginTop: 20, paddingTop: 10 }}
-          />
-        </View>
-      )}
       <Menu
         selected={selected === 0}
         setselected={() => setselected(0)}
