@@ -567,6 +567,7 @@ export const AddInventoryPage = (props) => {
         isLoading={deleteLoading}
         onDelete={deleteInventory}
         deleteItemText={"this item?"}
+        heading={"Delete Inventory?"}
       />
     </MainScreenContainer>
   );
