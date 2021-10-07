@@ -207,7 +207,7 @@ export const ResturantName = ({
                   {filteredFoodItems.map((item, i) => (
                     <FoodOverview
                       key={i}
-                      image={item.mealMedia[0] ?? ""}
+                      image={item.mealMedia ? item.mealMedia[0] : ""}
                       name={item.mealName}
                       desc={item.mealDescription}
                       cost={item.mealPrice}

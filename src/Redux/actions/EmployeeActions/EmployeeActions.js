@@ -1,6 +1,6 @@
-import { ADD_EMPLOYEES, GET_EMPLOYEES } from "./Types";
+import { ADD_EMPLOYEES, DELETE_EMPLOYEES, GET_EMPLOYEES } from "./Types";
 import { client } from "../client";
-import { ToastError } from "../../../helpers/Toast";
+import { ToastError, ToastSuccess } from "../../../helpers/Toast";
 
 export const getAllEmployees =
   ({ clientId }) =>
@@ -48,5 +48,27 @@ export const addEmployeeAction =
       .catch((e) => {
         ToastError("Some error occoured, please try again later");
         dispatch({ type: ADD_EMPLOYEES.FAILED });
+      });
+  };
+
+export const deleteEmployee =
+  ({ clientId, employeeId, navigation }) =>
+  (dispatch) => {
+    dispatch({ type: DELETE_EMPLOYEES.REQUESTED });
+
+    client
+      .post(`client/deleteEmployee/${clientId}/${employeeId}`)
+      .then(() => {
+        dispatch({
+          type: DELETE_EMPLOYEES.SUCCEEDED,
+        });
+        dispatch(getAllEmployees({ clientId }));
+        ToastSuccess("Success", "Employee deleted successfully!");
+
+        navigation.pop(1);
+      })
+      .catch((e) => {
+        dispatch({ type: DELETE_EMPLOYEES.FAILED });
+        ToastError("Some error occoured, please try again later!");
       });
   };

@@ -1,5 +1,9 @@
 import produce from "immer";
-import { ADD_EMPLOYEES, GET_EMPLOYEES } from "../actions/EmployeeActions/Types";
+import {
+  ADD_EMPLOYEES,
+  DELETE_EMPLOYEES,
+  GET_EMPLOYEES,
+} from "../actions/EmployeeActions/Types";
 
 const initialState = {
   employee: {
@@ -20,6 +24,21 @@ const initialState = {
 export const employeeReducer = produce(
   (state = initialState, { payload, type }) => {
     switch (type) {
+      case DELETE_EMPLOYEES.REQUESTED: {
+        state.deleteEmployee.isLoading = true;
+        state.deleteEmployee.isError = false;
+        break;
+      }
+      case DELETE_EMPLOYEES.SUCCEEDED: {
+        state.deleteEmployee.isLoading = false;
+        state.deleteEmployee.isError = false;
+        break;
+      }
+      case DELETE_EMPLOYEES.FAILED: {
+        state.deleteEmployee.isLoading = false;
+        state.deleteEmployee.isError = true;
+        break;
+      }
       case ADD_EMPLOYEES.REQUESTED: {
         state.addEmployee.isLoading = true;
         state.addEmployee.isError = false;
