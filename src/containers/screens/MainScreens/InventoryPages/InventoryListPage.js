@@ -6,32 +6,51 @@ import { MainScreenContainer } from "../../../MainScreenContainers";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Input } from "../../../../components/Inputs/Input";
 import { useNavigation } from "@react-navigation/core";
-import * as actions from "../../../../Redux/actions/RecipeActions/RecipeActions";
+import * as actions from "../../../../Redux/actions/InventoryAction/InventoryActions";
 import { SearchInput } from "../../../../components/SearchInput/SearchInput";
+import { AdminOverviewBox } from "../../../../components/AdminComponents/AdminOverviewBox";
+import { NoMealBox } from "../../../../components/NoMealBox/NoMealBox";
+import InventoryIcon from "../../../../assets/images/InventoryIcon.png";
+import { LoadingPage } from "../../../../components/LoadingPage/LoadingPage";
+import { RefetchDataError } from "../../../../components/ErrorPage/RefetchDataError";
+import { colors } from "../../../../helpers/utlils";
 
 export const InventoryListPage = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user.user);
+  const defaultLocation = useSelector(
+    (state) => state.locations.defaultLocation
+  );
   const device = useSelector((state) => state.system.device);
   const orientation = useSelector((state) => state.system.orientation);
-  const list = useSelector((state) => state.recipe.recipe.list);
+  const list = useSelector((state) => state.inventory.inventory.list);
+  const isLoading = useSelector((state) => state.inventory.inventory.isLoading);
+  const isError = useSelector((state) => state.inventory.inventory.isError);
   const [search, setSearch] = useState("");
-  const [filteredItem, setFiltereditem] = useState(list);
+  const [filteredItem, setFiltereditem] = useState([]);
   const [selectedRecipeItemForTab, setselectedRecipeItemForTab] = useState({});
+
+  const fetchInventoryItems = () =>
+    dispatch(
+      actions.fetchInventoryAction({ locationId: defaultLocation.locationId })
+    );
+
+  useEffect(() => {
+    fetchInventoryItems();
+  }, []);
 
   useEffect(() => {
     setFiltereditem(list);
   }, [list]);
 
-  const fetchRecipes = () =>
-    dispatch(actions.fetchRecipeActions({ clientId: user.clientId }));
-
   const searchKeyword = (text) => {
     const keyword = text?.toLowerCase();
     const realData = list;
-    const finalData = realData.filter((item) =>
-      item.recipeTitle?.toLowerCase()?.includes(keyword)
+    const finalData = realData.filter(
+      (item) =>
+        item?.itemName?.toLowerCase()?.includes(keyword) ||
+        item?.brand?.toLowerCase()?.includes(keyword)
     );
 
     setFiltereditem(finalData);
@@ -156,19 +175,53 @@ export const InventoryListPage = () => {
           marginTop: 20,
         }}
       >
-        <View style={{ width: "100%", flex: 1 }}>
-          <RegularButton
-            onPress={() => navigation.navigate("inventoryAdd")}
-            text={"Add Item"}
-            style={{ borderRadius: 10 }}
+        {isLoading ? (
+          <LoadingPage />
+        ) : isError ? (
+          <RefetchDataError
+            onPress={fetchInventoryItems}
+            isLoading={isLoading}
           />
+        ) : (
+          <View style={{ width: "100%", flex: 1 }}>
+            <RegularButton
+              onPress={() => navigation.navigate("inventoryAdd")}
+              text={"Add Item"}
+              style={{ borderRadius: 10 }}
+            />
 
-          <SearchInput
-            search={search}
-            setSearch={setSearch}
-            searchKeyword={searchKeyword}
-          />
-        </View>
+            <SearchInput
+              search={search}
+              setSearch={setSearch}
+              searchKeyword={searchKeyword}
+            />
+
+            {filteredItem.length === 0 ? (
+              <NoMealBox image={InventoryIcon} text={"No item added. "} />
+            ) : (
+              filteredItem.map((item, i) => (
+                <View key={i} style={{ width: "100%", marginTop: 10 }}>
+                  <AdminOverviewBox
+                    key={i}
+                    label={item?.itemName}
+                    name={item.brand}
+                    rightText={""}
+                    image={InventoryIcon}
+                    inventory
+                    borderLeftColor={
+                      colors.find((color) => item.color === color.title).color
+                    }
+                    onPress={() =>
+                      navigation.navigate("inventoryDetail", {
+                        data: item,
+                      })
+                    }
+                  />
+                </View>
+              ))
+            )}
+          </View>
+        )}
       </View>
     </MainScreenContainer>
   );

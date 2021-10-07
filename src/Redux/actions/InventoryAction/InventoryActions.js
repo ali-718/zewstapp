@@ -1,6 +1,46 @@
-import { ADD_INVENTORY } from "./Types";
+import { ADD_INVENTORY, DELETE_INVENTORY, FETCH_INVENTORY } from "./Types";
 import { client } from "../client";
 import { ToastError, ToastSuccess } from "../../../helpers/Toast";
+
+export const deleteInventoryAction =
+  ({ locationId, itemId, navigation }) =>
+  (dispatch) => {
+    dispatch({ type: DELETE_INVENTORY.REQUESTED });
+
+    client
+      .post(`/inventory/delete/${locationId}/${itemId}`)
+      .then(() => {
+        ToastSuccess("Item deleted successfully");
+        dispatch({
+          type: DELETE_INVENTORY.SUCCEEDED,
+        });
+        dispatch(fetchInventoryAction({ locationId }));
+        navigation.pop(2);
+      })
+      .catch((e) => {
+        console.log(e.response);
+        ToastError("Some error occoured please try again later!");
+        dispatch({ type: DELETE_INVENTORY.FAILED });
+      });
+  };
+
+export const fetchInventoryAction =
+  ({ locationId }) =>
+  (dispatch) => {
+    dispatch({ type: FETCH_INVENTORY.REQUESTED });
+
+    client
+      .get(`inventory/findAll/${locationId}`)
+      .then(({ data }) => {
+        dispatch({
+          type: FETCH_INVENTORY.SUCCEEDED,
+          payload: data.inventory.Items,
+        });
+      })
+      .catch((e) => {
+        dispatch({ type: FETCH_INVENTORY.FAILED });
+      });
+  };
 
 export const addInventoryAction =
   ({
@@ -13,43 +53,39 @@ export const addInventoryAction =
     color,
     notes,
     photos,
+    itemName,
+    costPerUnit,
+    threshold,
+    category,
+    navigation,
   }) =>
   (dispatch) => {
-    console.log({
-      locationId,
-      brand,
-      quantity,
-      units,
-      expiryDate,
-      purchaseDate,
-      color,
-      notes,
-      photos,
-    });
     dispatch({ type: ADD_INVENTORY.REQUESTED });
 
     client
       .post("/inventory/add", {
         locationId,
         brand,
-        category: "ali",
+        category,
         quantity: parseInt(quantity),
         units: units,
-        costPerUnit: 100,
+        costPerUnit: parseInt(costPerUnit),
         currency: "USD",
-        threshold: 40,
+        threshold: parseInt(threshold),
         expiryDate,
         purchaseDate,
         color,
         notes,
         photos,
+        itemName,
       })
       .then(() => {
         dispatch({ type: ADD_INVENTORY.SUCCEEDED });
+        dispatch(fetchInventoryAction({ locationId }));
+        navigation.goBack();
         ToastSuccess("Success", "Inventory item added successfully!");
       })
       .catch((e) => {
-        console.log(e.response);
         dispatch({ type: ADD_INVENTORY.FAILED });
         ToastError("Some error occoured, please try again later");
       });

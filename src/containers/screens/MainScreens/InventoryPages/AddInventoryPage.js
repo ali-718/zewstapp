@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Image, TouchableOpacity, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { Input } from "../../../../components/Inputs/Input";
@@ -17,8 +17,11 @@ import { PhotoModal } from "../../../../components/Meals/PhotoModal";
 import { ToastError } from "../../../../helpers/Toast";
 import * as actions from "../../../../Redux/actions/InventoryAction/InventoryActions";
 import { Spinner } from "native-base";
+import { useNavigation } from "@react-navigation/core";
+import { DeleteModal } from "../../../../components/Meals/DeleteModal";
 
-export const AddInventoryPage = () => {
+export const AddInventoryPage = (props) => {
+  const navigation = useNavigation();
   const dispatch = useDispatch();
   const device = useSelector((state) => state.system.device);
   const defaultLocation = useSelector(
@@ -26,6 +29,12 @@ export const AddInventoryPage = () => {
   );
   const isLoading = useSelector(
     (state) => state.inventory.addInventory.isLoading
+  );
+  const deleteLoading = useSelector(
+    (state) => state.inventory.deleteInventory.isLoading
+  );
+  const deleteError = useSelector(
+    (state) => state.inventory.deleteInventory.isError
   );
   const [itemName, setItemName] = useState("");
   const [brand, setBrand] = useState("");
@@ -38,6 +47,60 @@ export const AddInventoryPage = () => {
   const [imageUri, setImageUri] = useState([]);
   const [image64, setImage64] = useState([]);
   const [photoModal, setPhotoModal] = useState(false);
+  const [costPerUnit, setCostPerUnit] = useState("");
+  const [threshold, setThreshold] = useState("");
+  const [category, setcategory] = useState("");
+  const [isEdit, setIsEdit] = useState(false);
+  const [deleteModal, setdeleteModal] = useState(false);
+
+  useEffect(() => {
+    if (!deleteError) return;
+    setdeleteModal(false);
+  }, [deleteError]);
+
+  useEffect(() => {
+    const data = props?.route?.params?.data;
+
+    if (data) {
+      const {
+        itemName = "",
+        brand,
+        quantity,
+        units: unit,
+        purchaseDate: dateOfPurchase,
+        expiryDate: dateOfExpiry,
+        color,
+        costPerUnit,
+        threshold,
+        category,
+        photos,
+        notes,
+      } = props?.route?.params?.data;
+
+      setImageUri(photos);
+      setcategory(category);
+      setThreshold(`${threshold}`);
+      setCostPerUnit(`${costPerUnit}`);
+      setColor(colors.find((item) => item.title === color));
+      setDateOfPurchase(dateOfPurchase);
+      setDateOfExpiry(dateOfExpiry);
+      setUnit(`${unit}`);
+      setQuantity(`${quantity}`);
+      setItemName(itemName);
+      setBrand(brand);
+      setIsEdit(true);
+      setNotes(notes);
+    }
+  }, []);
+
+  const deleteInventory = () =>
+    dispatch(
+      actions.deleteInventoryAction({
+        locationId: defaultLocation.locationId,
+        itemId: props?.route?.params?.data?.inventoryId,
+        navigation,
+      })
+    );
 
   const addInventoryItem = () => {
     if (
@@ -47,9 +110,17 @@ export const AddInventoryPage = () => {
       unit.trim().length === 0 ||
       dateOfExpiry.trim().length === 0 ||
       dateOfPurchase.trim().length === 0 ||
+      costPerUnit.trim().length === 0 ||
+      threshold.trim().length === 0 ||
+      category.trim().length === 0 ||
       !color.color
     ) {
       ToastError("Kindly fill all fields");
+      return;
+    }
+
+    if (!defaultLocation.locationId) {
+      ToastError("Kindly select primary location, first");
       return;
     }
 
@@ -62,7 +133,12 @@ export const AddInventoryPage = () => {
       purchaseDate: dateOfPurchase,
       color: color.title,
       notes,
+      itemName,
       photos: image64,
+      costPerUnit,
+      threshold,
+      category,
+      navigation,
     };
 
     dispatch(actions.addInventoryAction(data));
@@ -149,7 +225,7 @@ export const AddInventoryPage = () => {
           marginVertical: 20,
           borderRadius: 10,
           paddingBottom: 20,
-          marginBottom: 300,
+          marginBottom: 30,
         }}
       >
         <View
@@ -204,13 +280,18 @@ export const AddInventoryPage = () => {
                 }}
                 source={purpleBackArrow}
               />
-              <Image
-                style={{
-                  width: device === "tablet" ? 30 : 20,
-                  resizeMode: "contain",
-                }}
-                source={deletePurple}
-              />
+              {isEdit && (
+                <TouchableOpacity onPress={() => setdeleteModal(true)}>
+                  <Image
+                    style={{
+                      width: device === "tablet" ? 30 : 20,
+                      resizeMode: "contain",
+                    }}
+                    source={deletePurple}
+                  />
+                </TouchableOpacity>
+              )}
+
               {isLoading ? (
                 <Spinner size="large" color={primaryColor} />
               ) : (
@@ -326,15 +407,65 @@ export const AddInventoryPage = () => {
                 maskType={"datetime"}
                 maskFormat={"DD/MM/YYYY"}
               />
-              <Dropdown
-                selectedMenu={color.title}
-                setMenu={(val) =>
-                  setColor(colors.find((item) => item.title === val))
-                }
-                placeholder={"Color*"}
-                menus={colors.map((item) => item.title)}
-                style={{ zIndex: 10 }}
-                colors={colors}
+              <View style={{ flex: device === "tablet" ? 0.3 : 1 }}>
+                <Dropdown
+                  selectedMenu={color.title}
+                  setMenu={(val) =>
+                    setColor(colors.find((item) => item.title === val))
+                  }
+                  placeholder={"Color*"}
+                  menus={colors.map((item) => item.title)}
+                  style={{ zIndex: 10 }}
+                  colors={colors}
+                />
+              </View>
+            </View>
+
+            <View
+              style={{
+                width: "100%",
+                flexDirection: device === "tablet" ? "row" : "column",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <Input
+                keyboardType={"number-pad"}
+                placeholder={"Cost Per Unit*"}
+                value={costPerUnit}
+                setValue={(val) => setCostPerUnit(val)}
+                style={{
+                  marginTop: 10,
+                  borderRadius: 0,
+                  flex: device === "tablet" ? 0.3 : 1,
+                  borderColor: grayColor,
+                  borderBottomWidth: 2,
+                }}
+              />
+              <Input
+                keyboardType={"number-pad"}
+                placeholder={"Threshold*"}
+                value={threshold}
+                setValue={(val) => setThreshold(val)}
+                style={{
+                  marginTop: 10,
+                  borderRadius: 0,
+                  flex: device === "tablet" ? 0.3 : 1,
+                  borderColor: grayColor,
+                  borderBottomWidth: 2,
+                }}
+              />
+              <Input
+                placeholder={"Category*"}
+                value={category}
+                setValue={(val) => setcategory(val)}
+                style={{
+                  marginTop: 10,
+                  borderRadius: 0,
+                  flex: device === "tablet" ? 0.3 : 1,
+                  borderColor: grayColor,
+                  borderBottomWidth: 2,
+                }}
               />
             </View>
 
@@ -370,7 +501,8 @@ export const AddInventoryPage = () => {
                   marginTop: 10,
                   flexDirection: "row",
                   alignItems: "center",
-                  justifyContent: "space-between",
+                  justifyContent:
+                    device === "tablet" ? "flex-start" : "space-between",
                 }}
               >
                 {imageUri.map((item, i) => (
@@ -384,6 +516,7 @@ export const AddInventoryPage = () => {
                       borderWidth: 2,
                       borderColor: grayColor,
                       marginTop: 10,
+                      marginLeft: device === "tablet" ? (i === 0 ? 0 : 10) : 0,
                     }}
                     onPress={() => removeImage(i)}
                   >
@@ -406,6 +539,7 @@ export const AddInventoryPage = () => {
                     borderWidth: 2,
                     borderColor: grayColor,
                     marginTop: 10,
+                    marginLeft: device === "tablet" ? 10 : 0,
                   }}
                   onPress={() => setPhotoModal(true)}
                 >
@@ -426,6 +560,13 @@ export const AddInventoryPage = () => {
         isImageTaken={false}
         removeImage={() => null}
         openCamera={() => openCamera(0)}
+      />
+      <DeleteModal
+        onRequestClose={() => setdeleteModal(false)}
+        visible={deleteModal}
+        isLoading={deleteLoading}
+        onDelete={deleteInventory}
+        deleteItemText={"this item?"}
       />
     </MainScreenContainer>
   );
