@@ -2,6 +2,7 @@ import produce from "immer";
 import {
   ADD_EMPLOYEES,
   DELETE_EMPLOYEES,
+  EDIT_EMPLOYEES,
   GET_EMPLOYEES,
 } from "../actions/EmployeeActions/Types";
 
@@ -37,6 +38,21 @@ export const employeeReducer = produce(
       case DELETE_EMPLOYEES.FAILED: {
         state.deleteEmployee.isLoading = false;
         state.deleteEmployee.isError = true;
+        break;
+      }
+      case EDIT_EMPLOYEES.REQUESTED: {
+        state.addEmployee.isLoading = true;
+        state.addEmployee.isError = false;
+        break;
+      }
+      case EDIT_EMPLOYEES.SUCCEEDED: {
+        state.addEmployee.isLoading = false;
+        state.addEmployee.isError = false;
+        break;
+      }
+      case EDIT_EMPLOYEES.FAILED: {
+        state.addEmployee.isLoading = false;
+        state.addEmployee.isError = true;
         break;
       }
       case ADD_EMPLOYEES.REQUESTED: {

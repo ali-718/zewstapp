@@ -1,7 +1,12 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { ToastSuccess } from "../../../helpers/Toast";
+import { ToastError, ToastSuccess } from "../../../helpers/Toast";
 import { client } from "../client";
-import { ADD_NEW_LOCATION, ALL_LOCATION, PRIMARY_LOCATION } from "./Types";
+import {
+  ADD_NEW_LOCATION,
+  ALL_LOCATION,
+  EDIT_LOCATION,
+  PRIMARY_LOCATION,
+} from "./Types";
 
 export const AddNewLocation =
   ({
@@ -35,11 +40,14 @@ export const AddNewLocation =
         dispatch({
           type: ADD_NEW_LOCATION.SUCCEEDED,
         });
-        dispatch(getAllLocations({ userId: clientId }));
+        dispatch(getAllUserLocations({ userId: clientId }));
         navigation.goBack();
+        ToastSuccess("Success", "New location sucessfully");
       })
       .catch((e) => {
         dispatch({ type: ADD_NEW_LOCATION.FAILED });
+
+        ToastError("Some error occoured, please try again later");
       });
   };
 
@@ -47,6 +55,7 @@ export const getAllUserLocations =
   ({ userId }) =>
   (dispatch) => {
     dispatch({ type: ALL_LOCATION.REQUESTED });
+
     client
       .get(`/location/findAll/${userId}`)
       .then((data) => {
@@ -77,7 +86,7 @@ export const updateLocation =
     locationId,
   }) =>
   (dispatch) => {
-    dispatch({ type: ADD_NEW_LOCATION.REQUESTED });
+    dispatch({ type: EDIT_LOCATION.REQUESTED });
 
     client
       .post(`/location/update`, {
@@ -94,13 +103,15 @@ export const updateLocation =
       })
       .then((data) => {
         dispatch({
-          type: ADD_NEW_LOCATION.SUCCEEDED,
+          type: EDIT_LOCATION.SUCCEEDED,
         });
         dispatch(getAllUserLocations({ userId: clientId }));
+        ToastSuccess("Success", "Location edited sucessfully");
         navigation.goBack();
       })
       .catch((e) => {
-        dispatch({ type: ADD_NEW_LOCATION.FAILED });
+        dispatch({ type: EDIT_LOCATION.FAILED });
+        ToastError("Some error occoured, please try again later");
       });
   };
 

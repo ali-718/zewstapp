@@ -1,10 +1,24 @@
 import produce from "immer";
-import { ALL_LOCATION, PRIMARY_LOCATION } from "../actions/AdminActions/Types";
+import {
+  ADD_NEW_LOCATION,
+  ALL_LOCATION,
+  EDIT_LOCATION,
+  PRIMARY_LOCATION,
+} from "../actions/AdminActions/Types";
+
 const initialState = {
   locations: [],
   isLoading: false,
   isError: false,
   defaultLocation: {},
+  addLocation: {
+    isLoading: false,
+    isError: false,
+  },
+  deleteLocation: {
+    isLoading: false,
+    isError: false,
+  },
 };
 
 export const locationReducer = produce(
@@ -12,6 +26,36 @@ export const locationReducer = produce(
     switch (type) {
       case PRIMARY_LOCATION: {
         state.defaultLocation = payload;
+        break;
+      }
+      case EDIT_LOCATION.REQUESTED: {
+        state.addLocation.isLoading = true;
+        state.addLocation.isError = false;
+        break;
+      }
+      case EDIT_LOCATION.SUCCEEDED: {
+        state.addLocation.isLoading = false;
+        state.addLocation.isError = false;
+        break;
+      }
+      case EDIT_LOCATION.FAILED: {
+        state.addLocation.isLoading = false;
+        state.addLocation.isError = true;
+        break;
+      }
+      case ADD_NEW_LOCATION.REQUESTED: {
+        state.addLocation.isLoading = true;
+        state.addLocation.isError = false;
+        break;
+      }
+      case ADD_NEW_LOCATION.SUCCEEDED: {
+        state.addLocation.isLoading = false;
+        state.addLocation.isError = false;
+        break;
+      }
+      case ADD_NEW_LOCATION.FAILED: {
+        state.addLocation.isLoading = false;
+        state.addLocation.isError = true;
         break;
       }
       case ALL_LOCATION.REQUESTED: {

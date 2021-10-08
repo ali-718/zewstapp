@@ -83,6 +83,8 @@ export const AddEmployeesPage = (props) => {
         navigation,
         employeeId: props.route.params.data.employeeId,
       };
+
+      dispatch(actions.editEmployeeAction(data));
       return;
     }
 
