@@ -693,7 +693,7 @@ export const FoodDetailPage = ({
       <View style={{ width: "100%", flex: 1, alignItems: "center" }}>
         <Image
           style={{ width: "100%", height: WIDTH > 600 ? 400 : 250 }}
-          source={image[0] ? { uri: image[0] } : placeholder}
+          source={image ? { uri: image[0] } : placeholder}
         />
         <View
           style={{

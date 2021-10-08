@@ -32,7 +32,9 @@ export const AddLocationsPage = (props) => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const user = useSelector((state) => state.auth.user.user);
-  const isLoading = useSelector((state) => state.meal.addNewLocation.isLoading);
+  const isLoading = useSelector(
+    (state) => state.locations.addLocation.isLoading
+  );
   const [locationName, setlocationName] = useState("");
   const [phone, setphone] = useState("");
   const [email, setEmail] = useState("");
@@ -208,7 +210,7 @@ export const AddLocationsPage = (props) => {
           <RegularButton
             onPress={onAddLocation}
             isLoading={isLoading}
-            text={"Add"}
+            text={isEdit ? "Update" : "Add"}
           />
         </View>
       </View>

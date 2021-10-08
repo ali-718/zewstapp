@@ -4,6 +4,7 @@ import { USER } from "../actions/AuthActions/Types";
 import {
   ADD_MEAL,
   DELETE_MEAL,
+  EDIT_MEAL,
   GET_ADDONS,
   GET_ALLERGENS,
   GET_CATEGORIES,
@@ -76,6 +77,21 @@ export const mealReducer = produce(
       case DELETE_MEAL.FAILED: {
         state.deleteMeal.isLoading = false;
         state.deleteMeal.isError = true;
+        break;
+      }
+      case EDIT_MEAL.REQUESTED: {
+        state.addMeal.isLoading = true;
+        state.addMeal.isError = false;
+        break;
+      }
+      case EDIT_MEAL.SUCCEEDED: {
+        state.addMeal.isLoading = false;
+        state.addMeal.isError = false;
+        break;
+      }
+      case EDIT_MEAL.FAILED: {
+        state.addMeal.isLoading = false;
+        state.addMeal.isError = true;
         break;
       }
       case ADD_MEAL.REQUESTED: {

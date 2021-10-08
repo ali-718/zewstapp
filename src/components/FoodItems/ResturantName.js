@@ -17,6 +17,7 @@ import { FoodOverview } from "../../components/FoodItems/FoodItemOverview";
 import { useNavigation } from "@react-navigation/native";
 import { RegularButton } from "../Buttons/RegularButton";
 import { useSelector } from "react-redux";
+import { SearchInput } from "../SearchInput/SearchInput";
 
 export const ResturantName = ({
   name,
@@ -191,19 +192,10 @@ export const ResturantName = ({
 
           {foodItems.length > 0 && (
             <View style={{ width: "100%", marginTop: 10 }}>
-              <Input
-                placeholder={"Search"}
-                iconName={search.length > 0 ? "cancel" : "search"}
-                iconType={MaterialIcons}
-                value={search}
-                setValue={(val) => {
-                  setSearch(val);
-                  searchKeyword(val);
-                }}
-                style={{ height: 60 }}
-                iconStyle={{ fontSize: 30 }}
-                inputStyle={{ fontSize: 20 }}
-                onIconClick={() => setSearch("")}
+              <SearchInput
+                search={search}
+                setSearch={setSearch}
+                searchKeyword={searchKeyword}
               />
             </View>
           )}
@@ -215,7 +207,7 @@ export const ResturantName = ({
                   {filteredFoodItems.map((item, i) => (
                     <FoodOverview
                       key={i}
-                      image={item.mealMedia[0] ?? ""}
+                      image={item.mealMedia ? item.mealMedia[0] : ""}
                       name={item.mealName}
                       desc={item.mealDescription}
                       cost={item.mealPrice}

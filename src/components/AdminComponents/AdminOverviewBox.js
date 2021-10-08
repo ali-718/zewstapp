@@ -13,6 +13,8 @@ export const AdminOverviewBox = ({
   iconStyle,
   onPress,
   recipe,
+  inventory,
+  borderLeftColor,
   onLongPress = () => null,
 }) => {
   const device = useSelector((state) => state.system.device);
@@ -26,6 +28,8 @@ export const AdminOverviewBox = ({
         padding: device === "tablet" ? 20 : 10,
         borderRadius: 10,
         alignItems: "center",
+        borderLeftWidth: inventory ? 5 : 0,
+        borderLeftColor: inventory ? borderLeftColor : "",
       }}
       onPress={onPress}
       onLongPress={onLongPress}
@@ -39,10 +43,16 @@ export const AdminOverviewBox = ({
         }}
       />
 
-      <View style={{ flex: 1, marginLeft: 10, marginRight: 10 }}>
+      <View
+        style={{
+          flex: 1,
+          marginLeft: device === "tablet" ? 20 : 10,
+          marginRight: 10,
+        }}
+      >
         <Text
           style={
-            recipe
+            recipe || inventory
               ? {
                   fontSize: device === "tablet" ? 30 : 20,
                   fontFamily: "openSans_bold",
@@ -60,7 +70,7 @@ export const AdminOverviewBox = ({
         <Text
           numberOfLines={1}
           style={
-            recipe
+            recipe || inventory
               ? {
                   fontSize: device === "tablet" ? 20 : 16,
                   fontFamily: "openSans_bold",

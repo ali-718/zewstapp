@@ -3,6 +3,7 @@ import { client } from "../client";
 import {
   ADD_MEAL,
   DELETE_MEAL,
+  EDIT_MEAL,
   GET_ADDONS,
   GET_ALLERGENS,
   GET_CATEGORIES,
@@ -164,6 +165,64 @@ export const addNewMeal =
       })
       .catch((e) => {
         dispatch({ type: ADD_MEAL.FAILED });
+        ToastError("Some error occoured! please try again later");
+      });
+  };
+
+export const editMeal =
+  ({
+    mealId,
+    locationId,
+    mealName,
+    mealDescription,
+    mealPrice,
+    mealCurrency = "$",
+    mealAvailability,
+    mealDaysAvailable,
+    mealCategory,
+    mealAllergens,
+    mealAddons,
+    mealDiscount = "",
+    mealMedia,
+    navigation,
+  }) =>
+  (dispatch) => {
+    dispatch({ type: EDIT_MEAL.REQUESTED });
+
+    const data = {
+      mealId,
+      locationId,
+      mealName,
+      mealDescription,
+      mealPrice,
+      mealCurrency,
+      mealAvailability,
+      mealDaysAvailable,
+      mealCategory,
+      mealAllergens,
+      mealAddons,
+      mealDiscount,
+    };
+
+    if (mealMedia) {
+      data["mealMedia"] = [`data:image/jpeg;base64,${mealMedia}`];
+    }
+
+    console.log(data);
+
+    client
+      .post(`/meal/manual/update`, data)
+      .then((data) => {
+        dispatch({
+          type: EDIT_MEAL.SUCCEEDED,
+        });
+        dispatch(getAllMeals({ id: locationId }));
+        ToastSuccess("Sucess", "Meal has been updated successfully");
+        navigation.pop(2);
+      })
+      .catch((e) => {
+        console.log(e.response);
+        dispatch({ type: EDIT_MEAL.FAILED });
         ToastError("Some error occoured! please try again later");
       });
   };

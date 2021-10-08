@@ -138,3 +138,11 @@ export const addonsList = [
 export const recipePacking = ["Packed", "Fresh"];
 
 export const recipeUnit = ["oz", "tbsp", "cloves", "cup", "tsp", "tbsp"];
+
+export const colors = [
+  { color: "#1FDD00", title: "light green" },
+  { color: "#DD0000", title: "red" },
+  { color: "#DD8500", title: "orange" },
+  { color: "#0073DD", title: "blue" },
+  { color: "#27C8C8", title: "sea blue" },
+];

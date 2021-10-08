@@ -5,6 +5,7 @@ import { systemReducer } from "./SystemReducer";
 import { recipeReducer } from "./RecipeReducer";
 import { locationReducer } from "./locationReducer";
 import { employeeReducer } from "./EmployeeReducer";
+import { inventoryReducer } from "./InventoryReducer";
 
 export default combineReducers({
   auth: authReducer,
@@ -13,4 +14,5 @@ export default combineReducers({
   recipe: recipeReducer,
   locations: locationReducer,
   employee: employeeReducer,
+  inventory: inventoryReducer,
 });

@@ -34,6 +34,9 @@ export const AddMeal = (props) => {
     (state) => state.meal.deleteMeal.isLoading
   );
   const deleteMealError = useSelector((state) => state.meal.deleteMeal.isError);
+  const defaultLocation = useSelector(
+    (state) => state.locations.defaultLocation
+  );
 
   const [name, setName] = useState("");
   const [desc, setdesc] = useState("");
@@ -201,6 +204,26 @@ export const AddMeal = (props) => {
       unitCost.length === 0
     ) {
       ToastError("Fill all fields marked with (*)");
+      return;
+    }
+
+    if (isEdit) {
+      dispatch(
+        actions.editMeal({
+          locationId: defaultLocation?.locationId,
+          mealName: name,
+          mealDescription: desc,
+          mealPrice: parseFloat(unitCost),
+          mealAvailability: available,
+          mealDaysAvailable: selectedDays,
+          mealCategory: selectedCategories,
+          mealAllergens: selectedAllergens,
+          mealAddons: selectedAddons,
+          mealMedia: foodImageBase64,
+          navigation,
+          mealId: props.route?.params?.data?.mealId,
+        })
+      );
       return;
     }
 

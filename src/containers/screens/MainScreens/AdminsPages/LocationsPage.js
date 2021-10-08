@@ -15,6 +15,7 @@ import {
   getAllUserLocations,
   setPrimaryLocationAction,
 } from "../../../../Redux/actions/AdminActions/LocationActions";
+import { SearchInput } from "../../../../components/SearchInput/SearchInput";
 
 export const LocationsPage = () => {
   const navigation = useNavigation();
@@ -125,18 +126,10 @@ export const LocationsPage = () => {
                 </View>
               )}
             </View> */}
-            <Input
-              placeholder={"Search"}
-              iconName={"search"}
-              iconType={MaterialIcons}
-              value={search}
-              onChangeText={(val) => {
-                setSearch(val);
-                searchKeyword(val);
-              }}
-              style={{ height: 60, marginTop: 0 }}
-              iconStyle={{ fontSize: 30 }}
-              inputStyle={{ fontSize: 20 }}
+            <SearchInput
+              search={search}
+              setSearch={setSearch}
+              searchKeyword={searchKeyword}
             />
 
             <View style={{ width: "100%", marginTop: 10 }}>
@@ -172,7 +165,7 @@ export const LocationsPage = () => {
               >
                 <Text
                   style={{
-                    fontSize: 20,
+                    fontSize: device === "tablet" ? 25 : 20,
                     fontFamily: "openSans_bold",
                     color: primaryColor,
                   }}

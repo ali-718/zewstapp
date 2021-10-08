@@ -14,6 +14,7 @@ import { RefetchDataError } from "../../../../components/ErrorPage/RefetchDataEr
 import { NoMealBox } from "../../../../components/NoMealBox/NoMealBox";
 import noRecipe from "../../../../assets/images/noRecipe.png";
 import { RecipeDetailPage } from "./RecipeDetailPage";
+import { SearchInput } from "../../../../components/SearchInput/SearchInput";
 
 export const RecipeListPage = () => {
   const navigation = useNavigation();
@@ -96,19 +97,10 @@ export const RecipeListPage = () => {
                         style={{ borderRadius: 10 }}
                       />
 
-                      <Input
-                        placeholder={"Search"}
-                        iconName={search.length > 0 ? "cancel" : "search"}
-                        iconType={MaterialIcons}
-                        value={search}
-                        setValue={(val) => {
-                          setSearch(val);
-                          searchKeyword(val);
-                        }}
-                        style={{ height: 60, marginTop: 20 }}
-                        iconStyle={{ fontSize: 30 }}
-                        inputStyle={{ fontSize: 20 }}
-                        onIconClick={() => setSearch("")}
+                      <SearchInput
+                        search={search}
+                        setSearch={setSearch}
+                        searchKeyword={searchKeyword}
                       />
                     </View>
 
@@ -180,19 +172,10 @@ export const RecipeListPage = () => {
               style={{ borderRadius: 10 }}
             />
 
-            <Input
-              placeholder={"Search"}
-              iconName={search.length > 0 ? "cancel" : "search"}
-              iconType={MaterialIcons}
-              value={search}
-              setValue={(val) => {
-                setSearch(val);
-                searchKeyword(val);
-              }}
-              style={{ height: 60, marginTop: 20 }}
-              iconStyle={{ fontSize: 30 }}
-              inputStyle={{ fontSize: 20 }}
-              onIconClick={() => setSearch("")}
+            <SearchInput
+              search={search}
+              setSearch={setSearch}
+              searchKeyword={searchKeyword}
             />
           </View>
 

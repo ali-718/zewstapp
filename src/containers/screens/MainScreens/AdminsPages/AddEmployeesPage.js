@@ -12,6 +12,8 @@ import { ToastError } from "../../../../helpers/Toast";
 import { useDispatch, useSelector } from "react-redux";
 import * as actions from "../../../../Redux/actions/EmployeeActions/EmployeeActions";
 import { useNavigation } from "@react-navigation/core";
+import deleteIconWhite from "../../../../assets/images/deleteIconWhite.png";
+import { DeleteModal } from "../../../../components/Meals/DeleteModal";
 
 export const AddEmployeesPage = (props) => {
   const dispatch = useDispatch();
@@ -20,6 +22,12 @@ export const AddEmployeesPage = (props) => {
   const isLoading = useSelector(
     (state) => state.employee.addEmployee.isLoading
   );
+  const deleteLoading = useSelector(
+    (state) => state.employee.deleteEmployee.isLoading
+  );
+  const deleteError = useSelector(
+    (state) => state.employee.deleteEmployee.isError
+  );
   const [selectedType, setSelectedType] = useState("");
   const [firstName, setfirstName] = useState("");
   const [lastName, setlastName] = useState("");
@@ -27,21 +35,19 @@ export const AddEmployeesPage = (props) => {
   const [email, setEmail] = useState("");
   const [available, setavailable] = useState(true);
   const [isEdit, setIsEdit] = useState(false);
+  const [deleteModal, setdeleteModal] = useState(false);
+
+  useEffect(() => {
+    if (!deleteError) return;
+
+    setdeleteModal(false);
+  }, [deleteError]);
 
   useEffect(() => {
     const data = props?.route?.params?.data;
 
     if (data) {
-      const {
-        active,
-        employeeId,
-        lastName,
-        email,
-        phone,
-        firstName,
-        clientId,
-        type,
-      } = data;
+      const { active, lastName, email, phone, firstName, type } = data;
 
       setIsEdit(true);
       setavailable(active);
@@ -77,6 +83,8 @@ export const AddEmployeesPage = (props) => {
         navigation,
         employeeId: props.route.params.data.employeeId,
       };
+
+      dispatch(actions.editEmployeeAction(data));
       return;
     }
 
@@ -94,8 +102,30 @@ export const AddEmployeesPage = (props) => {
     dispatch(actions.addEmployeeAction(data));
   };
 
+  const deleteEmployee = () =>
+    dispatch(
+      actions.deleteEmployee({
+        clientId: user?.clientId,
+        employeeId: props.route.params.data.employeeId,
+        navigation,
+      })
+    );
+
   return (
-    <MainScreenContainer title={"Add Employee"}>
+    <MainScreenContainer
+      rightImage={isEdit ? deleteIconWhite : ""}
+      onPressRight={isEdit ? () => setdeleteModal(true) : () => null}
+      title={isEdit ? "Edit Employee" : "Add Employee"}
+    >
+      <DeleteModal
+        onRequestClose={() => setdeleteModal(false)}
+        visible={deleteModal}
+        isLoading={deleteLoading}
+        onDelete={deleteEmployee}
+        deleteItemText={"this employee?"}
+        heading={"Delete Employee?"}
+      />
+
       <View style={{ width: "90%", marginVertical: 20, marginBottom: 40 }}>
         <View style={{ width: "100%" }}>
           <Input
