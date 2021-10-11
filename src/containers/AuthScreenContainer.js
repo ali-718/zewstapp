@@ -18,6 +18,7 @@ import { useNavigation } from "@react-navigation/native";
 import { Icon } from "native-base";
 import { Text } from "../components/Text/Text";
 import { Ionicons } from "@expo/vector-icons";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 const styles = StyleSheet.create({
   titleContainer: {
@@ -53,7 +54,7 @@ export const AuthScreenContainer = ({ title, noBack, ...props }) => {
         backgroundColor: grayColor,
       }}
     >
-      <ScrollView
+      <KeyboardAwareScrollView
         showsVerticalScrollIndicator={false}
         style={{ width: "100%", flex: 1 }}
       >
@@ -79,7 +80,7 @@ export const AuthScreenContainer = ({ title, noBack, ...props }) => {
 
           {props.children}
         </View>
-      </ScrollView>
+      </KeyboardAwareScrollView>
     </SafeAreaView>
   );
 };

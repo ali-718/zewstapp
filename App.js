@@ -4,7 +4,11 @@ import * as SplashScreen from "expo-splash-screen";
 import { NativeBaseProvider, extendTheme } from "native-base";
 import { fontAssets } from "./src/theme/fonts";
 import { Routes } from "./src/routes";
-import { primaryShade1 } from "./src/theme/colors";
+import {
+  primaryShade1,
+  progressDarkPurple,
+  textColor,
+} from "./src/theme/colors";
 import { Provider } from "react-redux";
 import store from "./store";
 import Toast from "react-native-toast-message";
@@ -13,6 +17,12 @@ const theme = extendTheme({
   colors: {
     app: {
       600: primaryShade1,
+    },
+    delivery: {
+      600: progressDarkPurple,
+    },
+    cancelled: {
+      600: textColor,
     },
   },
 });
