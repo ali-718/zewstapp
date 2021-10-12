@@ -131,61 +131,62 @@ export const OnBoardingPage = ({ inLogin = false }) => {
             />
           </View>
         </View>
-
-        {!inLogin && (
-          <View
-            style={{
-              width: "100%",
-              marginTop: 20,
-              flexDirection: "row",
-              justifyContent: "space-between",
-            }}
-          >
-            <TouchableOpacity
-              style={{
-                width: "50%",
-                padding: 15,
-                alignItems: "center",
-                justifyContent: "center",
-                backgroundColor: "white",
-              }}
-              onPress={() => navigation.navigate("Signup")}
-            >
-              <Text
-                style={{
-                  color: textColor,
-                  fontSize: 20,
-                  fontWeight: "bold",
-                  fontFamily: "openSans_bold",
-                }}
-              >
-                Sign up
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={{
-                width: "49.5%",
-                padding: 15,
-                alignItems: "center",
-                justifyContent: "center",
-                backgroundColor: "white",
-              }}
-              onPress={() => navigation.navigate("Login")}
-            >
-              <Text
-                style={{
-                  color: textColor,
-                  fontSize: 20,
-                  fontWeight: "bold",
-                  fontFamily: "openSans_bold",
-                }}
-              >
-                Login
-              </Text>
-            </TouchableOpacity>
-          </View>
-        )}
       </SafeAreaView>
+
+      {!inLogin && (
+        <SafeAreaView
+          style={{
+            width: "100%",
+            marginTop: 20,
+            flexDirection: "row",
+            justifyContent: "space-between",
+            backgroundColor: "white",
+          }}
+        >
+          <TouchableOpacity
+            style={{
+              width: "50%",
+              padding: 15,
+              alignItems: "center",
+              justifyContent: "center",
+              backgroundColor: "white",
+            }}
+            onPress={() => navigation.navigate("Signup")}
+          >
+            <Text
+              style={{
+                color: textColor,
+                fontSize: 20,
+                fontWeight: "bold",
+                fontFamily: "openSans_bold",
+              }}
+            >
+              Sign up
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{
+              width: "49.5%",
+              padding: 15,
+              alignItems: "center",
+              justifyContent: "center",
+              backgroundColor: "white",
+            }}
+            onPress={() => navigation.navigate("Login")}
+          >
+            <Text
+              style={{
+                color: textColor,
+                fontSize: 20,
+                fontWeight: "bold",
+                fontFamily: "openSans_bold",
+              }}
+            >
+              Login
+            </Text>
+          </TouchableOpacity>
+        </SafeAreaView>
+      )}
     </LinearGradient>
   );
 };
