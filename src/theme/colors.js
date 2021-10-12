@@ -21,3 +21,5 @@ export const linearShade2 = "#efeef0";
 export const lightSelectionShade = "#e6deed";
 export const progressGray = "#cccccc";
 export const progressDarkPurple = "#33253F";
+export const lightPurpleBackground = "#E8E3EC";
+export const grayBorderColor = "#c4c4c4";
