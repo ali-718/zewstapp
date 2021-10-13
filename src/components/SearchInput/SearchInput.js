@@ -3,7 +3,7 @@ import { Input } from "../Inputs/Input";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useSelector } from "react-redux";
 
-export const SearchInput = ({ search, setSearch, searchKeyword }) => {
+export const SearchInput = ({ search, setSearch, searchKeyword, style }) => {
   // const device = useSelector((state) => state.system.device);
   return (
     <Input
@@ -15,7 +15,7 @@ export const SearchInput = ({ search, setSearch, searchKeyword }) => {
         setSearch(val);
         searchKeyword(val);
       }}
-      style={{ marginTop: 20 }}
+      style={{ marginTop: 20, ...style }}
       iconStyle={{ fontSize: 30 }}
       inputStyle={{ fontSize: 20 }}
     />

@@ -23,6 +23,7 @@ import RecipeIconSelected from "./assets/images/RecipeIconSelected.png";
 import WasteIcon from "./assets/images/WasteIcon.png";
 import InventorySelected from "./assets/images/InventorySelected.png";
 import InventoryIcon from "./assets/images/InventoryIcon.png";
+import { InventoryPredictionsPage } from "./containers/screens/MainScreens/InventoryPrediction/InventoryPrediction";
 
 const Stack = createNativeStackNavigator();
 
@@ -65,7 +66,14 @@ export const TabRoutes = () => {
         {selected === 7 && (
           <Stack.Screen name="Inventory" component={InventoryListPage} />
         )}
-        {(selected === 6 || selected === 8 || selected === 4) && (
+        {/* for temporary */}
+        {selected === 6 && (
+          <Stack.Screen
+            name="InventoryPredictions"
+            component={InventoryPredictionsPage}
+          />
+        )}
+        {(selected === 8 || selected === 4) && (
           <Stack.Screen name="Recipe" component={() => <View />} />
         )}
       </Stack.Navigator>
