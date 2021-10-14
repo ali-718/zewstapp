@@ -135,6 +135,7 @@ export const addNewMeal =
     mealDiscount = "",
     mealMedia,
     navigation,
+    mealRecipes,
   }) =>
   (dispatch) => {
     dispatch({ type: ADD_MEAL.REQUESTED });
@@ -153,6 +154,7 @@ export const addNewMeal =
         mealAddons,
         mealDiscount,
         mealMedia: [`data:image/jpeg;base64,${mealMedia}`],
+        mealRecipes,
       })
       .then((data) => {
         dispatch({
@@ -185,6 +187,7 @@ export const editMeal =
     mealDiscount = "",
     mealMedia,
     navigation,
+    mealRecipes,
   }) =>
   (dispatch) => {
     dispatch({ type: EDIT_MEAL.REQUESTED });
@@ -202,13 +205,12 @@ export const editMeal =
       mealAllergens,
       mealAddons,
       mealDiscount,
+      mealRecipes,
     };
 
     if (mealMedia) {
       data["mealMedia"] = [`data:image/jpeg;base64,${mealMedia}`];
     }
-
-    console.log(data);
 
     client
       .post(`/meal/manual/update`, data)
@@ -221,7 +223,6 @@ export const editMeal =
         navigation.pop(2);
       })
       .catch((e) => {
-        console.log(e.response);
         dispatch({ type: EDIT_MEAL.FAILED });
         ToastError("Some error occoured! please try again later");
       });

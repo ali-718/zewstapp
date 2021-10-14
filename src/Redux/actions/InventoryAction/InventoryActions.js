@@ -18,7 +18,6 @@ export const deleteInventoryAction =
         navigation.pop(2);
       })
       .catch((e) => {
-        console.log(e.response);
         ToastError("Some error occoured please try again later!");
         dispatch({ type: DELETE_INVENTORY.FAILED });
       });

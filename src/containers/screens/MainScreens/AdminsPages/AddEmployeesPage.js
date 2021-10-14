@@ -14,6 +14,7 @@ import * as actions from "../../../../Redux/actions/EmployeeActions/EmployeeActi
 import { useNavigation } from "@react-navigation/core";
 import deleteIconWhite from "../../../../assets/images/deleteIconWhite.png";
 import { DeleteModal } from "../../../../components/Meals/DeleteModal";
+import { Dropdown } from "../../../../components/Inputs/DropDown";
 
 export const AddEmployeesPage = (props) => {
   const dispatch = useDispatch();
@@ -126,7 +127,7 @@ export const AddEmployeesPage = (props) => {
         heading={"Delete Employee?"}
       />
 
-      <View style={{ width: "90%", marginVertical: 20, marginBottom: 40 }}>
+      <View style={{ width: "90%", marginVertical: 20, marginBottom: 80 }}>
         <View style={{ width: "100%" }}>
           <Input
             value={firstName}
@@ -161,8 +162,15 @@ export const AddEmployeesPage = (props) => {
           />
         </View>
 
-        <View style={{ width: "100%", marginTop: 20 }}>
-          <View
+        <View style={{ width: "100%", marginTop: 20, zIndex: 1 }}>
+          <Dropdown
+            selectedMenu={selectedType}
+            setMenu={setSelectedType}
+            placeholder={"Type*"}
+            menus={["Manager", "Cashier", "kitchen Staff", "Order Taker"]}
+            style={{ zIndex: 3 }}
+          />
+          {/* <View
             style={{
               width: "100%",
               backgroundColor: "white",
@@ -181,7 +189,7 @@ export const AddEmployeesPage = (props) => {
                   borderBottomLeftRadius: 50,
                   borderWidth: 1,
                   borderColor: primaryColor,
-                  width: "33%",
+                  width: "25%",
                   height: 40,
                   alignItems: "center",
                   justifyContent: "center",
@@ -206,11 +214,12 @@ export const AddEmployeesPage = (props) => {
                   borderTopWidth: 1,
                   borderBottomWidth: 1,
                   borderColor: primaryColor,
-                  width: "33%",
+                  width: "25%",
                   height: 40,
                   alignItems: "center",
                   justifyContent: "center",
                   marginTop: 10,
+                  borderWidth: 1,
                   backgroundColor:
                     selectedType === "Manager" ? primaryColor : "white",
                 }}
@@ -228,31 +237,57 @@ export const AddEmployeesPage = (props) => {
 
               <TouchableOpacity
                 style={{
-                  borderTopRightRadius: 50,
-                  borderBottomRightRadius: 50,
-                  borderWidth: 1,
+                  borderTopWidth: 1,
+                  borderBottomWidth: 1,
                   borderColor: primaryColor,
-                  width: "33%",
+                  width: "25%",
                   height: 40,
                   alignItems: "center",
                   justifyContent: "center",
                   marginTop: 10,
                   backgroundColor:
-                    selectedType === "Host" ? primaryColor : "white",
+                    selectedType === "Kitchen Staff" ? primaryColor : "white",
                 }}
-                onPress={() => setSelectedType("Host")}
+                onPress={() => setSelectedType("Kitchen Staff")}
               >
                 <Text
                   style={{
-                    color: selectedType === "Host" ? "white" : primaryColor,
+                    color:
+                      selectedType === "Kitchen Staff" ? "white" : primaryColor,
                     fontFamily: "openSans_semiBold",
                   }}
                 >
-                  Host
+                  Kitchen Staff
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={{
+                  borderTopRightRadius: 50,
+                  borderBottomRightRadius: 50,
+                  borderWidth: 1,
+                  borderColor: primaryColor,
+                  width: "25%",
+                  height: 40,
+                  alignItems: "center",
+                  justifyContent: "center",
+                  marginTop: 10,
+                  backgroundColor:
+                    selectedType === "Order Taker" ? primaryColor : "white",
+                }}
+                onPress={() => setSelectedType("Order Taker")}
+              >
+                <Text
+                  style={{
+                    color:
+                      selectedType === "Order Taker" ? "white" : primaryColor,
+                    fontFamily: "openSans_semiBold",
+                  }}
+                >
+                  Order Taker
                 </Text>
               </TouchableOpacity>
             </View>
-          </View>
+          </View> */}
         </View>
 
         <View style={{ width: "100%", marginTop: 10 }}>

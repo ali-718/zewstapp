@@ -133,8 +133,6 @@ export const RecipeAdd = (props) => {
       navigation,
     };
 
-    console.log(data);
-
     dispatch(actions.addRecipeAction(data));
   };
 
