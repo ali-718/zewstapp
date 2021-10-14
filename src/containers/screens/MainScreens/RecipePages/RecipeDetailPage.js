@@ -325,7 +325,7 @@ export const RecipeDetailPage = ({ isTab, data, ...props }) => {
                       marginTop: 5,
                     }}
                   >
-                    Macro ingredient: {macroIngredient}
+                    Macro ingredient: {macroIngredient.itemName}
                   </Text>
                 </View>
 
@@ -383,7 +383,7 @@ export const RecipeDetailPage = ({ isTab, data, ...props }) => {
                   }}
                   numberOfLines={1}
                 >
-                  Macro ingredient: {macroIngredient}
+                  Macro ingredient: {macroIngredient.itemName}
                 </Text>
                 <View style={{ width: "100%" }}>
                   <IconBox
@@ -412,7 +412,7 @@ export const RecipeDetailPage = ({ isTab, data, ...props }) => {
                 renderItem={({ item }) => (
                   <IngredientBox
                     unit={item.unit}
-                    name={item.microIngredient}
+                    name={item.itemName}
                     value={item.quantity}
                   />
                 )}
@@ -573,7 +573,7 @@ export const RecipeDetailPage = ({ isTab, data, ...props }) => {
                   marginTop: 5,
                 }}
               >
-                Macro ingredient: {macroIngredient}
+                Macro ingredient: {macroIngredient.itemName}
               </Text>
             </View>
 
@@ -631,7 +631,7 @@ export const RecipeDetailPage = ({ isTab, data, ...props }) => {
               }}
               numberOfLines={1}
             >
-              Macro ingredient: {macroIngredient}
+              Macro ingredient: {macroIngredient.itemName}
             </Text>
             <View style={{ width: "100%" }}>
               <IconBox
@@ -652,7 +652,7 @@ export const RecipeDetailPage = ({ isTab, data, ...props }) => {
             renderItem={({ item }) => (
               <IngredientBox
                 unit={item.unit}
-                name={item.microIngredient}
+                name={item.itemName}
                 value={item.quantity}
               />
             )}

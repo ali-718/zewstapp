@@ -7,6 +7,7 @@ import { Text } from "../../../../components/Text/Text";
 import { useSelector } from "react-redux";
 import { Input } from "../../../../components/Inputs/Input";
 import { useNavigation } from "@react-navigation/core";
+import { inventoryAvailibility } from "../../../../helpers/utlils";
 
 export const InventoryDetailPage = ({ data, isTab, ...props }) => {
   const {
@@ -22,6 +23,7 @@ export const InventoryDetailPage = ({ data, isTab, ...props }) => {
     category,
     photos,
     notes,
+    availability,
   } = isTab ? data : props?.route?.params?.data;
   const device = useSelector((state) => state.system.device);
   const navigation = useNavigation();
@@ -263,6 +265,24 @@ export const InventoryDetailPage = ({ data, isTab, ...props }) => {
                     placeholder={"Notes"}
                     value={notes}
                     setValue={(val) => setNotes(val)}
+                    style={{
+                      marginTop: 10,
+                      borderRadius: 0,
+                      borderColor: grayColor,
+                      borderBottomWidth: 2,
+                    }}
+                    editable={false}
+                  />
+                </View>
+
+                <View style={{ width: "100%", zIndex: 0 }}>
+                  <Input
+                    placeholder={"Availibility"}
+                    value={
+                      inventoryAvailibility.find(
+                        (item) => item.value === availability
+                      ).name
+                    }
                     style={{
                       marginTop: 10,
                       borderRadius: 0,
@@ -566,6 +586,24 @@ export const InventoryDetailPage = ({ data, isTab, ...props }) => {
                 placeholder={"Notes"}
                 value={notes}
                 setValue={(val) => setNotes(val)}
+                style={{
+                  marginTop: 10,
+                  borderRadius: 0,
+                  borderColor: grayColor,
+                  borderBottomWidth: 2,
+                }}
+                editable={false}
+              />
+            </View>
+
+            <View style={{ width: "100%", zIndex: 0 }}>
+              <Input
+                placeholder={"Availibility"}
+                value={
+                  inventoryAvailibility.find(
+                    (item) => item.value === availability
+                  )?.name ?? ""
+                }
                 style={{
                   marginTop: 10,
                   borderRadius: 0,

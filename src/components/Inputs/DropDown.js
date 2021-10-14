@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { View, TextInput, TouchableOpacity } from "react-native";
+import { View, TextInput, TouchableOpacity, ScrollView } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Icon } from "native-base";
 import { grayColor, grayMenuText, primaryColor } from "../../theme/colors";
@@ -101,44 +101,48 @@ export const Dropdown = ({
               shadowRadius: 4.65,
               elevation: 6,
               borderRadius: 10,
+              maxHeight: 200,
             }}
           >
-            {menus.map((item, i) => (
-              <TouchableOpacity
-                key={i}
-                style={{
-                  backgroundColor: "white",
-                  padding: 10,
-                  paddingVertical: 15,
-                  flexDirection: "row",
-                }}
-                onPress={() => {
-                  setMenu(item);
-                  setIsOpen(false);
-                }}
-              >
-                {colors && (
-                  <View
-                    style={{
-                      width: 30,
-                      height: 30,
-                      backgroundColor: colors.find((val) => val.title === item)
-                        .color,
-                      marginRight: 10,
-                      borderRadius: 100,
-                    }}
-                  />
-                )}
-                <Text
+            <ScrollView style={{ flex: 1 }}>
+              {menus.map((item, i) => (
+                <TouchableOpacity
+                  key={i}
                   style={{
-                    fontSize: device === "tablet" ? 20 : 16,
-                    color: "black",
+                    backgroundColor: "white",
+                    padding: 10,
+                    paddingVertical: 15,
+                    flexDirection: "row",
+                  }}
+                  onPress={() => {
+                    setMenu(item);
+                    setIsOpen(false);
                   }}
                 >
-                  {item}
-                </Text>
-              </TouchableOpacity>
-            ))}
+                  {colors && (
+                    <View
+                      style={{
+                        width: 30,
+                        height: 30,
+                        backgroundColor: colors.find(
+                          (val) => val.title === item
+                        ).color,
+                        marginRight: 10,
+                        borderRadius: 100,
+                      }}
+                    />
+                  )}
+                  <Text
+                    style={{
+                      fontSize: device === "tablet" ? 20 : 16,
+                      color: "black",
+                    }}
+                  >
+                    {item}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
           </View>
         )}
       </View>

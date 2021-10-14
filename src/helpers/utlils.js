@@ -146,3 +146,8 @@ export const colors = [
   { color: "#0073DD", title: "blue" },
   { color: "#27C8C8", title: "sea blue" },
 ];
+
+export const inventoryAvailibility = [
+  { name: "Active", value: "ACTIVE" },
+  { name: "Draft", value: "DRAFT" },
+];

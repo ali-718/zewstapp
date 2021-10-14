@@ -11,7 +11,7 @@ import deletePurple from "../../../../assets/images/deletePurple.png";
 import purpleCamera from "../../../../assets/images/purpleCamera.png";
 import { Text } from "../../../../components/Text/Text";
 import { Dropdown } from "../../../../components/Inputs/DropDown";
-import { colors } from "../../../../helpers/utlils";
+import { colors, inventoryAvailibility } from "../../../../helpers/utlils";
 import * as ImagePicker from "expo-image-picker";
 import { PhotoModal } from "../../../../components/Meals/PhotoModal";
 import { ToastError } from "../../../../helpers/Toast";
@@ -50,6 +50,7 @@ export const AddInventoryPage = (props) => {
   const [costPerUnit, setCostPerUnit] = useState("");
   const [threshold, setThreshold] = useState("");
   const [category, setcategory] = useState("");
+  const [availablity, setAvailablity] = useState({});
   const [isEdit, setIsEdit] = useState(false);
   const [deleteModal, setdeleteModal] = useState(false);
 
@@ -75,6 +76,7 @@ export const AddInventoryPage = (props) => {
         category,
         photos,
         notes,
+        availability,
       } = props?.route?.params?.data;
 
       setImageUri(photos);
@@ -90,6 +92,9 @@ export const AddInventoryPage = (props) => {
       setBrand(brand);
       setIsEdit(true);
       setNotes(notes);
+      setAvailablity(
+        inventoryAvailibility.find((item) => item.value === availability)
+      );
     }
   }, []);
 
@@ -113,7 +118,8 @@ export const AddInventoryPage = (props) => {
       costPerUnit.trim().length === 0 ||
       threshold.trim().length === 0 ||
       category.trim().length === 0 ||
-      !color.color
+      !color.color ||
+      !availablity.value
     ) {
       ToastError("Kindly fill all fields");
       return;
@@ -139,6 +145,7 @@ export const AddInventoryPage = (props) => {
       threshold,
       category,
       navigation,
+      availability: availablity.value,
     };
 
     dispatch(actions.addInventoryAction(data));
@@ -469,7 +476,7 @@ export const AddInventoryPage = (props) => {
               />
             </View>
 
-            <View style={{ width: "100%", zIndex: 0 }}>
+            <View style={{ width: "100%", zIndex: 1 }}>
               <Input
                 placeholder={"Notes"}
                 value={notes}
@@ -481,9 +488,22 @@ export const AddInventoryPage = (props) => {
                   borderBottomWidth: 2,
                 }}
               />
+              <View style={{ width: "100%", marginTop: 10 }}>
+                <Dropdown
+                  selectedMenu={availablity?.name}
+                  setMenu={(val) =>
+                    setAvailablity(
+                      inventoryAvailibility.find((item) => item.name === val)
+                    )
+                  }
+                  placeholder={"Availibility*"}
+                  menus={inventoryAvailibility.map((item) => item.name)}
+                  style={{ zIndex: 10 }}
+                />
+              </View>
             </View>
 
-            <View style={{ width: "100%", marginTop: 20 }}>
+            <View style={{ width: "100%", marginTop: 20, zIndex: 0 }}>
               <Text
                 style={{
                   fontSize: 20,

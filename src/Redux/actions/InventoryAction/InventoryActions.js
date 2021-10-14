@@ -58,6 +58,7 @@ export const addInventoryAction =
     threshold,
     category,
     navigation,
+    availability,
   }) =>
   (dispatch) => {
     dispatch({ type: ADD_INVENTORY.REQUESTED });
@@ -78,6 +79,7 @@ export const addInventoryAction =
         notes,
         photos,
         itemName,
+        availability,
       })
       .then(() => {
         dispatch({ type: ADD_INVENTORY.SUCCEEDED });

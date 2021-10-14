@@ -14,20 +14,23 @@ import { RegularButton } from "../../../../components/Buttons/RegularButton";
 import { ToastError } from "../../../../helpers/Toast";
 import { useNavigation } from "@react-navigation/core";
 import * as actions from "../../../../Redux/actions/RecipeActions/RecipeActions";
+import * as inventoryActions from "../../../../Redux/actions/InventoryAction/InventoryActions";
 
 export const RecipeAdd = (props) => {
   const device = useSelector((state) => state.system.device);
   const user = useSelector((state) => state.auth.user.user);
-  const allLocations = useSelector((state) => state.locations.locations);
+  const inventoryList = useSelector((state) => state.inventory.inventory.list);
   const navigation = useNavigation();
   const dispatch = useDispatch();
 
   const [title, setTitle] = useState("");
-  const [macroIngredient, setMacroIngredient] = useState("");
+  const [macroIngredient, setMacroIngredient] = useState({});
+  const [quantity, setquantity] = useState("");
   const [serving, setServing] = useState("");
   const [cookingTime, setCookingTime] = useState("");
   const [type, settype] = useState("");
   const [ingredients, setIngredients] = useState([]);
+  const [coveredIngredients, setcoveredIngredients] = useState([]);
   const [recipeList, setrecipeList] = useState([]);
   const [isEdit, setIsEdit] = useState(false);
   const isLoading = useSelector((state) => state.recipe.addRecipe.isLoading);
@@ -37,6 +40,13 @@ export const RecipeAdd = (props) => {
 
   useEffect(() => {
     const data = props.route?.params?.data;
+
+    dispatch(
+      inventoryActions.fetchInventoryAction({
+        locationId: defaultLocation.locationId,
+      })
+    );
+
     if (!data) return;
 
     setIsEdit(true);
@@ -70,9 +80,10 @@ export const RecipeAdd = (props) => {
 
     if (
       title.trim().length === 0 ||
-      macroIngredient.trim().length === 0 ||
+      !macroIngredient.itemName ||
       serving.trim().length === 0 ||
       cookingTime.trim().length === 0 ||
+      quantity === "" ||
       type.trim().length === 0
     ) {
       ToastError("Please fill all fields");
@@ -102,6 +113,7 @@ export const RecipeAdd = (props) => {
         recipeSteps: recipeList,
         navigation,
         catalogId: props.route?.params?.data?.catalogId,
+        quantity,
       };
 
       dispatch(actions.updateRecipeAction(data));
@@ -112,7 +124,7 @@ export const RecipeAdd = (props) => {
       clientId: user.clientId,
       locationId: defaultLocation?.locationId,
       recipeTitle: title,
-      macroIngredient: macroIngredient,
+      macroIngredient: { ...macroIngredient, quantity },
       serving,
       recipeType: type,
       cookingTime: cookingTime,
@@ -120,6 +132,8 @@ export const RecipeAdd = (props) => {
       recipeSteps: recipeList,
       navigation,
     };
+
+    console.log(data);
 
     dispatch(actions.addRecipeAction(data));
   };
@@ -186,7 +200,8 @@ export const RecipeAdd = (props) => {
   const updateName = (value, index) => {
     const data = [...ingredients];
 
-    data[index] = { ...data[index], microIngredient: value };
+    data[index] = { ...data[index], ...value };
+    coveredIngredients[index] = { name: value.itemName };
 
     setIngredients(data);
   };
@@ -241,16 +256,37 @@ export const RecipeAdd = (props) => {
               Recipe Details
             </Text>
 
-            <Input
+            <Dropdown
+              selectedMenu={macroIngredient.itemName}
+              setMenu={(val) =>
+                setMacroIngredient(
+                  inventoryList.find((item) => item.itemName === val)
+                )
+              }
               placeholder={"Macro Ingredients*"}
-              value={macroIngredient}
-              setValue={(val) => setMacroIngredient(val)}
-              style={{
-                borderColor: grayColor,
-                borderBottomWidth: 2,
-                borderRadius: 0,
-              }}
+              menus={inventoryList
+                .filter(
+                  (item) =>
+                    item.itemName !== macroIngredient.itemName &&
+                    ingredients.filter((val) => val.itemName === item.itemName)
+                      .length === 0
+                )
+                .map((item) => item.itemName)}
+              style={{ zIndex: 3 }}
             />
+
+            {macroIngredient.quantity && (
+              <Dropdown
+                selectedMenu={quantity}
+                setMenu={setquantity}
+                placeholder={"Quantity*"}
+                menus={Array.from(
+                  { length: macroIngredient.quantity },
+                  (_, i) => i + 1
+                )}
+                style={{ zIndex: 2 }}
+              />
+            )}
 
             <Input
               keyboardType={"number-pad"}
@@ -271,7 +307,7 @@ export const RecipeAdd = (props) => {
               setMenu={settype}
               placeholder={"Type*"}
               menus={["completed", "pending"]}
-              style={{ zIndex: 2 }}
+              style={{ zIndex: 1 }}
             />
 
             <Input
@@ -414,42 +450,46 @@ export const RecipeAdd = (props) => {
                     source={deleteIcon}
                   />
                 </TouchableOpacity>
-                <Input
-                  placeholder={"Micro Ingredients*"}
-                  setValue={(val) => updateName(val, i)}
-                  style={{
-                    borderColor: grayColor,
-                    borderBottomWidth: 2,
-                    borderRadius: 0,
-                    flex: device === "tablet" ? 0.8 : 1,
-                  }}
-                  value={item.microIngredient}
-                />
-
-                <Input
-                  keyboardType={"number-pad"}
-                  placeholder={"Quantity*"}
-                  setValue={(val) => updateQuantity(val, i)}
-                  style={{
-                    borderColor: grayColor,
-                    borderBottomWidth: 2,
-                    marginVertical: device === "tablet" ? 0 : 10,
-                    borderRadius: 0,
-                    width: device === "tablet" ? 120 : "100%",
-                  }}
-                  value={item.quantity}
-                />
 
                 <Dropdown
-                  selectedMenu={item.unit}
-                  setMenu={(val) => updateUnit(val, i)}
-                  placeholder={"Unit*"}
-                  menus={recipeUnit}
-                  style={{
-                    zIndex: 2,
-                    width: device === "tablet" ? 100 : "100%",
-                  }}
+                  selectedMenu={ingredients[i].itemName}
+                  setMenu={(val) =>
+                    updateName(
+                      inventoryList
+                        .map((item) => ({
+                          ...item,
+                          totalQuantity: item.quantity,
+                          quantity: undefined,
+                        }))
+                        .find((item) => item.itemName === val),
+                      i
+                    )
+                  }
+                  placeholder={"Macro Ingredients*"}
+                  menus={inventoryList
+                    .filter(
+                      (item) =>
+                        item.itemName !== macroIngredient.itemName &&
+                        ingredients.filter(
+                          (val) => val.itemName === item.itemName
+                        ).length === 0
+                    )
+                    .map((item) => item.itemName)}
+                  style={{ zIndex: i + 3 }}
                 />
+
+                {ingredients[i].itemName && (
+                  <Dropdown
+                    selectedMenu={ingredients[i].quantity}
+                    setMenu={(val) => updateQuantity(val, i)}
+                    placeholder={"Quantity*"}
+                    menus={Array.from(
+                      { length: ingredients[i].totalQuantity },
+                      (_, i) => i + 1
+                    )}
+                    style={{ zIndex: i + 2 }}
+                  />
+                )}
 
                 <Dropdown
                   selectedMenu={item.type}
@@ -457,7 +497,7 @@ export const RecipeAdd = (props) => {
                   placeholder={"Fresh/Packed*"}
                   menus={recipePacking}
                   style={{
-                    zIndex: 1,
+                    zIndex: i + 1,
                     marginTop: device === "tablet" ? 0 : 5,
                     width: device === "tablet" ? 180 : "100%",
                   }}
