@@ -23,8 +23,7 @@
         "NSPhotoLibraryUsageDescription": "This app uses Photo Library for uploading your profile picture.",
         "UIBackgroundModes": ["fetch"]
       },
-      "bundleIdentifier": "com.hauraki.zewst",
-      "requireFullScreen": true
+      "bundleIdentifier": "com.hauraki.zewst"
     },
     "android": {
       "adaptiveIcon": {

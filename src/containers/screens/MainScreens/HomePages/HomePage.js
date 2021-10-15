@@ -1289,9 +1289,7 @@ export const HomePage = ({ setselected }) => {
                   data={chartData}
                   svg={{ stroke: "rgb(134, 65, 244)" }}
                   contentInset={{ top: 20, bottom: 20 }}
-                >
-                  <Grid />
-                </LineChart>
+                ></LineChart>
               </View>
             </View>
           </View>

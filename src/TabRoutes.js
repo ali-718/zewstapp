@@ -24,6 +24,7 @@ import WasteIcon from "./assets/images/WasteIcon.png";
 import InventorySelected from "./assets/images/InventorySelected.png";
 import InventoryIcon from "./assets/images/InventoryIcon.png";
 import { InventoryPredictionsPage } from "./containers/screens/MainScreens/InventoryPrediction/InventoryPrediction";
+import { DailyFoodLogListPage } from "./containers/screens/MainScreens/DailyFoodLog/DailyFoodLogListPage";
 
 const Stack = createNativeStackNavigator();
 
@@ -53,7 +54,7 @@ export const TabRoutes = () => {
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         {selected === 0 && <Stack.Screen name="Home" component={HomePage} />}
         {(selected === 1 || selected === 9) && (
-          <Stack.Screen name="Insights" component={InsightsPage} />
+          <Stack.Screen name="Insights" component={DailyFoodLogListPage} />
         )}
         {selected === 2 && <Stack.Screen name="Home" component={HomePage} />}
         {(selected === 3 || selected === 8) && (

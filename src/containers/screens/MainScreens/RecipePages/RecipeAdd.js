@@ -70,6 +70,7 @@ export const RecipeAdd = (props) => {
     settype(recipeType);
     setIngredients(ingredients);
     setrecipeList(recipeSteps);
+    setquantity(macroIngredient?.quantity);
   }, []);
 
   const onAddData = () => {
@@ -105,7 +106,7 @@ export const RecipeAdd = (props) => {
         clientId: user.clientId,
         locationId: defaultLocation?.locationId,
         recipeTitle: title,
-        macroIngredient: macroIngredient,
+        macroIngredient: { ...macroIngredient, quantity },
         serving,
         recipeType: type,
         cookingTime: cookingTime,
@@ -113,7 +114,6 @@ export const RecipeAdd = (props) => {
         recipeSteps: recipeList,
         navigation,
         catalogId: props.route?.params?.data?.catalogId,
-        quantity,
       };
 
       dispatch(actions.updateRecipeAction(data));
@@ -258,7 +258,13 @@ export const RecipeAdd = (props) => {
               selectedMenu={macroIngredient.itemName}
               setMenu={(val) =>
                 setMacroIngredient(
-                  inventoryList.find((item) => item.itemName === val)
+                  inventoryList
+                    .map((item) => ({
+                      ...item,
+                      totalQuantity: item.quantity,
+                      quantity: undefined,
+                    }))
+                    .find((item) => item.itemName === val)
                 )
               }
               placeholder={"Macro Ingredients*"}
@@ -273,13 +279,13 @@ export const RecipeAdd = (props) => {
               style={{ zIndex: 3 }}
             />
 
-            {macroIngredient.quantity && (
+            {macroIngredient.totalQuantity && (
               <Dropdown
                 selectedMenu={quantity}
                 setMenu={setquantity}
                 placeholder={"Quantity*"}
                 menus={Array.from(
-                  { length: macroIngredient.quantity },
+                  { length: macroIngredient.totalQuantity },
                   (_, i) => i + 1
                 )}
                 style={{ zIndex: 2 }}
@@ -428,9 +434,9 @@ export const RecipeAdd = (props) => {
                 style={{
                   width: "100%",
                   zIndex: ingredients.length - i,
-                  flexDirection: device === "tablet" ? "row" : "column",
+                  flexDirection: "column",
                   justifyContent: "space-between",
-                  alignItems: device === "tablet" ? "center" : "flex-start",
+                  alignItems: "flex-start",
                 }}
               >
                 <TouchableOpacity
@@ -463,7 +469,7 @@ export const RecipeAdd = (props) => {
                       i
                     )
                   }
-                  placeholder={"Macro Ingredients*"}
+                  placeholder={"Micro Ingredients*"}
                   menus={inventoryList
                     .filter(
                       (item) =>
