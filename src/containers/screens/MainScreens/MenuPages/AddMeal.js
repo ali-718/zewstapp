@@ -21,11 +21,14 @@ import { getMealCategories } from "../../../../Redux/actions/HomeActions/MealAct
 import { nameValidator } from "../../../../helpers/rules";
 import { ToastError } from "../../../../helpers/Toast";
 import * as actions from "../../../../Redux/actions/HomeActions/MealActions";
+import * as recipeActions from "../../../../Redux/actions/RecipeActions/RecipeActions";
 import { useNavigation } from "@react-navigation/core";
+import { Dropdown } from "../../../../components/Inputs/DropDown";
 
 export const AddMeal = (props) => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
+  const user = useSelector((state) => state.auth.user.user);
   const categories = useSelector((state) => state.meal.categories);
   const allergens = useSelector((state) => state.meal.allergens);
   const addons = useSelector((state) => state.meal.addons);
@@ -37,6 +40,7 @@ export const AddMeal = (props) => {
   const defaultLocation = useSelector(
     (state) => state.locations.defaultLocation
   );
+  const recipeList = useSelector((state) => state.recipe.recipe.list);
 
   const [name, setName] = useState("");
   const [desc, setdesc] = useState("");
@@ -55,6 +59,7 @@ export const AddMeal = (props) => {
   const [selectedAddons, setselectedAddons] = useState([]);
   const [foodImage, setFoodImage] = useState("");
   const [foodImageBase64, setfoodImageBase64] = useState("");
+  const [selectedRecipe, setSelectedRecipe] = useState({});
 
   useEffect(() => {
     if (!deleteMealError) return;
@@ -63,6 +68,8 @@ export const AddMeal = (props) => {
   }, [deleteMealError]);
 
   useEffect(() => {
+    dispatch(recipeActions.fetchRecipeActions({ clientId: user.clientId }));
+
     if (!props.route?.params?.data) return;
 
     const {
@@ -75,6 +82,7 @@ export const AddMeal = (props) => {
       mealAllergens: allergens,
       mealAddons: addons,
       mealMedia: image,
+      mealRecipes,
     } = props.route?.params?.data;
 
     setIsEdit(true);
@@ -87,6 +95,7 @@ export const AddMeal = (props) => {
     setselectedAllergens(allergens);
     setselectedAddons(addons);
     setFoodImage(image[0] ?? "");
+    setSelectedRecipe(mealRecipes ? mealRecipes[0] : {});
   }, []);
 
   const removeImage = () => {
@@ -201,7 +210,8 @@ export const AddMeal = (props) => {
       desc.trim().length === 0 ||
       selectedDays.length === 0 ||
       selectedCategories.length === 0 ||
-      unitCost.length === 0
+      unitCost.length === 0 ||
+      !selectedRecipe.recipeTitle
     ) {
       ToastError("Fill all fields marked with (*)");
       return;
@@ -222,6 +232,7 @@ export const AddMeal = (props) => {
           mealMedia: foodImageBase64,
           navigation,
           mealId: props.route?.params?.data?.mealId,
+          mealRecipes: [selectedRecipe],
         })
       );
       return;
@@ -245,6 +256,8 @@ export const AddMeal = (props) => {
         mealAddons: selectedAddons,
         mealMedia: foodImageBase64,
         navigation,
+        selectedRecipe,
+        mealRecipes: [selectedRecipe],
       })
     );
   };
@@ -342,7 +355,21 @@ export const AddMeal = (props) => {
           />
         </View>
 
-        <View style={{ width: "100%", marginTop: 10 }}>
+        <View style={{ width: "100%", marginTop: 10, zIndex: 1 }}>
+          <Dropdown
+            selectedMenu={selectedRecipe.recipeTitle}
+            setMenu={(val) =>
+              setSelectedRecipe(
+                recipeList.find((item) => item.recipeTitle === val)
+              )
+            }
+            placeholder={"Select Recipe*"}
+            menus={recipeList.map((item) => item.recipeTitle)}
+            style={{ zIndex: 3 }}
+          />
+        </View>
+
+        <View style={{ width: "100%", marginTop: 10, zIndex: 0 }}>
           <MealItem
             label={"Days Available*"}
             text={JSON.stringify(selectedDays.map((item) => item.slice(0, 3)))

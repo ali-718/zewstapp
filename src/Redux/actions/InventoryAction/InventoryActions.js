@@ -18,7 +18,6 @@ export const deleteInventoryAction =
         navigation.pop(2);
       })
       .catch((e) => {
-        console.log(e.response);
         ToastError("Some error occoured please try again later!");
         dispatch({ type: DELETE_INVENTORY.FAILED });
       });
@@ -58,6 +57,7 @@ export const addInventoryAction =
     threshold,
     category,
     navigation,
+    availability,
   }) =>
   (dispatch) => {
     dispatch({ type: ADD_INVENTORY.REQUESTED });
@@ -78,6 +78,7 @@ export const addInventoryAction =
         notes,
         photos,
         itemName,
+        availability,
       })
       .then(() => {
         dispatch({ type: ADD_INVENTORY.SUCCEEDED });

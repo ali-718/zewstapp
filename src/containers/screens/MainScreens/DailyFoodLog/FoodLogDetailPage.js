@@ -9,7 +9,7 @@ import { Input } from "../../../../components/Inputs/Input";
 import { useNavigation } from "@react-navigation/core";
 import { inventoryAvailibility } from "../../../../helpers/utlils";
 
-export const InventoryDetailPage = ({ data, isTab, ...props }) => {
+export const FoodLogDetailPage = ({ data, isTab, ...props }) => {
   const {
     itemName,
     brand,

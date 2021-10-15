@@ -119,7 +119,7 @@ export const RecipeListPage = () => {
                             <AdminOverviewBox
                               key={i}
                               label={item.recipeTitle}
-                              name={`Macro: ${item.macroIngredient}`}
+                              name={`Macro: ${item.macroIngredient.itemName}`}
                               rightText={""}
                               image={recipeVessel}
                               recipe
@@ -188,7 +188,7 @@ export const RecipeListPage = () => {
                   <AdminOverviewBox
                     key={i}
                     label={item.recipeTitle}
-                    name={`Macro: ${item.macroIngredient}`}
+                    name={`Macro: ${item.macroIngredient.itemName}`}
                     rightText={""}
                     image={recipeVessel}
                     recipe
