@@ -37,6 +37,7 @@ import { RecipeAdd } from "./containers/screens/MainScreens/RecipePages/RecipeAd
 import { InventoryListPage } from "./containers/screens/MainScreens/InventoryPages/InventoryListPage";
 import { AddInventoryPage } from "./containers/screens/MainScreens/InventoryPages/AddInventoryPage";
 import { InventoryDetailPage } from "./containers/screens/MainScreens/InventoryPages/InventoryDetailPage";
+import { LossInKitchen } from "./containers/screens/MainScreens/LossInKitchen/LossInKitchen";
 
 const Stack = createNativeStackNavigator();
 
@@ -78,6 +79,7 @@ const MainRoutes = () => {
         <Stack.Screen name="recipeAdd" component={RecipeAdd} />
         <Stack.Screen name="inventoryAdd" component={AddInventoryPage} />
         <Stack.Screen name="inventoryDetail" component={InventoryDetailPage} />
+        <Stack.Screen name="lossInKitchen" component={LossInKitchen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

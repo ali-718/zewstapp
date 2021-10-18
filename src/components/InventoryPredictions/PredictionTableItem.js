@@ -31,6 +31,7 @@ export const PredictionTableItem = ({
           style={{
             fontSize: device === "tablet" ? 18 : 16,
             color: "black",
+            marginLeft: 10,
           }}
         >
           {item}

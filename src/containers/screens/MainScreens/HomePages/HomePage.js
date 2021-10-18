@@ -1013,12 +1013,13 @@ export const HomePage = ({ setselected }) => {
                   Loss in Kitchen
                 </Text>
 
-                <View
+                <TouchableOpacity
                   style={{
                     flexDirection: "row",
                     alignItems: "center",
                     justifyContent: "center",
                   }}
+                  onPress={() => navigation.navigate("lossInKitchen")}
                 >
                   <Icon
                     style={{
@@ -1030,7 +1031,7 @@ export const HomePage = ({ setselected }) => {
                     name={"arrow-forward-ios"}
                     as={MaterialIcons}
                   />
-                </View>
+                </TouchableOpacity>
               </View>
               <View
                 style={{
