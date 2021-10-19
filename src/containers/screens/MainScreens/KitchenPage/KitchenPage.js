@@ -1,29 +1,16 @@
-import React, { useEffect, useState } from "react";
-import {
-  FlatList,
-  Image,
-  ScrollView,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import React, { useState } from "react";
+import { FlatList, Image, TouchableOpacity, View } from "react-native";
 import { MainScreenContainer } from "../../../MainScreenContainers";
-import pdfIcon from "../../../../assets/images/whitePdf.png";
 import {
-  grayBorderColor,
-  grayColor,
-  grayShade1,
   grayShade2,
   grayTextColor,
   primaryColor,
-  primaryShade1,
 } from "../../../../theme/colors";
 import profileGray from "../../../../assets/images/profileGray.png";
 import purpleWhiteArrow from "../../../../assets/images/purpleWhiteArrow.png";
 import { Text } from "../../../../components/Text/Text";
-import { ProgressBarBox } from "../../../../components/ProgressBarBox/ProgressBarBox";
-import { SearchInput } from "../../../../components/SearchInput/SearchInput";
 import { useSelector } from "react-redux";
-import { PredictionTableItem } from "../../../../components/InventoryPredictions/PredictionTableItem";
+import { useNavigation } from "@react-navigation/core";
 
 const KitchenOrder = ({ device }) => (
   <View
@@ -171,6 +158,7 @@ const KitchenOrder = ({ device }) => (
 );
 
 export const KitchenPage = () => {
+  const navigation = useNavigation();
   const [selectedAnnual, setselectedAnnual] = useState(0);
   const [search, setSearch] = useState("");
   const [lossInKitchen, setlossInKitchen] = useState([]);
@@ -232,10 +220,10 @@ export const KitchenPage = () => {
                   width: "100%",
                   overflow: "hidden",
                 }}
-                data={[1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 2]}
+                data={[1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 11]}
                 keyExtractor={(item) => `${item}`}
                 renderItem={() => (
-                  <View
+                  <TouchableOpacity
                     style={{
                       width:
                         device === "tablet"
@@ -246,9 +234,10 @@ export const KitchenPage = () => {
                       marginTop: 20,
                       marginHorizontal: device === "tablet" ? 10 : 0,
                     }}
+                    onPress={() => navigation.navigate("KitchenDetailPage")}
                   >
                     <KitchenOrder />
-                  </View>
+                  </TouchableOpacity>
                 )}
               />
             </View>
