@@ -38,6 +38,7 @@ import { InventoryListPage } from "./containers/screens/MainScreens/InventoryPag
 import { AddInventoryPage } from "./containers/screens/MainScreens/InventoryPages/AddInventoryPage";
 import { InventoryDetailPage } from "./containers/screens/MainScreens/InventoryPages/InventoryDetailPage";
 import { LossInKitchen } from "./containers/screens/MainScreens/LossInKitchen/LossInKitchen";
+import { KitchenPage } from "./containers/screens/MainScreens/KitchenPage/KitchenPage";
 
 const Stack = createNativeStackNavigator();
 
@@ -59,7 +60,10 @@ const AuthRoutes = () => {
 const MainRoutes = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Navigator
+        initialRouteName={"KitchenPage"}
+        screenOptions={{ headerShown: false }}
+      >
         <Stack.Screen name="tabRoutes" component={TabRoutes} />
         <Stack.Screen name="foodDetailPage" component={FoodDetailPage} />
         <Stack.Screen name="addMeal" component={AddMeal} />
@@ -80,6 +84,7 @@ const MainRoutes = () => {
         <Stack.Screen name="inventoryAdd" component={AddInventoryPage} />
         <Stack.Screen name="inventoryDetail" component={InventoryDetailPage} />
         <Stack.Screen name="lossInKitchen" component={LossInKitchen} />
+        <Stack.Screen name="KitchenPage" component={KitchenPage} />
       </Stack.Navigator>
     </NavigationContainer>
   );
