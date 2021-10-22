@@ -327,9 +327,9 @@ export const HomePage = ({ setselected }) => {
     dispatch(setPrimaryLocationAction(JSON.parse(location), true));
   };
 
-  useEffect(() => {
-    checkDefaultLocation();
-  }, []);
+  // useEffect(() => {
+  //   checkDefaultLocation();
+  // }, []);
 
   const changeTime = (val) => setSelectedTime(val);
 

@@ -62,7 +62,7 @@ const MainRoutes = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName={"KitchenPage"}
+        // initialRouteName={"KitchenPage"}
         screenOptions={{ headerShown: false }}
       >
         <Stack.Screen name="tabRoutes" component={TabRoutes} />

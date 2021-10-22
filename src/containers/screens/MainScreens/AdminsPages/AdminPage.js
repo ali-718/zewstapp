@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text } from "react-native";
+import { View, TouchableOpacity, Image } from "react-native";
 import { MainScreenContainer } from "../../../MainScreenContainers";
 import person from "../../../../assets/images/person.png";
 import personGrayIcon from "../../../../assets/images/personGrayIcon.png";
@@ -8,10 +8,16 @@ import locationIcon from "../../../../assets/images/locationIcon.png";
 import taxIcon from "../../../../assets/images/taxIcon.png";
 import multiplePeopleIcon from "../../../../assets/images/multiplePeopleIcon.png";
 import bankIcon from "../../../../assets/images/bankIcon.png";
+import squareLogo from "../../../../assets/images/squareLogo.png";
 import { ResturantName } from "../../../../components/FoodItems/ResturantName";
 import { AdminOverviewBox } from "../../../../components/AdminComponents/AdminOverviewBox";
 import { useNavigation } from "@react-navigation/native";
 import { useSelector } from "react-redux";
+import { Text } from "../../../../components/Text/Text";
+import { FullPageLoadingModall } from "../../../../components/FullPageLoadingModall/FullPageLoadingModall";
+import { ConnectSquareModal } from "../../../../components/ConnectSquareModal/ConnectSquareModal";
+import { ToastError, ToastSuccess } from "../../../../helpers/Toast";
+import { connectWithSquare } from "../../../../Redux/actions/AuthActions/authActions";
 
 export const AdminPage = () => {
   const navigation = useNavigation();
@@ -23,7 +29,38 @@ export const AdminPage = () => {
     (state) => state.locations.defaultLocation
   );
   const locationsList = useSelector((state) => state.locations.locations);
+  const device = useSelector((state) => state.system.device);
+  const user = useSelector((state) => state.auth.user.user);
+
   const [selected, setSelected] = useState(true);
+  const [accessToken, setAccessToken] = useState("");
+  const [squareModal, setSquareModal] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const onConnectSquare = () => {
+    setSquareModal(false);
+    setIsLoading(true);
+
+    connectWithSquare({
+      clientId: user.clientId,
+      squareAccessToken: accessToken,
+    })
+      .then(() => {
+        setSquareModal(false);
+        setIsLoading(false);
+
+        ToastSuccess("Success", "Data from square migrated successfully");
+      })
+      .catch((e) => {
+        setSquareModal(false);
+        setIsLoading(false);
+        ToastError(
+          typeof e === "string"
+            ? e
+            : "Some error occoured, please try again later"
+        );
+      });
+  };
 
   return (
     <MainScreenContainer leftImage={person} title={"Admin"}>
@@ -109,11 +146,62 @@ export const AdminPage = () => {
                     }
                   />
                 </View>
+
+                <View
+                  style={{ width: "100%", marginTop: 20, marginBottom: 20 }}
+                >
+                  <TouchableOpacity
+                    onPress={() => setSquareModal(true)}
+                    style={{
+                      width: "100%",
+                      height: device === "tablet" ? 60 : 50,
+                      alignItems: "center",
+                      justifyContent: "center",
+                      flexDirection: "row",
+                      backgroundColor: "white",
+                      borderRadius: 10,
+                      shadowColor: "#000",
+                      shadowOffset: {
+                        width: 0,
+                        height: 1,
+                      },
+                      shadowOpacity: 0.22,
+                      shadowRadius: 2.22,
+                      elevation: 5,
+                    }}
+                  >
+                    <Text
+                      style={{
+                        fontSize: device === "tablet" ? 25 : 18,
+                        fontFamily: "openSans_bold",
+                      }}
+                    >
+                      Connect with{" "}
+                    </Text>
+                    <Image
+                      source={squareLogo}
+                      style={{
+                        width: device === "tablet" ? 100 : 80,
+                        resizeMode: "contain",
+                        marginLeft: 10,
+                      }}
+                    />
+                  </TouchableOpacity>
+                </View>
               </View>
             )}
           </View>
         ))}
       </View>
+      <FullPageLoadingModall visible={isLoading} />
+      <ConnectSquareModal
+        disabled={accessToken.trim() === ""}
+        value={accessToken}
+        setValue={setAccessToken}
+        visible={squareModal}
+        onRequestClose={() => setSquareModal(false)}
+        onAction={onConnectSquare}
+      />
     </MainScreenContainer>
   );
 };

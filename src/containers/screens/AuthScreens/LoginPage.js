@@ -51,6 +51,7 @@ export const LoginPage = (props) => {
     loginAction({ email, password })
       .then((res) => {
         dispatch({ type: USER, payload: res });
+        AsyncStorage.removeItem("defaultLocation");
         AsyncStorage.setItem("refreshToken", res.token.refreshToken.token);
         AsyncStorage.setItem("user", JSON.stringify(res));
         setIsLoading(false);

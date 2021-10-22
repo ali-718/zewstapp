@@ -74,3 +74,19 @@ export const resendCode = ({ email }) =>
       })
       .catch((e) => reject(e.response.data));
   });
+
+export const connectWithSquare = ({ clientId, squareAccessToken }) =>
+  new Promise((resolve, reject) => {
+    client
+      .post("/client/updateSquareToken", {
+        clientId,
+        squareAccessToken,
+      })
+      .then((data) => {
+        resolve();
+      })
+      .catch((e) => {
+        reject(e.response.data.message);
+        console.log(e.response.data.message);
+      });
+  });
