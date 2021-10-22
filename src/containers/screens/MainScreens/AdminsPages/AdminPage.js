@@ -147,7 +147,7 @@ export const AdminPage = () => {
                   />
                 </View>
 
-                <View
+                {/* <View
                   style={{ width: "100%", marginTop: 20, marginBottom: 20 }}
                 >
                   <TouchableOpacity
@@ -187,7 +187,7 @@ export const AdminPage = () => {
                       }}
                     />
                   </TouchableOpacity>
-                </View>
+                </View> */}
               </View>
             )}
           </View>
