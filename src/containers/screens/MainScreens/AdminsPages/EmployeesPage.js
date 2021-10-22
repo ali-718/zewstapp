@@ -26,6 +26,8 @@ export const EmployeesPage = () => {
   const [search, setSearch] = useState("");
   const [filteredItem, setFiltereditem] = useState([]);
 
+  console.log(list);
+
   const searchKeyword = (text) => {
     const keyword = text?.toLowerCase();
     const realData = list;
@@ -70,7 +72,6 @@ export const EmployeesPage = () => {
               setSearch={setSearch}
               searchKeyword={searchKeyword}
             />
-
             <View style={{ width: "100%", marginTop: 10 }}>
               {list.length > 0 ? (
                 filteredItem.map((item, i) => (

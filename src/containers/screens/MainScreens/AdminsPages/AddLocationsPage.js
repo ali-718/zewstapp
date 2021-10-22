@@ -56,12 +56,12 @@ export const AddLocationsPage = (props) => {
 
     if (isData) {
       const {
-        locationName,
+        locationName = "",
         contact_no = "",
-        manager,
-        address,
-        email,
-        timmings,
+        manager = "",
+        address = "",
+        email = "",
+        timmings = "",
       } = isData;
 
       setlocationName(locationName);

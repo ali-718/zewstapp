@@ -414,7 +414,7 @@ export const AddInventoryPage = (props) => {
                 maskType={"datetime"}
                 maskFormat={"DD/MM/YYYY"}
               />
-              <View style={{ flex: device === "tablet" ? 0.3 : 1 }}>
+              <View style={{ zIndex: 10, flex: device === "tablet" ? 0.3 : 1 }}>
                 <Dropdown
                   selectedMenu={color.title}
                   setMenu={(val) =>
@@ -434,6 +434,7 @@ export const AddInventoryPage = (props) => {
                 flexDirection: device === "tablet" ? "row" : "column",
                 alignItems: "center",
                 justifyContent: "space-between",
+                zIndex: 0,
               }}
             >
               <Input
