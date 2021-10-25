@@ -48,7 +48,14 @@ export const AddEmployeesPage = (props) => {
     const data = props?.route?.params?.data;
 
     if (data) {
-      const { active, lastName, email, phone, firstName, type } = data;
+      const {
+        active = "",
+        lastName = "",
+        email = "",
+        phone = "",
+        firstName = "",
+        type = "",
+      } = data;
 
       setIsEdit(true);
       setavailable(active);

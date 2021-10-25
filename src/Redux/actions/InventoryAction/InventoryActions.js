@@ -88,6 +88,7 @@ export const addInventoryAction =
       })
       .catch((e) => {
         dispatch({ type: ADD_INVENTORY.FAILED });
+        console.log(e.response.data);
         ToastError("Some error occoured, please try again later");
       });
   };

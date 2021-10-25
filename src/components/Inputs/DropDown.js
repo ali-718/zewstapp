@@ -22,7 +22,14 @@ export const Dropdown = ({
 
   return (
     <>
-      <View style={{ width: "100%", height: 70, zIndex: 1, ...style }}>
+      <View
+        style={{
+          width: "100%",
+          height: isOpen ? 200 : 70,
+          zIndex: 10,
+          ...style,
+        }}
+      >
         <TouchableOpacity
           style={{
             width: "100%",
@@ -104,7 +111,7 @@ export const Dropdown = ({
               maxHeight: 200,
             }}
           >
-            <ScrollView style={{ flex: 1 }}>
+            <ScrollView nestedScrollEnabled style={{ flex: 1 }}>
               {menus.map((item, i) => (
                 <TouchableOpacity
                   key={i}

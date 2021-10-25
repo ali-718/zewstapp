@@ -54,13 +54,13 @@ export const RecipeAdd = (props) => {
     const {
       clientId,
       locationId,
-      recipeTitle,
-      macroIngredient,
-      serving,
-      recipeType,
-      cookingTime,
-      ingredients,
-      recipeSteps,
+      recipeTitle = "",
+      macroIngredient = "",
+      serving = "",
+      recipeType = "",
+      cookingTime = "",
+      ingredients = "",
+      recipeSteps = "",
     } = data;
 
     setTitle(recipeTitle);
