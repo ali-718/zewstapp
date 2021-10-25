@@ -102,11 +102,6 @@ export const VerificationPage = (props) => {
   };
 
   const onVerification = () => {
-    if (code.length < 6) {
-      ToastError("Kindly Fill all Fields");
-      return;
-    }
-
     setIsLoading(true);
 
     confirmCode({

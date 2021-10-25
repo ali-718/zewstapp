@@ -49,6 +49,7 @@ export const SignUpPage = (props) => {
 
   const SignUpClicked = () => {
     setshowError(true);
+
     if (
       validator.isEmpty(name, { ignore_whitespace: false }) ||
       validator.isEmpty(contact, { ignore_whitespace: false }) ||
