@@ -1,8 +1,9 @@
+import { authClient } from "../authClient";
 import { client } from "../client";
 
 export const signupAction = ({ owner_name, contact_no, email, password }) =>
   new Promise((resolve, reject) => {
-    client
+    authClient
       .post("/auth/signup", {
         owner_name,
         contact_no: `+${contact_no}`,
@@ -17,7 +18,7 @@ export const signupAction = ({ owner_name, contact_no, email, password }) =>
 
 export const confirmCode = ({ username, code }) =>
   new Promise((resolve, reject) => {
-    client
+    authClient
       .post("/auth/confirm", {
         username,
         code,
@@ -30,7 +31,7 @@ export const confirmCode = ({ username, code }) =>
 
 export const loginAction = ({ email, password }) =>
   new Promise((resolve, reject) => {
-    client
+    authClient
       .post("/auth/signin", {
         email,
         password,
@@ -56,7 +57,7 @@ export const refreshTokenAction = ({ refreshToken, email }) =>
 
 export const resendCode = ({ email }) =>
   new Promise((resolve, reject) => {
-    client
+    authClient
       .post("/auth/resendOtp", {
         email,
       })
