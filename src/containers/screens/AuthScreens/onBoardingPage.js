@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import {
   View,
   Image,
@@ -8,20 +8,29 @@ import {
 } from "react-native";
 import Carousel, { Pagination } from "react-native-snap-carousel";
 import { carouselData, WIDTH } from "../../../helpers/utlils";
-import {
-  primaryColor,
-  primaryShade1,
-  primaryShade2,
-  textColor,
-} from "../../../theme/colors";
-import logo from "../../../assets/images/logoWhite.png";
+import { primaryColor, primaryShade2, textColor } from "../../../theme/colors";
+import logo from "../../../assets/images/logoPurple.png";
 import { LinearGradient } from "expo-linear-gradient";
 import { useNavigation } from "@react-navigation/native";
 import { Text } from "../../../components/Text/Text";
+import { useSelector } from "react-redux";
+import { RegularButton } from "../../../components/Buttons/RegularButton";
 
 export const OnBoardingPage = ({ inLogin = false }) => {
   const navigation = useNavigation();
   const [activeIndex, setActiveIndex] = useState(0);
+  const device = useSelector((state) => state.system.device);
+  const orientation = useSelector((state) => state.system.orientation);
+  const carouselRef = useRef();
+
+  const changeCarousel = () => {
+    if (activeIndex === 2) {
+      navigation.navigate("Signup");
+      return;
+    }
+    setActiveIndex(activeIndex + 1);
+    carouselRef.current.snapToNext();
+  };
 
   const _renderItem = ({ item, index }) => {
     return (
@@ -33,16 +42,44 @@ export const OnBoardingPage = ({ inLogin = false }) => {
           justifyContent: "center",
         }}
       >
-        <View style={{ width: "90%", flex: 1 }}>
+        <View
+          style={{
+            width: "90%",
+            flex: 1,
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
           <Image
-            style={{ width: "100%", height: 250, resizeMode: "contain" }}
+            style={{
+              width: "100%",
+              height:
+                device === "tablet"
+                  ? orientation === "portrait"
+                    ? 400
+                    : 250
+                  : 250,
+              resizeMode: "contain",
+            }}
             source={item.image}
           />
 
           <Text
             style={{
-              color: "white",
-              fontSize: 20,
+              color: "black",
+              fontSize: device === "tablet" ? 40 : 25,
+              marginTop: 20,
+              textAlign: "center",
+              fontFamily: "openSans_bold",
+            }}
+          >
+            {item.heading}
+          </Text>
+
+          <Text
+            style={{
+              color: "black",
+              fontSize: device === "tablet" ? 22 : 18,
               marginTop: 10,
               textAlign: "center",
               fontFamily: "openSans_regular",
@@ -57,11 +94,10 @@ export const OnBoardingPage = ({ inLogin = false }) => {
 
   return (
     <LinearGradient
-      colors={[primaryColor, primaryShade1]}
+      colors={["white", "white"]}
       style={{
         width: "100%",
         flex: 1,
-        paddingTop: 50,
         alignItems: "center",
       }}
     >
@@ -75,10 +111,10 @@ export const OnBoardingPage = ({ inLogin = false }) => {
       >
         <View
           style={{
-            width: "90%",
             flex: 1,
             alignItems: "center",
             justifyContent: "center",
+            marginHorizontal: 16,
           }}
         >
           <View
@@ -86,34 +122,84 @@ export const OnBoardingPage = ({ inLogin = false }) => {
               width: "100%",
               alignItems: "center",
               justifyContent: "center",
-              paddingVertical: 20,
+              paddingVertical: orientation === "portrait" ? 0 : 20,
+              height: device === "tablet" ? 200 : 100,
+              flexDirection: "row",
             }}
           >
-            <Image
-              style={{ width: 250, height: 50, resizeMode: "contain" }}
-              source={logo}
-            />
+            <View
+              style={{
+                flex:
+                  device === "tablet"
+                    ? orientation === "portrait"
+                      ? 0.65
+                      : 0.65
+                    : 0.7,
+                alignItems: "flex-end",
+              }}
+            >
+              <Image
+                style={{
+                  width: device === "tablet" ? 250 : 150,
+                  resizeMode: "contain",
+                }}
+                source={logo}
+              />
+            </View>
+            <View
+              style={{
+                flex:
+                  device === "tablet"
+                    ? orientation === "portrait"
+                      ? 0.35
+                      : 0.4
+                    : 0.3,
+                alignItems: "flex-end",
+                justifyContent: "center",
+              }}
+            >
+              <TouchableOpacity onPress={() => navigation.navigate("Signup")}>
+                <Text
+                  style={{
+                    textTransform: "uppercase",
+                    color: primaryColor,
+                    fontSize: device === "tablet" ? 20 : 18,
+                  }}
+                >
+                  Skip
+                </Text>
+              </TouchableOpacity>
+            </View>
           </View>
           <View
-            style={{
-              width: "100%",
-
-              paddingVertical: 20,
-              alignItems: "center",
-              justifyContent: "space-between",
-              height: 450,
-            }}
+            style={[
+              {
+                width: "100%",
+                alignItems: "center",
+                justifyContent: "space-between",
+                flex: 1,
+                marginTop: orientation === "portrait" ? 20 : 0,
+              },
+              device === "tablet"
+                ? {
+                    maxWidth: 400,
+                  }
+                : {},
+            ]}
           >
             <Carousel
+              ref={carouselRef}
               onSnapToItem={(index) => setActiveIndex(index)}
               data={carouselData}
               renderItem={_renderItem}
               sliderWidth={inLogin ? WIDTH / 2 - 30 : WIDTH > 500 ? 500 : WIDTH}
               itemWidth={inLogin ? WIDTH / 2 - 30 : WIDTH > 500 ? 500 : WIDTH}
-              style={{ maxWidth: 500, width: "100%" }}
-              loop
+              style={{
+                maxWidth: 400,
+                width: "100%",
+              }}
             />
-            <View style={{ marginTop: 20 }} />
+            <View style={{ marginTop: 32 }} />
             <Pagination
               dotsLength={carouselData.length}
               activeDotIndex={activeIndex}
@@ -129,64 +215,16 @@ export const OnBoardingPage = ({ inLogin = false }) => {
               dotColor={"rgba(210, 186, 233, 0.92)"}
               inactiveDotOpacity={0.5}
             />
+
+            <RegularButton
+              onPress={changeCarousel}
+              text={activeIndex === 2 ? "GET STARTED" : "NEXT"}
+              style={{ borderRadius: 10, width: "100%", marginVertical: 22 }}
+              colors={[primaryColor, primaryColor]}
+            />
           </View>
         </View>
       </SafeAreaView>
-
-      {!inLogin && (
-        <SafeAreaView
-          style={{
-            width: "100%",
-            marginTop: 20,
-            flexDirection: "row",
-            justifyContent: "space-between",
-            backgroundColor: "white",
-          }}
-        >
-          <TouchableOpacity
-            style={{
-              width: "50%",
-              padding: 15,
-              alignItems: "center",
-              justifyContent: "center",
-              backgroundColor: "white",
-            }}
-            onPress={() => navigation.navigate("Signup")}
-          >
-            <Text
-              style={{
-                color: textColor,
-                fontSize: 20,
-                fontWeight: "bold",
-                fontFamily: "openSans_bold",
-              }}
-            >
-              Sign up
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={{
-              width: "49.5%",
-              padding: 15,
-              alignItems: "center",
-              justifyContent: "center",
-              backgroundColor: "white",
-            }}
-            onPress={() => navigation.navigate("Login")}
-          >
-            <Text
-              style={{
-                color: textColor,
-                fontSize: 20,
-                fontWeight: "bold",
-                fontFamily: "openSans_bold",
-              }}
-            >
-              Login
-            </Text>
-          </TouchableOpacity>
-        </SafeAreaView>
-      )}
     </LinearGradient>
   );
 };

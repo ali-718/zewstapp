@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, TextInput, TouchableOpacity } from "react-native";
 import { Icon } from "native-base";
 import { primaryColor } from "../../theme/colors";
@@ -6,26 +6,51 @@ import { Text } from "../Text/Text";
 import { Feather } from "@expo/vector-icons";
 import { useSelector } from "react-redux";
 
-export const PasswordInput = ({ placeholder, setValue, rule, ...props }) => {
+export const PasswordInput = ({
+  placeholder,
+  setValue,
+  rule,
+  showError,
+  setHighOrderError,
+  confirmPassword,
+  value,
+  ...props
+}) => {
   const device = useSelector((state) => state.system.device);
   const [isFocused, setIsFocused] = useState(false);
   const [isSecured, setIsSecured] = useState(true);
   const [isError, setIsError] = useState(false);
   const [errorText, seterrorText] = useState("");
 
+  useEffect(() => {
+    if (!showError) return;
+    ruleChecker(value);
+  }, [showError]);
+
   const OnTextChange = (val) => {
     setValue(val);
+    ruleChecker(val);
+  };
 
+  const ruleChecker = (val) => {
     if (!rule) return;
-    rule(val)
+    rule(val, confirmPassword)
       .then((res) => {
         setIsError(false);
         seterrorText("");
+        setHighOrderError(false);
       })
       .catch((e) => {
         setIsError(true);
-        seterrorText(typeof e === "object" ? e : e.error);
+        seterrorText(e.error);
+        setHighOrderError(true);
       });
+  };
+
+  const requirements = () => {
+    alert(
+      `Password must contain 16 letters. \n ${" "} \n Password must contain 1 uppercase letter.  \n ${" "} \n  Password must contain 1 number. \n ${" "} \n Password must contain 1 special character.`
+    );
   };
 
   return (
@@ -40,7 +65,7 @@ export const PasswordInput = ({ placeholder, setValue, rule, ...props }) => {
           justifyContent: "center",
           alignItems: "center",
           flexDirection: "row",
-          borderWidth: isError ? 1 : 0,
+          borderBottomWidth: isError && showError ? 1 : 0,
           borderColor: "red",
         }}
       >
@@ -49,11 +74,24 @@ export const PasswordInput = ({ placeholder, setValue, rule, ...props }) => {
             width: "90%",
           }}
         >
-          {isFocused && (
-            <Text style={{ marginBottom: 5, color: "gray" }}>
-              {placeholder}
-            </Text>
-          )}
+          <View
+            style={{
+              flexDirection: "row",
+              width: "100%",
+              alignItems: "center",
+            }}
+          >
+            {isFocused && (
+              <Text style={{ marginBottom: 5, color: "gray" }}>
+                {placeholder}{" "}
+                {isError && showError && (
+                  <Text>
+                    - <Text style={{ color: "red" }}>{errorText}</Text>
+                  </Text>
+                )}
+              </Text>
+            )}
+          </View>
 
           <TextInput
             style={{ width: "100%", fontSize: device === "tablet" ? 20 : 16 }}
@@ -84,24 +122,32 @@ export const PasswordInput = ({ placeholder, setValue, rule, ...props }) => {
           />
         </TouchableOpacity>
       </View>
-      {isError ? (
-        typeof errorText === "object" ? (
-          errorText.map((item, i) => (
-            <Text
-              key={i}
-              style={{ color: "red", fontSize: device === "tablet" ? 16 : 12 }}
-            >
-              *{item.error}
-            </Text>
-          ))
-        ) : (
-          <Text
-            style={{ color: "red", fontSize: device === "tablet" ? 16 : 12 }}
-          >
-            *{errorText}
-          </Text>
-        )
-      ) : null}
+
+      <View
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          width: "100%",
+          marginTop: 10,
+        }}
+      >
+        <Icon
+          style={{
+            fontSize: 25,
+            color: primaryColor,
+          }}
+          name={"info"}
+          as={Feather}
+          onPress={requirements}
+        />
+
+        <Text
+          onPress={requirements}
+          style={{ color: primaryColor, marginLeft: 10 }}
+        >
+          Password requirements
+        </Text>
+      </View>
     </>
   );
 };

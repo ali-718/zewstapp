@@ -13,9 +13,7 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
       "infoPlist": {
@@ -23,21 +21,22 @@
         "NSLocationWhenInUseUsageDescription": "This app uses the location to find the Person near you.",
         "NSCameraUsageDescription": "This app uses the camera to take your profile picture.",
         "NSPhotoLibraryUsageDescription": "This app uses Photo Library for uploading your profile picture.",
-        "UIBackgroundModes": [
-          "fetch"
-        ]
+        "UIBackgroundModes": ["fetch"]
       },
-      "bundleIdentifier": "com.hauraki.zewst"
+      "bundleIdentifier": "com.hauraki.zewst",
+      "splash": {
+        "tabletImage": "./assets/tabletSplash.png"
+      }
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#FFFFFF"
+        "foregroundImage": "./assets/icon.png",
+        "backgroundColor": "#A461D8"
       },
       "package": "com.hauraki.zewst"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/icon.png"
     }
   }
 }

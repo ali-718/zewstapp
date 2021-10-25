@@ -9,6 +9,7 @@ import {
   StyleSheet,
 } from "react-native";
 import {
+  backgroundGrayColor,
   grayColor,
   primaryColor,
   primaryShade1,
@@ -23,21 +24,19 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 const styles = StyleSheet.create({
   titleContainer: {
     flex: 1,
-    flexDirection: "column",
-    borderBottomColor: primaryShade1,
-    borderBottomWidth: 2,
-    paddingHorizontal: 20,
+    flexDirection: "row",
     paddingVertical: 20,
     width: "100%",
+    alignItems: "center",
   },
   title: {
-    fontSize: 35,
-    color: primaryShade1,
-    fontFamily: "openSans_bold",
-    marginTop: 10,
+    fontSize: 20,
+    color: "black",
+    fontFamily: "openSans_semiBold",
+    marginLeft: 20,
   },
   icon: {
-    color: primaryShade1,
+    color: "black",
     fontSize: 30,
   },
 });
@@ -47,11 +46,10 @@ export const AuthScreenContainer = ({ title, noBack, ...props }) => {
   return (
     <SafeAreaView
       style={{
-        width: "100%",
         flex: 1,
         alignItems: "center",
         paddingTop: StatusBar.currentHeight,
-        backgroundColor: grayColor,
+        backgroundColor: backgroundGrayColor,
       }}
     >
       <KeyboardAwareScrollView
@@ -60,19 +58,15 @@ export const AuthScreenContainer = ({ title, noBack, ...props }) => {
       >
         <View
           style={{
-            width: "100%",
             flex: 1,
             alignItems: "center",
+            marginHorizontal: 16,
           }}
         >
           <View style={styles.titleContainer}>
             {!noBack && (
               <TouchableOpacity onPress={() => navigation.goBack()}>
-                <Icon
-                  as={Ionicons}
-                  name={"arrow-back-outline"}
-                  style={styles.icon}
-                />
+                <Icon as={Ionicons} name={"chevron-back"} style={styles.icon} />
               </TouchableOpacity>
             )}
             <Text style={styles.title}>{title}</Text>

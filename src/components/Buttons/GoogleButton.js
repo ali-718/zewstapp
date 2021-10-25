@@ -3,10 +3,15 @@ import { Spinner } from "native-base";
 import React from "react";
 import { Image, TouchableOpacity, View } from "react-native";
 import { useSelector } from "react-redux";
-import { primaryColor, primaryShade1 } from "../../theme/colors";
+import {
+  googleButtonColor,
+  primaryColor,
+  primaryShade1,
+} from "../../theme/colors";
 import { Text } from "../Text/Text";
+import googleIcon from "../../assets/images/googleIcon.png";
 
-export const RegularButton = ({
+export const GoogleButton = ({
   text,
   style,
   textStyle,
@@ -35,7 +40,7 @@ export const RegularButton = ({
       }}
     >
       <LinearGradient
-        colors={colors || [primaryColor, primaryShade1]}
+        colors={[googleButtonColor, googleButtonColor]}
         style={{
           width: "100%",
           flex: 1,
@@ -54,22 +59,22 @@ export const RegularButton = ({
               width: "100%",
               flex: 1,
               alignItems: "center",
-              justifyContent: "center",
               flexDirection: "row",
+              paddingHorizontal: 10,
             }}
           >
-            {iconLeft ? (
-              <Image style={{ ...iconStyle }} source={iconLeft} />
-            ) : null}
+            <Image style={{ ...iconStyle }} source={googleIcon} />
+
             <Text
               style={{
                 color: "white",
                 fontWeight: "bold",
-                fontSize: device === "tablet" ? 20 : 15,
+                fontSize: device === "tablet" ? 18 : 14,
                 fontFamily: "openSans_bold",
                 marginLeft: iconLeft ? 10 : 0,
                 letterSpacing: 1,
-                ...textStyle,
+                flex: 1,
+                textAlign: "center",
               }}
             >
               {text}

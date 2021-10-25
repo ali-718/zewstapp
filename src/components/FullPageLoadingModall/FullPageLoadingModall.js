@@ -4,7 +4,11 @@ import { Spinner } from "native-base";
 import { primaryColor } from "../../theme/colors";
 import { useSelector } from "react-redux";
 
-export const FullPageLoadingModall = ({ visible }) => {
+export const FullPageLoadingModall = ({
+  visible,
+  accessibilityLabel,
+  text,
+}) => {
   const device = useSelector((state) => state.system.device);
 
   return (
@@ -25,6 +29,7 @@ export const FullPageLoadingModall = ({ visible }) => {
       >
         <Spinner
           accessibilityLabel={
+            accessibilityLabel ??
             "Kindly do not close the app we are migrating data from square"
           }
           size="large"
@@ -39,7 +44,8 @@ export const FullPageLoadingModall = ({ visible }) => {
             textAlign: "center",
           }}
         >
-          Kindly do not close the app we are migrating data from square
+          {text ??
+            "Kindly do not close the app we are migrating data from square"}
         </Text>
       </View>
     </Modal>

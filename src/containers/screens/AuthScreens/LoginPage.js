@@ -5,7 +5,11 @@ import { AuthScreenContainer } from "../../AuthScreenContainer";
 import { PasswordInput } from "../../../components/Inputs/PasswordInput";
 import { RegularButton } from "../../../components/Buttons/RegularButton";
 import { Text } from "../../../components/Text/Text";
-import { primaryShade3 } from "../../../theme/colors";
+import {
+  grayTextColor,
+  primaryColor,
+  primaryShade3,
+} from "../../../theme/colors";
 import { emailValidator, passwordValidator } from "../../../helpers/rules";
 import validator from "validator";
 import { loginAction } from "../../../Redux/actions/AuthActions/authActions";
@@ -15,6 +19,7 @@ import { ToastError } from "../../../helpers/Toast";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Device from "expo-device";
 import { OnBoardingPage } from "./onBoardingPage";
+import { FullPageLoadingModall } from "../../../components/FullPageLoadingModall/FullPageLoadingModall";
 
 export const LoginPage = (props) => {
   const dispatch = useDispatch();
@@ -24,6 +29,11 @@ export const LoginPage = (props) => {
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [noBack, setnoBack] = useState(false);
+  const [showError, setshowError] = useState(false);
+  const [isError, setIsError] = useState({
+    email: false,
+    password: false,
+  });
 
   useEffect(() => {
     const noBack = props.route.params?.noBack;
@@ -38,6 +48,7 @@ export const LoginPage = (props) => {
   }, []);
 
   const onLogin = () => {
+    setshowError(true);
     if (
       validator.isEmpty(email, { ignore_whitespace: false }) ||
       validator.isEmpty(password, { ignore_whitespace: false })
@@ -45,6 +56,8 @@ export const LoginPage = (props) => {
       ToastError("please fill all fields");
       return;
     }
+
+    if (isError.email || isError.password) return;
 
     setIsLoading(true);
 
@@ -64,94 +77,25 @@ export const LoginPage = (props) => {
       });
   };
 
-  // if (device === "tablet") {
-  //   return (
-  //     <View
-  //       style={{
-  //         width: "100%",
-  //         alignItems: "center",
-  //         justifyContent: "center",
-  //         flex: 1,
-  //         flexDirection: "row",
-  //       }}
-  //     >
-  //       <View
-  //         style={{
-  //           width: orientation === "landscape" ? "60%" : "50%",
-  //           alignItems: "center",
-
-  //           justifyContent: "center",
-  //         }}
-  //       >
-  //         <OnBoardingPage inLogin />
-  //       </View>
-  //       <View
-  //         style={{
-  //           width: orientation === "landscape" ? "40%" : "50%",
-  //           alignItems: "center",
-
-  //           justifyContent: "center",
-  //         }}
-  //       >
-  //         <AuthScreenContainer noBack={noBack} title={"Login"}>
-  //           <View
-  //             style={{ width: "90%", marginVertical: 20, marginBottom: 40 }}
-  //           >
-  //             <View style={{ width: "100%", marginTop: 20 }}>
-  //               <Input
-  //                 keyboardType={"email-address"}
-  //                 placeholder={"Email address*"}
-  //                 value={email}
-  //                 setValue={(val) => setEmail(val)}
-  //                 rule={emailValidator}
-  //               />
-  //             </View>
-
-  //             <View style={{ width: "100%", marginTop: 20 }}>
-  //               <PasswordInput
-  //                 value={password}
-  //                 setValue={(val) => setPassword(val)}
-  //                 placeholder={"Password*"}
-  //                 rule={passwordValidator}
-  //               />
-  //             </View>
-
-  //             <View style={{ width: "100%", marginTop: 20 }}>
-  //               <RegularButton
-  //                 isLoading={isLoading}
-  //                 onPress={onLogin}
-  //                 text={"Log in"}
-  //                 style={{ borderRadius: 50 }}
-  //               />
-  //             </View>
-
-  //             <View
-  //               style={{ width: "100%", marginTop: 20, alignItems: "center" }}
-  //             >
-  //               <TouchableOpacity
-  //                 onPress={() => props.navigation.navigate("Forgot")}
-  //               >
-  //                 <Text
-  //                   style={{
-  //                     fontFamily: "openSans_bold",
-  //                     fontSize: device === "tablet" ? 20 : 18,
-  //                     color: primaryShade3,
-  //                   }}
-  //                 >
-  //                   Forgot Password?
-  //                 </Text>
-  //               </TouchableOpacity>
-  //             </View>
-  //           </View>
-  //         </AuthScreenContainer>
-  //       </View>
-  //     </View>
-  //   );
-  // }
-
   return (
-    <AuthScreenContainer noBack={noBack} title={"Login"}>
-      <View style={{ width: "90%", marginVertical: 20, marginBottom: 40 }}>
+    <AuthScreenContainer title={"Sign in"}>
+      <View style={{ width: "100%", marginBottom: 40 }}>
+        <View style={{ width: "100%" }}>
+          <Text style={{ fontSize: 28, fontFamily: "openSans_bold" }}>
+            Welcome to Zewst
+          </Text>
+          <Text
+            style={{
+              fontSize: 16,
+              marginTop: 16,
+              width: "80%",
+              color: grayTextColor,
+            }}
+          >
+            Enter your Phone number or Email address for sign in. Enjoy your
+            food :)
+          </Text>
+        </View>
         <View style={{ width: "100%", marginTop: 20 }}>
           <Input
             keyboardType={"email-address"}
@@ -159,6 +103,8 @@ export const LoginPage = (props) => {
             value={email}
             setValue={(val) => setEmail(val)}
             rule={emailValidator}
+            showError={showError}
+            setHighOrderError={(val) => setIsError({ ...isError, email: val })}
           />
         </View>
 
@@ -168,6 +114,10 @@ export const LoginPage = (props) => {
             setValue={(val) => setPassword(val)}
             placeholder={"Password*"}
             rule={passwordValidator}
+            showError={showError}
+            setHighOrderError={(val) =>
+              setIsError({ ...isError, password: val })
+            }
           />
         </View>
 
@@ -175,8 +125,9 @@ export const LoginPage = (props) => {
           <RegularButton
             isLoading={isLoading}
             onPress={onLogin}
-            text={"Log in"}
-            style={{ borderRadius: 50 }}
+            text={"Get Started"}
+            style={{ borderRadius: 10, width: "100%" }}
+            colors={[primaryColor, primaryColor]}
           />
         </View>
 
@@ -184,9 +135,8 @@ export const LoginPage = (props) => {
           <TouchableOpacity onPress={() => props.navigation.navigate("Forgot")}>
             <Text
               style={{
-                fontFamily: "openSans_bold",
                 fontSize: 18,
-                color: primaryShade3,
+                color: primaryColor,
               }}
             >
               Forgot Password?
@@ -194,6 +144,11 @@ export const LoginPage = (props) => {
           </TouchableOpacity>
         </View>
       </View>
+      <FullPageLoadingModall
+        visible={isLoading}
+        accessibilityLabel={"Singing you in"}
+        text={"Singing you in..."}
+      />
     </AuthScreenContainer>
   );
 };

@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { TextInput, View } from "react-native";
+import React, { useEffect, useRef, useState } from "react";
+import { TextInput, TouchableOpacity, View } from "react-native";
 import { AuthScreenContainer } from "../../AuthScreenContainer";
 import { Text } from "../../../components/Text/Text";
 import {
+  gray,
   grayMenuText,
   grayShade1,
   grayTextColor,
@@ -17,52 +18,83 @@ import {
 } from "../../../Redux/actions/AuthActions/authActions";
 import { useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/core";
+import { FullPageLoadingModall } from "../../../components/FullPageLoadingModall/FullPageLoadingModall";
 
 const time = 60;
+
+const TextBox = ({ val, setVal, setRef, onChangeText, noLeft }) => {
+  const ref = useRef();
+
+  useEffect(() => {
+    setRef(ref);
+  }, []);
+
+  return (
+    <TouchableOpacity
+      style={{
+        width: 40,
+        borderBottomWidth: 2,
+        borderBottomColor: val ? primaryColor : gray,
+        backgroundColor: "white",
+        height: 40,
+        alignItems: "center",
+        justifyContent: "center",
+        marginLeft: noLeft ? 0 : 20,
+      }}
+      onPress={() => {
+        ref.current.focus();
+      }}
+    >
+      <TextInput
+        keyboardType={"number-pad"}
+        ref={ref}
+        style={{
+          fontSize: 20,
+          fontWeight: "bold",
+          color: "black",
+        }}
+        value={val}
+        onChangeText={(val) => {
+          setVal(val);
+          if (val.length > 0) {
+            ref.current.blur();
+
+            onChangeText();
+          }
+        }}
+        maxLength={1}
+      />
+    </TouchableOpacity>
+  );
+};
 
 export const VerificationPage = (props) => {
   const navigation = useNavigation();
   const username = useSelector((state) => state.auth.user.user);
   const [isEdit, setIsEdit] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [code, setcode] = useState("");
-  const [isResendDisabled, setResendDisabled] = useState(true);
-  const [duration, setDuration] = useState(
-    moment.duration(time * 1000, "milliseconds")
-  );
-  let timer;
+  const [code1, setcode1] = useState("");
+  const [code2, setcode2] = useState("");
+  const [code3, setcode3] = useState("");
+  const [code4, setcode4] = useState("");
+  const [code5, setcode5] = useState("");
+  const [code6, setcode6] = useState("");
 
-  useEffect(() => {
-    countDown();
-    return () => {
-      clearInterval(timer);
-    };
-  }, []);
-
-  const countDown = () => {
-    timer = setInterval(() => {
-      setDuration((prev) => {
-        if (prev.asMilliseconds() - 1000 === 0) {
-          clearInterval(timer);
-          setResendDisabled(false);
-          return moment.duration(0, "milliseconds");
-        }
-        return moment.duration(prev.asMilliseconds() - 1000, "milliseconds");
-      });
-    }, 1000);
-  };
+  const [refs, setrefs] = useState({
+    first: null,
+    second: null,
+    third: null,
+    fourth: null,
+    fifth: null,
+    sixth: null,
+  });
 
   const resetCountDown = () => {
-    setResendDisabled(true);
     resendCode({ email: username })
       .then((res) => {
-        setDuration(moment.duration(time * 1000, "milliseconds"));
-        setIsEdit(false);
-        countDown();
         ToastSuccess("Sent!", "Code sent again :)");
       })
       .catch((e) => {
-        setResendDisabled(false);
         ToastError(
           e.err?.message || "Some error occoured, please try again later"
         );
@@ -77,15 +109,16 @@ export const VerificationPage = (props) => {
 
     setIsLoading(true);
 
-    confirmCode({ username, code })
+    confirmCode({
+      username,
+      code: `${code1}${code2}${code3}${code4}${code5}${code6}`,
+    })
       .then((res) => {
         setIsLoading(false);
         ToastSuccess("Verified!", "Your email has been verified! kindly login");
         navigation.reset({
           index: 0,
-          routes: [
-            { name: "Login", params: { noBack: true, email: username } },
-          ],
+          routes: [{ name: "Login", params: { email: username } }],
         });
       })
       .catch((e) => {
@@ -97,99 +130,114 @@ export const VerificationPage = (props) => {
   };
 
   return (
-    <AuthScreenContainer title={"Verify"}>
-      <View style={{ width: "90%", marginVertical: 20, marginBottom: 40 }}>
-        {/* <Input
-          value={phone}
-          onChangeText={(val) => setPhone(val)}
-          placeholder={"Code sent on"}
-          iconName={"edit"}
-          iconType={FontAwesome}
-          editable={isEdit}
-          keyboardType={"number-pad"}
-          onIconClick={() => setIsEdit(true)}
-        /> */}
-        <Text style={{ color: grayMenuText, fontSize: 12 }}>
-          *check your email for 6 digit code
-        </Text>
+    <AuthScreenContainer title={"Register"}>
+      <View style={{ width: "100%", marginVertical: 20, marginBottom: 40 }}>
+        <View style={{ width: "100%" }}>
+          <Text style={{ fontSize: 28, fontFamily: "openSans_bold" }}>
+            Verify your phone number
+          </Text>
+          <Text
+            style={{
+              fontSize: 16,
+              marginTop: 16,
+              width: "80%",
+              color: grayTextColor,
+            }}
+          >
+            Enter the 6-Digit code sent to you at +{props?.route?.params?.phone}
+          </Text>
+        </View>
         <View
           style={{
             width: "100%",
-            backgroundColor: "white",
-            borderRadius: 10,
-            padding: 10,
-            height: 70,
             marginTop: 20,
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "center",
           }}
         >
-          <Text style={{ marginBottom: 5, color: "gray" }}>
-            Verification code
-          </Text>
-          <TextInput
-            placeholder={"_ _ _ _ _ _"}
-            maxLength={6}
-            keyboardType={"number-pad"}
-            editable={true}
-            style={{
-              fontSize: 20,
-              fontWeight: "bold",
-              color: "black",
-              letterSpacing: 10,
-            }}
-            placeholderTextColor={"black"}
-            value={code}
-            onChangeText={(val) => setcode(val)}
+          <TextBox
+            setRef={(val) => (refs.first = val)}
+            val={code1}
+            setVal={setcode1}
+            onChangeText={() => refs?.second?.current?.focus()}
+            noLeft
+          />
+          <TextBox
+            setRef={(val) => (refs.second = val)}
+            val={code2}
+            setVal={setcode2}
+            onChangeText={() => refs?.third?.current?.focus()}
+          />
+          <TextBox
+            setRef={(val) => (refs.third = val)}
+            val={code3}
+            setVal={setcode3}
+            onChangeText={() => refs?.fourth?.current?.focus()}
+          />
+          <TextBox
+            setRef={(val) => (refs.fourth = val)}
+            val={code4}
+            setVal={setcode4}
+            onChangeText={() => refs?.fifth?.current?.focus()}
+          />
+          <TextBox
+            setRef={(val) => (refs.fifth = val)}
+            val={code5}
+            setVal={setcode5}
+            onChangeText={() => refs?.sixth?.current?.focus()}
+          />
+          <TextBox
+            setRef={(val) => (refs.sixth = val)}
+            val={code6}
+            setVal={setcode6}
+            onChangeText={() => null}
           />
         </View>
 
-        <View style={{ width: "100%", marginTop: 20 }}>
+        <View style={{ width: "100%", marginTop: 32 }}>
           <RegularButton
             onPress={onVerification}
             isLoading={isLoading}
-            text={"Verify"}
-            style={{ borderRadius: 50 }}
+            text={"Get Started"}
+            style={{ borderRadius: 10, width: "100%" }}
+            colors={[primaryColor, primaryColor]}
           />
         </View>
 
-        <View
-          style={{
-            width: "100%",
-            marginTop: 20,
-            backgroundColor: grayShade1,
-            borderRadius: 5,
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
-            padding: 10,
-          }}
-        >
-          <View>
-            <Text style={{ fontSize: 14, color: grayTextColor }}>
-              Resending code in
-            </Text>
-
-            <Text style={{ fontSize: 15, color: "black", marginTop: 5 }}>
-              {moment(duration.asMilliseconds()).format("mm:ss")}
-            </Text>
-          </View>
-
-          <RegularButton
-            text={"Re-send"}
+        <View style={{ width: "100%", marginTop: 20, alignItems: "center" }}>
+          <Text
             style={{
-              width: "40%",
-              height: 40,
-              backgroundColor: grayShade1,
-              borderColor: primaryColor,
-              borderWidth: 2,
-              opacity: isResendDisabled ? 0.4 : 1,
+              fontSize: 14,
+              color: "gray",
+              fontFamily: "openSans_bold",
+              textAlign: "center",
             }}
-            colors={[grayShade1, grayShade1]}
-            textStyle={{ fontWeight: "bold", color: primaryColor }}
-            disabled={isResendDisabled}
-            onPress={() => resetCountDown()}
-          />
+          >
+            Didn’t receive code?{" "}
+            <Text onPress={resetCountDown} style={{ color: primaryColor }}>
+              Resend Again.
+            </Text>
+          </Text>
+        </View>
+        <View style={{ width: "100%", marginTop: 20, alignItems: "center" }}>
+          <Text
+            style={{
+              fontSize: 16,
+              color: grayTextColor,
+              textAlign: "center",
+              width: "80%",
+            }}
+          >
+            By Signing up you agree to our Terms Conditions & Privacy Policy.
+          </Text>
         </View>
       </View>
+      <FullPageLoadingModall
+        visible={isLoading}
+        accessibilityLabel={"Registering you"}
+        text={"Registering you..."}
+      />
     </AuthScreenContainer>
   );
 };

@@ -46,7 +46,10 @@ const Stack = createNativeStackNavigator();
 const AuthRoutes = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Navigator
+        // initialRouteName={"Verification"}
+        screenOptions={{ headerShown: false }}
+      >
         <Stack.Screen name="SigningCheck" component={SigningCheck} />
         <Stack.Screen name="OnBoardingPage" component={OnBoardingPage} />
         <Stack.Screen name="Signup" component={SignUpPage} />

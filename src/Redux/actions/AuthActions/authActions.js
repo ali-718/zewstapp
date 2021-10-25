@@ -1,18 +1,9 @@
 import { client } from "../client";
 
-export const signupAction = ({
-  restaurant_name,
-  designation,
-  owner_name,
-  contact_no,
-  email,
-  password,
-}) =>
+export const signupAction = ({ owner_name, contact_no, email, password }) =>
   new Promise((resolve, reject) => {
     client
       .post("/auth/signup", {
-        restaurant_name,
-        designation,
         owner_name,
         contact_no: `+${contact_no}`,
         email,
