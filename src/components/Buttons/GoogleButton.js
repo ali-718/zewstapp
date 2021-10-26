@@ -63,7 +63,10 @@ export const GoogleButton = ({
               paddingHorizontal: 10,
             }}
           >
-            <Image style={{ ...iconStyle }} source={googleIcon} />
+            <Image
+              style={{ width: 30, resizeMode: "contain" }}
+              source={googleIcon}
+            />
 
             <Text
               style={{

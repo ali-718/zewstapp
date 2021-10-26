@@ -122,7 +122,7 @@ export const SignUpPage = (props) => {
           <Input
             value={name}
             setValue={(val) => setName(val)}
-            placeholder={"Your full name"}
+            placeholder={"Full name"}
             rule={nameValidator}
             showError={showError}
             setHighOrderError={(val) => setIsError({ ...isError, name: val })}

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { View, TextInput, TouchableOpacity } from "react-native";
 import { Icon } from "native-base";
 import { primaryColor } from "../../theme/colors";
@@ -21,6 +21,7 @@ export const PasswordInput = ({
   const [isSecured, setIsSecured] = useState(true);
   const [isError, setIsError] = useState(false);
   const [errorText, seterrorText] = useState("");
+  const ref = useRef();
 
   useEffect(() => {
     if (!showError) return;
@@ -55,7 +56,7 @@ export const PasswordInput = ({
 
   return (
     <>
-      <View
+      <TouchableOpacity
         style={{
           width: "100%",
           backgroundColor: "white",
@@ -68,6 +69,8 @@ export const PasswordInput = ({
           borderBottomWidth: isError && showError ? 1 : 0,
           borderColor: "red",
         }}
+        activeOpacity={1}
+        onPress={() => ref.current?.focus()}
       >
         <View
           style={{
@@ -94,11 +97,19 @@ export const PasswordInput = ({
           </View>
 
           <TextInput
+            onBlur={() => {
+              if (value.length > 0) {
+                return;
+              }
+              setIsFocused(false);
+            }}
+            selectionColor={primaryColor}
             style={{ width: "100%", fontSize: device === "tablet" ? 20 : 16 }}
             placeholder={isFocused ? "" : placeholder}
             placeholderTextColor={"gray"}
             onFocus={() => setIsFocused(true)}
             secureTextEntry={isSecured}
+            ref={ref}
             onChangeText={(val) => OnTextChange(val)}
             {...props}
           />
@@ -121,33 +132,35 @@ export const PasswordInput = ({
             }}
           />
         </TouchableOpacity>
-      </View>
+      </TouchableOpacity>
 
-      <View
-        style={{
-          flexDirection: "row",
-          alignItems: "center",
-          width: "100%",
-          marginTop: 10,
-        }}
-      >
-        <Icon
+      {isError && showError && (
+        <View
           style={{
-            fontSize: 25,
-            color: primaryColor,
+            flexDirection: "row",
+            alignItems: "center",
+            width: "100%",
+            marginTop: 10,
           }}
-          name={"info"}
-          as={Feather}
-          onPress={requirements}
-        />
-
-        <Text
-          onPress={requirements}
-          style={{ color: primaryColor, marginLeft: 10 }}
         >
-          Password requirements
-        </Text>
-      </View>
+          <Icon
+            style={{
+              fontSize: 25,
+              color: primaryColor,
+            }}
+            name={"info"}
+            as={Feather}
+            onPress={requirements}
+          />
+
+          <Text
+            onPress={requirements}
+            style={{ color: primaryColor, marginLeft: 10 }}
+          >
+            Password requirements
+          </Text>
+        </View>
+      )}
     </>
   );
 };

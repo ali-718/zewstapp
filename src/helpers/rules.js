@@ -17,7 +17,7 @@ export const phoneValidator = (phone) =>
     if (phone.trim().length < 12) {
       return reject({
         success: false,
-        error: "phone must contain 12 numbers",
+        error: "atleast 12 numbers",
       });
     }
 
@@ -38,6 +38,13 @@ export const emailValidator = (email) =>
 
 export const passwordValidator = (data) =>
   new Promise((resolve, reject) => {
+    if (data.trim().length === 0) {
+      return reject({
+        success: false,
+        error: "Empty field",
+      });
+    }
+
     if (
       !validator.isStrongPassword(data, {
         minLength: 16,

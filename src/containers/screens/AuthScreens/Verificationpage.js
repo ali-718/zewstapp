@@ -46,6 +46,8 @@ const TextBox = ({ val, setVal, setRef, onChangeText, noLeft }) => {
       }}
     >
       <TextInput
+        selectionColor={primaryColor}
+        textContentType={"oneTimeCode"}
         keyboardType={"number-pad"}
         ref={ref}
         style={{

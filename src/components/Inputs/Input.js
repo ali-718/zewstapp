@@ -114,6 +114,13 @@ export const Input = ({
 
           {masked ? (
             <TextInputMask
+              onBlur={() => {
+                console.log("ok");
+                if (value.length > 0) {
+                  return;
+                }
+                setIsFocused(false);
+              }}
               type={maskType}
               options={{
                 format: maskFormat,
@@ -138,11 +145,19 @@ export const Input = ({
                 }
                 setIsFocused(true);
               }}
+              selectionColor={primaryColor}
               autoCapitalize={"none"}
               {...props}
             />
           ) : (
             <TextInput
+              selectionColor={primaryColor}
+              onBlur={() => {
+                if (value.length > 0) {
+                  return;
+                }
+                setIsFocused(false);
+              }}
               ref={ref}
               style={{
                 width: "100%",

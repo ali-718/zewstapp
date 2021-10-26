@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import Carousel, { Pagination } from "react-native-snap-carousel";
 import { carouselData, WIDTH } from "../../../helpers/utlils";
-import { primaryColor, primaryShade2, textColor } from "../../../theme/colors";
+import { primaryColor, grayTextColor, textColor } from "../../../theme/colors";
 import logo from "../../../assets/images/logoPurple.png";
 import { LinearGradient } from "expo-linear-gradient";
 import { useNavigation } from "@react-navigation/native";
@@ -203,16 +203,16 @@ export const OnBoardingPage = ({ inLogin = false }) => {
             <Pagination
               dotsLength={carouselData.length}
               activeDotIndex={activeIndex}
-              inactiveDotColor={primaryShade2}
+              inactiveDotColor={grayTextColor}
               dotStyle={{
                 width: 10,
                 height: 10,
-                borderRadius: 4,
+                borderRadius: 100,
                 marginHorizontal: 0,
               }}
               containerStyle={{ paddingVertical: 0, margin: 0 }}
               inactiveDotScale={1}
-              dotColor={"rgba(210, 186, 233, 0.92)"}
+              dotColor={primaryColor}
               inactiveDotOpacity={0.5}
             />
 

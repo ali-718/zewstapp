@@ -29,7 +29,7 @@ export const ForgotPassword = (props) => {
       <View style={{ width: "100%", marginVertical: 0, marginBottom: 32 }}>
         <View style={{ width: "100%" }}>
           <Text style={{ fontSize: 28, fontFamily: "openSans_bold" }}>
-            Forgot password
+            Forgot password?
           </Text>
           <Text
             style={{
@@ -39,7 +39,8 @@ export const ForgotPassword = (props) => {
               color: grayTextColor,
             }}
           >
-            Enter you email address and we will send you a reset instructions.
+            Enter your email address and we will send you the reset
+            instructions.
           </Text>
         </View>
 
