@@ -25,3 +25,4 @@ export const progressDarkPurple = "#33253F";
 export const lightPurpleBackground = "#E8E3EC";
 export const grayBorderColor = "#c4c4c4";
 export const googleButtonColor = "#4285F4";
+export const drawerHeadingColor = "#92929d";

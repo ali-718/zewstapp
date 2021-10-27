@@ -20,8 +20,6 @@ import { useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/core";
 import { FullPageLoadingModall } from "../../../components/FullPageLoadingModall/FullPageLoadingModall";
 
-const time = 60;
-
 const TextBox = ({ val, setVal, setRef, onChangeText, noLeft }) => {
   const ref = useRef();
 

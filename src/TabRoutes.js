@@ -84,64 +84,6 @@ export const TabRoutes = () => {
         selected={selected}
         setselected={(val) => setselected(val)}
       />
-
-      {showMore && (
-        <View
-          style={{
-            width: 80,
-            position: "absolute",
-            right: 10,
-            zIndex: 2,
-            backgroundColor: "white",
-            bottom: 80,
-            borderRadius: 10,
-            paddingVertical: 20,
-            alignItems: "center",
-            justifyContent: "center",
-            shadowColor: "#000",
-            shadowOffset: {
-              width: 0,
-              height: 3,
-            },
-            shadowOpacity: 0.27,
-            shadowRadius: 4.65,
-            zIndex: 999999999,
-            elevation: 6,
-          }}
-        >
-          <Menu
-            selected={selected === 5}
-            setselected={() => setselected(5)}
-            image={RecipeEngineering}
-            name={"Recipe Engineering"}
-            style={{ width: "90%", paddingTop: 10 }}
-          />
-
-          <Menu
-            selected={selected === 6}
-            setselected={() => setselected(6)}
-            image={WasteEngineering}
-            name={"Waste Engineering"}
-            style={{ width: "90%", marginTop: 20, paddingTop: 10 }}
-          />
-
-          <Menu
-            selected={selected === 7}
-            setselected={() => setselected(7)}
-            image={Inventory}
-            name={"Inventory"}
-            style={{ width: "90%", marginTop: 20, paddingTop: 10 }}
-          />
-
-          <Menu
-            selected={selected === 10}
-            setselected={() => setselected(10)}
-            image={admin}
-            name={"Admin"}
-            style={{ width: "90%", marginTop: 20, paddingTop: 10 }}
-          />
-        </View>
-      )}
     </SafeAreaView>
   );
 };

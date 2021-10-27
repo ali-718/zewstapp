@@ -15,8 +15,8 @@ export const SigningCheck = () => {
   const getData = async () => {
     const user = await AsyncStorage.getItem("user");
 
-    AsyncStorage.removeItem("user");
-    AsyncStorage.removeItem("refreshToken");
+    // AsyncStorage.removeItem("user");
+    // AsyncStorage.removeItem("refreshToken");
     if (user) {
       const data = JSON.parse(user);
       refreshTokenAction({
