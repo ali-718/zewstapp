@@ -15,6 +15,7 @@ export const RegularButton = ({
   iconStyle,
   isLoading,
   disabled,
+  noText,
   ...props
 }) => {
   const device = useSelector((state) => state.system.device);
@@ -61,19 +62,21 @@ export const RegularButton = ({
             {iconLeft ? (
               <Image style={{ ...iconStyle }} source={iconLeft} />
             ) : null}
-            <Text
-              style={{
-                color: "white",
-                fontWeight: "bold",
-                fontSize: device === "tablet" ? 20 : 15,
-                fontFamily: "openSans_bold",
-                marginLeft: iconLeft ? 10 : 0,
-                letterSpacing: 1,
-                ...textStyle,
-              }}
-            >
-              {text}
-            </Text>
+            {!noText && (
+              <Text
+                style={{
+                  color: "white",
+                  fontWeight: "bold",
+                  fontSize: device === "tablet" ? 20 : 15,
+                  fontFamily: "openSans_bold",
+                  marginLeft: iconLeft ? 10 : 0,
+                  letterSpacing: 1,
+                  ...textStyle,
+                }}
+              >
+                {text}
+              </Text>
+            )}
           </View>
         )}
       </LinearGradient>

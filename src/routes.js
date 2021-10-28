@@ -6,7 +6,6 @@ import { SignUpPage } from "./containers/screens/AuthScreens/SignUpPage";
 import { VerificationPage } from "./containers/screens/AuthScreens/Verificationpage";
 import { LoginPage } from "./containers/screens/AuthScreens/LoginPage";
 import { ForgotPassword } from "./containers/screens/AuthScreens/ForgotPassword";
-import { TabRoutes } from "./TabRoutes";
 import { FoodDetailPage } from "./containers/screens/MainScreens/MenuPages/FoodDetailPage";
 import { AddMeal } from "./containers/screens/MainScreens/MenuPages/AddMeal";
 import { OrderDetailPage } from "./containers/screens/MainScreens/HomePages/OrderDetailPage";
@@ -128,13 +127,20 @@ const AdminRoutes = () => {
 const Drawer = createDrawerNavigator();
 
 const MainRoutes = () => {
+  const orientation = useSelector((state) => state.system.orientation);
+  const device = useSelector((state) => state.system.device);
   return (
     <NavigationContainer>
       <Drawer.Navigator
         // initialRouteName={"KitchenPage"}
         screenOptions={{
           headerShown: false,
-          drawerType: "front",
+          drawerType:
+            device === "tablet"
+              ? orientation === "landscape"
+                ? "permanent"
+                : "front"
+              : "front",
           gestureEnabled: false,
           swipeEnabled: true,
           drawerStyle: {

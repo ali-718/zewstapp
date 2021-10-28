@@ -21,6 +21,10 @@ import salesIcon from "../../assets/images/MenuIcons/sales.png";
 import recipeIcon from "../../assets/images/MenuIcons/recipe.png";
 import wasteIcon from "../../assets/images/MenuIcons/waste.png";
 import inventoryIcon from "../../assets/images/MenuIcons/inventory.png";
+import messageIcon from "../../assets/images/MenuIcons/message.png";
+import libraryIcon from "../../assets/images/MenuIcons/library.png";
+import settingsIcon from "../../assets/images/MenuIcons/settings.png";
+import supportIcon from "../../assets/images/MenuIcons/support.png";
 import { useNavigation } from "@react-navigation/native";
 import { useSelector } from "react-redux";
 import { Text } from "../Text/Text";
@@ -34,8 +38,9 @@ export const Menu = ({ image, name, setselected, selected, style }) => (
       alignItems: "center",
       borderLeftWidth: selected ? 4 : 0,
       borderColor: primaryColor,
-      marginTop: 20,
+      marginTop: 30,
       paddingVertical: 5,
+      ...style,
     }}
     onPress={setselected}
   >
@@ -96,6 +101,7 @@ export const DrawerMenu = ({ state: { index } }) => {
               setselected={() => navigation.navigate("Home")}
               image={overviewIcon}
               name={"Overview"}
+              style={{ marginTop: 20 }}
             />
             <Menu
               selected={index === 1}
@@ -110,7 +116,7 @@ export const DrawerMenu = ({ state: { index } }) => {
               name={"Sales"}
             />
             <Menu
-              selected={index === 3 || index === 11 || index === 12}
+              selected={index === 3}
               setselected={() => navigation.navigate("Recipe")}
               image={recipeIcon}
               name={"Recipe Engineering"}
@@ -122,28 +128,54 @@ export const DrawerMenu = ({ state: { index } }) => {
               name={"Waste Prediction"}
             />
             <Menu
-              selected={index === 5 || index === 13 || index === 14}
+              selected={index === 5}
               setselected={() => navigation.navigate("Inventory")}
               image={inventoryIcon}
               name={"Inventory"}
             />
             <Menu
-              selected={
-                index === 6 ||
-                index === 15 ||
-                index === 16 ||
-                index === 17 ||
-                index === 18 ||
-                index === 19 ||
-                index === 20 ||
-                index === 21 ||
-                index === 22 ||
-                index === 23 ||
-                index === 24
-              }
+              selected={index === 6}
               setselected={() => navigation.navigate("Admin")}
               image={inventoryIcon}
               name={"Admin"}
+            />
+          </View>
+
+          <View style={{ width: "100%", marginTop: 40 }}>
+            <Text
+              style={{
+                textTransform: "uppercase",
+                color: drawerHeadingColor,
+                marginLeft: 20,
+                fontSize: 16,
+              }}
+            >
+              Help
+            </Text>
+            <Menu
+              selected={index === 7}
+              setselected={() => navigation.navigate("")}
+              image={messageIcon}
+              name={"Messages"}
+              style={{ marginTop: 20 }}
+            />
+            <Menu
+              selected={index === 8}
+              setselected={() => navigation.navigate("")}
+              image={libraryIcon}
+              name={"Library"}
+            />
+            <Menu
+              selected={index === 8}
+              setselected={() => navigation.navigate("")}
+              image={settingsIcon}
+              name={"Settings"}
+            />
+            <Menu
+              selected={index === 8}
+              setselected={() => navigation.navigate("")}
+              image={supportIcon}
+              name={"Support"}
             />
           </View>
         </View>

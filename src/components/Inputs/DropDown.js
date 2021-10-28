@@ -1,5 +1,11 @@
 import React, { useState, useRef, useEffect } from "react";
-import { View, TextInput, TouchableOpacity, ScrollView } from "react-native";
+import {
+  View,
+  TextInput,
+  TouchableOpacity,
+  ScrollView,
+  Platform,
+} from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Icon } from "native-base";
 import { grayColor, grayMenuText, primaryColor } from "../../theme/colors";
@@ -15,6 +21,8 @@ export const Dropdown = ({
   selectedMenu,
   style,
   colors,
+  noPlaceholder,
+  dropDownOffset,
 }) => {
   const device = useSelector((state) => state.system.device);
   const [isFocused, setIsFocused] = useState(false);
@@ -25,7 +33,7 @@ export const Dropdown = ({
       <View
         style={{
           width: "100%",
-          height: isOpen ? 200 : 70,
+          height: Platform.OS === "android" ? (isOpen ? 200 : 70) : 70,
           zIndex: 10,
           ...style,
         }}
@@ -55,9 +63,11 @@ export const Dropdown = ({
               width: "90%",
             }}
           >
-            <Text style={{ marginBottom: 5, color: "gray" }}>
-              {placeholder}
-            </Text>
+            {!noPlaceholder && (
+              <Text style={{ marginBottom: 5, color: "gray" }}>
+                {placeholder}
+              </Text>
+            )}
             {selectedMenu ? (
               <Text
                 style={{
@@ -98,7 +108,7 @@ export const Dropdown = ({
               width: "100%",
               zIndex: 10,
               position: "absolute",
-              marginTop: 70,
+              marginTop: dropDownOffset ?? 70,
               shadowColor: "#000",
               shadowOffset: {
                 width: 0,
