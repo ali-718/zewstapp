@@ -428,7 +428,7 @@ export const HomePage = ({ setselected }) => {
               >
                 <Text
                   style={{
-                    fontSize: device === "tablet" ? 20 : 18,
+                    fontSize: device === "tablet" ? 20 : 16,
                     color: drawerHeadingColor,
                   }}
                 >
@@ -452,8 +452,6 @@ export const HomePage = ({ setselected }) => {
                   iconStyle={{ marginTop: 10 }}
                   dropDownOffset={device === "tablet" ? 50 : 40}
                 />
-
-                {/* <Text style={{ fontSize: 18, color: "black" }}>Show:</Text> */}
               </View>
             </View>
 

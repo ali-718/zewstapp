@@ -104,6 +104,17 @@ const MenuRoutes = () => {
   );
 };
 
+const DashboardRoutes = () => {
+  return (
+    <Stack.Navigator
+      screenOptions={{ headerShown: false, gestureEnabled: false }}
+    >
+      <Drawer.Screen name="Home" component={HomePage} />
+      <Stack.Screen name="lossInKitchen" component={LossInKitchen} />
+    </Stack.Navigator>
+  );
+};
+
 const AdminRoutes = () => {
   return (
     <Stack.Navigator
@@ -150,7 +161,7 @@ const MainRoutes = () => {
         drawerContent={(props) => <DrawerMenu {...props} />}
         backBehavior={"history"}
       >
-        <Drawer.Screen name="Home" component={HomePage} />
+        <Drawer.Screen name="Home" component={DashboardRoutes} />
         <Drawer.Screen name="Menu" component={MenuRoutes} />
         <Drawer.Screen name="Sales" component={InsightsPage} />
         <Drawer.Screen name="Recipe" component={RecipeRoutes} />
@@ -165,7 +176,6 @@ const MainRoutes = () => {
 
         <Stack.Screen name="orderDetail" component={OrderDetailPage} />
         <Stack.Screen name="changePass" component={ChangePasswordPage} />
-        <Stack.Screen name="lossInKitchen" component={LossInKitchen} />
         <Stack.Screen name="KitchenPage" component={KitchenPage} />
         <Stack.Screen name="KitchenDetailPage" component={KitchenDetailPage} />
       </Drawer.Navigator>
