@@ -73,7 +73,7 @@ export const DrawerMenu = ({ state: { index } }) => {
   const device = useSelector((state) => state.system.device);
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={{ flex: 1, paddingTop: 30 }}>
       <ScrollView
         style={{ flex: 1, backgroundColor: "white" }}
         showsVerticalScrollIndicator={false}
@@ -83,6 +83,7 @@ export const DrawerMenu = ({ state: { index } }) => {
             width: "100%",
             flexDirection: "column",
             flex: 1,
+            marginBottom: 20,
           }}
         >
           <View style={{ width: "100%", marginTop: 30 }}>

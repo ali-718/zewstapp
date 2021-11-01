@@ -1,7 +1,11 @@
 import React from "react";
 import { View, Text } from "react-native";
 import { useSelector } from "react-redux";
-import { grayBorderColor, primaryColor } from "../../theme/colors";
+import {
+  chartHeaderColor,
+  grayBorderColor,
+  primaryColor,
+} from "../../theme/colors";
 import { AreaChart } from "react-native-svg-charts";
 // import * as shape from 'd3-shape'
 
@@ -14,6 +18,7 @@ export const PredictionTableItem = ({
   predictedRequiredStaff,
   predictedCost,
   trendsInChange,
+  gray,
 }) => {
   const device = useSelector((state) => state.system.device);
   return (
@@ -22,8 +27,7 @@ export const PredictionTableItem = ({
         width: "100%",
         flexDirection: "row",
         paddingVertical: 15,
-        borderBottomWidth: 1,
-        borderColor: grayBorderColor,
+        backgroundColor: gray ? chartHeaderColor : "white",
       }}
     >
       <View style={{ width: 150 }}>

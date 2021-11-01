@@ -372,7 +372,7 @@ export const HomePage = ({ setselected }) => {
   const changeTime = (val) => setSelectedTime(val);
 
   return (
-    <MainScreenContainer rightImage={bellIcon} mainPage title={"Menu"}>
+    <MainScreenContainer>
       <LinearGradient
         colors={[backgroundGrayColor, backgroundGrayColor]}
         style={{
@@ -434,42 +434,25 @@ export const HomePage = ({ setselected }) => {
                 >
                   Show:
                 </Text>
-                {Platform.OS === "android" ? (
-                  <Select
-                    variant="unstyled"
-                    selectedValue={selectedTime}
-                    minWidth="150"
-                    accessibilityLabel="Choose time"
-                    placeholder=""
-                    onValueChange={(itemValue) => changeTime(itemValue)}
-                    _selectedItem={{
-                      bg: "teal.600",
-                      endIcon: <ArrowDownIcon size={5} />,
-                    }}
-                  >
-                    <Select.Item label="This month" value={"This month"} />
-                    <Select.Item label="This year" value={"This year"} />
-                    <Select.Item label="This day" value={"This day"} />
-                  </Select>
-                ) : (
-                  <Dropdown
-                    noPlaceholder
-                    selectedMenu={selectedTime}
-                    setMenu={changeTime}
-                    placeholder={""}
-                    menus={["This month", "This year", "This day"]}
-                    style={{
-                      zIndex: 3,
-                      width: device === "tablet" ? 150 : 130,
-                      borderBottomWidth: 0,
-                      marginTop: 0,
-                      height: device === "tablet" ? 50 : 40,
-                      backgroundColor: "rgba(0,0,0,0)",
-                    }}
-                    iconStyle={{ marginTop: 10 }}
-                    dropDownOffset={device === "tablet" ? 50 : 40}
-                  />
-                )}
+
+                <Dropdown
+                  noPlaceholder
+                  selectedMenu={selectedTime}
+                  setMenu={changeTime}
+                  placeholder={""}
+                  menus={["This month", "This year", "This day"]}
+                  style={{
+                    zIndex: 3,
+                    width: device === "tablet" ? 150 : 130,
+                    borderBottomWidth: 0,
+                    marginTop: 0,
+                    height: device === "tablet" ? 50 : 40,
+                    backgroundColor: "rgba(0,0,0,0)",
+                  }}
+                  iconStyle={{ marginTop: 10 }}
+                  dropDownOffset={device === "tablet" ? 50 : 40}
+                />
+
                 {/* <Text style={{ fontSize: 18, color: "black" }}>Show:</Text> */}
               </View>
             </View>
@@ -712,7 +695,10 @@ export const HomePage = ({ setselected }) => {
                   marginTop: 20,
                 }}
               >
-                <View style={{ width: "100%" }}>
+                <TouchableOpacity
+                  onPress={() => navigation.navigate("lossInKitchen")}
+                  style={{ width: "100%" }}
+                >
                   <View
                     style={{
                       width: "100%",
@@ -772,7 +758,7 @@ export const HomePage = ({ setselected }) => {
                       device={device}
                     />
                   </View>
-                </View>
+                </TouchableOpacity>
               </View>
             </View>
 

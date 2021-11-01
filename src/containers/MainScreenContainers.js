@@ -10,13 +10,8 @@ import { DrawerActions } from "@react-navigation/routers";
 import menuIcon from "../assets/images/menuIcon.png";
 
 export const MainScreenContainer = ({
-  leftImage,
-  rightImage,
-  title,
-  onPressLeft,
   noScroll,
   onPressRight = () => null,
-  mainPage,
   ...props
 }) => {
   const navigation = useNavigation();
@@ -32,15 +27,8 @@ export const MainScreenContainer = ({
       }}
     >
       <Header
-        heading={title}
-        leftImage={leftImage ?? (mainPage ? menuIcon : back)}
-        rightImage={rightImage}
-        onPressLeft={() =>
-          onPressLeft ??
-          (mainPage
-            ? navigation.dispatch(DrawerActions.openDrawer())
-            : navigation.goBack())
-        }
+        leftImage={menuIcon}
+        onPressLeft={() => navigation.dispatch(DrawerActions.openDrawer())}
         onPressRight={onPressRight}
       />
       {noScroll ? (

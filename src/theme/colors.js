@@ -34,3 +34,4 @@ export const borderColor2 = "#F1F1F5";
 export const chartYellowColor = "#FF974A";
 export const chartPinkColor = "#E74A69";
 export const chartPurpleColor = "#7063CB";
+export const chartHeaderColor = "#FAFAFB";

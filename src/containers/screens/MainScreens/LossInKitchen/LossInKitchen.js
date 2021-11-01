@@ -3,6 +3,7 @@ import { Image, ScrollView, TouchableOpacity, View } from "react-native";
 import { MainScreenContainer } from "../../../MainScreenContainers";
 import pdfIcon from "../../../../assets/images/whitePdf.png";
 import {
+  chartHeaderColor,
   grayBorderColor,
   grayColor,
   grayShade1,
@@ -160,7 +161,7 @@ export const LossInKitchen = () => {
   };
 
   return (
-    <MainScreenContainer rightImage={pdfIcon} title={"Loss in Kitchen"}>
+    <MainScreenContainer>
       <View
         style={{
           width: "100%",
@@ -327,9 +328,7 @@ export const LossInKitchen = () => {
                     width: "100%",
                     flexDirection: "row",
                     paddingVertical: 15,
-                    borderBottomWidth: 1,
-                    borderColor: grayBorderColor,
-                    backgroundColor: primaryShade1,
+                    backgroundColor: chartHeaderColor,
                     borderRadius: 10,
                     borderBottomLeftRadius: 0,
                     borderBottomRightRadius: 0,
@@ -340,7 +339,7 @@ export const LossInKitchen = () => {
                       style={{
                         fontFamily: "openSans_bold",
                         fontSize: device === "tablet" ? 18 : 16,
-                        color: "white",
+                        color: "black",
                         marginLeft: 10,
                       }}
                     >
@@ -352,7 +351,7 @@ export const LossInKitchen = () => {
                       style={{
                         fontFamily: "openSans_bold",
                         fontSize: device === "tablet" ? 18 : 16,
-                        color: "white",
+                        color: "black",
                       }}
                     >
                       Previous Sales
@@ -363,7 +362,7 @@ export const LossInKitchen = () => {
                       style={{
                         fontFamily: "openSans_bold",
                         fontSize: device === "tablet" ? 18 : 16,
-                        color: "white",
+                        color: "black",
                       }}
                     >
                       Day 1
@@ -374,7 +373,7 @@ export const LossInKitchen = () => {
                       style={{
                         fontFamily: "openSans_bold",
                         fontSize: device === "tablet" ? 18 : 16,
-                        color: "white",
+                        color: "black",
                       }}
                     >
                       Day 2
@@ -385,7 +384,7 @@ export const LossInKitchen = () => {
                       style={{
                         fontFamily: "openSans_bold",
                         fontSize: device === "tablet" ? 18 : 16,
-                        color: "white",
+                        color: "black",
                       }}
                     >
                       Today
@@ -396,7 +395,7 @@ export const LossInKitchen = () => {
                       style={{
                         fontFamily: "openSans_bold",
                         fontSize: device === "tablet" ? 18 : 16,
-                        color: "white",
+                        color: "black",
                       }}
                     >
                       Predicted Required Stuff
@@ -407,7 +406,7 @@ export const LossInKitchen = () => {
                       style={{
                         fontFamily: "openSans_bold",
                         fontSize: device === "tablet" ? 18 : 16,
-                        color: "white",
+                        color: "black",
                       }}
                     >
                       Predicted Cost
@@ -418,7 +417,7 @@ export const LossInKitchen = () => {
                       style={{
                         fontFamily: "openSans_bold",
                         fontSize: device === "tablet" ? 18 : 16,
-                        color: "white",
+                        color: "black",
                       }}
                     >
                       Trends in Change
@@ -429,6 +428,7 @@ export const LossInKitchen = () => {
                 <View style={{ backgroundColor: "white" }}>
                   {lossInKitchen.map((item, i) => (
                     <PredictionTableItem
+                      gray={device === "tablet" ? i % 2 === 1 : false}
                       key={i}
                       item={item.item}
                       previousSales={item.previousSales}

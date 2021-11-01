@@ -13,13 +13,7 @@ import personGrayIcon from "../../assets/images/personGrayIcon.png";
 import qrcodeIcon from "../../assets/images/qrcodeIcon.png";
 import { Text } from "../Text/Text";
 
-export const Header = ({
-  leftImage,
-  rightImage,
-  heading,
-  onPressLeft,
-  onPressRight,
-}) => {
+export const Header = ({ leftImage, onPressLeft, onPressRight }) => {
   const orientation = useSelector((state) => state.system.orientation);
   const device = useSelector((state) => state.system.device);
   const user = useSelector((state) => state.auth.user.user);
