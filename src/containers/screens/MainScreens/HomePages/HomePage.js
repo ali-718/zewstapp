@@ -39,14 +39,13 @@ import {
 import { PendingPickUps } from "../../../../components/Meals/PendingPickUps";
 import { ScanQrModal } from "../../../../components/Home/ScanQrModal";
 import { Camera } from "expo-camera";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useIsFocused } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ToastError, ToastSuccess } from "../../../../helpers/Toast";
 import { useDispatch, useSelector } from "react-redux";
 import { setPrimaryLocationAction } from "../../../../Redux/actions/AdminActions/LocationActions";
 import { LinearGradient } from "expo-linear-gradient";
 import { colors, HEIGHT } from "../../../../helpers/utlils";
-import moment from "moment";
 import purpleCalender from "../../../../assets/images/purpleCalender.png";
 import grayCalender from "../../../../assets/images/grayCalender.png";
 import purpleMenuItem from "../../../../assets/images/purpleMenuItem.png";
@@ -72,9 +71,12 @@ import {
   BarChart,
   PieChart,
 } from "react-native-svg-charts";
-import { Icon, Progress, Select, ArrowDownIcon } from "native-base";
+import { Icon, Progress, Select, ArrowDownIcon, Spinner } from "native-base";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Dropdown } from "../../../../components/Inputs/DropDown";
+import { fetchFoodCountAction } from "../../../../Redux/actions/DashboardActions/DashboardActions";
+import moment from "moment";
+import { order } from "styled-system";
 
 const chartData = [50, 10, 40, 95, 4, 24, 85, 91, 35, 53, 53, 24, 50, 20, 80];
 
@@ -343,6 +345,14 @@ export const HomePage = ({ setselected }) => {
   const device = useSelector((state) => state.system.device);
   const [qrModal, setQrModal] = useState(false);
   const [selectedTime, setSelectedTime] = useState("This month");
+  const [isDefaultLocation, setIsDefaultLocation] = useState(true);
+  const isScreenFocused = useIsFocused();
+  const {
+    isLoading: firstSectionLoading,
+    menuItems,
+    orderItems,
+    customerItems,
+  } = useSelector((state) => state.dashboard.firstSection);
 
   const openCamera = async () => {
     const { status } = await Camera.requestCameraPermissionsAsync();
@@ -357,6 +367,7 @@ export const HomePage = ({ setselected }) => {
     const location = await AsyncStorage.getItem("defaultLocation");
 
     if (location === null) {
+      setIsDefaultLocation(false);
       navigation.navigate("location");
       ToastSuccess("Kindly select your default location");
       return;
@@ -365,221 +376,228 @@ export const HomePage = ({ setselected }) => {
     dispatch(setPrimaryLocationAction(JSON.parse(location), true));
   };
 
-  // useEffect(() => {
-  //   checkDefaultLocation();
-  // }, []);
+  useEffect(() => {
+    if (!isScreenFocused) return;
+    checkDefaultLocation();
+
+    Promise.all([fetchFirstSection()]);
+  }, [isScreenFocused]);
+
+  useEffect(() => {
+    fetchFirstSection();
+  }, [selectedTime]);
+
+  const fetchFirstSection = async () => {
+    const location = await AsyncStorage.getItem("defaultLocation");
+
+    dispatch(
+      fetchFoodCountAction({
+        locationId: JSON.parse(location).locationId ?? "",
+        interval:
+          selectedTime === "This month"
+            ? "month"
+            : selectedTime === "This year"
+            ? "year"
+            : selectedTime === "This day"
+            ? "day"
+            : "",
+        startDate:
+          selectedTime === "This month"
+            ? moment().subtract(30, "days").format("DD-M-yyy")
+            : selectedTime === "This year"
+            ? moment().subtract(365, "days").format("DD-M-yyy")
+            : selectedTime === "This day"
+            ? moment().format("DD-M-yyy")
+            : "",
+        endDate: moment().format("DD-M-yyy"),
+      })
+    );
+  };
 
   const changeTime = (val) => setSelectedTime(val);
 
   return (
     <MainScreenContainer>
-      <LinearGradient
-        colors={[backgroundGrayColor, backgroundGrayColor]}
-        style={{
-          width: "100%",
-          flex: 1,
-          alignItems: "center",
-        }}
-      >
-        <View
+      {isDefaultLocation ? (
+        <LinearGradient
+          colors={[backgroundGrayColor, backgroundGrayColor]}
           style={{
-            width: "95%",
-            marginBottom: 80,
+            width: "100%",
+            flex: 1,
             alignItems: "center",
-            marginTop: 20,
-            zIndex: 1,
           }}
         >
           <View
             style={{
-              width: "100%",
-              flexDirection: "row",
+              width: "95%",
+              marginBottom: 80,
               alignItems: "center",
-              justifyContent: "space-between",
+              marginTop: 20,
               zIndex: 1,
             }}
           >
             <View
               style={{
-                flexDirection: device === "tablet" ? "row" : "column",
-                alignItems: device === "tablet" ? "center" : "flex-start",
-                justifyContent: "center",
+                width: "100%",
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "space-between",
                 zIndex: 1,
               }}
             >
-              <Text
-                style={{
-                  color: "black",
-                  fontSize: device === "tablet" ? 30 : 24,
-                  fontFamily: "openSans_bold",
-                }}
-              >
-                Overview
-              </Text>
-
               <View
                 style={{
-                  flexDirection: "row",
-                  alignItems: "center",
+                  flexDirection: device === "tablet" ? "row" : "column",
+                  alignItems: device === "tablet" ? "center" : "flex-start",
                   justifyContent: "center",
-                  marginLeft: device === "tablet" ? 20 : 0,
-                  zIndex: 4,
+                  zIndex: 1,
                 }}
               >
                 <Text
                   style={{
-                    fontSize: device === "tablet" ? 20 : 16,
-                    color: drawerHeadingColor,
+                    color: "black",
+                    fontSize: device === "tablet" ? 30 : 24,
+                    fontFamily: "openSans_bold",
                   }}
                 >
-                  Show:
+                  Overview
                 </Text>
 
-                <Dropdown
-                  noPlaceholder
-                  selectedMenu={selectedTime}
-                  setMenu={changeTime}
-                  placeholder={""}
-                  menus={["This month", "This year", "This day"]}
+                <View
                   style={{
-                    zIndex: 3,
-                    width: device === "tablet" ? 150 : 130,
-                    borderBottomWidth: 0,
-                    marginTop: 0,
-                    height: device === "tablet" ? 50 : 40,
-                    backgroundColor: "rgba(0,0,0,0)",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    marginLeft: device === "tablet" ? 20 : 0,
+                    zIndex: 4,
                   }}
-                  iconStyle={{ marginTop: 10 }}
-                  dropDownOffset={device === "tablet" ? 50 : 40}
-                />
+                >
+                  <Text
+                    style={{
+                      fontSize: device === "tablet" ? 20 : 16,
+                      color: drawerHeadingColor,
+                    }}
+                  >
+                    Show:
+                  </Text>
+
+                  <Dropdown
+                    noPlaceholder
+                    selectedMenu={selectedTime}
+                    setMenu={changeTime}
+                    placeholder={""}
+                    menus={["This month", "This year", "This day"]}
+                    style={{
+                      zIndex: 3,
+                      width: device === "tablet" ? 150 : 130,
+                      borderBottomWidth: 0,
+                      marginTop: 0,
+                      height: device === "tablet" ? 50 : 40,
+                      backgroundColor: "rgba(0,0,0,0)",
+                    }}
+                    iconStyle={{ marginTop: 10 }}
+                    dropDownOffset={device === "tablet" ? 50 : 40}
+                  />
+                </View>
               </View>
+
+              <RegularButton
+                iconLeft={downloadPDF}
+                iconStyle={{
+                  width: device === "tablet" ? 20 : 20,
+                  height: device === "tablet" ? 25 : 25,
+                  resizeMode: "contain",
+                }}
+                text={device === "tablet" ? "GENERATE REPORT" : ""}
+                colors={["white", "white"]}
+                noText={device !== "tablet"}
+                style={{
+                  borderWidth: 1,
+                  borderColor: primaryColor,
+                  width: device === "tablet" ? 270 : 50,
+                  height: device === "tablet" ? 50 : 40,
+                  borderRadius: 15,
+                }}
+                textStyle={{ color: primaryColor }}
+              />
             </View>
 
-            <RegularButton
-              iconLeft={downloadPDF}
-              iconStyle={{
-                width: device === "tablet" ? 20 : 20,
-                height: device === "tablet" ? 25 : 25,
-                resizeMode: "contain",
-              }}
-              text={device === "tablet" ? "GENERATE REPORT" : ""}
-              colors={["white", "white"]}
-              noText={device !== "tablet"}
+            <View
               style={{
-                borderWidth: 1,
-                borderColor: primaryColor,
-                width: device === "tablet" ? 270 : 50,
-                height: device === "tablet" ? 50 : 40,
-                borderRadius: 15,
+                width: "100%",
+                flexDirection: device === "tablet" ? "row" : "column",
+                marginTop: 20,
+                justifyContent: "space-between",
               }}
-              textStyle={{ color: primaryColor }}
-            />
-          </View>
+            >
+              <View style={{ width: device === "tablet" ? "60%" : "100%" }}>
+                {firstSectionLoading ? (
+                  <View
+                    style={{
+                      flex: 1,
+                      flexDirection: "row",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      backgroundColor: "white",
+                      borderRadius: 10,
+                      padding: 10,
+                      paddingVertical: 20,
+                    }}
+                  >
+                    <Spinner size={"large"} color={primaryColor} />
+                  </View>
+                ) : (
+                  <View
+                    style={{
+                      flex: 1,
+                      flexDirection: "row",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      backgroundColor: "white",
+                      borderRadius: 10,
+                      padding: 10,
+                      paddingVertical: 20,
+                    }}
+                  >
+                    <IamgeItemBox
+                      image={purpleMenuItem}
+                      heading={"Menu items"}
+                      value={menuItems}
+                      device={device}
+                    />
 
-          <View
-            style={{
-              width: "100%",
-              flexDirection: device === "tablet" ? "row" : "column",
-              marginTop: 20,
-              justifyContent: "space-between",
-            }}
-          >
-            <View style={{ width: device === "tablet" ? "60%" : "100%" }}>
-              <View
-                style={{
-                  flex: 1,
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  backgroundColor: "white",
-                  borderRadius: 10,
-                  padding: 10,
-                  paddingVertical: 20,
-                }}
-              >
-                <IamgeItemBox
-                  image={purpleMenuItem}
-                  heading={"Menu items"}
-                  value={"234"}
-                  device={device}
-                />
+                    <IamgeItemBox
+                      image={purpleOrderIcon}
+                      heading={"Orders"}
+                      value={orderItems}
+                      device={device}
+                    />
 
-                <IamgeItemBox
-                  image={purpleOrderIcon}
-                  heading={"Orders"}
-                  value={"6651"}
-                  device={device}
-                />
+                    <IamgeItemBox
+                      image={purpleCustomerIcon}
+                      heading={"Customers"}
+                      value={customerItems}
+                      device={device}
+                    />
+                  </View>
+                )}
 
-                <IamgeItemBox
-                  image={purpleCustomerIcon}
-                  heading={"Customers"}
-                  value={"34511"}
-                  device={device}
-                />
-              </View>
-
-              <View
-                style={{
-                  flex: 1,
-                  flexDirection: "column",
-                  backgroundColor: "white",
-                  borderRadius: 10,
-                  padding: 10,
-                  paddingVertical: 20,
-                  marginTop: 20,
-                }}
-              >
                 <View
                   style={{
                     flex: 1,
-                    flexDirection: "row",
-                    alignItems: "center",
-                    justifyContent: "space-between",
+                    flexDirection: "column",
+                    backgroundColor: "white",
+                    borderRadius: 10,
+                    padding: 10,
+                    paddingVertical: 20,
+                    marginTop: 20,
                   }}
                 >
-                  <View>
-                    <View
-                      style={{
-                        flexDirection: "row",
-                        alignItems: "center",
-                        justifyContent: "center",
-                      }}
-                    >
-                      <Text
-                        style={{
-                          fontSize: 18,
-                          color: "black",
-                          fontFamily: "openSans_semiBold",
-                        }}
-                      >
-                        Revenue
-                      </Text>
-                      <Text
-                        style={{
-                          fontSize: 14,
-                          color: grayTextColor,
-                          marginLeft: 10,
-                        }}
-                      >
-                        This month
-                      </Text>
-                    </View>
-                    <Text
-                      style={{
-                        fontSize: 16,
-                        color: grayTextColor,
-                        fontFamily: "openSans_semiBold",
-                      }}
-                    >
-                      Total: $38,451
-                    </Text>
-                  </View>
-
                   <View
                     style={{
-                      flex: 0.9,
-                      flexDirection: device === "tablet" ? "row" : "column",
+                      flex: 1,
+                      flexDirection: "row",
+                      alignItems: "center",
                       justifyContent: "space-between",
                     }}
                   >
@@ -588,16 +606,18 @@ export const HomePage = ({ setselected }) => {
                         style={{
                           flexDirection: "row",
                           alignItems: "center",
+                          justifyContent: "center",
                         }}
                       >
-                        <View
+                        <Text
                           style={{
-                            backgroundColor: chartColor1,
-                            width: 12,
-                            height: 12,
-                            borderRadius: 100,
+                            fontSize: 18,
+                            color: "black",
+                            fontFamily: "openSans_semiBold",
                           }}
-                        />
+                        >
+                          Revenue
+                        </Text>
                         <Text
                           style={{
                             fontSize: 14,
@@ -605,13 +625,13 @@ export const HomePage = ({ setselected }) => {
                             marginLeft: 10,
                           }}
                         >
-                          Forecasted Sales
+                          This month
                         </Text>
                       </View>
                       <Text
                         style={{
                           fontSize: 16,
-                          color: "black",
+                          color: grayTextColor,
                           fontFamily: "openSans_semiBold",
                         }}
                       >
@@ -619,83 +639,201 @@ export const HomePage = ({ setselected }) => {
                       </Text>
                     </View>
 
-                    <View>
-                      <View
-                        style={{
-                          flexDirection: "row",
-                          alignItems: "center",
-                          marginTop: device === "tablet" ? 0 : 10,
-                        }}
-                      >
+                    <View
+                      style={{
+                        flex: 0.9,
+                        flexDirection: device === "tablet" ? "row" : "column",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <View>
                         <View
                           style={{
-                            backgroundColor: chartColor2,
-                            width: 12,
-                            height: 12,
-                            borderRadius: 100,
-                          }}
-                        />
-                        <Text
-                          style={{
-                            fontSize: 14,
-                            color: grayTextColor,
-                            marginLeft: 10,
+                            flexDirection: "row",
+                            alignItems: "center",
                           }}
                         >
-                          Actual Sales
+                          <View
+                            style={{
+                              backgroundColor: chartColor1,
+                              width: 12,
+                              height: 12,
+                              borderRadius: 100,
+                            }}
+                          />
+                          <Text
+                            style={{
+                              fontSize: 14,
+                              color: grayTextColor,
+                              marginLeft: 10,
+                            }}
+                          >
+                            Forecasted Sales
+                          </Text>
+                        </View>
+                        <Text
+                          style={{
+                            fontSize: 16,
+                            color: "black",
+                            fontFamily: "openSans_semiBold",
+                          }}
+                        >
+                          Total: $38,451
                         </Text>
                       </View>
-                      <Text
-                        style={{
-                          fontSize: 16,
-                          color: "black",
-                          fontFamily: "openSans_semiBold",
-                        }}
-                      >
-                        Total: $38,451
-                      </Text>
+
+                      <View>
+                        <View
+                          style={{
+                            flexDirection: "row",
+                            alignItems: "center",
+                            marginTop: device === "tablet" ? 0 : 10,
+                          }}
+                        >
+                          <View
+                            style={{
+                              backgroundColor: chartColor2,
+                              width: 12,
+                              height: 12,
+                              borderRadius: 100,
+                            }}
+                          />
+                          <Text
+                            style={{
+                              fontSize: 14,
+                              color: grayTextColor,
+                              marginLeft: 10,
+                            }}
+                          >
+                            Actual Sales
+                          </Text>
+                        </View>
+                        <Text
+                          style={{
+                            fontSize: 16,
+                            color: "black",
+                            fontFamily: "openSans_semiBold",
+                          }}
+                        >
+                          Total: $38,451
+                        </Text>
+                      </View>
                     </View>
                   </View>
+                  <View
+                    style={{
+                      flex: 1,
+                      flexDirection: "row",
+                      marginTop: 20,
+                    }}
+                  >
+                    <YAxis
+                      data={[...data1, ...data2]}
+                      style={{ marginBottom: 10 }}
+                      contentInset={{ top: 20, bottom: 0 }}
+                      svg={{ fontSize: 10, fill: "grey" }}
+                    />
+                    <BarChart
+                      animate={true}
+                      style={{ height: 200, marginLeft: 10, flex: 1 }}
+                      data={barData}
+                      yAccessor={({ item }) => item.value}
+                      xAccessor={({ item }) => item.value}
+                      spacingInner={0.8}
+                      contentInset={{ top: 20, bottom: 20 }}
+                    ></BarChart>
+                  </View>
                 </View>
+
                 <View
                   style={{
                     flex: 1,
-                    flexDirection: "row",
+                    flexDirection: "column",
+                    backgroundColor: "white",
+                    borderRadius: 10,
+                    padding: 10,
+                    paddingVertical: 20,
                     marginTop: 20,
                   }}
                 >
-                  <YAxis
-                    data={[...data1, ...data2]}
-                    style={{ marginBottom: 10 }}
-                    contentInset={{ top: 20, bottom: 0 }}
-                    svg={{ fontSize: 10, fill: "grey" }}
-                  />
-                  <BarChart
-                    animate={true}
-                    style={{ height: 200, marginLeft: 10, flex: 1 }}
-                    data={barData}
-                    yAccessor={({ item }) => item.value}
-                    xAccessor={({ item }) => item.value}
-                    spacingInner={0.8}
-                    contentInset={{ top: 20, bottom: 20 }}
-                  ></BarChart>
+                  <TouchableOpacity
+                    onPress={() => navigation.navigate("lossInKitchen")}
+                    style={{ width: "100%" }}
+                  >
+                    <View
+                      style={{
+                        width: "100%",
+                        flexDirection: "row",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <View>
+                        <Text
+                          style={{
+                            color: "black",
+                            fontSize: 18,
+                            fontFamily: "openSans_semiBold",
+                          }}
+                        >
+                          Loss in kitchen
+                        </Text>
+                        <Text
+                          style={{
+                            color: grayTextColor,
+                            fontSize: 16,
+                            fontFamily: "openSans_semiBold",
+                          }}
+                        >
+                          Total: $6.540
+                        </Text>
+                      </View>
+
+                      <Image
+                        source={menuDotGray}
+                        style={{ width: 20, resizeMode: "contain" }}
+                      />
+                    </View>
+                    <View
+                      style={{
+                        width: "100%",
+                        borderBottomLeftRadius: 5,
+                        borderBottomRightRadius: 5,
+                        padding: 10,
+                        marginTop: 10,
+                      }}
+                    >
+                      <LossInKitchen
+                        heading={"Honeywell Mustard"}
+                        belowText={"2"}
+                        device={device}
+                      />
+                      <LossInKitchen
+                        heading={"Honeywell Mustard"}
+                        belowText={"3"}
+                        device={device}
+                      />
+                      <LossInKitchen
+                        heading={"Honeywell Mustard asli asd"}
+                        belowText={"5"}
+                        device={device}
+                      />
+                    </View>
+                  </TouchableOpacity>
                 </View>
               </View>
 
-              <View
-                style={{
-                  flex: 1,
-                  flexDirection: "column",
-                  backgroundColor: "white",
-                  borderRadius: 10,
-                  padding: 10,
-                  paddingVertical: 20,
-                  marginTop: 20,
-                }}
-              >
-                <TouchableOpacity
-                  onPress={() => navigation.navigate("lossInKitchen")}
-                  style={{ width: "100%" }}
+              <View style={{ width: device === "tablet" ? "38%" : "100%" }}>
+                <View
+                  style={{
+                    flexDirection: "column",
+                    backgroundColor: "white",
+                    borderRadius: 10,
+                    padding: 10,
+                    paddingVertical: 20,
+                    paddingBottom: 30,
+                    width: "100%",
+                  }}
                 >
                   <View
                     style={{
@@ -713,7 +851,7 @@ export const HomePage = ({ setselected }) => {
                           fontFamily: "openSans_semiBold",
                         }}
                       >
-                        Loss in kitchen
+                        Food waste profit
                       </Text>
                       <Text
                         style={{
@@ -722,7 +860,7 @@ export const HomePage = ({ setselected }) => {
                           fontFamily: "openSans_semiBold",
                         }}
                       >
-                        Total: $6.540
+                        Total this month: $6.540
                       </Text>
                     </View>
 
@@ -731,56 +869,146 @@ export const HomePage = ({ setselected }) => {
                       style={{ width: 20, resizeMode: "contain" }}
                     />
                   </View>
+
                   <View
                     style={{
-                      width: "100%",
-                      borderBottomLeftRadius: 5,
-                      borderBottomRightRadius: 5,
-                      padding: 10,
+                      flexDirection: "row",
+                      alignItems: "center",
                       marginTop: 10,
                     }}
                   >
-                    <LossInKitchen
-                      heading={"Honeywell Mustard"}
-                      belowText={"2"}
-                      device={device}
-                    />
-                    <LossInKitchen
-                      heading={"Honeywell Mustard"}
-                      belowText={"3"}
-                      device={device}
-                    />
-                    <LossInKitchen
-                      heading={"Honeywell Mustard asli asd"}
-                      belowText={"5"}
-                      device={device}
-                    />
-                  </View>
-                </TouchableOpacity>
-              </View>
-            </View>
+                    <View
+                      style={{
+                        width: 50,
+                        height: 50,
+                        backgroundColor: "rgba(61,213,152,0.1)",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        padding: 0,
+                        borderRadius: 20,
+                      }}
+                    >
+                      <Image
+                        source={greenArrowUp}
+                        style={{ width: 20, height: 20, resizeMode: "contain" }}
+                      />
+                    </View>
 
-            <View style={{ width: device === "tablet" ? "38%" : "100%" }}>
-              <View
-                style={{
-                  flexDirection: "column",
-                  backgroundColor: "white",
-                  borderRadius: 10,
-                  padding: 10,
-                  paddingVertical: 20,
-                  paddingBottom: 30,
-                  width: "100%",
-                }}
-              >
+                    <Text
+                      style={{
+                        color: chartGreenIndicator,
+                        fontFamily: "openSans_bold",
+                        fontSize: 16,
+                        marginLeft: 10,
+                      }}
+                    >
+                      +2.5%
+                    </Text>
+                  </View>
+
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      marginTop: 20,
+                      justifyContent: "space-between",
+                      width: "80%",
+                    }}
+                  >
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        alignItems: "center",
+                      }}
+                    >
+                      <View
+                        style={{
+                          backgroundColor: MonthBlueColor,
+                          width: 12,
+                          height: 12,
+                          borderRadius: 100,
+                        }}
+                      />
+                      <Text
+                        style={{
+                          fontSize: 14,
+                          color: grayTextColor,
+                          marginLeft: 10,
+                        }}
+                      >
+                        This Month
+                      </Text>
+                    </View>
+
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        alignItems: "center",
+                      }}
+                    >
+                      <View
+                        style={{
+                          backgroundColor: chartGreenIndicator,
+                          width: 12,
+                          height: 12,
+                          borderRadius: 100,
+                        }}
+                      />
+                      <Text
+                        style={{
+                          fontSize: 14,
+                          color: grayTextColor,
+                          marginLeft: 10,
+                        }}
+                      >
+                        Last Month
+                      </Text>
+                    </View>
+                  </View>
+
+                  <View style={{ width: "100%", marginTop: 20 }}>
+                    <View
+                      style={{
+                        flex: device === "tablet" ? 0.5 : 1,
+                        flexDirection: "row",
+                      }}
+                    >
+                      <YAxis
+                        data={[...data1, ...data2]}
+                        style={{ marginBottom: 10 }}
+                        contentInset={{ top: 10, bottom: 10 }}
+                        svg={{ fontSize: 10, fill: "grey" }}
+                      />
+                      <LineChart
+                        style={{ height: 200, flex: 1 }}
+                        data={lineChartData}
+                        svg={{
+                          strokeWidth: 5,
+                        }}
+                        contentInset={{ top: 20, bottom: 20 }}
+                      ></LineChart>
+                    </View>
+                  </View>
+                </View>
+
                 <View
                   style={{
+                    flexDirection: "column",
+                    backgroundColor: "white",
+                    borderRadius: 10,
+                    padding: 10,
                     width: "100%",
-                    flexDirection: "row",
-                    alignItems: "center",
-                    justifyContent: "space-between",
+                    marginTop: 20,
                   }}
                 >
-                  <View>
+                  <View
+                    style={{
+                      width: "100%",
+                      flexDirection: "row",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                    }}
+                  >
                     <Text
                       style={{
                         color: "black",
@@ -788,164 +1016,86 @@ export const HomePage = ({ setselected }) => {
                         fontFamily: "openSans_semiBold",
                       }}
                     >
-                      Food waste profit
+                      Top Price Fluctuations
                     </Text>
-                    <Text
-                      style={{
-                        color: grayTextColor,
-                        fontSize: 16,
-                        fontFamily: "openSans_semiBold",
-                      }}
-                    >
-                      Total this month: $6.540
-                    </Text>
-                  </View>
 
-                  <Image
-                    source={menuDotGray}
-                    style={{ width: 20, resizeMode: "contain" }}
-                  />
-                </View>
-
-                <View
-                  style={{
-                    flexDirection: "row",
-                    alignItems: "center",
-                    marginTop: 10,
-                  }}
-                >
-                  <View
-                    style={{
-                      width: 50,
-                      height: 50,
-                      backgroundColor: "rgba(61,213,152,0.1)",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      padding: 0,
-                      borderRadius: 20,
-                    }}
-                  >
-                    <Image
-                      source={greenArrowUp}
-                      style={{ width: 20, height: 20, resizeMode: "contain" }}
-                    />
-                  </View>
-
-                  <Text
-                    style={{
-                      color: chartGreenIndicator,
-                      fontFamily: "openSans_bold",
-                      fontSize: 16,
-                      marginLeft: 10,
-                    }}
-                  >
-                    +2.5%
-                  </Text>
-                </View>
-
-                <View
-                  style={{
-                    flexDirection: "row",
-                    alignItems: "center",
-                    marginTop: 20,
-                    justifyContent: "space-between",
-                    width: "80%",
-                  }}
-                >
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      alignItems: "center",
-                    }}
-                  >
                     <View
                       style={{
-                        backgroundColor: MonthBlueColor,
-                        width: 12,
-                        height: 12,
-                        borderRadius: 100,
-                      }}
-                    />
-                    <Text
-                      style={{
-                        fontSize: 14,
-                        color: grayTextColor,
-                        marginLeft: 10,
+                        flexDirection: "row",
+                        alignItems: "center",
+                        justifyContent: "center",
                       }}
                     >
-                      This Month
-                    </Text>
+                      <Image
+                        source={downloadPDF}
+                        style={{
+                          width: 20,
+                          resizeMode: "contain",
+                          tintColor: primaryColor,
+                        }}
+                      />
+                      <Image
+                        source={menuDotGray}
+                        style={{
+                          width: 20,
+                          resizeMode: "contain",
+                          marginLeft: 20,
+                          marginRight: 10,
+                        }}
+                      />
+                    </View>
                   </View>
-
                   <View
                     style={{
-                      flexDirection: "row",
-                      alignItems: "center",
+                      width: "100%",
+                      borderBottomLeftRadius: 5,
+                      borderBottomRightRadius: 5,
+                      padding: 10,
                     }}
                   >
-                    <View
-                      style={{
-                        backgroundColor: chartGreenIndicator,
-                        width: 12,
-                        height: 12,
-                        borderRadius: 100,
-                      }}
+                    <PriceFluctuation
+                      heading={"Beans"}
+                      belowText={"$38 in the last invoice"}
+                      device={device}
+                      color
                     />
-                    <Text
-                      style={{
-                        fontSize: 14,
-                        color: grayTextColor,
-                        marginLeft: 10,
-                      }}
-                    >
-                      Last Month
-                    </Text>
-                  </View>
-                </View>
-
-                <View style={{ width: "100%", marginTop: 20 }}>
-                  <View
-                    style={{
-                      flex: device === "tablet" ? 0.5 : 1,
-                      flexDirection: "row",
-                    }}
-                  >
-                    <YAxis
-                      data={[...data1, ...data2]}
-                      style={{ marginBottom: 10 }}
-                      contentInset={{ top: 10, bottom: 10 }}
-                      svg={{ fontSize: 10, fill: "grey" }}
+                    <PriceFluctuation
+                      heading={"Honeywell Mustard"}
+                      belowText={"$38 in the last invoice"}
+                      device={device}
+                      color
                     />
-                    <LineChart
-                      style={{ height: 200, flex: 1 }}
-                      data={lineChartData}
-                      svg={{
-                        strokeWidth: 5,
-                      }}
-                      contentInset={{ top: 20, bottom: 20 }}
-                    ></LineChart>
+                    <PriceFluctuation
+                      heading={"Honeywell Mustard asli asd asda"}
+                      belowText={"$38 in the last invoice"}
+                      device={device}
+                      color
+                    />
                   </View>
                 </View>
               </View>
+            </View>
 
+            <View
+              style={{
+                flexDirection: device === "tablet" ? "row" : "column",
+                backgroundColor: "white",
+                borderRadius: 10,
+                padding: 10,
+                width: "100%",
+                marginTop: 20,
+                justifyContent:
+                  device === "tablet" ? "space-between" : "center",
+                alignItems: "center",
+              }}
+            >
               <View
                 style={{
                   flexDirection: "column",
-                  backgroundColor: "white",
-                  borderRadius: 10,
-                  padding: 10,
-                  width: "100%",
-                  marginTop: 20,
+                  flex: 1,
                 }}
               >
-                <View
-                  style={{
-                    width: "100%",
-                    flexDirection: "row",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                  }}
-                >
+                <View>
                   <Text
                     style={{
                       color: "black",
@@ -953,430 +1103,359 @@ export const HomePage = ({ setselected }) => {
                       fontFamily: "openSans_semiBold",
                     }}
                   >
-                    Top Price Fluctuations
+                    Cost by Category
                   </Text>
-
-                  <View
+                  <Text
                     style={{
-                      flexDirection: "row",
-                      alignItems: "center",
-                      justifyContent: "center",
+                      color: grayTextColor,
+                      fontSize: 16,
+                      fontFamily: "openSans_semiBold",
                     }}
                   >
-                    <Image
-                      source={downloadPDF}
+                    Total: $6.540
+                  </Text>
+                </View>
+
+                <View
+                  style={{ width: "100%", flexDirection: "row", marginTop: 20 }}
+                >
+                  <View
+                    style={{
+                      flex: 1,
+                      flexDirection: device === "tablet" ? "row" : "column",
+                    }}
+                  >
+                    <View>
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        <View
+                          style={{
+                            flexDirection: "row",
+                            alignItems: "center",
+                          }}
+                        >
+                          <View
+                            style={{
+                              backgroundColor: chartGreenIndicator,
+                              width: 12,
+                              height: 12,
+                              borderRadius: 100,
+                            }}
+                          />
+                          <Text
+                            style={{
+                              fontSize: 14,
+                              color: grayTextColor,
+                              marginLeft: 10,
+                            }}
+                          >
+                            Meats
+                          </Text>
+                        </View>
+
+                        <Text
+                          style={{
+                            fontSize: 14,
+                            color: chartGreenIndicator,
+                            marginLeft: 50,
+                          }}
+                        >
+                          15%
+                        </Text>
+                      </View>
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                          marginTop: 20,
+                        }}
+                      >
+                        <View
+                          style={{
+                            flexDirection: "row",
+                            alignItems: "center",
+                          }}
+                        >
+                          <View
+                            style={{
+                              backgroundColor: chartColor1,
+                              width: 12,
+                              height: 12,
+                              borderRadius: 100,
+                            }}
+                          />
+                          <Text
+                            style={{
+                              fontSize: 14,
+                              color: grayTextColor,
+                              marginLeft: 10,
+                            }}
+                          >
+                            Vegetables
+                          </Text>
+                        </View>
+
+                        <Text
+                          style={{
+                            fontSize: 14,
+                            color: chartGreenIndicator,
+                            marginLeft: 50,
+                          }}
+                        >
+                          15%
+                        </Text>
+                      </View>
+                    </View>
+
+                    <View
                       style={{
-                        width: 20,
-                        resizeMode: "contain",
-                        tintColor: primaryColor,
+                        marginLeft: device === "tablet" ? 30 : 0,
+                        marginTop: device === "tablet" ? 0 : 20,
                       }}
-                    />
-                    <Image
-                      source={menuDotGray}
+                    >
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        <View
+                          style={{
+                            flexDirection: "row",
+                            alignItems: "center",
+                          }}
+                        >
+                          <View
+                            style={{
+                              backgroundColor: chartYellowColor,
+                              width: 12,
+                              height: 12,
+                              borderRadius: 100,
+                            }}
+                          />
+                          <Text
+                            style={{
+                              fontSize: 14,
+                              color: grayTextColor,
+                              marginLeft: 10,
+                            }}
+                          >
+                            Fruits
+                          </Text>
+                        </View>
+
+                        <Text
+                          style={{
+                            fontSize: 14,
+                            color: chartGreenIndicator,
+                            marginLeft: 50,
+                          }}
+                        >
+                          15%
+                        </Text>
+                      </View>
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                          marginTop: 20,
+                        }}
+                      >
+                        <View
+                          style={{
+                            flexDirection: "row",
+                            alignItems: "center",
+                          }}
+                        >
+                          <View
+                            style={{
+                              backgroundColor: MonthBlueColor,
+                              width: 12,
+                              height: 12,
+                              borderRadius: 100,
+                            }}
+                          />
+                          <Text
+                            style={{
+                              fontSize: 14,
+                              color: grayTextColor,
+                              marginLeft: 10,
+                            }}
+                          >
+                            Grains
+                          </Text>
+                        </View>
+
+                        <Text
+                          style={{
+                            fontSize: 14,
+                            color: chartGreenIndicator,
+                            marginLeft: 50,
+                          }}
+                        >
+                          15%
+                        </Text>
+                      </View>
+                    </View>
+                    <View
                       style={{
-                        width: 20,
-                        resizeMode: "contain",
-                        marginLeft: 20,
-                        marginRight: 10,
+                        marginLeft: device === "tablet" ? 30 : 0,
+                        marginTop: device === "tablet" ? 0 : 20,
                       }}
-                    />
+                    >
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        <View
+                          style={{
+                            flexDirection: "row",
+                            alignItems: "center",
+                          }}
+                        >
+                          <View
+                            style={{
+                              backgroundColor: chartPinkColor,
+                              width: 12,
+                              height: 12,
+                              borderRadius: 100,
+                            }}
+                          />
+                          <Text
+                            style={{
+                              fontSize: 14,
+                              color: grayTextColor,
+                              marginLeft: 10,
+                            }}
+                          >
+                            Dairy
+                          </Text>
+                        </View>
+
+                        <Text
+                          style={{
+                            fontSize: 14,
+                            color: chartGreenIndicator,
+                            marginLeft: 50,
+                          }}
+                        >
+                          15%
+                        </Text>
+                      </View>
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                          marginTop: 20,
+                        }}
+                      >
+                        <View
+                          style={{
+                            flexDirection: "row",
+                            alignItems: "center",
+                          }}
+                        >
+                          <View
+                            style={{
+                              backgroundColor: chartPurpleColor,
+                              width: 12,
+                              height: 12,
+                              borderRadius: 100,
+                            }}
+                          />
+                          <Text
+                            style={{
+                              fontSize: 14,
+                              color: grayTextColor,
+                              marginLeft: 10,
+                            }}
+                          >
+                            Grains
+                          </Text>
+                        </View>
+
+                        <Text
+                          style={{
+                            fontSize: 14,
+                            color: chartGreenIndicator,
+                            marginLeft: 50,
+                          }}
+                        >
+                          15%
+                        </Text>
+                      </View>
+                    </View>
                   </View>
                 </View>
+              </View>
+
+              <View
+                style={{ width: 200, marginTop: device === "tablet" ? 0 : 20 }}
+              >
+                <PieChart
+                  style={{ height: device === "tablet" ? 100 : 200, flex: 1 }}
+                  data={data}
+                  innerRadius={"80%"}
+                  padAngle={0}
+                />
                 <View
                   style={{
-                    width: "100%",
-                    borderBottomLeftRadius: 5,
-                    borderBottomRightRadius: 5,
-                    padding: 10,
+                    alignItems: "center",
+                    position: "absolute",
+                    bottom: "35%",
+                    right: "35%",
                   }}
                 >
-                  <PriceFluctuation
-                    heading={"Beans"}
-                    belowText={"$38 in the last invoice"}
-                    device={device}
-                    color
-                  />
-                  <PriceFluctuation
-                    heading={"Honeywell Mustard"}
-                    belowText={"$38 in the last invoice"}
-                    device={device}
-                    color
-                  />
-                  <PriceFluctuation
-                    heading={"Honeywell Mustard asli asd asda"}
-                    belowText={"$38 in the last invoice"}
-                    device={device}
-                    color
-                  />
+                  <Text
+                    style={{
+                      fontSize: 18,
+                      color: "black",
+                      fontFamily: "openSans_bold",
+                    }}
+                  >
+                    $12.210
+                  </Text>
+                  <Text
+                    style={{
+                      fontSize: 14,
+                      color: grayTextColor,
+                      marginTop: 0,
+                    }}
+                  >
+                    total costs
+                  </Text>
                 </View>
               </View>
             </View>
           </View>
-
-          <View
-            style={{
-              flexDirection: device === "tablet" ? "row" : "column",
-              backgroundColor: "white",
-              borderRadius: 10,
-              padding: 10,
-              width: "100%",
-              marginTop: 20,
-              justifyContent: device === "tablet" ? "space-between" : "center",
-              alignItems: "center",
-            }}
-          >
-            <View
-              style={{
-                flexDirection: "column",
-                flex: 1,
-              }}
-            >
-              <View>
-                <Text
-                  style={{
-                    color: "black",
-                    fontSize: 18,
-                    fontFamily: "openSans_semiBold",
-                  }}
-                >
-                  Cost by Category
-                </Text>
-                <Text
-                  style={{
-                    color: grayTextColor,
-                    fontSize: 16,
-                    fontFamily: "openSans_semiBold",
-                  }}
-                >
-                  Total: $6.540
-                </Text>
-              </View>
-
-              <View
-                style={{ width: "100%", flexDirection: "row", marginTop: 20 }}
-              >
-                <View
-                  style={{
-                    flex: 1,
-                    flexDirection: device === "tablet" ? "row" : "column",
-                  }}
-                >
-                  <View>
-                    <View
-                      style={{
-                        flexDirection: "row",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                      }}
-                    >
-                      <View
-                        style={{
-                          flexDirection: "row",
-                          alignItems: "center",
-                        }}
-                      >
-                        <View
-                          style={{
-                            backgroundColor: chartGreenIndicator,
-                            width: 12,
-                            height: 12,
-                            borderRadius: 100,
-                          }}
-                        />
-                        <Text
-                          style={{
-                            fontSize: 14,
-                            color: grayTextColor,
-                            marginLeft: 10,
-                          }}
-                        >
-                          Meats
-                        </Text>
-                      </View>
-
-                      <Text
-                        style={{
-                          fontSize: 14,
-                          color: chartGreenIndicator,
-                          marginLeft: 50,
-                        }}
-                      >
-                        15%
-                      </Text>
-                    </View>
-                    <View
-                      style={{
-                        flexDirection: "row",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                        marginTop: 20,
-                      }}
-                    >
-                      <View
-                        style={{
-                          flexDirection: "row",
-                          alignItems: "center",
-                        }}
-                      >
-                        <View
-                          style={{
-                            backgroundColor: chartColor1,
-                            width: 12,
-                            height: 12,
-                            borderRadius: 100,
-                          }}
-                        />
-                        <Text
-                          style={{
-                            fontSize: 14,
-                            color: grayTextColor,
-                            marginLeft: 10,
-                          }}
-                        >
-                          Vegetables
-                        </Text>
-                      </View>
-
-                      <Text
-                        style={{
-                          fontSize: 14,
-                          color: chartGreenIndicator,
-                          marginLeft: 50,
-                        }}
-                      >
-                        15%
-                      </Text>
-                    </View>
-                  </View>
-
-                  <View
-                    style={{
-                      marginLeft: device === "tablet" ? 30 : 0,
-                      marginTop: device === "tablet" ? 0 : 20,
-                    }}
-                  >
-                    <View
-                      style={{
-                        flexDirection: "row",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                      }}
-                    >
-                      <View
-                        style={{
-                          flexDirection: "row",
-                          alignItems: "center",
-                        }}
-                      >
-                        <View
-                          style={{
-                            backgroundColor: chartYellowColor,
-                            width: 12,
-                            height: 12,
-                            borderRadius: 100,
-                          }}
-                        />
-                        <Text
-                          style={{
-                            fontSize: 14,
-                            color: grayTextColor,
-                            marginLeft: 10,
-                          }}
-                        >
-                          Fruits
-                        </Text>
-                      </View>
-
-                      <Text
-                        style={{
-                          fontSize: 14,
-                          color: chartGreenIndicator,
-                          marginLeft: 50,
-                        }}
-                      >
-                        15%
-                      </Text>
-                    </View>
-                    <View
-                      style={{
-                        flexDirection: "row",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                        marginTop: 20,
-                      }}
-                    >
-                      <View
-                        style={{
-                          flexDirection: "row",
-                          alignItems: "center",
-                        }}
-                      >
-                        <View
-                          style={{
-                            backgroundColor: MonthBlueColor,
-                            width: 12,
-                            height: 12,
-                            borderRadius: 100,
-                          }}
-                        />
-                        <Text
-                          style={{
-                            fontSize: 14,
-                            color: grayTextColor,
-                            marginLeft: 10,
-                          }}
-                        >
-                          Grains
-                        </Text>
-                      </View>
-
-                      <Text
-                        style={{
-                          fontSize: 14,
-                          color: chartGreenIndicator,
-                          marginLeft: 50,
-                        }}
-                      >
-                        15%
-                      </Text>
-                    </View>
-                  </View>
-                  <View
-                    style={{
-                      marginLeft: device === "tablet" ? 30 : 0,
-                      marginTop: device === "tablet" ? 0 : 20,
-                    }}
-                  >
-                    <View
-                      style={{
-                        flexDirection: "row",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                      }}
-                    >
-                      <View
-                        style={{
-                          flexDirection: "row",
-                          alignItems: "center",
-                        }}
-                      >
-                        <View
-                          style={{
-                            backgroundColor: chartPinkColor,
-                            width: 12,
-                            height: 12,
-                            borderRadius: 100,
-                          }}
-                        />
-                        <Text
-                          style={{
-                            fontSize: 14,
-                            color: grayTextColor,
-                            marginLeft: 10,
-                          }}
-                        >
-                          Dairy
-                        </Text>
-                      </View>
-
-                      <Text
-                        style={{
-                          fontSize: 14,
-                          color: chartGreenIndicator,
-                          marginLeft: 50,
-                        }}
-                      >
-                        15%
-                      </Text>
-                    </View>
-                    <View
-                      style={{
-                        flexDirection: "row",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                        marginTop: 20,
-                      }}
-                    >
-                      <View
-                        style={{
-                          flexDirection: "row",
-                          alignItems: "center",
-                        }}
-                      >
-                        <View
-                          style={{
-                            backgroundColor: chartPurpleColor,
-                            width: 12,
-                            height: 12,
-                            borderRadius: 100,
-                          }}
-                        />
-                        <Text
-                          style={{
-                            fontSize: 14,
-                            color: grayTextColor,
-                            marginLeft: 10,
-                          }}
-                        >
-                          Grains
-                        </Text>
-                      </View>
-
-                      <Text
-                        style={{
-                          fontSize: 14,
-                          color: chartGreenIndicator,
-                          marginLeft: 50,
-                        }}
-                      >
-                        15%
-                      </Text>
-                    </View>
-                  </View>
-                </View>
-              </View>
-            </View>
-
-            <View
-              style={{ width: 200, marginTop: device === "tablet" ? 0 : 20 }}
-            >
-              <PieChart
-                style={{ height: device === "tablet" ? 100 : 200, flex: 1 }}
-                data={data}
-                innerRadius={"80%"}
-                padAngle={0}
-              />
-              <View
-                style={{
-                  alignItems: "center",
-                  position: "absolute",
-                  bottom: "35%",
-                  right: "35%",
-                }}
-              >
-                <Text
-                  style={{
-                    fontSize: 18,
-                    color: "black",
-                    fontFamily: "openSans_bold",
-                  }}
-                >
-                  $12.210
-                </Text>
-                <Text
-                  style={{
-                    fontSize: 14,
-                    color: grayTextColor,
-                    marginTop: 0,
-                  }}
-                >
-                  total costs
-                </Text>
-              </View>
-            </View>
-          </View>
+        </LinearGradient>
+      ) : (
+        <View
+          style={{
+            width: "100%",
+            flex: 1,
+            alignItems: "center",
+            justifyContent: "center",
+            height: HEIGHT - 100,
+          }}
+        >
+          <Text style={{ fontSize: 20, width: "80%", textAlign: "center" }}>
+            You need to add atleast one location to view dashboard 😃
+          </Text>
         </View>
-      </LinearGradient>
+      )}
     </MainScreenContainer>
   );
 };

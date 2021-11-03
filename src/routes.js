@@ -161,7 +161,7 @@ const MainRoutes = () => {
         drawerContent={(props) => <DrawerMenu {...props} />}
         backBehavior={"history"}
       >
-        <Drawer.Screen name="Home" component={DashboardRoutes} />
+        <Drawer.Screen name="Dashboard" component={DashboardRoutes} />
         <Drawer.Screen name="Menu" component={MenuRoutes} />
         <Drawer.Screen name="Sales" component={InsightsPage} />
         <Drawer.Screen name="Recipe" component={RecipeRoutes} />
