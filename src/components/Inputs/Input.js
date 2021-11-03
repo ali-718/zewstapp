@@ -24,6 +24,8 @@ export const Input = ({
   masked,
   maskType,
   maskFormat,
+  showError,
+  setHighOrderError,
   ...props
 }) => {
   const device = useSelector((state) => state.system.device);
@@ -43,18 +45,28 @@ export const Input = ({
     setIsFocused(true);
   }, [value]);
 
+  useEffect(() => {
+    if (!showError) return;
+    ruleChecker(value);
+  }, [showError]);
+
   const OnTextChange = (val) => {
     setValue(val);
+    ruleChecker(val);
+  };
 
+  const ruleChecker = (val) => {
     if (!rule) return;
     rule(val)
       .then(() => {
         setIsError(false);
         seterrorText("");
+        setHighOrderError(false);
       })
       .catch((e) => {
         setIsError(true);
         seterrorText(typeof e === "array" ? e : e.error);
+        setHighOrderError(true);
       });
   };
 
@@ -64,13 +76,12 @@ export const Input = ({
         style={{
           width: "100%",
           backgroundColor: "white",
-          borderRadius: 10,
           padding: 10,
           height: textarea ? 150 : 70,
           justifyContent: textarea ? "flex-start" : "center",
           alignItems: textarea ? "flex-start" : "center",
           flexDirection: "row",
-          borderWidth: isError ? 1 : 0,
+          borderBottomWidth: isError && showError ? 1 : 0,
           borderColor: "red",
           ...style,
         }}
@@ -82,14 +93,34 @@ export const Input = ({
             width: "90%",
           }}
         >
-          {isFocused && (
-            <Text style={{ marginBottom: 5, color: "gray" }}>
-              {placeholder}
-            </Text>
-          )}
+          <View
+            style={{
+              flexDirection: "row",
+              width: "100%",
+              alignItems: "center",
+            }}
+          >
+            {isFocused && (
+              <Text style={{ marginBottom: 5, color: "gray" }}>
+                {placeholder}{" "}
+                {isError && showError && (
+                  <Text>
+                    - <Text style={{ color: "red" }}>{errorText}</Text>
+                  </Text>
+                )}
+              </Text>
+            )}
+          </View>
 
           {masked ? (
             <TextInputMask
+              onBlur={() => {
+                console.log("ok");
+                if (value.length > 0) {
+                  return;
+                }
+                setIsFocused(false);
+              }}
               type={maskType}
               options={{
                 format: maskFormat,
@@ -114,11 +145,19 @@ export const Input = ({
                 }
                 setIsFocused(true);
               }}
+              selectionColor={primaryColor}
               autoCapitalize={"none"}
               {...props}
             />
           ) : (
             <TextInput
+              selectionColor={primaryColor}
+              onBlur={() => {
+                if (value.length > 0) {
+                  return;
+                }
+                setIsFocused(false);
+              }}
               ref={ref}
               style={{
                 width: "100%",
@@ -166,24 +205,6 @@ export const Input = ({
           )}
         </TouchableOpacity>
       </TouchableOpacity>
-      {isError ? (
-        typeof errorText === "array" ? (
-          errorText.map((item, i) => (
-            <Text
-              key={i}
-              style={{ color: "red", fontSize: device === "tablet" ? 16 : 12 }}
-            >
-              *{item.error}
-            </Text>
-          ))
-        ) : (
-          <Text
-            style={{ color: "red", fontSize: device === "tablet" ? 16 : 12 }}
-          >
-            *{errorText}
-          </Text>
-        )
-      ) : null}
     </>
   );
 };

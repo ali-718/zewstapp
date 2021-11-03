@@ -6,6 +6,7 @@ import { recipeReducer } from "./RecipeReducer";
 import { locationReducer } from "./locationReducer";
 import { employeeReducer } from "./EmployeeReducer";
 import { inventoryReducer } from "./InventoryReducer";
+import { dashboardReducer } from "./DashboardReducer";
 
 export default combineReducers({
   auth: authReducer,
@@ -15,4 +16,5 @@ export default combineReducers({
   locations: locationReducer,
   employee: employeeReducer,
   inventory: inventoryReducer,
+  dashboard: dashboardReducer,
 });

@@ -1,18 +1,10 @@
+import { authClient } from "../authClient";
 import { client } from "../client";
 
-export const signupAction = ({
-  restaurant_name,
-  designation,
-  owner_name,
-  contact_no,
-  email,
-  password,
-}) =>
+export const signupAction = ({ owner_name, contact_no, email, password }) =>
   new Promise((resolve, reject) => {
-    client
+    authClient
       .post("/auth/signup", {
-        restaurant_name,
-        designation,
         owner_name,
         contact_no: `+${contact_no}`,
         email,
@@ -26,7 +18,7 @@ export const signupAction = ({
 
 export const confirmCode = ({ username, code }) =>
   new Promise((resolve, reject) => {
-    client
+    authClient
       .post("/auth/confirm", {
         username,
         code,
@@ -39,7 +31,7 @@ export const confirmCode = ({ username, code }) =>
 
 export const loginAction = ({ email, password }) =>
   new Promise((resolve, reject) => {
-    client
+    authClient
       .post("/auth/signin", {
         email,
         password,
@@ -65,7 +57,7 @@ export const refreshTokenAction = ({ refreshToken, email }) =>
 
 export const resendCode = ({ email }) =>
   new Promise((resolve, reject) => {
-    client
+    authClient
       .post("/auth/resendOtp", {
         email,
       })
@@ -73,4 +65,20 @@ export const resendCode = ({ email }) =>
         resolve(data.data);
       })
       .catch((e) => reject(e.response.data));
+  });
+
+export const connectWithSquare = ({ clientId, squareAccessToken }) =>
+  new Promise((resolve, reject) => {
+    client
+      .post("/client/updateSquareToken", {
+        clientId,
+        squareAccessToken,
+      })
+      .then((data) => {
+        resolve();
+      })
+      .catch((e) => {
+        reject(e.response.data.message);
+        console.log(e.response.data.message);
+      });
   });

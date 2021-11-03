@@ -73,16 +73,16 @@ export const AddMeal = (props) => {
     if (!props.route?.params?.data) return;
 
     const {
-      mealName: name,
-      mealDescription: desc,
-      mealPrice: cost,
-      mealDaysAvailable: days,
-      mealCategory: categories,
-      mealAvailability: available,
-      mealAllergens: allergens,
-      mealAddons: addons,
-      mealMedia: image,
-      mealRecipes,
+      mealName: name = "",
+      mealDescription: desc = "",
+      mealPrice: cost = "",
+      mealDaysAvailable: days = "",
+      mealCategory: categories = "",
+      mealAvailability: available = "",
+      mealAllergens: allergens = "",
+      mealAddons: addons = "",
+      mealMedia: image = "",
+      mealRecipes = "",
     } = props.route?.params?.data;
 
     setIsEdit(true);

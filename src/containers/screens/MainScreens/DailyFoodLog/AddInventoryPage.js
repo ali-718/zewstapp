@@ -65,18 +65,18 @@ export const AddInventoryPage = (props) => {
     if (data) {
       const {
         itemName = "",
-        brand,
-        quantity,
-        units: unit,
-        purchaseDate: dateOfPurchase,
-        expiryDate: dateOfExpiry,
-        color,
-        costPerUnit,
-        threshold,
-        category,
-        photos,
-        notes,
-        availability,
+        brand = "",
+        quantity = "",
+        units: unit = "",
+        purchaseDate: dateOfPurchase = "",
+        expiryDate: dateOfExpiry = "",
+        color = "",
+        costPerUnit = "",
+        threshold = "",
+        category = "",
+        photos = "",
+        notes = "",
+        availability = "",
       } = props?.route?.params?.data;
 
       setImageUri(photos);

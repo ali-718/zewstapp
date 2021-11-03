@@ -2,7 +2,7 @@
   "expo": {
     "name": "zewst",
     "slug": "zewstapp",
-    "version": "1.0.1",
+    "version": "1.0.8",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -23,16 +23,20 @@
         "NSPhotoLibraryUsageDescription": "This app uses Photo Library for uploading your profile picture.",
         "UIBackgroundModes": ["fetch"]
       },
-      "bundleIdentifier": "com.hauraki.zewst"
+      "bundleIdentifier": "com.hauraki.zewst",
+      "splash": {
+        "tabletImage": "./assets/tabletSplash.png"
+      }
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#FFFFFF"
-      }
+        "foregroundImage": "./assets/icon.png",
+        "backgroundColor": "#A461D8"
+      },
+      "package": "com.hauraki.zewst"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/icon.png"
     }
   }
 }

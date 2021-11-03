@@ -2,9 +2,6 @@ import { Dimensions } from "react-native";
 import food1 from "../assets/images/food1.png";
 import food2 from "../assets/images/food2.png";
 import food3 from "../assets/images/food3.png";
-import food4 from "../assets/images/food4.png";
-import food5 from "../assets/images/food5.png";
-import food6 from "../assets/images/food6.png";
 import vegeterian from "../assets/images/categories/vegeterian.png";
 import baked from "../assets/images/categories/baked.png";
 import lactose from "../assets/images/allergens/lactose.png";
@@ -17,26 +14,17 @@ export const carouselData = [
   {
     image: food1,
     text: "As a participating restaurant, you will be providing a fresh, nutritious meal to a person in need.",
+    heading: "All your favorites",
   },
   {
     image: food2,
-    text: "You decide what meal you’d like to donate.",
+    text: "Upload available meals and share some basic information such as unit cost of meals, allergens, etc.",
+    heading: "Choose your food",
   },
   {
     image: food3,
-    text: "Upload available meals and share some basic information such as unit cost of meals, allergens, etc.",
-  },
-  {
-    image: food4,
     text: "Get access to a comprehensive dashboard that highlights how many meals you’ve donated.",
-  },
-  {
-    image: food5,
-    text: "Receive tax deductions and monetary rewards.",
-  },
-  {
-    image: food6,
-    text: "Help your community by reducing hunger and food wastage.",
+    heading: "All the data you need",
   },
 ];
 

@@ -6,7 +6,6 @@ import { SignUpPage } from "./containers/screens/AuthScreens/SignUpPage";
 import { VerificationPage } from "./containers/screens/AuthScreens/Verificationpage";
 import { LoginPage } from "./containers/screens/AuthScreens/LoginPage";
 import { ForgotPassword } from "./containers/screens/AuthScreens/ForgotPassword";
-import { TabRoutes } from "./TabRoutes";
 import { FoodDetailPage } from "./containers/screens/MainScreens/MenuPages/FoodDetailPage";
 import { AddMeal } from "./containers/screens/MainScreens/MenuPages/AddMeal";
 import { OrderDetailPage } from "./containers/screens/MainScreens/HomePages/OrderDetailPage";
@@ -34,16 +33,30 @@ import {
 import { Dimensions } from "react-native";
 import { RecipeDetailPage } from "./containers/screens/MainScreens/RecipePages/RecipeDetailPage";
 import { RecipeAdd } from "./containers/screens/MainScreens/RecipePages/RecipeAdd";
-import { InventoryListPage } from "./containers/screens/MainScreens/InventoryPages/InventoryListPage";
 import { AddInventoryPage } from "./containers/screens/MainScreens/InventoryPages/AddInventoryPage";
 import { InventoryDetailPage } from "./containers/screens/MainScreens/InventoryPages/InventoryDetailPage";
+import { LossInKitchen } from "./containers/screens/MainScreens/LossInKitchen/LossInKitchen";
+import { KitchenPage } from "./containers/screens/MainScreens/KitchenPage/KitchenPage";
+import { KitchenDetailPage } from "./containers/screens/MainScreens/KitchenPage/KitchenDetailPage";
+import { createDrawerNavigator } from "@react-navigation/drawer";
+import { HomePage } from "./containers/screens/MainScreens/HomePages/HomePage";
+import { DailyFoodLogListPage } from "./containers/screens/MainScreens/DailyFoodLog/DailyFoodLogListPage";
+import { MenuPage } from "./containers/screens/MainScreens/MenuPages/MenuPage";
+import { AdminPage } from "./containers/screens/MainScreens/AdminsPages/AdminPage";
+import { RecipeListPage } from "./containers/screens/MainScreens/RecipePages/RecipeListPage";
+import { InventoryListPage } from "./containers/screens/MainScreens/InventoryPages/InventoryListPage";
+import { DrawerMenu } from "./components/Drawer/Drawer";
+import { InsightsPage } from "./containers/screens/MainScreens/InsightsPages/InsightsPage";
 
 const Stack = createNativeStackNavigator();
 
 const AuthRoutes = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Navigator
+        // initialRouteName={"Verification"}
+        screenOptions={{ headerShown: false }}
+      >
         <Stack.Screen name="SigningCheck" component={SigningCheck} />
         <Stack.Screen name="OnBoardingPage" component={OnBoardingPage} />
         <Stack.Screen name="Signup" component={SignUpPage} />
@@ -55,30 +68,117 @@ const AuthRoutes = () => {
   );
 };
 
+const RecipeRoutes = () => {
+  return (
+    <Stack.Navigator
+      screenOptions={{ headerShown: false, gestureEnabled: false }}
+    >
+      <Stack.Screen name="recipeList" component={RecipeListPage} />
+      <Stack.Screen name="recipeAdd" component={RecipeAdd} />
+      <Stack.Screen name="recipeDetailPage" component={RecipeDetailPage} />
+    </Stack.Navigator>
+  );
+};
+
+const InventoryRoutes = () => {
+  return (
+    <Stack.Navigator
+      screenOptions={{ headerShown: false, gestureEnabled: false }}
+    >
+      <Stack.Screen name="inventoryList" component={InventoryListPage} />
+      <Stack.Screen name="inventoryAdd" component={AddInventoryPage} />
+      <Stack.Screen name="inventoryDetail" component={InventoryDetailPage} />
+    </Stack.Navigator>
+  );
+};
+
+const MenuRoutes = () => {
+  return (
+    <Stack.Navigator
+      screenOptions={{ headerShown: false, gestureEnabled: false }}
+    >
+      <Stack.Screen name="MenuPage" component={MenuPage} />
+      <Stack.Screen name="foodDetailPage" component={FoodDetailPage} />
+      <Stack.Screen name="addMeal" component={AddMeal} />
+    </Stack.Navigator>
+  );
+};
+
+const DashboardRoutes = () => {
+  return (
+    <Stack.Navigator
+      screenOptions={{ headerShown: false, gestureEnabled: false }}
+    >
+      <Drawer.Screen name="Home" component={HomePage} />
+      <Stack.Screen name="lossInKitchen" component={LossInKitchen} />
+    </Stack.Navigator>
+  );
+};
+
+const AdminRoutes = () => {
+  return (
+    <Stack.Navigator
+      screenOptions={{ headerShown: false, gestureEnabled: false }}
+    >
+      <Stack.Screen name="AdminPage" component={AdminPage} />
+      <Stack.Screen name="resturantDetail" component={ResturantDetails} />
+      <Stack.Screen name="resturantLogo" component={ResturantLogo} />
+      <Stack.Screen name="profile" component={ProfilePage} />
+      <Stack.Screen name="location" component={LocationsPage} />
+      <Stack.Screen name="addLocation" component={AddLocationsPage} />
+      <Stack.Screen name="tax" component={TaxPage} />
+      <Stack.Screen name="taxDocument" component={TaxDocument} />
+      <Stack.Screen name="employees" component={EmployeesPage} />
+      <Stack.Screen name="addEmployees" component={AddEmployeesPage} />
+      <Stack.Screen name="bankDetails" component={BankDetailsPage} />
+    </Stack.Navigator>
+  );
+};
+
+const Drawer = createDrawerNavigator();
+
 const MainRoutes = () => {
+  const orientation = useSelector((state) => state.system.orientation);
+  const device = useSelector((state) => state.system.device);
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="tabRoutes" component={TabRoutes} />
-        <Stack.Screen name="foodDetailPage" component={FoodDetailPage} />
-        <Stack.Screen name="addMeal" component={AddMeal} />
+      <Drawer.Navigator
+        // initialRouteName={"KitchenPage"}
+        screenOptions={{
+          headerShown: false,
+          drawerType:
+            device === "tablet"
+              ? orientation === "landscape"
+                ? "permanent"
+                : "front"
+              : "front",
+          gestureEnabled: false,
+          swipeEnabled: true,
+          drawerStyle: {
+            width: 300,
+          },
+        }}
+        drawerContent={(props) => <DrawerMenu {...props} />}
+        backBehavior={"history"}
+      >
+        <Drawer.Screen name="Dashboard" component={DashboardRoutes} />
+        <Drawer.Screen name="Menu" component={MenuRoutes} />
+        <Drawer.Screen name="Sales" component={InsightsPage} />
+        <Drawer.Screen name="Recipe" component={RecipeRoutes} />
+        <Drawer.Screen name="Waste" component={RecipeListPage} />
+        <Drawer.Screen name="Inventory" component={InventoryRoutes} />
+        <Drawer.Screen name="Admin" component={AdminRoutes} />
+
+        <Drawer.Screen name="Messages" component={AdminPage} />
+        <Drawer.Screen name="Library" component={AdminPage} />
+        <Drawer.Screen name="Settings" component={AdminPage} />
+        <Drawer.Screen name="Support" component={AdminPage} />
+
         <Stack.Screen name="orderDetail" component={OrderDetailPage} />
-        <Stack.Screen name="resturantDetail" component={ResturantDetails} />
-        <Stack.Screen name="resturantLogo" component={ResturantLogo} />
-        <Stack.Screen name="profile" component={ProfilePage} />
         <Stack.Screen name="changePass" component={ChangePasswordPage} />
-        <Stack.Screen name="bankDetails" component={BankDetailsPage} />
-        <Stack.Screen name="location" component={LocationsPage} />
-        <Stack.Screen name="addLocation" component={AddLocationsPage} />
-        <Stack.Screen name="tax" component={TaxPage} />
-        <Stack.Screen name="taxDocument" component={TaxDocument} />
-        <Stack.Screen name="employees" component={EmployeesPage} />
-        <Stack.Screen name="addEmployees" component={AddEmployeesPage} />
-        <Stack.Screen name="recipeDetailPage" component={RecipeDetailPage} />
-        <Stack.Screen name="recipeAdd" component={RecipeAdd} />
-        <Stack.Screen name="inventoryAdd" component={AddInventoryPage} />
-        <Stack.Screen name="inventoryDetail" component={InventoryDetailPage} />
-      </Stack.Navigator>
+        <Stack.Screen name="KitchenPage" component={KitchenPage} />
+        <Stack.Screen name="KitchenDetailPage" component={KitchenDetailPage} />
+      </Drawer.Navigator>
     </NavigationContainer>
   );
 };
