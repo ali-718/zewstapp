@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Modal, TouchableOpacity } from "react-native";
-import { primaryShade1 } from "../../theme/colors";
+import { buttonRedColor, primaryShade1 } from "../../theme/colors";
 import { RegularButton } from "../Buttons/RegularButton";
 
 export const PhotoModal = ({
@@ -61,7 +61,11 @@ export const PhotoModal = ({
 
           {isImageTaken && (
             <View style={{ width: "100%", marginTop: 10 }}>
-              <RegularButton onPress={removeImage} text={"Delete Photo"} />
+              <RegularButton
+                colors={[buttonRedColor, buttonRedColor]}
+                onPress={removeImage}
+                text={"Delete Photo"}
+              />
             </View>
           )}
 

@@ -3,10 +3,12 @@ import { Image, TouchableOpacity, View } from "react-native";
 import { Text } from "../../../../components/Text/Text";
 import { WIDTH } from "../../../../helpers/utlils";
 import { MainScreenContainer } from "../../../MainScreenContainers";
-import camera from "../../../../assets/images/cameraPurple.png";
+import camera from "../../../../assets/images/addCircle.png";
 import { grayColor } from "../../../../theme/colors";
 import { PhotoModal } from "../../../../components/Meals/PhotoModal";
 import * as ImagePicker from "expo-image-picker";
+import { HeadingBox } from "../../../../components/HeadingBox/HeadingBox";
+import { RegularButton } from "../../../../components/Buttons/RegularButton";
 
 export const ResturantLogo = () => {
   const [squareLogo, setSquareLogo] = useState("");
@@ -92,6 +94,7 @@ export const ResturantLogo = () => {
 
   return (
     <MainScreenContainer title={"Logo"}>
+      <HeadingBox heading={"Restaurant logo"} />
       <View style={{ width: "90%", marginVertical: 20 }}>
         <View
           style={{
@@ -121,11 +124,16 @@ export const ResturantLogo = () => {
             <Image
               source={squareLogo ? { uri: squareLogo } : camera}
               style={{
-                width: squareLogo ? "100%" : 50,
-                height: squareLogo ? "100%" : 50,
+                width: squareLogo ? "100%" : 30,
+                height: squareLogo ? "100%" : 30,
                 resizeMode: squareLogo ? "cover" : "contain",
               }}
             />
+            {!squareLogo && (
+              <Text style={{ color: "black", marginTop: 10 }}>
+                add an image
+              </Text>
+            )}
           </TouchableOpacity>
         </View>
 
@@ -143,7 +151,7 @@ export const ResturantLogo = () => {
           <TouchableOpacity
             style={{
               width: "100%",
-              height: WIDTH > 600 ? 250 : 70,
+              height: WIDTH > 600 ? 250 : 100,
               alignItems: "center",
               justifyContent: "center",
               alignSelf: "center",
@@ -158,12 +166,21 @@ export const ResturantLogo = () => {
             <Image
               source={horizontalLogo ? { uri: horizontalLogo } : camera}
               style={{
-                width: horizontalLogo ? "100%" : 50,
-                height: horizontalLogo ? "100%" : 50,
+                width: horizontalLogo ? "100%" : 30,
+                height: horizontalLogo ? "100%" : 30,
                 resizeMode: horizontalLogo ? "stretch" : "contain",
               }}
             />
+            {!horizontalLogo && (
+              <Text style={{ color: "black", marginTop: 10 }}>
+                add an image
+              </Text>
+            )}
           </TouchableOpacity>
+        </View>
+
+        <View style={{ width: "100%", marginTop: 20 }}>
+          <RegularButton text={"Save"} />
         </View>
 
         <PhotoModal

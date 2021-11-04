@@ -1,6 +1,11 @@
 import React from "react";
 import { Image, TouchableOpacity, View } from "react-native";
-import { grayColor, grayTextColor, primaryColor } from "../../theme/colors";
+import {
+  borderColor2,
+  grayColor,
+  grayTextColor,
+  primaryColor,
+} from "../../theme/colors";
 import { Text } from "../Text/Text";
 import forwardIcon from "../../assets/images/forwardIcon.png";
 import { useSelector } from "react-redux";
@@ -30,6 +35,9 @@ export const AdminOverviewBox = ({
         alignItems: "center",
         borderLeftWidth: inventory ? 5 : 0,
         borderLeftColor: inventory ? borderLeftColor : "",
+        borderBottomWidth: 1,
+        borderBottomColor: borderColor2,
+        paddingBottom: 20,
       }}
       onPress={onPress}
       onLongPress={onLongPress}
@@ -40,13 +48,14 @@ export const AdminOverviewBox = ({
           width: device === "tablet" ? 40 : 30,
           height: device === "tablet" ? 40 : 30,
           resizeMode: "contain",
+          tintColor: primaryColor,
         }}
       />
 
       <View
         style={{
           flex: 1,
-          marginLeft: device === "tablet" ? 20 : 10,
+          marginLeft: device === "tablet" ? 20 : 15,
           marginRight: 10,
         }}
       >
@@ -59,8 +68,8 @@ export const AdminOverviewBox = ({
                   color: "black",
                 }
               : {
-                  fontSize: device === "tablet" ? 20 : 16,
-                  fontFamily: "openSans_bold",
+                  fontSize: device === "tablet" ? 20 : 18,
+                  fontFamily: "openSans_semiBold",
                   color: "black",
                 }
           }
@@ -77,9 +86,8 @@ export const AdminOverviewBox = ({
                   color: grayTextColor,
                 }
               : {
-                  fontSize: device === "tablet" ? 30 : 20,
-                  fontFamily: "openSans_bold",
-                  color: primaryColor,
+                  fontSize: device === "tablet" ? 18 : 14,
+                  color: grayTextColor,
                 }
           }
         >
@@ -88,19 +96,11 @@ export const AdminOverviewBox = ({
       </View>
 
       <View style={{ flexDirection: "row", alignItems: "center" }}>
-        <Text
-          style={{
-            textTransform: "uppercase",
-            fontSize: device === "tablet" ? 20 : 12,
-          }}
-        >
-          {rightText}
-        </Text>
         <Image
           source={forwardIcon}
           style={{
-            width: 20,
-            height: 20,
+            width: 15,
+            height: 15,
             resizeMode: "contain",
             marginLeft: 5,
             ...iconStyle,

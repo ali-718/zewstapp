@@ -36,7 +36,7 @@ export const RegularButton = ({
       }}
     >
       <LinearGradient
-        colors={colors || [primaryColor, primaryShade1]}
+        colors={colors || [primaryColor, primaryColor]}
         style={{
           width: "100%",
           flex: 1,

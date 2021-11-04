@@ -1,15 +1,12 @@
 import React, { useState } from "react";
-import { View, TouchableOpacity, Image } from "react-native";
+import { View } from "react-native";
 import { MainScreenContainer } from "../../../MainScreenContainers";
-import person from "../../../../assets/images/person.png";
 import personGrayIcon from "../../../../assets/images/personGrayIcon.png";
 import storeIcon from "../../../../assets/images/storeIcon.png";
 import locationIcon from "../../../../assets/images/locationIcon.png";
 import taxIcon from "../../../../assets/images/taxIcon.png";
 import multiplePeopleIcon from "../../../../assets/images/multiplePeopleIcon.png";
 import bankIcon from "../../../../assets/images/bankIcon.png";
-import squareLogo from "../../../../assets/images/squareLogo.png";
-import { ResturantName } from "../../../../components/FoodItems/ResturantName";
 import { AdminOverviewBox } from "../../../../components/AdminComponents/AdminOverviewBox";
 import { useNavigation } from "@react-navigation/native";
 import { useSelector } from "react-redux";
@@ -18,6 +15,7 @@ import { FullPageLoadingModall } from "../../../../components/FullPageLoadingMod
 import { ConnectSquareModal } from "../../../../components/ConnectSquareModal/ConnectSquareModal";
 import { ToastError, ToastSuccess } from "../../../../helpers/Toast";
 import { connectWithSquare } from "../../../../Redux/actions/AuthActions/authActions";
+import { HeadingBox } from "../../../../components/HeadingBox/HeadingBox";
 
 export const AdminPage = () => {
   const navigation = useNavigation();
@@ -62,92 +60,89 @@ export const AdminPage = () => {
       });
   };
 
+  const item = hotels[0];
+
   return (
-    <MainScreenContainer leftImage={person} title={"Admin"}>
-      <View style={{ width: "90%", alignItems: "center", marginBottom: 50 }}>
-        {hotels.map((item, i) => (
-          <View key={i} style={{ width: "100%", alignItems: "center" }}>
-            <ResturantName
-              name={item.name}
-              selected={selected}
-              setSelected={() => null}
-              isAdmin
-              customComponent
-            />
+    <MainScreenContainer>
+      <HeadingBox noBack heading={"Admin panel"} />
 
-            {selected && (
-              <View style={{ width: "100%", marginTop: 20 }}>
-                <View style={{ width: "100%" }}>
-                  <AdminOverviewBox
-                    label={"Restaurant details"}
-                    name={item.name}
-                    rightText={"Open"}
-                    image={storeIcon}
-                    onPress={() =>
-                      navigation.navigate("resturantDetail", { data: item })
-                    }
-                  />
-                </View>
+      <View
+        style={{
+          width: "90%",
+          alignItems: "center",
+          marginBottom: 50,
+          backgroundColor: "white",
+          borderRadius: 10,
+          marginTop: 20,
+        }}
+      >
+        <View style={{ width: "100%", alignItems: "center" }}>
+          <View style={{ width: "100%", marginTop: 20 }}>
+            <View style={{ width: "100%" }}>
+              <AdminOverviewBox
+                label={"Restaurant details"}
+                name={item.name}
+                rightText={"Open"}
+                image={storeIcon}
+                onPress={() =>
+                  navigation.navigate("resturantDetail", { data: item })
+                }
+              />
+            </View>
 
-                <View style={{ width: "100%", marginTop: 10 }}>
-                  <AdminOverviewBox
-                    label={"Profile"}
-                    name={item.owner}
-                    rightText={"Owner"}
-                    image={personGrayIcon}
-                    onPress={() =>
-                      navigation.navigate("profile", { data: item })
-                    }
-                  />
-                </View>
+            <View style={{ width: "100%", marginTop: 10 }}>
+              <AdminOverviewBox
+                label={"Profile"}
+                name={item.owner}
+                rightText={"Owner"}
+                image={personGrayIcon}
+                onPress={() => navigation.navigate("profile", { data: item })}
+              />
+            </View>
 
-                <View style={{ width: "100%", marginTop: 10 }}>
-                  <AdminOverviewBox
-                    label={"Locations"}
-                    name={defaultLocation.locationName ?? ""}
-                    rightText={`${locationsList.length} Location`}
-                    image={locationIcon}
-                    onPress={() =>
-                      navigation.navigate("location", { data: item })
-                    }
-                  />
-                </View>
+            <View style={{ width: "100%", marginTop: 10 }}>
+              <AdminOverviewBox
+                label={"Locations"}
+                name={defaultLocation.locationName ?? ""}
+                rightText={`${locationsList.length} Location`}
+                image={locationIcon}
+                onPress={() => navigation.navigate("location", { data: item })}
+              />
+            </View>
 
-                <View style={{ width: "100%", marginTop: 10 }}>
-                  <AdminOverviewBox
-                    label={"Tax Documents"}
-                    name={"2021 Available"}
-                    rightText={"6 Available"}
-                    image={taxIcon}
-                    onPress={() => navigation.navigate("tax", { data: item })}
-                  />
-                </View>
+            <View style={{ width: "100%", marginTop: 10 }}>
+              <AdminOverviewBox
+                label={"Tax Invoices UBF"}
+                name={"2021 Available"}
+                rightText={"6 Available"}
+                image={taxIcon}
+                onPress={() => navigation.navigate("tax", { data: item })}
+              />
+            </View>
 
-                <View style={{ width: "100%", marginTop: 10 }}>
-                  <AdminOverviewBox
-                    label={"Employees"}
-                    name={"Managers/Workers"}
-                    rightText={`${employeeList.length} Users`}
-                    image={multiplePeopleIcon}
-                    onPress={() =>
-                      navigation.navigate("employees", { data: item })
-                    }
-                  />
-                </View>
+            <View style={{ width: "100%", marginTop: 10 }}>
+              <AdminOverviewBox
+                label={"Employees"}
+                name={"Managers/Workers"}
+                rightText={`${employeeList.length} Users`}
+                image={multiplePeopleIcon}
+                onPress={() => navigation.navigate("employees", { data: item })}
+              />
+            </View>
 
-                <View style={{ width: "100%", marginTop: 10 }}>
-                  <AdminOverviewBox
-                    label={"Bank Details"}
-                    name={"HBL Bank"}
-                    rightText={"Active"}
-                    image={bankIcon}
-                    onPress={() =>
-                      navigation.navigate("bankDetails", { data: item })
-                    }
-                  />
-                </View>
+            <View style={{ width: "100%", marginTop: 10 }}>
+              <AdminOverviewBox
+                label={"Payment methods"}
+                name={"HBL Bank"}
+                rightText={"Active"}
+                image={bankIcon}
+                onPress={() =>
+                  navigation.navigate("bankDetails", { data: item })
+                }
+              />
+            </View>
 
-                {/* <View
+            {/* <View
                   style={{ width: "100%", marginTop: 20, marginBottom: 20 }}
                 >
                   <TouchableOpacity
@@ -188,10 +183,8 @@ export const AdminPage = () => {
                     />
                   </TouchableOpacity>
                 </View> */}
-              </View>
-            )}
           </View>
-        ))}
+        </View>
       </View>
       <FullPageLoadingModall visible={isLoading} />
       <ConnectSquareModal

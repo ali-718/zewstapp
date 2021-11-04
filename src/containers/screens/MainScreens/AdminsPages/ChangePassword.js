@@ -5,6 +5,7 @@ import { useNavigation } from "@react-navigation/native";
 import { RegularButton } from "../../../../components/Buttons/RegularButton";
 import { primaryShade1 } from "../../../../theme/colors";
 import { PasswordInput } from "../../../../components/Inputs/PasswordInput";
+import { HeadingBox } from "../../../../components/HeadingBox/HeadingBox";
 
 export const ChangePasswordPage = () => {
   const navigation = useNavigation();
@@ -14,6 +15,7 @@ export const ChangePasswordPage = () => {
 
   return (
     <MainScreenContainer title={"Change Password"}>
+      <HeadingBox heading={"Change password"} />
       <View
         style={{
           width: "90%",

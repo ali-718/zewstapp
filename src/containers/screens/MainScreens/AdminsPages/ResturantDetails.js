@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View } from "react-native";
+import { Image, TouchableOpacity, View } from "react-native";
 import { Input } from "../../../../components/Inputs/Input";
 import { MealItem } from "../../../../components/Meals/MealItem";
 import { MainScreenContainer } from "../../../MainScreenContainers";
@@ -7,6 +7,10 @@ import forwardIcon from "../../../../assets/images/forwardIcon.png";
 import { ListModal } from "../../../../components/Meals/ListModal";
 import { useNavigation } from "@react-navigation/native";
 import { RegularButton } from "../../../../components/Buttons/RegularButton";
+import blackBackArrow from "../../../../assets/images/blackBackArrow.png";
+import { Text } from "../../../../components/Text/Text";
+import { useSelector } from "react-redux";
+import { HeadingBox } from "../../../../components/HeadingBox/HeadingBox";
 
 const emp = ["Ali", "Zainab", "Umer", "Kanwal", "Zaid", "Yahya"];
 const time = [
@@ -29,9 +33,11 @@ export const ResturantDetails = () => {
   const [selectedCsr, setSelectedCsr] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
   const [timeModal, setTimeModal] = useState(false);
+  const device = useSelector((state) => state.system.device);
 
   return (
-    <MainScreenContainer title={"Restaurant details"}>
+    <MainScreenContainer>
+      <HeadingBox heading={"Restaurant details"} />
       <View
         style={{
           width: "90%",

@@ -2,7 +2,11 @@ import React, { useState, useRef, useEffect } from "react";
 import { View, TextInput, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { Icon } from "native-base";
-import { grayMenuText, primaryColor } from "../../theme/colors";
+import {
+  grayMenuText,
+  inputBorderColor,
+  primaryColor,
+} from "../../theme/colors";
 import { Text } from "../Text/Text";
 import { useSelector } from "react-redux";
 import { TextInputMask } from "react-native-masked-text";
@@ -82,7 +86,7 @@ export const Input = ({
           alignItems: textarea ? "flex-start" : "center",
           flexDirection: "row",
           borderBottomWidth: isError && showError ? 1 : 0,
-          borderColor: "red",
+          borderColor: inputBorderColor,
           ...style,
         }}
         activeOpacity={1}

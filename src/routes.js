@@ -131,6 +131,7 @@ const AdminRoutes = () => {
       <Stack.Screen name="employees" component={EmployeesPage} />
       <Stack.Screen name="addEmployees" component={AddEmployeesPage} />
       <Stack.Screen name="bankDetails" component={BankDetailsPage} />
+      <Stack.Screen name="changePass" component={ChangePasswordPage} />
     </Stack.Navigator>
   );
 };
@@ -175,7 +176,6 @@ const MainRoutes = () => {
         <Drawer.Screen name="Support" component={AdminPage} />
 
         <Stack.Screen name="orderDetail" component={OrderDetailPage} />
-        <Stack.Screen name="changePass" component={ChangePasswordPage} />
         <Stack.Screen name="KitchenPage" component={KitchenPage} />
         <Stack.Screen name="KitchenDetailPage" component={KitchenDetailPage} />
       </Drawer.Navigator>

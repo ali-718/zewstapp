@@ -5,6 +5,7 @@ import { MainScreenContainer } from "../../../MainScreenContainers";
 import { useNavigation } from "@react-navigation/native";
 import { RegularButton } from "../../../../components/Buttons/RegularButton";
 import { primaryShade1 } from "../../../../theme/colors";
+import { HeadingBox } from "../../../../components/HeadingBox/HeadingBox";
 
 export const ProfilePage = () => {
   const navigation = useNavigation();
@@ -14,6 +15,7 @@ export const ProfilePage = () => {
 
   return (
     <MainScreenContainer title={"Profile"}>
+      <HeadingBox heading={"Profile"} />
       <View
         style={{
           width: "90%",
