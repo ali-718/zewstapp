@@ -16,6 +16,8 @@ import {
   setPrimaryLocationAction,
 } from "../../../../Redux/actions/AdminActions/LocationActions";
 import { SearchInput } from "../../../../components/SearchInput/SearchInput";
+import { RegularButton } from "../../../../components/Buttons/RegularButton";
+import { HeadingBox } from "../../../../components/HeadingBox/HeadingBox";
 
 export const LocationsPage = () => {
   const navigation = useNavigation();
@@ -63,11 +65,11 @@ export const LocationsPage = () => {
 
   return (
     <MainScreenContainer title={"Locations"}>
+      <HeadingBox heading={"Location"} />
       <View
         style={{
           width: "90%",
           alignItems: "center",
-          marginTop: 20,
           marginBottom: 30,
         }}
       >
@@ -126,53 +128,35 @@ export const LocationsPage = () => {
                 </View>
               )}
             </View> */}
-            <SearchInput
+            {/* <SearchInput
               search={search}
               setSearch={setSearch}
               searchKeyword={searchKeyword}
-            />
+            /> */}
 
             <View style={{ width: "100%", marginTop: 10 }}>
               {locations.map((item, i) => (
-                <View style={{ width: "100%", marginTop: 10 }}>
-                  <AdminOverviewBox
-                    key={i}
-                    label={`Location ${i + 1}`}
-                    name={item.locationName}
-                    rightText={
-                      defaultLocation.locationId === item.locationId
-                        ? "Primary"
-                        : ""
-                    }
-                    image={storeIcon}
-                    onPress={() =>
-                      navigation.navigate("addLocation", { data: item })
-                    }
-                    onLongPress={() => setPrimaryLocation(item)}
-                  />
-                </View>
+                <AdminOverviewBox
+                  key={i}
+                  label={`Location ${i + 1}`}
+                  name={item.locationName}
+                  rightText={
+                    defaultLocation.locationId === item.locationId
+                      ? "Primary"
+                      : ""
+                  }
+                  onPress={() =>
+                    navigation.navigate("addLocation", { data: item })
+                  }
+                  onLongPress={() => setPrimaryLocation(item)}
+                />
               ))}
 
-              <TouchableOpacity
-                style={{
-                  width: "100%",
-                  marginTop: 10,
-                  backgroundColor: "white",
-                  borderRadius: 10,
-                  padding: 15,
-                }}
+              <RegularButton
+                style={{ marginTop: 20 }}
                 onPress={() => navigation.navigate("addLocation")}
-              >
-                <Text
-                  style={{
-                    fontSize: device === "tablet" ? 25 : 20,
-                    fontFamily: "openSans_bold",
-                    color: primaryColor,
-                  }}
-                >
-                  Add Location
-                </Text>
-              </TouchableOpacity>
+                text={"+ Add a new location"}
+              />
             </View>
           </View>
         )}

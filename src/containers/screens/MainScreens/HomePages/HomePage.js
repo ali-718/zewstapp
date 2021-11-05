@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Image, Platform, TouchableOpacity, View } from "react-native";
 import { MainScreenContainer } from "../../../MainScreenContainers";
-import menuIcon from "../../../../assets/images/menuIcon.png";
-import bellIcon from "../../../../assets/images/bellIcon.png";
 import { Text } from "../../../../components/Text/Text";
 import forwardIcon from "../../../../assets/images/forwardIcon.png";
 import qrcodeIcon from "../../../../assets/images/qrcodeIcon.png";

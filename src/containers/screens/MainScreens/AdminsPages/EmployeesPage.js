@@ -14,6 +14,8 @@ import { LoadingPage } from "../../../../components/LoadingPage/LoadingPage";
 import { RefetchDataError } from "../../../../components/ErrorPage/RefetchDataError";
 import { NoMealBox } from "../../../../components/NoMealBox/NoMealBox";
 import { SearchInput } from "../../../../components/SearchInput/SearchInput";
+import { HeadingBox } from "../../../../components/HeadingBox/HeadingBox";
+import { RegularButton } from "../../../../components/Buttons/RegularButton";
 
 export const EmployeesPage = () => {
   const dispatch = useDispatch();
@@ -25,8 +27,6 @@ export const EmployeesPage = () => {
   const isError = useSelector((state) => state.employee.employee.isError);
   const [search, setSearch] = useState("");
   const [filteredItem, setFiltereditem] = useState([]);
-
-  console.log(list);
 
   const searchKeyword = (text) => {
     const keyword = text?.toLowerCase();
@@ -53,11 +53,11 @@ export const EmployeesPage = () => {
 
   return (
     <MainScreenContainer title={"Employees"}>
+      <HeadingBox heading={"Employees"} />
       <View
         style={{
           width: "90%",
           alignItems: "center",
-          marginTop: 20,
           marginBottom: 30,
         }}
       >
@@ -67,11 +67,6 @@ export const EmployeesPage = () => {
           <RefetchDataError onPress={fetchEmployees} isLoading={isLoading} />
         ) : (
           <View style={{ width: "100%" }}>
-            <SearchInput
-              search={search}
-              setSearch={setSearch}
-              searchKeyword={searchKeyword}
-            />
             <View style={{ width: "100%", marginTop: 10 }}>
               {list.length > 0 ? (
                 filteredItem.map((item, i) => (
@@ -81,7 +76,6 @@ export const EmployeesPage = () => {
                       label={item.type}
                       name={`${item.firstName} ${item.lastName}`}
                       rightText={item.active ? "Active" : "Inactive"}
-                      image={employeeIcon}
                       onPress={() =>
                         navigation.navigate("addEmployees", { data: item })
                       }
@@ -95,26 +89,11 @@ export const EmployeesPage = () => {
                 />
               )}
 
-              <TouchableOpacity
-                style={{
-                  width: "100%",
-                  marginTop: 10,
-                  backgroundColor: "white",
-                  borderRadius: 10,
-                  padding: 15,
-                }}
+              <RegularButton
                 onPress={() => navigation.navigate("addEmployees")}
-              >
-                <Text
-                  style={{
-                    fontSize: 20,
-                    fontFamily: "openSans_bold",
-                    color: primaryColor,
-                  }}
-                >
-                  Add Employee
-                </Text>
-              </TouchableOpacity>
+                text={"+ Add an employee"}
+                style={{ marginTop: 20 }}
+              />
             </View>
           </View>
         )}

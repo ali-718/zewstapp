@@ -119,7 +119,6 @@ export const Input = ({
           {masked ? (
             <TextInputMask
               onBlur={() => {
-                console.log("ok");
                 if (value.length > 0) {
                   return;
                 }
