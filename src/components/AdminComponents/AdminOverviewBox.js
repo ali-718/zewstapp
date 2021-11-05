@@ -20,6 +20,7 @@ export const AdminOverviewBox = ({
   recipe,
   inventory,
   borderLeftColor,
+  rightIcon,
   onLongPress = () => null,
 }) => {
   const device = useSelector((state) => state.system.device);
@@ -42,15 +43,17 @@ export const AdminOverviewBox = ({
       onPress={onPress}
       onLongPress={onLongPress}
     >
-      <Image
-        source={image}
-        style={{
-          width: device === "tablet" ? 40 : 30,
-          height: device === "tablet" ? 40 : 30,
-          resizeMode: "contain",
-          tintColor: primaryColor,
-        }}
-      />
+      {image && (
+        <Image
+          source={image}
+          style={{
+            width: device === "tablet" ? 40 : 30,
+            height: device === "tablet" ? 40 : 30,
+            resizeMode: "contain",
+            tintColor: primaryColor,
+          }}
+        />
+      )}
 
       <View
         style={{
@@ -96,8 +99,19 @@ export const AdminOverviewBox = ({
       </View>
 
       <View style={{ flexDirection: "row", alignItems: "center" }}>
+        {rightText && (
+          <Text
+            numberOfLines={1}
+            style={{
+              fontSize: device === "tablet" ? 18 : 14,
+              color: grayTextColor,
+            }}
+          >
+            {rightText}
+          </Text>
+        )}
         <Image
-          source={forwardIcon}
+          source={rightIcon ?? forwardIcon}
           style={{
             width: 15,
             height: 15,

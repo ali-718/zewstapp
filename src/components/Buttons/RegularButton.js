@@ -71,6 +71,7 @@ export const RegularButton = ({
                   fontFamily: "openSans_bold",
                   marginLeft: iconLeft ? 10 : 0,
                   letterSpacing: 1,
+                  textTransform: "uppercase",
                   ...textStyle,
                 }}
               >

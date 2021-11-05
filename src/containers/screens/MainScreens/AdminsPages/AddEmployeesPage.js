@@ -15,6 +15,7 @@ import { useNavigation } from "@react-navigation/core";
 import deleteIconWhite from "../../../../assets/images/deleteIconWhite.png";
 import { DeleteModal } from "../../../../components/Meals/DeleteModal";
 import { Dropdown } from "../../../../components/Inputs/DropDown";
+import { HeadingBox } from "../../../../components/HeadingBox/HeadingBox";
 
 export const AddEmployeesPage = (props) => {
   const dispatch = useDispatch();
@@ -125,6 +126,7 @@ export const AddEmployeesPage = (props) => {
       onPressRight={isEdit ? () => setdeleteModal(true) : () => null}
       title={isEdit ? "Edit Employee" : "Add Employee"}
     >
+      <HeadingBox heading={isEdit ? "Edit employee" : "Add employee"} />
       <DeleteModal
         onRequestClose={() => setdeleteModal(false)}
         visible={deleteModal}
@@ -139,13 +141,13 @@ export const AddEmployeesPage = (props) => {
           <Input
             value={firstName}
             setValue={(val) => setfirstName(val)}
-            placeholder={"First name*"}
+            placeholder={"First name"}
           />
         </View>
 
         <View style={{ width: "100%", marginTop: 20 }}>
           <Input
-            placeholder={"Last Name*"}
+            placeholder={"Last Name"}
             value={lastName}
             setValue={(val) => setlastName(val)}
           />
@@ -156,14 +158,14 @@ export const AddEmployeesPage = (props) => {
             value={contact}
             setValue={(val) => setContact(val)}
             keyboardType={"number-pad"}
-            placeholder={"Contact number*"}
+            placeholder={"Contact number"}
           />
         </View>
 
         <View style={{ width: "100%", marginTop: 20 }}>
           <Input
             keyboardType={"email-address"}
-            placeholder={"Email address*"}
+            placeholder={"Email address"}
             value={email}
             setValue={(val) => setEmail(val)}
           />
@@ -173,7 +175,7 @@ export const AddEmployeesPage = (props) => {
           <Dropdown
             selectedMenu={selectedType}
             setMenu={setSelectedType}
-            placeholder={"Type*"}
+            placeholder={"Type"}
             menus={["Manager", "Cashier", "kitchen Staff", "Order Taker"]}
             style={{ zIndex: 3 }}
           />
@@ -299,7 +301,7 @@ export const AddEmployeesPage = (props) => {
 
         <View style={{ width: "100%", marginTop: 10 }}>
           <MealItem
-            label={"Availability*"}
+            label={"Availability"}
             text={available ? "Available" : "Hidden"}
             icon={available ? switchOn : switchOff}
             onIconClick={() => setavailable(!available)}
@@ -311,7 +313,6 @@ export const AddEmployeesPage = (props) => {
             onPress={addEmployee}
             isLoading={isLoading}
             text={isEdit ? "Update" : "Save"}
-            style={{ borderRadius: 50 }}
           />
         </View>
       </View>

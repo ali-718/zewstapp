@@ -16,6 +16,9 @@ import { useDispatch, useSelector } from "react-redux";
 import * as actions from "../../../../Redux/actions/AdminActions/LocationActions";
 import { useNavigation } from "@react-navigation/core";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { HeadingBox } from "../../../../components/HeadingBox/HeadingBox";
+import { Dropdown } from "../../../../components/Inputs/DropDown";
+import { allCountries } from "../../../../helpers/utlils";
 
 const emp = ["Ali", "Zainab", "Umer", "Kanwal", "Zaid", "Yahya"];
 const time = [
@@ -35,6 +38,12 @@ export const AddLocationsPage = (props) => {
   const isLoading = useSelector(
     (state) => state.locations.addLocation.isLoading
   );
+  const [country, setCountry] = useState("");
+  const [streetName, setStreetName] = useState("");
+  const [plz, setPlz] = useState("");
+  const [city, setCity] = useState("");
+  const [district, setDistrict] = useState("");
+
   const [locationName, setlocationName] = useState("");
   const [phone, setphone] = useState("");
   const [email, setEmail] = useState("");
@@ -119,6 +128,7 @@ export const AddLocationsPage = (props) => {
 
   return (
     <MainScreenContainer title={"Add Location"}>
+      <HeadingBox heading={isEdit ? "Edit location" : "Add location"} />
       <View
         style={{
           width: "90%",
@@ -127,16 +137,51 @@ export const AddLocationsPage = (props) => {
           marginTop: 20,
         }}
       >
-        <View style={{ width: "100%" }}>
-          <Input
+        <View style={{ width: "100%", zIndex: 3 }}>
+          <Dropdown
+            selectedMenu={country}
+            setMenu={setCountry}
+            placeholder={"Country"}
+            menus={allCountries}
+            style={{ zIndex: 3 }}
+          />
+          {/* <Input
             value={locationName}
             setValue={(val) => setlocationName(val)}
             placeholder={"Location Name*"}
             rule={nameValidator}
-          />
+          /> */}
         </View>
 
         <View style={{ width: "100%", marginTop: 10 }}>
+          <Input
+            value={streetName}
+            setValue={(val) => setStreetName(val)}
+            placeholder={"Street name and number"}
+          />
+        </View>
+        <View style={{ width: "100%", marginTop: 10 }}>
+          <Input
+            value={plz}
+            setValue={(val) => setPlz(val)}
+            placeholder={"PLZ"}
+          />
+        </View>
+        <View style={{ width: "100%", marginTop: 10 }}>
+          <Input
+            value={city}
+            setValue={(val) => setCity(val)}
+            placeholder={"Town/City"}
+          />
+        </View>
+        <View style={{ width: "100%", marginTop: 10 }}>
+          <Input
+            value={district}
+            setValue={(val) => setDistrict(val)}
+            placeholder={"District"}
+          />
+        </View>
+        {/* <View style={{ width: "100%", marginTop: 10 }}>
           <Input
             value={phone}
             setValue={(val) => setphone(val)}
@@ -161,8 +206,8 @@ export const AddLocationsPage = (props) => {
             placeholder={"Address*"}
             rule={nameValidator}
           />
-        </View>
-        {!isMenu && (
+        </View> */}
+        {/* {!isMenu && (
           <View style={{ width: "100%", marginTop: 10 }}>
             <MealItem
               label={"Manager"}
@@ -173,7 +218,7 @@ export const AddLocationsPage = (props) => {
               iconStyle={{ width: 20, height: 20 }}
             />
           </View>
-        )}
+        )} */}
 
         <ListModal
           onRequestClose={() => setManagerModal(false)}
@@ -184,7 +229,7 @@ export const AddLocationsPage = (props) => {
           list={emp}
         />
 
-        {!isMenu && (
+        {/* {!isMenu && (
           <View style={{ width: "100%", marginTop: 10 }}>
             <MealItem
               label={"Timings"}
@@ -195,7 +240,7 @@ export const AddLocationsPage = (props) => {
               iconStyle={{ width: 20, height: 20 }}
             />
           </View>
-        )}
+        )} */}
 
         <ListModal
           onRequestClose={() => settimeModal(false)}
