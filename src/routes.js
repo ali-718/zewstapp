@@ -47,6 +47,7 @@ import { RecipeListPage } from "./containers/screens/MainScreens/RecipePages/Rec
 import { InventoryListPage } from "./containers/screens/MainScreens/InventoryPages/InventoryListPage";
 import { DrawerMenu } from "./components/Drawer/Drawer";
 import { InsightsPage } from "./containers/screens/MainScreens/InsightsPages/InsightsPage";
+import BankPage from "./containers/screens/MainScreens/AdminsPages/BankPage";
 
 const Stack = createNativeStackNavigator();
 
@@ -130,6 +131,7 @@ const AdminRoutes = () => {
       <Stack.Screen name="taxDocument" component={TaxDocument} />
       <Stack.Screen name="employees" component={EmployeesPage} />
       <Stack.Screen name="addEmployees" component={AddEmployeesPage} />
+      <Stack.Screen name="bankPage" component={BankPage} />
       <Stack.Screen name="bankDetails" component={BankDetailsPage} />
       <Stack.Screen name="changePass" component={ChangePasswordPage} />
     </Stack.Navigator>

@@ -22,6 +22,7 @@ export const AdminOverviewBox = ({
   borderLeftColor,
   rightIcon,
   onLongPress = () => null,
+  noTint,
 }) => {
   const device = useSelector((state) => state.system.device);
 
@@ -46,12 +47,14 @@ export const AdminOverviewBox = ({
       {image && (
         <Image
           source={image}
-          style={{
-            width: device === "tablet" ? 40 : 30,
-            height: device === "tablet" ? 40 : 30,
-            resizeMode: "contain",
-            tintColor: primaryColor,
-          }}
+          style={[
+            {
+              width: device === "tablet" ? 40 : 30,
+              height: device === "tablet" ? 40 : 30,
+              resizeMode: "contain",
+            },
+            !noTint && { tintColor: primaryColor },
+          ]}
         />
       )}
 

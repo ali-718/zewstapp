@@ -136,9 +136,7 @@ export const AdminPage = () => {
                 name={"HBL Bank"}
                 rightText={"Active"}
                 image={bankIcon}
-                onPress={() =>
-                  navigation.navigate("bankDetails", { data: item })
-                }
+                onPress={() => navigation.navigate("bankPage")}
               />
             </View>
 
