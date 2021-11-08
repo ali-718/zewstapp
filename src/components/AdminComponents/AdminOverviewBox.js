@@ -44,7 +44,7 @@ export const AdminOverviewBox = ({
       onPress={onPress}
       onLongPress={onLongPress}
     >
-      {image && (
+      {image ? (
         <Image
           source={image}
           style={[
@@ -56,8 +56,7 @@ export const AdminOverviewBox = ({
             !noTint && { tintColor: primaryColor },
           ]}
         />
-      )}
-
+      ) : null}
       <View
         style={{
           flex: 1,
@@ -100,9 +99,8 @@ export const AdminOverviewBox = ({
           {name}
         </Text>
       </View>
-
       <View style={{ flexDirection: "row", alignItems: "center" }}>
-        {rightText && (
+        {rightText ? (
           <Text
             numberOfLines={1}
             style={{
@@ -112,7 +110,7 @@ export const AdminOverviewBox = ({
           >
             {rightText}
           </Text>
-        )}
+        ) : null}
         <Image
           source={rightIcon ?? forwardIcon}
           style={{

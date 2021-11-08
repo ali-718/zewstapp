@@ -72,7 +72,10 @@ import {
 import { Icon, Progress, Select, ArrowDownIcon, Spinner } from "native-base";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Dropdown } from "../../../../components/Inputs/DropDown";
-import { fetchFoodCountAction } from "../../../../Redux/actions/DashboardActions/DashboardActions";
+import {
+  fetchFoodCountAction,
+  fetchLossInKitchenAction,
+} from "../../../../Redux/actions/DashboardActions/DashboardActions";
 import moment from "moment";
 import { order } from "styled-system";
 
@@ -194,7 +197,7 @@ const PriceFluctuation = ({ heading, belowText, device, rightText, color }) => (
     </View>
   </View>
 );
-const LossInKitchen = ({ heading, belowText, device }) => (
+const LossInKitchen = ({ heading, belowText, device, logDate }) => (
   <View
     style={{
       width: "100%",
@@ -235,7 +238,7 @@ const LossInKitchen = ({ heading, belowText, device }) => (
         color: primaryColor,
       }}
     >
-      02.10 at 2:21 PM
+      {logDate}
     </Text>
   </View>
 );
@@ -351,6 +354,12 @@ export const HomePage = ({ setselected }) => {
     orderItems,
     customerItems,
   } = useSelector((state) => state.dashboard.firstSection);
+  const {
+    isLoading: lossInKitchenLoading,
+    isError,
+    list: lossInKitchenList,
+    totalLoss: lossInKitchenTotalLoss,
+  } = useSelector((state) => state.dashboard.lossInKitchen);
 
   const openCamera = async () => {
     const { status } = await Camera.requestCameraPermissionsAsync();
@@ -378,11 +387,7 @@ export const HomePage = ({ setselected }) => {
     if (!isScreenFocused) return;
     checkDefaultLocation();
 
-    Promise.all([fetchFirstSection()]);
-  }, [isScreenFocused]);
-
-  useEffect(() => {
-    fetchFirstSection();
+    Promise.all([fetchFirstSection(), fetchLossInKitchenSection()]);
   }, [selectedTime]);
 
   const fetchFirstSection = async () => {
@@ -390,6 +395,33 @@ export const HomePage = ({ setselected }) => {
 
     dispatch(
       fetchFoodCountAction({
+        locationId: JSON.parse(location).locationId ?? "",
+        interval:
+          selectedTime === "This month"
+            ? "month"
+            : selectedTime === "This year"
+            ? "year"
+            : selectedTime === "This day"
+            ? "day"
+            : "",
+        startDate:
+          selectedTime === "This month"
+            ? moment().subtract(30, "days").format("DD-M-yyy")
+            : selectedTime === "This year"
+            ? moment().subtract(365, "days").format("DD-M-yyy")
+            : selectedTime === "This day"
+            ? moment().format("DD-M-yyy")
+            : "",
+        endDate: moment().format("DD-M-yyy"),
+      })
+    );
+  };
+
+  const fetchLossInKitchenSection = async () => {
+    const location = await AsyncStorage.getItem("defaultLocation");
+
+    dispatch(
+      fetchLossInKitchenAction({
         locationId: JSON.parse(location).locationId ?? "",
         interval:
           selectedTime === "This month"
@@ -783,7 +815,7 @@ export const HomePage = ({ setselected }) => {
                             fontFamily: "openSans_semiBold",
                           }}
                         >
-                          Total: $6.540
+                          Total: ${lossInKitchenTotalLoss}
                         </Text>
                       </View>
 
@@ -801,21 +833,32 @@ export const HomePage = ({ setselected }) => {
                         marginTop: 10,
                       }}
                     >
-                      <LossInKitchen
-                        heading={"Honeywell Mustard"}
-                        belowText={"2"}
-                        device={device}
-                      />
-                      <LossInKitchen
-                        heading={"Honeywell Mustard"}
-                        belowText={"3"}
-                        device={device}
-                      />
-                      <LossInKitchen
-                        heading={"Honeywell Mustard asli asd"}
-                        belowText={"5"}
-                        device={device}
-                      />
+                      {lossInKitchenLoading ? (
+                        <View
+                          style={{
+                            flex: 1,
+                            flexDirection: "row",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            backgroundColor: "white",
+                            borderRadius: 10,
+                            padding: 10,
+                            paddingVertical: 20,
+                          }}
+                        >
+                          <Spinner size={"large"} color={primaryColor} />
+                        </View>
+                      ) : (
+                        lossInKitchenList.map((item, i) => (
+                          <LossInKitchen
+                            key={i}
+                            heading={item.category}
+                            belowText={item.wastedQuantity}
+                            device={device}
+                            logDate={item.logDate}
+                          />
+                        ))
+                      )}
                     </View>
                   </TouchableOpacity>
                 </View>

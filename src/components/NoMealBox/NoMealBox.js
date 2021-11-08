@@ -8,7 +8,6 @@ export const NoMealBox = ({ image, text }) => {
       style={{
         width: "100%",
         borderRadius: 10,
-        backgroundColor: grayShade2,
         alignItems: "center",
         justifyContent: "center",
         height: 300,
