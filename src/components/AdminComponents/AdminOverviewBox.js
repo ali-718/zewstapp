@@ -22,6 +22,7 @@ export const AdminOverviewBox = ({
   borderLeftColor,
   rightIcon,
   onLongPress = () => null,
+  noTint,
 }) => {
   const device = useSelector((state) => state.system.device);
 
@@ -43,18 +44,19 @@ export const AdminOverviewBox = ({
       onPress={onPress}
       onLongPress={onLongPress}
     >
-      {image && (
+      {image ? (
         <Image
           source={image}
-          style={{
-            width: device === "tablet" ? 40 : 30,
-            height: device === "tablet" ? 40 : 30,
-            resizeMode: "contain",
-            tintColor: primaryColor,
-          }}
+          style={[
+            {
+              width: device === "tablet" ? 40 : 30,
+              height: device === "tablet" ? 40 : 30,
+              resizeMode: "contain",
+            },
+            !noTint && { tintColor: primaryColor },
+          ]}
         />
-      )}
-
+      ) : null}
       <View
         style={{
           flex: 1,
@@ -97,9 +99,8 @@ export const AdminOverviewBox = ({
           {name}
         </Text>
       </View>
-
       <View style={{ flexDirection: "row", alignItems: "center" }}>
-        {rightText && (
+        {rightText ? (
           <Text
             numberOfLines={1}
             style={{
@@ -109,7 +110,7 @@ export const AdminOverviewBox = ({
           >
             {rightText}
           </Text>
-        )}
+        ) : null}
         <Image
           source={rightIcon ?? forwardIcon}
           style={{

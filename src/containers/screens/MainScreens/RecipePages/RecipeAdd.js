@@ -15,6 +15,7 @@ import { ToastError } from "../../../../helpers/Toast";
 import { useNavigation } from "@react-navigation/core";
 import * as actions from "../../../../Redux/actions/RecipeActions/RecipeActions";
 import * as inventoryActions from "../../../../Redux/actions/InventoryAction/InventoryActions";
+import { HeadingBox } from "../../../../components/HeadingBox/HeadingBox";
 
 export const RecipeAdd = (props) => {
   const device = useSelector((state) => state.system.device);
@@ -205,21 +206,18 @@ export const RecipeAdd = (props) => {
   };
 
   return (
-    <MainScreenContainer
-      rightImage={""}
-      title={"Recipe Engineering"}
-      onPressRight={() => null}
-    >
+    <MainScreenContainer>
+      <HeadingBox heading={isEdit ? "Edit recipe" : "Add recipe"} />
       <View
         style={{
           width: "95%",
           flex: 1,
           alignItems: "center",
-          backgroundColor: "white",
           marginVertical: 20,
           borderRadius: 10,
           paddingBottom: 20,
           marginBottom: 200,
+          marginTop: 0,
         }}
       >
         <View
@@ -234,8 +232,6 @@ export const RecipeAdd = (props) => {
             value={title}
             setValue={(val) => setTitle(val)}
             style={{
-              borderColor: grayColor,
-              borderBottomWidth: 2,
               marginTop: 10,
               borderRadius: 0,
             }}
@@ -298,8 +294,6 @@ export const RecipeAdd = (props) => {
               value={serving}
               setValue={(val) => setServing(val)}
               style={{
-                borderColor: grayColor,
-                borderBottomWidth: 2,
                 marginTop: 10,
                 borderRadius: 0,
                 marginBottom: 10,
@@ -320,8 +314,6 @@ export const RecipeAdd = (props) => {
               value={cookingTime}
               setValue={(val) => setCookingTime(val)}
               style={{
-                borderColor: grayColor,
-                borderBottomWidth: 2,
                 marginTop: 10,
                 borderRadius: 0,
               }}
@@ -375,8 +367,6 @@ export const RecipeAdd = (props) => {
                   placeholder={`Step ${i + 1}`}
                   setValue={(val) => addRecipeDescription(val, i)}
                   style={{
-                    borderColor: grayColor,
-                    borderBottomWidth: 2,
                     borderRadius: 0,
                     flex: 1,
                     zIndex: 0,

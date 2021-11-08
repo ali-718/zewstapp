@@ -1,5 +1,8 @@
 import produce from "immer";
-import { FETCH_FOOD_COUNT } from "../actions/DashboardActions/Types";
+import {
+  FETCH_FOOD_COUNT,
+  LOSS_IN_KITCHEN,
+} from "../actions/DashboardActions/Types";
 
 const initialState = {
   firstSection: {
@@ -9,11 +12,34 @@ const initialState = {
     orderItems: 0,
     customerItems: 0,
   },
+  lossInKitchen: {
+    isLoading: true,
+    isError: false,
+    list: [],
+    totalLoss: 0,
+  },
 };
 
 export const dashboardReducer = produce(
   (state = initialState, { payload, type }) => {
     switch (type) {
+      case LOSS_IN_KITCHEN.REQUESTED: {
+        state.lossInKitchen.isLoading = true;
+        state.firstSection.isError = false;
+        break;
+      }
+      case LOSS_IN_KITCHEN.SUCCEEDED: {
+        state.lossInKitchen.isLoading = false;
+        state.firstSection.isError = false;
+        state.firstSection.list = payload.data;
+        state.firstSection.totalLoss = payload.totalRevenue ?? 0;
+        break;
+      }
+      case LOSS_IN_KITCHEN.FAILED: {
+        state.lossInKitchen.isLoading = false;
+        state.firstSection.isError = true;
+        break;
+      }
       case FETCH_FOOD_COUNT.REQUESTED: {
         state.firstSection.isLoading = true;
         state.firstSection.isError = false;
