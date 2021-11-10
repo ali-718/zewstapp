@@ -9,34 +9,23 @@ import {
 } from "./Types";
 
 export const AddNewLocation =
-  ({
-    clientId,
-    locationName,
-    contact_no,
-    email,
-    address,
-    cordinates = "",
-    manager = "",
-    timmings = "",
-    default_location = false,
-    navigation,
-  }) =>
+  ({ clientId, country, streetInfo, name, townCity, district, navigation }) =>
   (dispatch) => {
     dispatch({ type: ADD_NEW_LOCATION.REQUESTED });
 
     client
       .post(`/location/add`, {
         clientId,
-        locationName,
-        contact_no: `+${contact_no}`,
-        email,
-        address,
-        cordinates,
-        manager,
-        timmings,
-        default_location,
+        country,
+        streetInfo,
+        name,
+        townCity,
+        district,
+        mode: "Manual",
+        default_location: true,
       })
       .then((data) => {
+        // dispatch(setPrimaryLocationAction({}));
         dispatch({
           type: ADD_NEW_LOCATION.SUCCEEDED,
         });
@@ -74,13 +63,11 @@ export const getAllUserLocations =
 export const updateLocation =
   ({
     clientId,
-    locationName,
-    contact_no,
-    email,
-    address,
-    cordinates = "",
-    manager = "",
-    timmings = "",
+    country,
+    streetInfo,
+    name,
+    townCity,
+    district,
     default_location = false,
     navigation,
     locationId,
@@ -91,13 +78,11 @@ export const updateLocation =
     client
       .post(`/location/update`, {
         clientId,
-        locationName,
-        contact_no: `+${contact_no}`,
-        email,
-        address,
-        cordinates,
-        manager,
-        timmings,
+        country,
+        streetInfo,
+        name,
+        townCity,
+        district,
         default_location,
         locationId,
       })

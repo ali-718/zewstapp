@@ -17,6 +17,7 @@ export const SigningCheck = () => {
 
     // AsyncStorage.removeItem("user");
     // AsyncStorage.removeItem("refreshToken");
+    // AsyncStorage.removeItem("defaultLocation");
     if (user) {
       const data = JSON.parse(user);
       refreshTokenAction({

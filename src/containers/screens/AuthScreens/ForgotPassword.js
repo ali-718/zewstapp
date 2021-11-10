@@ -10,11 +10,17 @@ import {
   primaryColor,
   primaryShade3,
 } from "../../../theme/colors";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { OnBoardingPage } from "./onBoardingPage";
 import { emailValidator } from "../../../helpers/rules";
+import validator from "validator";
+import { ToastError } from "../../../helpers/Toast";
+import { resetPasswordAction } from "../../../Redux/actions/AuthActions/authActions";
+import { useNavigation } from "@react-navigation/core";
 
 export const ForgotPassword = (props) => {
+  const dispatch = useDispatch();
+  const navigation = useNavigation();
   const orientation = useSelector((state) => state.system.orientation);
   const device = useSelector((state) => state.system.device);
 
@@ -23,6 +29,18 @@ export const ForgotPassword = (props) => {
   const [isError, setIsError] = useState({
     email: false,
   });
+
+  const forgotPasswordClick = () => {
+    setshowError(true);
+    if (validator.isEmpty(email, { ignore_whitespace: false })) {
+      ToastError("Kindly enter your email");
+      return;
+    }
+
+    if (isError.email) return;
+
+    dispatch(resetPasswordAction({ email, navigation }));
+  };
 
   return (
     <AuthScreenContainer title={"Forgot Password"}>
@@ -58,6 +76,7 @@ export const ForgotPassword = (props) => {
 
         <View style={{ width: "100%", marginTop: 20 }}>
           <RegularButton
+            onPress={forgotPasswordClick}
             text={"RESET PASSWORD"}
             style={{ borderRadius: 10, width: "100%" }}
             colors={[primaryColor, primaryColor]}

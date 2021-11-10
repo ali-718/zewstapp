@@ -133,13 +133,12 @@ export const LocationsPage = () => {
               setSearch={setSearch}
               searchKeyword={searchKeyword}
             /> */}
-
             <View style={{ width: "100%", marginTop: 10 }}>
               {locations.map((item, i) => (
                 <AdminOverviewBox
                   key={i}
                   label={`Location ${i + 1}`}
-                  name={item.locationName}
+                  name={item.streetInfo}
                   rightText={
                     defaultLocation.locationId === item.locationId
                       ? "Primary"

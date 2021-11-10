@@ -1,9 +1,11 @@
-import { authClient } from "../authClient";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { ToastError, ToastSuccess } from "../../../helpers/Toast";
 import { client } from "../client";
+import { LOGOUT } from "./Types";
 
 export const signupAction = ({ owner_name, contact_no, email, password }) =>
   new Promise((resolve, reject) => {
-    authClient
+    client
       .post("/auth/signup", {
         owner_name,
         contact_no: `+${contact_no}`,
@@ -18,7 +20,7 @@ export const signupAction = ({ owner_name, contact_no, email, password }) =>
 
 export const confirmCode = ({ username, code }) =>
   new Promise((resolve, reject) => {
-    authClient
+    client
       .post("/auth/confirm", {
         username,
         code,
@@ -31,7 +33,7 @@ export const confirmCode = ({ username, code }) =>
 
 export const loginAction = ({ email, password }) =>
   new Promise((resolve, reject) => {
-    authClient
+    client
       .post("/auth/signin", {
         email,
         password,
@@ -55,9 +57,25 @@ export const refreshTokenAction = ({ refreshToken, email }) =>
       .catch((e) => reject(e.response.data));
   });
 
+export const resetPasswordAction =
+  ({ email, navigation }) =>
+  (dispatch) => {
+    client
+      .post("/auth/resetPassword", {
+        email,
+      })
+      .then((data) => {
+        ToastSuccess("Code sent!", "Code has been sent to your email");
+        navigation.navigate("ResetPasswordVerification", { email });
+      })
+      .catch((e) => {
+        ToastError("Some error occoured, please try again later");
+      });
+  };
+
 export const resendCode = ({ email }) =>
   new Promise((resolve, reject) => {
-    authClient
+    client
       .post("/auth/resendOtp", {
         email,
       })
@@ -80,5 +98,26 @@ export const connectWithSquare = ({ clientId, squareAccessToken }) =>
       .catch((e) => {
         reject(e.response.data.message);
         console.log(e.response.data.message);
+      });
+  });
+
+export const LogoutAction = (navigation) => (dispatch) => {
+  dispatch({ type: LOGOUT });
+  AsyncStorage.clear();
+};
+
+export const confirmResetPasswordCode = ({ email, code, newpass }) =>
+  new Promise((resolve, reject) => {
+    client
+      .post("/auth/newPasswordConfirmation", {
+        email,
+        code,
+        newpass,
+      })
+      .then((data) => {
+        resolve(data.data);
+      })
+      .catch((e) => {
+        reject(e.response.data);
       });
   });

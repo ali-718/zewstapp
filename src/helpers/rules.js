@@ -14,10 +14,10 @@ export const nameValidator = (name) =>
 
 export const phoneValidator = (phone) =>
   new Promise((resolve, reject) => {
-    if (phone.trim().length < 12) {
+    if (phone.trim().length === 0) {
       return reject({
         success: false,
-        error: "atleast 12 numbers",
+        error: "Empty field",
       });
     }
 
@@ -47,9 +47,8 @@ export const passwordValidator = (data) =>
 
     if (
       !validator.isStrongPassword(data, {
-        minLength: 16,
+        minLength: 9,
         minUppercase: 1,
-        minNumbers: 1,
         pointsPerUnique: 1,
       })
     ) {
@@ -73,9 +72,8 @@ export const confirmPasswordValidator = (data, pass) =>
 
     if (
       !validator.isStrongPassword(data, {
-        minLength: 16,
+        minLength: 9,
         minUppercase: 1,
-        minNumbers: 1,
         pointsPerUnique: 1,
       })
     ) {

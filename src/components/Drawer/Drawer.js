@@ -26,9 +26,11 @@ import libraryIcon from "../../assets/images/MenuIcons/library.png";
 import settingsIcon from "../../assets/images/MenuIcons/settings.png";
 import supportIcon from "../../assets/images/MenuIcons/support.png";
 import { useNavigation } from "@react-navigation/native";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Text } from "../Text/Text";
 import { useRoute } from "@react-navigation/native";
+import { RegularButton } from "../Buttons/RegularButton";
+import { LogoutAction } from "../../Redux/actions/AuthActions/authActions";
 
 export const Menu = ({ image, name, setselected, selected, style }) => (
   <TouchableOpacity
@@ -70,7 +72,10 @@ export const Menu = ({ image, name, setselected, selected, style }) => (
 
 export const DrawerMenu = ({ state: { index } }) => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
   const device = useSelector((state) => state.system.device);
+
+  const Logout = () => dispatch(LogoutAction(navigation));
 
   return (
     <SafeAreaView style={{ flex: 1, paddingTop: 30 }}>
@@ -139,6 +144,20 @@ export const DrawerMenu = ({ state: { index } }) => {
               setselected={() => navigation.navigate("Admin")}
               image={inventoryIcon}
               name={"Admin"}
+            />
+
+            <RegularButton
+              text={"Logout"}
+              onPress={Logout}
+              textStyle={{ color: "red" }}
+              colors={["white", "white"]}
+              style={{
+                borderColor: "red",
+                borderWidth: 1,
+                marginTop: 20,
+                width: "90%",
+                alignSelf: "center",
+              }}
             />
           </View>
 

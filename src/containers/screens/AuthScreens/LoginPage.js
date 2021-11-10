@@ -78,7 +78,7 @@ export const LoginPage = (props) => {
   };
 
   return (
-    <AuthScreenContainer title={"Sign in"}>
+    <AuthScreenContainer noBack={noBack} title={"Sign in"}>
       <View style={{ width: "100%", marginBottom: 40 }}>
         <View style={{ width: "100%" }}>
           <Text style={{ fontSize: 28, fontFamily: "openSans_bold" }}>

@@ -50,7 +50,7 @@ export const PasswordInput = ({
 
   const requirements = () => {
     alert(
-      `Password must contain 16 letters. \n ${" "} \n Password must contain 1 uppercase letter.  \n ${" "} \n  Password must contain 1 number. \n ${" "} \n Password must contain 1 special character.`
+      `Password must contain 9 letters. \n ${" "} \n Password must contain 1 uppercase letter.  \n ${" "} \n  Password must contain 1 number. \n ${" "} \n Password must contain 1 special character.`
     );
   };
 

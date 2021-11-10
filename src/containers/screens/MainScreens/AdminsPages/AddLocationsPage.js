@@ -19,17 +19,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { HeadingBox } from "../../../../components/HeadingBox/HeadingBox";
 import { Dropdown } from "../../../../components/Inputs/DropDown";
 import { allCountries } from "../../../../helpers/utlils";
-
-const emp = ["Ali", "Zainab", "Umer", "Kanwal", "Zaid", "Yahya"];
-const time = [
-  "11:30am - 11:45pm",
-  "12:10am - 12:45pm",
-  "1:30am - 11:45pm",
-  "2:30am - 2:45pm",
-  "3:30am - 3:45pm",
-  "4:30am - 4:45pm",
-  "5:30am - 5:45pm",
-];
+import validator from "validator";
 
 export const AddLocationsPage = (props) => {
   const dispatch = useDispatch();
@@ -43,68 +33,50 @@ export const AddLocationsPage = (props) => {
   const [plz, setPlz] = useState("");
   const [city, setCity] = useState("");
   const [district, setDistrict] = useState("");
-
-  const [locationName, setlocationName] = useState("");
-  const [phone, setphone] = useState("");
-  const [email, setEmail] = useState("");
-  const [address, setAddress] = useState("");
-  const [selectedManager, setSelectedManager] = useState("");
-  const [managerModal, setManagerModal] = useState(false);
-  const [selectedTime, setselectedTime] = useState("");
-  const [timeModal, settimeModal] = useState(false);
-  const [isMenu, setIsMenu] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
 
   useEffect(() => {
-    const isMenu = props?.route?.params?.isMenu;
     const isData = props?.route?.params?.data;
-
-    if (isMenu) {
-      setIsMenu(true);
-    }
 
     if (isData) {
       const {
-        locationName = "",
-        contact_no = "",
-        manager = "",
-        address = "",
-        email = "",
-        timmings = "",
+        streetInfo = "",
+        name = "",
+        country = "",
+        district = "",
+        townCity = "",
       } = isData;
 
-      setlocationName(locationName);
-      setphone(contact_no.replace("+", ""));
-      setSelectedManager(manager);
-      setAddress(address);
-      setEmail(email);
-      setselectedTime(timmings);
+      setCity(townCity);
+      setDistrict(district);
+      setCountry(country);
+      setStreetName(streetInfo);
+      setPlz(name);
       setIsEdit(true);
     }
   }, []);
 
   const onAddLocation = () => {
     if (
-      locationName.trim().length === 0 ||
-      phone.trim().length === 0 ||
-      email.trim().length === 0 ||
-      address.trim().length === 0
+      validator.isEmpty(country, { ignore_whitespace: false }) ||
+      validator.isEmpty(streetName, { ignore_whitespace: false }) ||
+      validator.isEmpty(plz, { ignore_whitespace: false }) ||
+      validator.isEmpty(city, { ignore_whitespace: false }) ||
+      validator.isEmpty(district, { ignore_whitespace: false })
     ) {
-      ToastError("Fill all fields marked with (*)");
+      ToastError("Fill all fields");
       return;
     }
 
     if (isEdit) {
       const data = {
         clientId: user.clientId,
-        locationName,
-        contact_no: phone,
-        email,
-        address,
-        navigation,
+        country,
+        streetInfo: streetName,
+        name: plz,
+        townCity: city,
+        district: district,
         locationId: props?.route?.params?.data?.locationId,
-        manager: selectedManager,
-        timmings: selectedTime,
       };
 
       dispatch(actions.updateLocation(data));
@@ -114,13 +86,12 @@ export const AddLocationsPage = (props) => {
 
     const data = {
       clientId: user.clientId,
-      locationName,
-      contact_no: phone,
-      email,
-      address,
+      country,
+      streetInfo: streetName,
+      name: plz,
+      townCity: city,
+      district: district,
       navigation,
-      manager: selectedManager,
-      timmings: selectedTime,
     };
 
     dispatch(actions.AddNewLocation(data));
@@ -220,14 +191,14 @@ export const AddLocationsPage = (props) => {
           </View>
         )} */}
 
-        <ListModal
+        {/* <ListModal
           onRequestClose={() => setManagerModal(false)}
           visible={managerModal}
           title={"Manager"}
           onSelect={(item) => setSelectedManager(item)}
           selected={[selectedManager]}
           list={emp}
-        />
+        /> */}
 
         {/* {!isMenu && (
           <View style={{ width: "100%", marginTop: 10 }}>
@@ -241,7 +212,7 @@ export const AddLocationsPage = (props) => {
             />
           </View>
         )} */}
-
+        {/* 
         <ListModal
           onRequestClose={() => settimeModal(false)}
           visible={timeModal}
@@ -249,7 +220,7 @@ export const AddLocationsPage = (props) => {
           onSelect={(item) => setselectedTime(item)}
           selected={[selectedTime]}
           list={time}
-        />
+        /> */}
 
         <View style={{ width: "100%", marginTop: 20 }}>
           <RegularButton

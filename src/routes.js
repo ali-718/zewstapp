@@ -48,6 +48,7 @@ import { InventoryListPage } from "./containers/screens/MainScreens/InventoryPag
 import { DrawerMenu } from "./components/Drawer/Drawer";
 import { InsightsPage } from "./containers/screens/MainScreens/InsightsPages/InsightsPage";
 import BankPage from "./containers/screens/MainScreens/AdminsPages/BankPage";
+import { ResetPasswordVerification } from "./containers/screens/AuthScreens/ResetPasswordVerification";
 
 const Stack = createNativeStackNavigator();
 
@@ -64,6 +65,10 @@ const AuthRoutes = () => {
         <Stack.Screen name="Verification" component={VerificationPage} />
         <Stack.Screen name="Login" component={LoginPage} />
         <Stack.Screen name="Forgot" component={ForgotPassword} />
+        <Stack.Screen
+          name="ResetPasswordVerification"
+          component={ResetPasswordVerification}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -112,6 +117,8 @@ const DashboardRoutes = () => {
     >
       <Drawer.Screen name="Home" component={HomePage} />
       <Stack.Screen name="lossInKitchen" component={LossInKitchen} />
+      <Stack.Screen name="location" component={LocationsPage} />
+      <Stack.Screen name="addLocation" component={AddLocationsPage} />
     </Stack.Navigator>
   );
 };

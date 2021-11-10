@@ -13,12 +13,15 @@ import { RegularButton } from "../../../components/Buttons/RegularButton";
 import moment from "moment";
 import { ToastError, ToastSuccess } from "../../../helpers/Toast";
 import {
-  confirmCode,
+  confirmResetPasswordCode,
   resendCode,
 } from "../../../Redux/actions/AuthActions/authActions";
 import { useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/core";
 import { FullPageLoadingModall } from "../../../components/FullPageLoadingModall/FullPageLoadingModall";
+import { PasswordInput } from "../../../components/Inputs/PasswordInput";
+import { passwordValidator } from "../../../helpers/rules";
+import validator from "validator";
 
 const TextBox = ({ val, setVal, setRef, onChangeText, noLeft }) => {
   const ref = useRef();
@@ -68,9 +71,9 @@ const TextBox = ({ val, setVal, setRef, onChangeText, noLeft }) => {
   );
 };
 
-export const VerificationPage = (props) => {
+export const ResetPasswordVerification = (props) => {
   const navigation = useNavigation();
-  const username = useSelector((state) => state.auth.user.user);
+  const username = props?.route?.params?.email;
   const [isEdit, setIsEdit] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [code1, setcode1] = useState("");
@@ -79,6 +82,11 @@ export const VerificationPage = (props) => {
   const [code4, setcode4] = useState("");
   const [code5, setcode5] = useState("");
   const [code6, setcode6] = useState("");
+  const [password, setPassword] = useState("");
+  const [showError, setShowError] = useState(false);
+  const [isError, setIsError] = useState({
+    password: false,
+  });
 
   const [refs, setrefs] = useState({
     first: null,
@@ -89,39 +97,37 @@ export const VerificationPage = (props) => {
     sixth: null,
   });
 
-  const resetCountDown = () => {
-    resendCode({ email: username })
-      .then((res) => {
-        ToastSuccess("Sent!", "Code sent again :)");
-      })
-      .catch((e) => {
-        ToastError(
-          e.err?.message || "Some error occoured, please try again later"
-        );
-      });
-  };
-
   const onVerification = () => {
+    setShowError(true);
+
+    if (validator.isEmpty(password, { ignore_whitespace: false })) {
+      ToastError("please fill all fields");
+      return;
+    }
+
+    if (isError.password) return;
+
     setIsLoading(true);
 
-    confirmCode({
-      username,
+    confirmResetPasswordCode({
+      email: username,
       code: `${code1}${code2}${code3}${code4}${code5}${code6}`,
+      newpass: password,
     })
       .then((res) => {
         setIsLoading(false);
-        ToastSuccess("Verified!", "Your email has been verified! kindly login");
         navigation.reset({
           index: 0,
           routes: [
             { name: "Login", params: { email: username, noBack: true } },
           ],
         });
+        ToastSuccess("Success", "Password changed successfully");
       })
       .catch((e) => {
         setIsLoading(false);
         ToastError(
-          e.err?.message || "Some error occoured, please try again later"
+          e?.err?.message || "Some error occoured, please try again later"
         );
       });
   };
@@ -131,7 +137,7 @@ export const VerificationPage = (props) => {
       <View style={{ width: "100%", marginVertical: 20, marginBottom: 40 }}>
         <View style={{ width: "100%" }}>
           <Text style={{ fontSize: 28, fontFamily: "openSans_bold" }}>
-            Verify your phone number
+            Verification
           </Text>
           <Text
             style={{
@@ -141,7 +147,7 @@ export const VerificationPage = (props) => {
               color: grayTextColor,
             }}
           >
-            Enter the 6-Digit code sent to you at +{props?.route?.params?.phone}
+            Enter the 6-Digit code sent to you at {username}
           </Text>
         </View>
         <View
@@ -192,48 +198,33 @@ export const VerificationPage = (props) => {
           />
         </View>
 
+        <View style={{ width: "100%", marginTop: 20 }}>
+          <PasswordInput
+            value={password}
+            setValue={(val) => setPassword(val)}
+            placeholder={"New password"}
+            rule={passwordValidator}
+            showError={showError}
+            setHighOrderError={(val) =>
+              setIsError({ ...isError, password: val })
+            }
+          />
+        </View>
+
         <View style={{ width: "100%", marginTop: 32 }}>
           <RegularButton
             onPress={onVerification}
             isLoading={isLoading}
-            text={"Get Started"}
+            text={"Submit"}
             style={{ borderRadius: 10, width: "100%" }}
             colors={[primaryColor, primaryColor]}
           />
         </View>
-
-        <View style={{ width: "100%", marginTop: 20, alignItems: "center" }}>
-          <Text
-            style={{
-              fontSize: 14,
-              color: "gray",
-              fontFamily: "openSans_bold",
-              textAlign: "center",
-            }}
-          >
-            Didn’t receive code?{" "}
-            <Text onPress={resetCountDown} style={{ color: primaryColor }}>
-              Resend Again.
-            </Text>
-          </Text>
-        </View>
-        <View style={{ width: "100%", marginTop: 20, alignItems: "center" }}>
-          <Text
-            style={{
-              fontSize: 16,
-              color: grayTextColor,
-              textAlign: "center",
-              width: "80%",
-            }}
-          >
-            By Signing up you agree to our Terms Conditions & Privacy Policy.
-          </Text>
-        </View>
       </View>
       <FullPageLoadingModall
         visible={isLoading}
-        accessibilityLabel={"Registering you"}
-        text={"Registering you..."}
+        accessibilityLabel={"updating your password"}
+        text={"Updating..."}
       />
     </AuthScreenContainer>
   );

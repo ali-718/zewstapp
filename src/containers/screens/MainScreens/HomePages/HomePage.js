@@ -370,15 +370,18 @@ export const HomePage = ({ setselected }) => {
     setQrModal(true);
   };
 
-  const checkDefaultLocation = async () => {
+  const checkDefaultLocation = async (noRedirect = false) => {
     const location = await AsyncStorage.getItem("defaultLocation");
 
     if (location === null) {
       setIsDefaultLocation(false);
+      if (noRedirect) return;
       navigation.navigate("location");
       ToastSuccess("Kindly select your default location");
       return;
     }
+
+    setIsDefaultLocation(true);
 
     dispatch(setPrimaryLocationAction(JSON.parse(location), true));
   };
@@ -390,8 +393,18 @@ export const HomePage = ({ setselected }) => {
     Promise.all([fetchFirstSection(), fetchLossInKitchenSection()]);
   }, [selectedTime]);
 
+  useEffect(() => {
+    // so when user get back here after selecting default location
+    if (!isScreenFocused) return;
+    checkDefaultLocation(true);
+
+    Promise.all([fetchFirstSection(), fetchLossInKitchenSection()]);
+  }, [isScreenFocused]);
+
   const fetchFirstSection = async () => {
     const location = await AsyncStorage.getItem("defaultLocation");
+
+    if (location === null) return;
 
     dispatch(
       fetchFoodCountAction({
@@ -419,6 +432,8 @@ export const HomePage = ({ setselected }) => {
 
   const fetchLossInKitchenSection = async () => {
     const location = await AsyncStorage.getItem("defaultLocation");
+
+    if (location === null) return;
 
     dispatch(
       fetchLossInKitchenAction({
