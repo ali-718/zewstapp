@@ -252,6 +252,7 @@ export const RecipeAdd = (props) => {
 
             <Dropdown
               selectedMenu={macroIngredient.itemName}
+              errMsg={"Looks like there are no items left in inventory 😞"}
               setMenu={(val) =>
                 setMacroIngredient(
                   inventoryList
@@ -277,6 +278,7 @@ export const RecipeAdd = (props) => {
 
             {macroIngredient.totalQuantity && (
               <Dropdown
+                errMsg={"Looks like there are no items left in inventory 😞"}
                 selectedMenu={quantity}
                 setMenu={setquantity}
                 placeholder={"Quantity*"}
@@ -446,6 +448,7 @@ export const RecipeAdd = (props) => {
                 </TouchableOpacity>
 
                 <Dropdown
+                  errMsg={"Looks like there are no items left in inventory 😞"}
                   selectedMenu={ingredients[i].itemName}
                   setMenu={(val) =>
                     updateName(

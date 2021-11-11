@@ -363,6 +363,7 @@ export const AddMeal = (props) => {
                 recipeList.find((item) => item.recipeTitle === val)
               )
             }
+            errMsg={"Looks like you have not added any recipe yet 😀"}
             placeholder={"Select Recipe*"}
             menus={recipeList.map((item) => item.recipeTitle)}
             style={{ zIndex: 3 }}

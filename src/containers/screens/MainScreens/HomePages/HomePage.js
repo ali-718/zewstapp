@@ -1173,6 +1173,59 @@ export const HomePage = ({ setselected }) => {
                 </View>
 
                 <View
+                  style={{
+                    flex: 1,
+                    alignItems: "center",
+                    justifyContent: "center",
+                    marginVertical: 20,
+                  }}
+                >
+                  <View
+                    style={{
+                      width: 200,
+                      marginTop: device === "tablet" ? 0 : 20,
+                    }}
+                  >
+                    <PieChart
+                      style={{
+                        height: device === "tablet" ? 100 : 200,
+                        flex: 1,
+                      }}
+                      data={data}
+                      innerRadius={"80%"}
+                      padAngle={0}
+                    />
+                    <View
+                      style={{
+                        alignItems: "center",
+                        position: "absolute",
+                        bottom: "35%",
+                        right: "35%",
+                      }}
+                    >
+                      <Text
+                        style={{
+                          fontSize: 18,
+                          color: "black",
+                          fontFamily: "openSans_bold",
+                        }}
+                      >
+                        $12.210
+                      </Text>
+                      <Text
+                        style={{
+                          fontSize: 14,
+                          color: grayTextColor,
+                          marginTop: 0,
+                        }}
+                      >
+                        total costs
+                      </Text>
+                    </View>
+                  </View>
+                </View>
+
+                <View
                   style={{ width: "100%", flexDirection: "row", marginTop: 20 }}
                 >
                   <View
@@ -1457,43 +1510,48 @@ export const HomePage = ({ setselected }) => {
                 </View>
               </View>
 
-              <View
-                style={{ width: 200, marginTop: device === "tablet" ? 0 : 20 }}
-              >
-                <PieChart
-                  style={{ height: device === "tablet" ? 100 : 200, flex: 1 }}
-                  data={data}
-                  innerRadius={"80%"}
-                  padAngle={0}
-                />
+              {device === "tablet" ? (
                 <View
                   style={{
-                    alignItems: "center",
-                    position: "absolute",
-                    bottom: "35%",
-                    right: "35%",
+                    width: 200,
+                    marginTop: device === "tablet" ? 0 : 20,
                   }}
                 >
-                  <Text
+                  <PieChart
+                    style={{ height: device === "tablet" ? 100 : 200, flex: 1 }}
+                    data={data}
+                    innerRadius={"80%"}
+                    padAngle={0}
+                  />
+                  <View
                     style={{
-                      fontSize: 18,
-                      color: "black",
-                      fontFamily: "openSans_bold",
+                      alignItems: "center",
+                      position: "absolute",
+                      bottom: "35%",
+                      right: "35%",
                     }}
                   >
-                    $12.210
-                  </Text>
-                  <Text
-                    style={{
-                      fontSize: 14,
-                      color: grayTextColor,
-                      marginTop: 0,
-                    }}
-                  >
-                    total costs
-                  </Text>
+                    <Text
+                      style={{
+                        fontSize: 18,
+                        color: "black",
+                        fontFamily: "openSans_bold",
+                      }}
+                    >
+                      $12.210
+                    </Text>
+                    <Text
+                      style={{
+                        fontSize: 14,
+                        color: grayTextColor,
+                        marginTop: 0,
+                      }}
+                    >
+                      total costs
+                    </Text>
+                  </View>
                 </View>
-              </View>
+              ) : null}
             </View>
           </View>
         </LinearGradient>

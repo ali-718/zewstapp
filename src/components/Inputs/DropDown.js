@@ -24,6 +24,7 @@ export const Dropdown = ({
   noPlaceholder,
   dropDownOffset,
   styled,
+  errMsg,
 }) => {
   const device = useSelector((state) => state.system.device);
   const [isFocused, setIsFocused] = useState(false);
@@ -143,43 +144,65 @@ export const Dropdown = ({
               }}
             >
               <ScrollView nestedScrollEnabled style={{ flex: 1 }}>
-                {menus.map((item, i) => (
-                  <TouchableOpacity
-                    key={i}
+                {menus?.length > 0 ? (
+                  menus.map((item, i) => (
+                    <TouchableOpacity
+                      key={i}
+                      style={{
+                        backgroundColor: "white",
+                        padding: 10,
+                        paddingVertical: 15,
+                        flexDirection: "row",
+                      }}
+                      onPress={() => {
+                        setMenu(item);
+                        setIsOpen(false);
+                      }}
+                    >
+                      {colors && (
+                        <View
+                          style={{
+                            width: 30,
+                            height: 30,
+                            backgroundColor: colors.find(
+                              (val) => val.title === item
+                            ).color,
+                            marginRight: 10,
+                            borderRadius: 100,
+                          }}
+                        />
+                      )}
+                      <Text
+                        style={{
+                          fontSize: device === "tablet" ? 20 : 16,
+                          color: "black",
+                        }}
+                      >
+                        {item}
+                      </Text>
+                    </TouchableOpacity>
+                  ))
+                ) : (
+                  <View
                     style={{
+                      width: "100%",
+                      alignItems: "center",
+                      justifyContent: "center",
                       backgroundColor: "white",
-                      padding: 10,
-                      paddingVertical: 15,
-                      flexDirection: "row",
-                    }}
-                    onPress={() => {
-                      setMenu(item);
-                      setIsOpen(false);
+                      padding: 20,
                     }}
                   >
-                    {colors && (
-                      <View
-                        style={{
-                          width: 30,
-                          height: 30,
-                          backgroundColor: colors.find(
-                            (val) => val.title === item
-                          ).color,
-                          marginRight: 10,
-                          borderRadius: 100,
-                        }}
-                      />
-                    )}
                     <Text
                       style={{
                         fontSize: device === "tablet" ? 20 : 16,
                         color: "black",
+                        textAlign: "center",
                       }}
                     >
-                      {item}
+                      {errMsg}
                     </Text>
-                  </TouchableOpacity>
-                ))}
+                  </View>
+                )}
               </ScrollView>
             </View>
           )}
