@@ -1,5 +1,6 @@
 import produce from "immer";
 import {
+  COST_BY_CATEGORY,
   FETCH_FOOD_COUNT,
   LOSS_IN_KITCHEN,
 } from "../actions/DashboardActions/Types";
@@ -18,26 +19,49 @@ const initialState = {
     list: [],
     totalLoss: 0,
   },
+  costByCategory: {
+    isLoading: true,
+    isError: false,
+    list: [],
+    totalPrice: 0,
+  },
 };
 
 export const dashboardReducer = produce(
   (state = initialState, { payload, type }) => {
     switch (type) {
+      case COST_BY_CATEGORY.REQUESTED: {
+        state.costByCategory.isLoading = true;
+        state.costByCategory.isError = false;
+        break;
+      }
+      case COST_BY_CATEGORY.SUCCEEDED: {
+        state.costByCategory.isLoading = false;
+        state.costByCategory.isError = false;
+        state.costByCategory.list = payload.data.catergoryData;
+        state.costByCategory.totalPrice = payload.data.total ?? 0;
+        break;
+      }
+      case COST_BY_CATEGORY.FAILED: {
+        state.costByCategory.isLoading = false;
+        state.costByCategory.isError = true;
+        break;
+      }
       case LOSS_IN_KITCHEN.REQUESTED: {
         state.lossInKitchen.isLoading = true;
-        state.firstSection.isError = false;
+        state.lossInKitchen.isError = false;
         break;
       }
       case LOSS_IN_KITCHEN.SUCCEEDED: {
         state.lossInKitchen.isLoading = false;
-        state.firstSection.isError = false;
-        state.firstSection.list = payload.data;
-        state.firstSection.totalLoss = payload.totalRevenue ?? 0;
+        state.lossInKitchen.isError = false;
+        state.lossInKitchen.list = payload.data;
+        state.lossInKitchen.totalLoss = payload.totalRevenue ?? 0;
         break;
       }
       case LOSS_IN_KITCHEN.FAILED: {
         state.lossInKitchen.isLoading = false;
-        state.firstSection.isError = true;
+        state.lossInKitchen.isError = true;
         break;
       }
       case FETCH_FOOD_COUNT.REQUESTED: {

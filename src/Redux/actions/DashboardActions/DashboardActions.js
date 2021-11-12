@@ -1,5 +1,5 @@
 import { client } from "../client";
-import { FETCH_FOOD_COUNT, LOSS_IN_KITCHEN } from "./Types";
+import { COST_BY_CATEGORY, FETCH_FOOD_COUNT, LOSS_IN_KITCHEN } from "./Types";
 
 export const fetchFoodCountAction =
   ({ locationId, interval, startDate, endDate }) =>
@@ -36,5 +36,24 @@ export const fetchLossInKitchenAction =
       })
       .catch((e) => {
         dispatch({ type: LOSS_IN_KITCHEN.FAILED });
+      });
+  };
+
+export const fetchCostByCategoryAction =
+  ({ locationId, interval, startDate, endDate }) =>
+  (dispatch) => {
+    dispatch({ type: COST_BY_CATEGORY.REQUESTED });
+    client
+      .get(
+        `/dashboard/costByCategory/${locationId}?interval=${interval}&startDate=${startDate}&endDate=${endDate}`
+      )
+      .then((data) => {
+        dispatch({
+          type: COST_BY_CATEGORY.SUCCEEDED,
+          payload: data.data,
+        });
+      })
+      .catch((e) => {
+        dispatch({ type: COST_BY_CATEGORY.FAILED });
       });
   };

@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Image, Platform, TouchableOpacity, View } from "react-native";
+import {
+  FlatList,
+  Image,
+  Platform,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { MainScreenContainer } from "../../../MainScreenContainers";
 import { Text } from "../../../../components/Text/Text";
 import forwardIcon from "../../../../assets/images/forwardIcon.png";
@@ -73,6 +79,7 @@ import { Icon, Progress, Select, ArrowDownIcon, Spinner } from "native-base";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Dropdown } from "../../../../components/Inputs/DropDown";
 import {
+  fetchCostByCategoryAction,
   fetchFoodCountAction,
   fetchLossInKitchenAction,
 } from "../../../../Redux/actions/DashboardActions/DashboardActions";
@@ -356,10 +363,31 @@ export const HomePage = ({ setselected }) => {
   } = useSelector((state) => state.dashboard.firstSection);
   const {
     isLoading: lossInKitchenLoading,
-    isError,
     list: lossInKitchenList,
     totalLoss: lossInKitchenTotalLoss,
   } = useSelector((state) => state.dashboard.lossInKitchen);
+  const {
+    isLoading: costByCategoryLoading,
+    list: costByCategoryList,
+    totalPrice: costByCategoryPrice,
+  } = useSelector((state) => state.dashboard.costByCategory);
+  const [costByCategoryListData, setCostByCategoryListData] = useState([]);
+
+  useEffect(() => {
+    if (costByCategoryList.length === 0) return;
+
+    setCostByCategoryListData(
+      costByCategoryList.map((item) => ({
+        name: item.name,
+        value: item.cost,
+        svg: {
+          fill: chartPurpleColor,
+          onPress: () => null,
+        },
+        key: item.inventoryId,
+      }))
+    );
+  }, [costByCategoryList]);
 
   const openCamera = async () => {
     const { status } = await Camera.requestCameraPermissionsAsync();
@@ -390,7 +418,11 @@ export const HomePage = ({ setselected }) => {
     if (!isScreenFocused) return;
     checkDefaultLocation();
 
-    Promise.all([fetchFirstSection(), fetchLossInKitchenSection()]);
+    Promise.all([
+      fetchFirstSection(),
+      fetchLossInKitchenSection(),
+      fetchCostByCategorySection(),
+    ]);
   }, [selectedTime]);
 
   useEffect(() => {
@@ -398,7 +430,11 @@ export const HomePage = ({ setselected }) => {
     if (!isScreenFocused) return;
     checkDefaultLocation(true);
 
-    Promise.all([fetchFirstSection(), fetchLossInKitchenSection()]);
+    Promise.all([
+      fetchFirstSection(),
+      fetchLossInKitchenSection(),
+      fetchCostByCategorySection(),
+    ]);
   }, [isScreenFocused]);
 
   const fetchFirstSection = async () => {
@@ -409,6 +445,36 @@ export const HomePage = ({ setselected }) => {
     dispatch(
       fetchFoodCountAction({
         locationId: JSON.parse(location).locationId ?? "",
+        interval:
+          selectedTime === "This month"
+            ? "month"
+            : selectedTime === "This year"
+            ? "year"
+            : selectedTime === "This day"
+            ? "day"
+            : "",
+        startDate:
+          selectedTime === "This month"
+            ? moment().subtract(30, "days").format("DD-M-yyy")
+            : selectedTime === "This year"
+            ? moment().subtract(365, "days").format("DD-M-yyy")
+            : selectedTime === "This day"
+            ? moment().format("DD-M-yyy")
+            : "",
+        endDate: moment().format("DD-M-yyy"),
+      })
+    );
+  };
+
+  const fetchCostByCategorySection = async () => {
+    const location = await AsyncStorage.getItem("defaultLocation");
+
+    if (location === null) return;
+
+    dispatch(
+      fetchCostByCategoryAction({
+        locationId: "0f06628b-9b71-48b6-be64-5cc7a377f501",
+        // locationId: JSON.parse(location).locationId ?? "",
         interval:
           selectedTime === "This month"
             ? "month"
@@ -1145,41 +1211,196 @@ export const HomePage = ({ setselected }) => {
                 alignItems: "center",
               }}
             >
-              <View
-                style={{
-                  flexDirection: "column",
-                  flex: 1,
-                }}
-              >
-                <View>
-                  <Text
-                    style={{
-                      color: "black",
-                      fontSize: 18,
-                      fontFamily: "openSans_semiBold",
-                    }}
-                  >
-                    Cost by Category
-                  </Text>
-                  <Text
-                    style={{
-                      color: grayTextColor,
-                      fontSize: 16,
-                      fontFamily: "openSans_semiBold",
-                    }}
-                  >
-                    Total: $6.540
-                  </Text>
-                </View>
-
+              {costByCategoryLoading ? (
                 <View
                   style={{
                     flex: 1,
+                    flexDirection: "row",
                     alignItems: "center",
                     justifyContent: "center",
-                    marginVertical: 20,
+                    backgroundColor: "white",
+                    borderRadius: 10,
+                    padding: 10,
+                    paddingVertical: 20,
                   }}
                 >
+                  <Spinner size={"large"} color={primaryColor} />
+                </View>
+              ) : (
+                <View
+                  style={{
+                    flexDirection: "column",
+                    flex: 1,
+                  }}
+                >
+                  <View>
+                    <Text
+                      style={{
+                        color: "black",
+                        fontSize: 18,
+                        fontFamily: "openSans_semiBold",
+                      }}
+                    >
+                      Cost by Category
+                    </Text>
+                    <Text
+                      style={{
+                        color: grayTextColor,
+                        fontSize: 16,
+                        fontFamily: "openSans_semiBold",
+                      }}
+                    >
+                      Total: ${costByCategoryPrice}
+                    </Text>
+                  </View>
+
+                  {device !== "tablet" ? (
+                    <View
+                      style={{
+                        flex: 1,
+                        alignItems: "center",
+                        justifyContent: "center",
+                        marginVertical: 20,
+                      }}
+                    >
+                      <View
+                        style={{
+                          width: 200,
+                          marginTop: device === "tablet" ? 0 : 20,
+                        }}
+                      >
+                        <PieChart
+                          style={{
+                            height: device === "tablet" ? 100 : 200,
+                            flex: 1,
+                          }}
+                          data={costByCategoryListData}
+                          innerRadius={"80%"}
+                          // padAngle={0}
+                        />
+                        <View
+                          style={{
+                            alignItems: "center",
+                            position: "absolute",
+                            bottom: "35%",
+                            right: "35%",
+                          }}
+                        >
+                          <Text
+                            style={{
+                              fontSize: 18,
+                              color: "black",
+                              fontFamily: "openSans_bold",
+                            }}
+                          >
+                            ${costByCategoryPrice}
+                          </Text>
+                          <Text
+                            style={{
+                              fontSize: 14,
+                              color: grayTextColor,
+                              marginTop: 0,
+                            }}
+                          >
+                            total costs
+                          </Text>
+                        </View>
+                      </View>
+                    </View>
+                  ) : null}
+
+                  <View
+                    style={{
+                      width: "100%",
+                      flexDirection: "row",
+                      marginTop: 20,
+                    }}
+                  >
+                    <View
+                      style={{
+                        flex: 1,
+                        flexDirection: "column",
+                      }}
+                    >
+                      <FlatList
+                        data={costByCategoryListData}
+                        key={device === "tablet" ? 1 : 2}
+                        numColumns={device === "tablet" ? 2 : 1}
+                        renderItem={({ item, index }) => (
+                          <View
+                            style={{
+                              flexDirection: "row",
+                              alignItems: "center",
+                              justifyContent: "space-between",
+                              marginTop: 20,
+                              width: device === "tablet" ? "35%" : "100%",
+                              marginLeft:
+                                device === "tablet"
+                                  ? (index + 1) % 2 === 0
+                                    ? "20%"
+                                    : 0
+                                  : 0,
+                            }}
+                          >
+                            <View
+                              style={{
+                                flexDirection: "row",
+                                alignItems: "center",
+                              }}
+                            >
+                              <View
+                                style={{
+                                  backgroundColor: item.svg.fill,
+                                  width: 12,
+                                  height: 12,
+                                  borderRadius: 100,
+                                }}
+                              />
+                              <Text
+                                style={{
+                                  fontSize: 14,
+                                  color: grayTextColor,
+                                  marginLeft: 10,
+                                }}
+                              >
+                                {item.name}
+                              </Text>
+                            </View>
+
+                            <Text
+                              style={{
+                                fontSize: 14,
+                                color: chartGreenIndicator,
+                                marginLeft: 50,
+                              }}
+                            >
+                              ${item.value}
+                            </Text>
+                          </View>
+                        )}
+                      />
+                    </View>
+                  </View>
+                </View>
+              )}
+
+              {device === "tablet" ? (
+                costByCategoryLoading ? (
+                  <View
+                    style={{
+                      flex: 1,
+                      flexDirection: "row",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      backgroundColor: "white",
+                      borderRadius: 10,
+                      padding: 10,
+                      paddingVertical: 20,
+                    }}
+                  >
+                    <Spinner size={"large"} color={primaryColor} />
+                  </View>
+                ) : (
                   <View
                     style={{
                       width: 200,
@@ -1188,12 +1409,12 @@ export const HomePage = ({ setselected }) => {
                   >
                     <PieChart
                       style={{
-                        height: device === "tablet" ? 100 : 200,
+                        height: 200,
                         flex: 1,
                       }}
-                      data={data}
+                      data={costByCategoryListData}
                       innerRadius={"80%"}
-                      padAngle={0}
+                      // padAngle={0}
                     />
                     <View
                       style={{
@@ -1210,7 +1431,7 @@ export const HomePage = ({ setselected }) => {
                           fontFamily: "openSans_bold",
                         }}
                       >
-                        $12.210
+                        ${costByCategoryPrice}
                       </Text>
                       <Text
                         style={{
@@ -1223,334 +1444,7 @@ export const HomePage = ({ setselected }) => {
                       </Text>
                     </View>
                   </View>
-                </View>
-
-                <View
-                  style={{ width: "100%", flexDirection: "row", marginTop: 20 }}
-                >
-                  <View
-                    style={{
-                      flex: 1,
-                      flexDirection: device === "tablet" ? "row" : "column",
-                    }}
-                  >
-                    <View>
-                      <View
-                        style={{
-                          flexDirection: "row",
-                          alignItems: "center",
-                          justifyContent: "space-between",
-                        }}
-                      >
-                        <View
-                          style={{
-                            flexDirection: "row",
-                            alignItems: "center",
-                          }}
-                        >
-                          <View
-                            style={{
-                              backgroundColor: chartGreenIndicator,
-                              width: 12,
-                              height: 12,
-                              borderRadius: 100,
-                            }}
-                          />
-                          <Text
-                            style={{
-                              fontSize: 14,
-                              color: grayTextColor,
-                              marginLeft: 10,
-                            }}
-                          >
-                            Meats
-                          </Text>
-                        </View>
-
-                        <Text
-                          style={{
-                            fontSize: 14,
-                            color: chartGreenIndicator,
-                            marginLeft: 50,
-                          }}
-                        >
-                          15%
-                        </Text>
-                      </View>
-                      <View
-                        style={{
-                          flexDirection: "row",
-                          alignItems: "center",
-                          justifyContent: "space-between",
-                          marginTop: 20,
-                        }}
-                      >
-                        <View
-                          style={{
-                            flexDirection: "row",
-                            alignItems: "center",
-                          }}
-                        >
-                          <View
-                            style={{
-                              backgroundColor: chartColor1,
-                              width: 12,
-                              height: 12,
-                              borderRadius: 100,
-                            }}
-                          />
-                          <Text
-                            style={{
-                              fontSize: 14,
-                              color: grayTextColor,
-                              marginLeft: 10,
-                            }}
-                          >
-                            Vegetables
-                          </Text>
-                        </View>
-
-                        <Text
-                          style={{
-                            fontSize: 14,
-                            color: chartGreenIndicator,
-                            marginLeft: 50,
-                          }}
-                        >
-                          15%
-                        </Text>
-                      </View>
-                    </View>
-
-                    <View
-                      style={{
-                        marginLeft: device === "tablet" ? 30 : 0,
-                        marginTop: device === "tablet" ? 0 : 20,
-                      }}
-                    >
-                      <View
-                        style={{
-                          flexDirection: "row",
-                          alignItems: "center",
-                          justifyContent: "space-between",
-                        }}
-                      >
-                        <View
-                          style={{
-                            flexDirection: "row",
-                            alignItems: "center",
-                          }}
-                        >
-                          <View
-                            style={{
-                              backgroundColor: chartYellowColor,
-                              width: 12,
-                              height: 12,
-                              borderRadius: 100,
-                            }}
-                          />
-                          <Text
-                            style={{
-                              fontSize: 14,
-                              color: grayTextColor,
-                              marginLeft: 10,
-                            }}
-                          >
-                            Fruits
-                          </Text>
-                        </View>
-
-                        <Text
-                          style={{
-                            fontSize: 14,
-                            color: chartGreenIndicator,
-                            marginLeft: 50,
-                          }}
-                        >
-                          15%
-                        </Text>
-                      </View>
-                      <View
-                        style={{
-                          flexDirection: "row",
-                          alignItems: "center",
-                          justifyContent: "space-between",
-                          marginTop: 20,
-                        }}
-                      >
-                        <View
-                          style={{
-                            flexDirection: "row",
-                            alignItems: "center",
-                          }}
-                        >
-                          <View
-                            style={{
-                              backgroundColor: MonthBlueColor,
-                              width: 12,
-                              height: 12,
-                              borderRadius: 100,
-                            }}
-                          />
-                          <Text
-                            style={{
-                              fontSize: 14,
-                              color: grayTextColor,
-                              marginLeft: 10,
-                            }}
-                          >
-                            Grains
-                          </Text>
-                        </View>
-
-                        <Text
-                          style={{
-                            fontSize: 14,
-                            color: chartGreenIndicator,
-                            marginLeft: 50,
-                          }}
-                        >
-                          15%
-                        </Text>
-                      </View>
-                    </View>
-                    <View
-                      style={{
-                        marginLeft: device === "tablet" ? 30 : 0,
-                        marginTop: device === "tablet" ? 0 : 20,
-                      }}
-                    >
-                      <View
-                        style={{
-                          flexDirection: "row",
-                          alignItems: "center",
-                          justifyContent: "space-between",
-                        }}
-                      >
-                        <View
-                          style={{
-                            flexDirection: "row",
-                            alignItems: "center",
-                          }}
-                        >
-                          <View
-                            style={{
-                              backgroundColor: chartPinkColor,
-                              width: 12,
-                              height: 12,
-                              borderRadius: 100,
-                            }}
-                          />
-                          <Text
-                            style={{
-                              fontSize: 14,
-                              color: grayTextColor,
-                              marginLeft: 10,
-                            }}
-                          >
-                            Dairy
-                          </Text>
-                        </View>
-
-                        <Text
-                          style={{
-                            fontSize: 14,
-                            color: chartGreenIndicator,
-                            marginLeft: 50,
-                          }}
-                        >
-                          15%
-                        </Text>
-                      </View>
-                      <View
-                        style={{
-                          flexDirection: "row",
-                          alignItems: "center",
-                          justifyContent: "space-between",
-                          marginTop: 20,
-                        }}
-                      >
-                        <View
-                          style={{
-                            flexDirection: "row",
-                            alignItems: "center",
-                          }}
-                        >
-                          <View
-                            style={{
-                              backgroundColor: chartPurpleColor,
-                              width: 12,
-                              height: 12,
-                              borderRadius: 100,
-                            }}
-                          />
-                          <Text
-                            style={{
-                              fontSize: 14,
-                              color: grayTextColor,
-                              marginLeft: 10,
-                            }}
-                          >
-                            Grains
-                          </Text>
-                        </View>
-
-                        <Text
-                          style={{
-                            fontSize: 14,
-                            color: chartGreenIndicator,
-                            marginLeft: 50,
-                          }}
-                        >
-                          15%
-                        </Text>
-                      </View>
-                    </View>
-                  </View>
-                </View>
-              </View>
-
-              {device === "tablet" ? (
-                <View
-                  style={{
-                    width: 200,
-                    marginTop: device === "tablet" ? 0 : 20,
-                  }}
-                >
-                  <PieChart
-                    style={{ height: device === "tablet" ? 100 : 200, flex: 1 }}
-                    data={data}
-                    innerRadius={"80%"}
-                    padAngle={0}
-                  />
-                  <View
-                    style={{
-                      alignItems: "center",
-                      position: "absolute",
-                      bottom: "35%",
-                      right: "35%",
-                    }}
-                  >
-                    <Text
-                      style={{
-                        fontSize: 18,
-                        color: "black",
-                        fontFamily: "openSans_bold",
-                      }}
-                    >
-                      $12.210
-                    </Text>
-                    <Text
-                      style={{
-                        fontSize: 14,
-                        color: grayTextColor,
-                        marginTop: 0,
-                      }}
-                    >
-                      total costs
-                    </Text>
-                  </View>
-                </View>
+                )
               ) : null}
             </View>
           </View>
