@@ -473,8 +473,8 @@ export const HomePage = ({ setselected }) => {
 
     dispatch(
       fetchCostByCategoryAction({
-        locationId: "0f06628b-9b71-48b6-be64-5cc7a377f501",
-        // locationId: JSON.parse(location).locationId ?? "",
+        // locationId: "0f06628b-9b71-48b6-be64-5cc7a377f501",
+        locationId: JSON.parse(location).locationId ?? "",
         interval:
           selectedTime === "This month"
             ? "month"
