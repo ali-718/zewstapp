@@ -10,11 +10,12 @@ import * as actions from "../../../../Redux/actions/InventoryAction/InventoryAct
 import { SearchInput } from "../../../../components/SearchInput/SearchInput";
 import { AdminOverviewBox } from "../../../../components/AdminComponents/AdminOverviewBox";
 import { NoMealBox } from "../../../../components/NoMealBox/NoMealBox";
-import InventoryIcon from "../../../../assets/images/InventoryIcon.png";
+import InventoryIcon from "../../../../assets/images/RecipeIcon.png";
 import { LoadingPage } from "../../../../components/LoadingPage/LoadingPage";
 import { RefetchDataError } from "../../../../components/ErrorPage/RefetchDataError";
 import { colors } from "../../../../helpers/utlils";
 import { InventoryDetailPage } from "./InventoryDetailPage";
+import { HeadingBox } from "../../../../components/HeadingBox/HeadingBox";
 
 export const InventoryListPage = () => {
   const navigation = useNavigation();
@@ -58,99 +59,95 @@ export const InventoryListPage = () => {
     setFiltereditem(finalData);
   };
 
-  if (device === "tablet" && orientation === "landscape") {
-    return (
-      <MainScreenContainer
-        leftImage={""}
-        rightImage={""}
-        title={"Inventory"}
-        noScroll
-      >
-        <View
-          style={{
-            width: "100%",
-            flex: 1,
-            flexDirection: "row",
-            justifyContent: "space-between",
-          }}
-        >
-          <View style={{ width: "40%" }}>
-            <ScrollView style={{ width: "100%" }}>
-              <View
-                style={{
-                  width: "100%",
-                  flex: 1,
-                  alignItems: "center",
-                }}
-              >
-                {isLoading ? (
-                  <LoadingPage />
-                ) : isError ? (
-                  <RefetchDataError
-                    onPress={fetchInventoryItems}
-                    isLoading={isLoading}
-                  />
-                ) : (
-                  <View style={{ width: "90%", flex: 1, marginTop: 20 }}>
-                    <RegularButton
-                      onPress={() => navigation.navigate("inventoryAdd")}
-                      text={"Add Item"}
-                      style={{ borderRadius: 10 }}
-                    />
+  // if (device === "tablet" && orientation === "landscape") {
+  //   return (
+  //     <MainScreenContainer
+  //       leftImage={""}
+  //       rightImage={""}
+  //       title={"Inventory"}
+  //       noScroll
+  //     >
+  //       <View
+  //         style={{
+  //           width: "100%",
+  //           flex: 1,
+  //           flexDirection: "row",
+  //           justifyContent: "space-between",
+  //         }}
+  //       >
+  //         <View style={{ width: "40%" }}>
+  //           <ScrollView style={{ width: "100%" }}>
+  //             <View
+  //               style={{
+  //                 width: "100%",
+  //                 flex: 1,
+  //                 alignItems: "center",
+  //               }}
+  //             >
+  //               {isLoading ? (
+  //                 <LoadingPage />
+  //               ) : isError ? (
+  //                 <RefetchDataError
+  //                   onPress={fetchInventoryItems}
+  //                   isLoading={isLoading}
+  //                 />
+  //               ) : (
+  //                 <View style={{ width: "90%", flex: 1, marginTop: 20 }}>
+  //                   {/* <SearchInput
+  //                     search={search}
+  //                     setSearch={setSearch}
+  //                     searchKeyword={searchKeyword}
+  //                   /> */}
 
-                    <SearchInput
-                      search={search}
-                      setSearch={setSearch}
-                      searchKeyword={searchKeyword}
-                    />
+  //                   {filteredItem.length === 0 ? (
+  //                     <NoMealBox
+  //                       image={InventoryIcon}
+  //                       text={"No item added. "}
+  //                     />
+  //                   ) : (
+  //                     filteredItem.map((item, i) => (
+  //                       <View key={i} style={{ width: "100%", marginTop: 10 }}>
+  //                         <AdminOverviewBox
+  //                           key={i}
+  //                           label={item?.itemName}
+  //                           name={item.brand}
+  //                           rightText={""}
+  //                           image={InventoryIcon}
+  //                           inventory
+  //                           borderLeftColor={
+  //                             colors.find((color) => item.color === color.title)
+  //                               .color
+  //                           }
+  //                           onPress={() => setselectedInventoryItemForTab(item)}
+  //                         />
+  //                       </View>
+  //                     ))
+  //                   )}
 
-                    {filteredItem.length === 0 ? (
-                      <NoMealBox
-                        image={InventoryIcon}
-                        text={"No item added. "}
-                      />
-                    ) : (
-                      filteredItem.map((item, i) => (
-                        <View key={i} style={{ width: "100%", marginTop: 10 }}>
-                          <AdminOverviewBox
-                            key={i}
-                            label={item?.itemName}
-                            name={item.brand}
-                            rightText={""}
-                            image={InventoryIcon}
-                            inventory
-                            borderLeftColor={
-                              colors.find((color) => item.color === color.title)
-                                .color
-                            }
-                            onPress={() => setselectedInventoryItemForTab(item)}
-                          />
-                        </View>
-                      ))
-                    )}
-                  </View>
-                )}
-              </View>
-            </ScrollView>
-          </View>
+  //                   <RegularButton
+  //                     onPress={() => navigation.navigate("inventoryAdd")}
+  //                     text={"Add Item"}
+  //                     style={{ marginTop: 20 }}
+  //                   />
+  //                 </View>
+  //               )}
+  //             </View>
+  //           </ScrollView>
+  //         </View>
 
-          <View style={{ width: "60%" }}>
-            {selectedInventoryItemForTab?.itemName && (
-              <InventoryDetailPage isTab data={selectedInventoryItemForTab} />
-            )}
-          </View>
-        </View>
-      </MainScreenContainer>
-    );
-  }
+  //         <View style={{ width: "60%" }}>
+  //           {selectedInventoryItemForTab?.itemName && (
+  //             <InventoryDetailPage isTab data={selectedInventoryItemForTab} />
+  //           )}
+  //         </View>
+  //       </View>
+  //     </MainScreenContainer>
+  //   );
+  // }
 
   return (
-    <MainScreenContainer
-      onPressRight={() => null}
-      leftImage={""}
-      rightImage={""}
-      title={"Inventory"}
-    >
+    <MainScreenContainer>
+      <HeadingBox heading={"Inventory"} noBack />
       <View
         style={{
           width: "90%",
@@ -168,17 +165,11 @@ export const InventoryListPage = () => {
           />
         ) : (
           <View style={{ width: "100%", flex: 1 }}>
-            <RegularButton
-              onPress={() => navigation.navigate("inventoryAdd")}
-              text={"Add Item"}
-              style={{ borderRadius: 10 }}
-            />
-
-            <SearchInput
+            {/* <SearchInput
               search={search}
               setSearch={setSearch}
               searchKeyword={searchKeyword}
-            />
+            /> */}
 
             {filteredItem.length === 0 ? (
               <NoMealBox image={InventoryIcon} text={"No item added. "} />
@@ -204,6 +195,11 @@ export const InventoryListPage = () => {
                 </View>
               ))
             )}
+            <RegularButton
+              onPress={() => navigation.navigate("inventoryAdd")}
+              text={"+ Add An Item"}
+              style={{ marginTop: 20 }}
+            />
           </View>
         )}
       </View>

@@ -368,7 +368,7 @@ export const HomePage = ({ setselected }) => {
   } = useSelector((state) => state.dashboard.lossInKitchen);
   const {
     isLoading: costByCategoryLoading,
-    list: costByCategoryList,
+    list: costByCategoryList = [],
     totalPrice: costByCategoryPrice,
   } = useSelector((state) => state.dashboard.costByCategory);
   const [costByCategoryListData, setCostByCategoryListData] = useState([]);

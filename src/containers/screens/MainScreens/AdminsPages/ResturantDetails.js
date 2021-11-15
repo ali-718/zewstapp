@@ -11,6 +11,7 @@ import blackBackArrow from "../../../../assets/images/blackBackArrow.png";
 import { Text } from "../../../../components/Text/Text";
 import { useSelector } from "react-redux";
 import { HeadingBox } from "../../../../components/HeadingBox/HeadingBox";
+import { TimeModal } from "../../../../components/TimeModal/TimeModal";
 
 const emp = ["Ali", "Zainab", "Umer", "Kanwal", "Zaid", "Yahya"];
 const time = [
@@ -50,14 +51,14 @@ export const ResturantDetails = () => {
           <Input
             value={name}
             onChangeText={(val) => setName(val)}
-            placeholder={"Restaurant name*"}
+            placeholder={"Restaurant name"}
           />
         </View>
         <View style={{ width: "100%", marginTop: 10 }}>
           <Input
             value={address}
             onChangeText={(val) => setAddress(val)}
-            placeholder={"Main/Head Office Address*"}
+            placeholder={"Main/Head Office Address"}
           />
         </View>
 
@@ -65,7 +66,7 @@ export const ResturantDetails = () => {
           <Input
             value={phone}
             onChangeText={(val) => setPhone(val)}
-            placeholder={"Phone*"}
+            placeholder={"Phone"}
             keyboardType={"number-pad"}
           />
         </View>
@@ -74,7 +75,7 @@ export const ResturantDetails = () => {
           <Input
             value={email}
             onChangeText={(val) => setEmail(val)}
-            placeholder={"Email*"}
+            placeholder={"Email"}
             keyboardType={"email-address"}
           />
         </View>
@@ -101,7 +102,7 @@ export const ResturantDetails = () => {
 
         <View style={{ width: "100%", marginTop: 10 }}>
           <MealItem
-            label={"Timings*"}
+            label={"Timings"}
             text={selectedTime}
             icon={forwardIcon}
             touchable
@@ -110,13 +111,9 @@ export const ResturantDetails = () => {
           />
         </View>
 
-        <ListModal
+        <TimeModal
           onRequestClose={() => setTimeModal(false)}
           visible={timeModal}
-          title={"Timings"}
-          onSelect={(item) => setSelectedTime(item)}
-          selected={[selectedTime]}
-          list={time}
         />
 
         <View style={{ width: "100%", marginTop: 10 }}>

@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import blackBackArrow from "../../assets/images/blackBackArrow.png";
 import { Text } from "../Text/Text";
 
-export const HeadingBox = ({ noBack, heading }) => {
+export const HeadingBox = ({ noBack, heading, onGoBack }) => {
   const navigation = useNavigation();
   const device = useSelector((state) => state.system.device);
 
@@ -23,7 +23,9 @@ export const HeadingBox = ({ noBack, heading }) => {
         }}
       >
         {!noBack && (
-          <TouchableOpacity onPress={() => navigation.goBack()}>
+          <TouchableOpacity
+            onPress={onGoBack ? onGoBack : () => navigation.goBack()}
+          >
             <Image
               source={blackBackArrow}
               style={{ width: 20, resizeMode: "contain" }}

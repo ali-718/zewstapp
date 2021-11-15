@@ -8,6 +8,7 @@ import { useSelector } from "react-redux";
 import { Input } from "../../../../components/Inputs/Input";
 import { useNavigation } from "@react-navigation/core";
 import { inventoryAvailibility } from "../../../../helpers/utlils";
+import { HeadingBox } from "../../../../components/HeadingBox/HeadingBox";
 
 export const InventoryDetailPage = ({ data, isTab, ...props }) => {
   const {
@@ -31,6 +32,7 @@ export const InventoryDetailPage = ({ data, isTab, ...props }) => {
   if (isTab) {
     return (
       <ScrollView style={{ flex: 1 }}>
+        <HeadingBox heading={"Inventory Item"} />
         <View
           style={{
             width: "100%",
@@ -359,6 +361,7 @@ export const InventoryDetailPage = ({ data, isTab, ...props }) => {
       title={"Inventory Item"}
       onPressRight={() => null}
     >
+      <HeadingBox heading={"Inventory Item"} />
       <View
         style={{
           width: "95%",

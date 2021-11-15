@@ -27,7 +27,7 @@ export const RecipeListPage = () => {
   const isError = useSelector((state) => state.recipe.recipe.isError);
   const list = useSelector((state) => state.recipe.recipe.list);
   const [search, setSearch] = useState("");
-  const [filteredItem, setFiltereditem] = useState(list);
+  const [filteredItem, setFiltereditem] = useState([]);
   const [selectedRecipeItemForTab, setselectedRecipeItemForTab] = useState({});
 
   useEffect(() => {
@@ -35,7 +35,7 @@ export const RecipeListPage = () => {
   }, []);
 
   useEffect(() => {
-    setFiltereditem(list);
+    setFiltereditem(list ?? []);
   }, [list]);
 
   const fetchRecipes = () =>
@@ -175,10 +175,10 @@ export const RecipeListPage = () => {
           </View>
 
           <View style={{ width: "100%", marginTop: 10 }}>
-            {filteredItem.length === 0 ? (
+            {filteredItem?.length === 0 ? (
               <NoMealBox image={noRecipe} text={"No recipe added. "} />
             ) : (
-              filteredItem.map((item, i) => (
+              filteredItem?.map((item, i) => (
                 <View
                   key={i}
                   style={{

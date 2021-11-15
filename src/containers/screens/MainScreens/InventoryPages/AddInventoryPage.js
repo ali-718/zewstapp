@@ -19,6 +19,8 @@ import * as actions from "../../../../Redux/actions/InventoryAction/InventoryAct
 import { Spinner } from "native-base";
 import { useNavigation } from "@react-navigation/core";
 import { DeleteModal } from "../../../../components/Meals/DeleteModal";
+import { HeadingBox } from "../../../../components/HeadingBox/HeadingBox";
+import { RegularButton } from "../../../../components/Buttons/RegularButton";
 
 export const AddInventoryPage = (props) => {
   const navigation = useNavigation();
@@ -218,17 +220,13 @@ export const AddInventoryPage = (props) => {
   };
 
   return (
-    <MainScreenContainer
-      rightImage={""}
-      title={"Inventory Item"}
-      onPressRight={() => null}
-    >
+    <MainScreenContainer>
+      <HeadingBox heading={isEdit ? "Edit Item" : "Add Item"} />
       <View
         style={{
           width: "95%",
           flex: 1,
           alignItems: "center",
-          backgroundColor: "white",
           marginVertical: 20,
           borderRadius: 10,
           paddingBottom: 20,
@@ -246,24 +244,20 @@ export const AddInventoryPage = (props) => {
             style={{
               width: "100%",
               flexDirection: device === "tablet" ? "row" : "column",
-              borderColor: grayColor,
-              borderBottomWidth: 2,
             }}
           >
             <Input
-              placeholder={"Item Name*"}
+              placeholder={"Item Name"}
               value={itemName}
               setValue={(val) => setItemName(val)}
               style={{
                 marginTop: 10,
                 borderRadius: 0,
                 flex: 1,
-                borderColor: grayColor,
-                borderBottomWidth: device === "tablet" ? 0 : 2,
               }}
             />
 
-            <View
+            {/* <View
               style={{
                 flexDirection: "row",
                 alignItems: "center",
@@ -312,246 +306,192 @@ export const AddInventoryPage = (props) => {
                   />
                 </TouchableOpacity>
               )}
+            </View> */}
+          </View>
+
+          <View
+            style={{
+              width: "100%",
+              flexDirection: device === "tablet" ? "row" : "column",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
+            <Input
+              placeholder={"Brand"}
+              value={brand}
+              setValue={(val) => setBrand(val)}
+              style={{
+                marginTop: 10,
+                borderRadius: 0,
+                flex: device === "tablet" ? 0.3 : 1,
+              }}
+            />
+            <Input
+              keyboardType={"number-pad"}
+              placeholder={"Quantity"}
+              value={quantity}
+              setValue={(val) => setQuantity(val)}
+              style={{
+                marginTop: 10,
+                borderRadius: 0,
+                flex: device === "tablet" ? 0.3 : 1,
+              }}
+            />
+            <Input
+              placeholder={"Unit"}
+              value={unit}
+              setValue={(val) => setUnit(val)}
+              style={{
+                marginTop: 10,
+                borderRadius: 0,
+                flex: device === "tablet" ? 0.3 : 1,
+              }}
+            />
+          </View>
+
+          <View
+            style={{
+              width: "100%",
+              flexDirection: device === "tablet" ? "row" : "column",
+              alignItems: "center",
+              justifyContent: "space-between",
+              zIndex: 10,
+            }}
+          >
+            <Input
+              placeholder={"Date of Purchase"}
+              value={dateOfPurchase}
+              setValue={(val) => setDateOfPurchase(val)}
+              style={{
+                marginTop: 10,
+                borderRadius: 0,
+                flex: device === "tablet" ? 0.3 : 1,
+              }}
+              masked
+              maskType={"datetime"}
+              maskFormat={"DD/MM/YYYY"}
+            />
+            <Input
+              placeholder={"Date of Expiry"}
+              value={dateOfExpiry}
+              setValue={(val) => setDateOfExpiry(val)}
+              style={{
+                marginTop: 10,
+                borderRadius: 0,
+                flex: device === "tablet" ? 0.3 : 1,
+              }}
+              masked
+              maskType={"datetime"}
+              maskFormat={"DD/MM/YYYY"}
+            />
+            <View style={{ zIndex: 10, flex: device === "tablet" ? 0.3 : 1 }}>
+              <Dropdown
+                selectedMenu={color.title}
+                setMenu={(val) =>
+                  setColor(colors.find((item) => item.title === val))
+                }
+                placeholder={"Color"}
+                menus={colors.map((item) => item.title)}
+                style={{ zIndex: 10 }}
+                colors={colors}
+              />
             </View>
           </View>
 
           <View
-            style={{ width: "95%", flexDirection: "column", marginTop: 20 }}
+            style={{
+              width: "100%",
+              flexDirection: device === "tablet" ? "row" : "column",
+              alignItems: "center",
+              justifyContent: "space-between",
+              zIndex: 0,
+            }}
           >
+            <Input
+              keyboardType={"number-pad"}
+              placeholder={"Cost Per Unit"}
+              value={costPerUnit}
+              setValue={(val) => setCostPerUnit(val)}
+              style={{
+                marginTop: 10,
+                borderRadius: 0,
+                flex: device === "tablet" ? 0.3 : 1,
+              }}
+            />
+            <Input
+              keyboardType={"number-pad"}
+              placeholder={"Threshold"}
+              value={threshold}
+              setValue={(val) => setThreshold(val)}
+              style={{
+                marginTop: 10,
+                borderRadius: 0,
+                flex: device === "tablet" ? 0.3 : 1,
+              }}
+            />
+            <Input
+              placeholder={"Category"}
+              value={category}
+              setValue={(val) => setcategory(val)}
+              style={{
+                marginTop: 10,
+                borderRadius: 0,
+                flex: device === "tablet" ? 0.3 : 1,
+              }}
+            />
+          </View>
+
+          <View style={{ width: "100%", zIndex: 1 }}>
+            <Input
+              placeholder={"Notes"}
+              value={notes}
+              setValue={(val) => setNotes(val)}
+              style={{
+                marginTop: 10,
+                borderRadius: 0,
+              }}
+            />
+            <View style={{ width: "100%", marginTop: 10 }}>
+              <Dropdown
+                selectedMenu={availablity?.name}
+                setMenu={(val) =>
+                  setAvailablity(
+                    inventoryAvailibility.find((item) => item.name === val)
+                  )
+                }
+                placeholder={"Availibility"}
+                menus={inventoryAvailibility.map((item) => item.name)}
+                style={{ zIndex: 10 }}
+              />
+            </View>
+          </View>
+
+          <View style={{ width: "100%", marginTop: 20, zIndex: 0 }}>
             <Text
               style={{
-                fontSize: 20,
-                color: "black",
+                fontSize: 16,
+                color: primaryColor,
                 fontFamily: "openSans_bold",
               }}
             >
-              Inventory Details
+              Photos
             </Text>
 
             <View
               style={{
                 width: "100%",
-                flexDirection: device === "tablet" ? "row" : "column",
+                flexWrap: "wrap",
+                marginTop: 10,
+                flexDirection: "row",
                 alignItems: "center",
-                justifyContent: "space-between",
+                justifyContent:
+                  device === "tablet" ? "flex-start" : "space-between",
               }}
             >
-              <Input
-                placeholder={"Brand*"}
-                value={brand}
-                setValue={(val) => setBrand(val)}
-                style={{
-                  marginTop: 10,
-                  borderRadius: 0,
-                  flex: device === "tablet" ? 0.3 : 1,
-                  borderColor: grayColor,
-                  borderBottomWidth: 2,
-                }}
-              />
-              <Input
-                keyboardType={"number-pad"}
-                placeholder={"Quantity*"}
-                value={quantity}
-                setValue={(val) => setQuantity(val)}
-                style={{
-                  marginTop: 10,
-                  borderRadius: 0,
-                  flex: device === "tablet" ? 0.3 : 1,
-                  borderColor: grayColor,
-                  borderBottomWidth: 2,
-                }}
-              />
-              <Input
-                placeholder={"Unit*"}
-                value={unit}
-                setValue={(val) => setUnit(val)}
-                style={{
-                  marginTop: 10,
-                  borderRadius: 0,
-                  flex: device === "tablet" ? 0.3 : 1,
-                  borderColor: grayColor,
-                  borderBottomWidth: 2,
-                }}
-              />
-            </View>
-
-            <View
-              style={{
-                width: "100%",
-                flexDirection: device === "tablet" ? "row" : "column",
-                alignItems: "center",
-                justifyContent: "space-between",
-                zIndex: 10,
-              }}
-            >
-              <Input
-                placeholder={"Date of Purchase*"}
-                value={dateOfPurchase}
-                setValue={(val) => setDateOfPurchase(val)}
-                style={{
-                  marginTop: 10,
-                  borderRadius: 0,
-                  flex: device === "tablet" ? 0.3 : 1,
-                  borderColor: grayColor,
-                  borderBottomWidth: 2,
-                }}
-                masked
-                maskType={"datetime"}
-                maskFormat={"DD/MM/YYYY"}
-              />
-              <Input
-                placeholder={"Date of Expiry*"}
-                value={dateOfExpiry}
-                setValue={(val) => setDateOfExpiry(val)}
-                style={{
-                  marginTop: 10,
-                  borderRadius: 0,
-                  flex: device === "tablet" ? 0.3 : 1,
-                  borderColor: grayColor,
-                  borderBottomWidth: 2,
-                }}
-                masked
-                maskType={"datetime"}
-                maskFormat={"DD/MM/YYYY"}
-              />
-              <View style={{ zIndex: 10, flex: device === "tablet" ? 0.3 : 1 }}>
-                <Dropdown
-                  selectedMenu={color.title}
-                  setMenu={(val) =>
-                    setColor(colors.find((item) => item.title === val))
-                  }
-                  placeholder={"Color*"}
-                  menus={colors.map((item) => item.title)}
-                  style={{ zIndex: 10 }}
-                  colors={colors}
-                />
-              </View>
-            </View>
-
-            <View
-              style={{
-                width: "100%",
-                flexDirection: device === "tablet" ? "row" : "column",
-                alignItems: "center",
-                justifyContent: "space-between",
-                zIndex: 0,
-              }}
-            >
-              <Input
-                keyboardType={"number-pad"}
-                placeholder={"Cost Per Unit*"}
-                value={costPerUnit}
-                setValue={(val) => setCostPerUnit(val)}
-                style={{
-                  marginTop: 10,
-                  borderRadius: 0,
-                  flex: device === "tablet" ? 0.3 : 1,
-                  borderColor: grayColor,
-                  borderBottomWidth: 2,
-                }}
-              />
-              <Input
-                keyboardType={"number-pad"}
-                placeholder={"Threshold*"}
-                value={threshold}
-                setValue={(val) => setThreshold(val)}
-                style={{
-                  marginTop: 10,
-                  borderRadius: 0,
-                  flex: device === "tablet" ? 0.3 : 1,
-                  borderColor: grayColor,
-                  borderBottomWidth: 2,
-                }}
-              />
-              <Input
-                placeholder={"Category*"}
-                value={category}
-                setValue={(val) => setcategory(val)}
-                style={{
-                  marginTop: 10,
-                  borderRadius: 0,
-                  flex: device === "tablet" ? 0.3 : 1,
-                  borderColor: grayColor,
-                  borderBottomWidth: 2,
-                }}
-              />
-            </View>
-
-            <View style={{ width: "100%", zIndex: 1 }}>
-              <Input
-                placeholder={"Notes"}
-                value={notes}
-                setValue={(val) => setNotes(val)}
-                style={{
-                  marginTop: 10,
-                  borderRadius: 0,
-                  borderColor: grayColor,
-                  borderBottomWidth: 2,
-                }}
-              />
-              <View style={{ width: "100%", marginTop: 10 }}>
-                <Dropdown
-                  selectedMenu={availablity?.name}
-                  setMenu={(val) =>
-                    setAvailablity(
-                      inventoryAvailibility.find((item) => item.name === val)
-                    )
-                  }
-                  placeholder={"Availibility*"}
-                  menus={inventoryAvailibility.map((item) => item.name)}
-                  style={{ zIndex: 10 }}
-                />
-              </View>
-            </View>
-
-            <View style={{ width: "100%", marginTop: 20, zIndex: 0 }}>
-              <Text
-                style={{
-                  fontSize: 20,
-                  color: "black",
-                  fontFamily: "openSans_bold",
-                }}
-              >
-                Photos
-              </Text>
-
-              <View
-                style={{
-                  width: "100%",
-                  flexWrap: "wrap",
-                  marginTop: 10,
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent:
-                    device === "tablet" ? "flex-start" : "space-between",
-                }}
-              >
-                {imageUri.map((item, i) => (
-                  <TouchableOpacity
-                    key={i}
-                    style={{
-                      width: device === "tablet" ? 150 : 140,
-                      height: device === "tablet" ? 150 : 140,
-                      alignItems: "center",
-                      justifyContent: "center",
-                      borderWidth: 2,
-                      borderColor: grayColor,
-                      marginTop: 10,
-                      marginLeft: device === "tablet" ? (i === 0 ? 0 : 10) : 0,
-                    }}
-                    onPress={() => removeImage(i)}
-                  >
-                    <Image
-                      style={{
-                        width: device === "tablet" ? 150 : 140,
-                        height: device === "tablet" ? 150 : 140,
-                        resizeMode: "contain",
-                      }}
-                      source={{ uri: item }}
-                    />
-                  </TouchableOpacity>
-                ))}
+              {imageUri.map((item, i) => (
                 <TouchableOpacity
+                  key={i}
                   style={{
                     width: device === "tablet" ? 150 : 140,
                     height: device === "tablet" ? 150 : 140,
@@ -560,19 +500,50 @@ export const AddInventoryPage = (props) => {
                     borderWidth: 2,
                     borderColor: grayColor,
                     marginTop: 10,
-                    marginLeft: device === "tablet" ? 10 : 0,
+                    marginLeft: device === "tablet" ? (i === 0 ? 0 : 10) : 0,
                   }}
-                  onPress={() => setPhotoModal(true)}
+                  onPress={() => removeImage(i)}
                 >
                   <Image
-                    style={{ width: 40, resizeMode: "contain" }}
-                    source={purpleCamera}
+                    style={{
+                      width: device === "tablet" ? 150 : 140,
+                      height: device === "tablet" ? 150 : 140,
+                      resizeMode: "contain",
+                    }}
+                    source={{ uri: item }}
                   />
                 </TouchableOpacity>
-              </View>
+              ))}
+              <TouchableOpacity
+                style={{
+                  width: device === "tablet" ? 150 : 140,
+                  height: device === "tablet" ? 150 : 140,
+                  alignItems: "center",
+                  justifyContent: "center",
+                  borderWidth: 1,
+                  borderColor: grayColor,
+                  marginTop: 10,
+                  marginLeft: device === "tablet" ? 10 : 0,
+                  backgroundColor: "white",
+                  borderRadius: 5,
+                }}
+                onPress={() => setPhotoModal(true)}
+              >
+                <Image
+                  style={{ width: 40, resizeMode: "contain" }}
+                  source={purpleCamera}
+                />
+              </TouchableOpacity>
             </View>
           </View>
         </View>
+
+        <RegularButton
+          isLoading={isLoading}
+          onPress={addInventoryItem}
+          style={{ marginTop: 20 }}
+          text={"save item"}
+        />
       </View>
       <PhotoModal
         onRequestClose={() => setPhotoModal(false)}
