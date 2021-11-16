@@ -88,7 +88,7 @@ export const DeleteModal = ({
                 color: "black",
               }}
             >
-              Are you sure you want to delete the {deleteItemText} This is not
+              Are you sure you want to delete {deleteItemText} This is not
               reversible.
             </Text>
 

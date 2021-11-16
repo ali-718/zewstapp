@@ -24,6 +24,8 @@ export const RecipeAdd = (props) => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
 
+  const [recipeCategories, setRecipeCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState("");
   const [title, setTitle] = useState("");
   const [macroIngredient, setMacroIngredient] = useState({});
   const [quantity, setquantity] = useState("");
@@ -48,6 +50,10 @@ export const RecipeAdd = (props) => {
       })
     );
 
+    actions.fetchRecipeCategoryActions().then((res) => {
+      setRecipeCategories(res);
+    });
+
     if (!data) return;
 
     setIsEdit(true);
@@ -62,6 +68,7 @@ export const RecipeAdd = (props) => {
       cookingTime = "",
       ingredients = "",
       recipeSteps = "",
+      category = "",
     } = data;
 
     setTitle(recipeTitle);
@@ -72,6 +79,7 @@ export const RecipeAdd = (props) => {
     setIngredients(ingredients);
     setrecipeList(recipeSteps);
     setquantity(macroIngredient?.quantity);
+    setSelectedCategory(category);
   }, []);
 
   const onAddData = () => {
@@ -86,7 +94,8 @@ export const RecipeAdd = (props) => {
       serving.trim().length === 0 ||
       cookingTime.trim().length === 0 ||
       quantity === "" ||
-      type.trim().length === 0
+      type.trim().length === 0 ||
+      selectedCategory.trim().length === 0
     ) {
       ToastError("Please fill all fields");
       return;
@@ -115,6 +124,7 @@ export const RecipeAdd = (props) => {
         recipeSteps: recipeList,
         navigation,
         catalogId: props.route?.params?.data?.catalogId,
+        category: selectedCategory,
       };
 
       dispatch(actions.updateRecipeAction(data));
@@ -132,6 +142,7 @@ export const RecipeAdd = (props) => {
       ingredients,
       recipeSteps: recipeList,
       navigation,
+      category: selectedCategory,
     };
 
     dispatch(actions.addRecipeAction(data));
@@ -228,7 +239,7 @@ export const RecipeAdd = (props) => {
           }}
         >
           <Input
-            placeholder={"Recipe Title*"}
+            placeholder={"Recipe Title"}
             value={title}
             setValue={(val) => setTitle(val)}
             style={{
@@ -251,6 +262,15 @@ export const RecipeAdd = (props) => {
             </Text>
 
             <Dropdown
+              selectedMenu={selectedCategory}
+              errMsg={"Looks like there are no category available"}
+              setMenu={setSelectedCategory}
+              placeholder={"Category"}
+              menus={recipeCategories}
+              style={{ zIndex: 4, marginTop: 10 }}
+            />
+
+            <Dropdown
               selectedMenu={macroIngredient.itemName}
               errMsg={"Looks like there are no items left in inventory 😞"}
               setMenu={(val) =>
@@ -264,7 +284,7 @@ export const RecipeAdd = (props) => {
                     .find((item) => item.itemName === val)
                 )
               }
-              placeholder={"Macro Ingredients*"}
+              placeholder={"Macro Ingredients"}
               menus={inventoryList
                 .filter(
                   (item) =>
@@ -273,7 +293,7 @@ export const RecipeAdd = (props) => {
                       .length === 0
                 )
                 .map((item) => item.itemName)}
-              style={{ zIndex: 3 }}
+              style={{ zIndex: 3, marginTop: 10 }}
             />
 
             {macroIngredient.totalQuantity && (
@@ -281,22 +301,22 @@ export const RecipeAdd = (props) => {
                 errMsg={"Looks like there are no items left in inventory 😞"}
                 selectedMenu={quantity}
                 setMenu={setquantity}
-                placeholder={"Quantity*"}
+                placeholder={"Quantity"}
                 menus={Array.from(
                   { length: macroIngredient.totalQuantity },
                   (_, i) => i + 1
                 )}
-                style={{ zIndex: 2 }}
+                style={{ zIndex: 2, marginTop: 10 }}
               />
             )}
 
             <Input
               keyboardType={"number-pad"}
-              placeholder={"Serving*"}
+              placeholder={"Serving"}
               value={serving}
               setValue={(val) => setServing(val)}
               style={{
-                marginTop: 10,
+                marginTop: 20,
                 borderRadius: 0,
                 marginBottom: 10,
               }}
@@ -305,14 +325,14 @@ export const RecipeAdd = (props) => {
             <Dropdown
               selectedMenu={type}
               setMenu={settype}
-              placeholder={"Type*"}
+              placeholder={"Type"}
               menus={["completed", "pending"]}
               style={{ zIndex: 1 }}
             />
 
             <Input
               keyboardType={"number-pad"}
-              placeholder={"Cooking time (mins)*"}
+              placeholder={"Cooking time (mins)"}
               value={cookingTime}
               setValue={(val) => setCookingTime(val)}
               style={{
@@ -462,7 +482,7 @@ export const RecipeAdd = (props) => {
                       i
                     )
                   }
-                  placeholder={"Micro Ingredients*"}
+                  placeholder={"Micro Ingredients"}
                   menus={inventoryList
                     .filter(
                       (item) =>
@@ -479,23 +499,23 @@ export const RecipeAdd = (props) => {
                   <Dropdown
                     selectedMenu={ingredients[i].quantity}
                     setMenu={(val) => updateQuantity(val, i)}
-                    placeholder={"Quantity*"}
+                    placeholder={"Quantity"}
                     menus={Array.from(
                       { length: ingredients[i].totalQuantity },
                       (_, i) => i + 1
                     )}
-                    style={{ zIndex: i + 2 }}
+                    style={{ zIndex: i + 2, marginTop: 10 }}
                   />
                 )}
 
                 <Dropdown
                   selectedMenu={item.type}
                   setMenu={(val) => updatePacking(val, i)}
-                  placeholder={"Fresh/Packed*"}
+                  placeholder={"Fresh/Packed"}
                   menus={recipePacking}
                   style={{
                     zIndex: i + 1,
-                    marginTop: device === "tablet" ? 0 : 5,
+                    marginTop: device === "tablet" ? 0 : 10,
                     width: device === "tablet" ? 180 : "100%",
                   }}
                 />

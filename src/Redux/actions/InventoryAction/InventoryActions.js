@@ -58,6 +58,7 @@ export const addInventoryAction =
     category,
     navigation,
     availability,
+    vendor,
   }) =>
   (dispatch) => {
     dispatch({ type: ADD_INVENTORY.REQUESTED });
@@ -79,12 +80,68 @@ export const addInventoryAction =
         photos,
         itemName,
         availability,
+        vendor,
       })
       .then(() => {
         dispatch({ type: ADD_INVENTORY.SUCCEEDED });
         dispatch(fetchInventoryAction({ locationId }));
         navigation.goBack();
         ToastSuccess("Success", "Inventory item added successfully!");
+      })
+      .catch((e) => {
+        dispatch({ type: ADD_INVENTORY.FAILED });
+        console.log(e.response.data);
+        ToastError("Some error occoured, please try again later");
+      });
+  };
+export const updateInventoryAction =
+  ({
+    locationId,
+    brand,
+    quantity,
+    units,
+    expiryDate,
+    purchaseDate,
+    color,
+    notes,
+    photos,
+    itemName,
+    costPerUnit,
+    threshold,
+    category,
+    navigation,
+    availability,
+    vendor,
+    inventoryId,
+  }) =>
+  (dispatch) => {
+    dispatch({ type: ADD_INVENTORY.REQUESTED });
+
+    client
+      .post("/inventory/update", {
+        inventoryId,
+        locationId,
+        brand,
+        category,
+        quantity: parseInt(quantity),
+        units: units,
+        costPerUnit: parseInt(costPerUnit),
+        currency: "USD",
+        threshold: parseInt(threshold),
+        expiryDate,
+        purchaseDate,
+        color,
+        notes,
+        photos,
+        itemName,
+        availability,
+        vendor,
+      })
+      .then(() => {
+        dispatch({ type: ADD_INVENTORY.SUCCEEDED });
+        dispatch(fetchInventoryAction({ locationId }));
+        navigation.pop();
+        ToastSuccess("Success", "Inventory item updated successfully!");
       })
       .catch((e) => {
         dispatch({ type: ADD_INVENTORY.FAILED });

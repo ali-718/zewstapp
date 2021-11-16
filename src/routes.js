@@ -49,6 +49,8 @@ import { DrawerMenu } from "./components/Drawer/Drawer";
 import { InsightsPage } from "./containers/screens/MainScreens/InsightsPages/InsightsPage";
 import BankPage from "./containers/screens/MainScreens/AdminsPages/BankPage";
 import { ResetPasswordVerification } from "./containers/screens/AuthScreens/ResetPasswordVerification";
+import { VendorListPage } from "./containers/screens/MainScreens/VendorPages/VendorListPage";
+import { AddVendorsPage } from "./containers/screens/MainScreens/VendorPages/AddVendorsPage";
 
 const Stack = createNativeStackNavigator();
 
@@ -94,6 +96,17 @@ const InventoryRoutes = () => {
       <Stack.Screen name="inventoryList" component={InventoryListPage} />
       <Stack.Screen name="inventoryAdd" component={AddInventoryPage} />
       <Stack.Screen name="inventoryDetail" component={InventoryDetailPage} />
+    </Stack.Navigator>
+  );
+};
+
+const VendorRoutes = () => {
+  return (
+    <Stack.Navigator
+      screenOptions={{ headerShown: false, gestureEnabled: false }}
+    >
+      <Stack.Screen name="vendorList" component={VendorListPage} />
+      <Stack.Screen name="vendorAdd" component={AddVendorsPage} />
     </Stack.Navigator>
   );
 };
@@ -178,6 +191,7 @@ const MainRoutes = () => {
         <Drawer.Screen name="Waste" component={RecipeListPage} />
         <Drawer.Screen name="Inventory" component={InventoryRoutes} />
         <Drawer.Screen name="Admin" component={AdminRoutes} />
+        <Drawer.Screen name="Vendor" component={VendorRoutes} />
 
         <Drawer.Screen name="Messages" component={AdminPage} />
         <Drawer.Screen name="Library" component={AdminPage} />

@@ -16,6 +16,7 @@ import * as ImagePicker from "expo-image-picker";
 import { PhotoModal } from "../../../../components/Meals/PhotoModal";
 import { ToastError } from "../../../../helpers/Toast";
 import * as actions from "../../../../Redux/actions/InventoryAction/InventoryActions";
+import * as actionsVendor from "../../../../Redux/actions/VendorActions/VendorActions";
 import { Spinner } from "native-base";
 import { useNavigation } from "@react-navigation/core";
 import { DeleteModal } from "../../../../components/Meals/DeleteModal";
@@ -38,6 +39,8 @@ export const AddInventoryPage = (props) => {
   const deleteError = useSelector(
     (state) => state.inventory.deleteInventory.isError
   );
+  const vendorsList = useSelector((state) => state.vendor.vendors.list);
+
   const [itemName, setItemName] = useState("");
   const [brand, setBrand] = useState("");
   const [quantity, setQuantity] = useState("");
@@ -55,6 +58,7 @@ export const AddInventoryPage = (props) => {
   const [availablity, setAvailablity] = useState({});
   const [isEdit, setIsEdit] = useState(false);
   const [deleteModal, setdeleteModal] = useState(false);
+  const [selectedVendor, setSelectedVendor] = useState({});
 
   useEffect(() => {
     if (!deleteError) return;
@@ -62,6 +66,11 @@ export const AddInventoryPage = (props) => {
   }, [deleteError]);
 
   useEffect(() => {
+    dispatch(
+      actionsVendor.fetchVendorActions({
+        locationId: defaultLocation.locationId,
+      })
+    );
     const data = props?.route?.params?.data;
 
     if (data) {
@@ -79,6 +88,7 @@ export const AddInventoryPage = (props) => {
         photos,
         notes,
         availability,
+        vendor,
       } = props?.route?.params?.data;
 
       setImageUri(photos);
@@ -97,6 +107,7 @@ export const AddInventoryPage = (props) => {
       setAvailablity(
         inventoryAvailibility.find((item) => item.value === availability)
       );
+      setSelectedVendor(vendor);
     }
   }, []);
 
@@ -121,7 +132,8 @@ export const AddInventoryPage = (props) => {
       threshold.trim().length === 0 ||
       category.trim().length === 0 ||
       !color.color ||
-      !availablity.value
+      !availablity.value ||
+      !selectedVendor.name
     ) {
       ToastError("Kindly fill all fields");
       return;
@@ -129,6 +141,32 @@ export const AddInventoryPage = (props) => {
 
     if (!defaultLocation.locationId) {
       ToastError("Kindly select primary location, first");
+      return;
+    }
+
+    if (isEdit) {
+      const data = {
+        locationId: defaultLocation.locationId,
+        brand,
+        quantity,
+        units: unit,
+        expiryDate: dateOfExpiry,
+        purchaseDate: dateOfPurchase,
+        color: color.title,
+        notes,
+        itemName,
+        photos: image64,
+        costPerUnit,
+        threshold,
+        category,
+        navigation,
+        availability: availablity.value,
+        vendor: selectedVendor,
+        inventoryId: props?.route?.params?.data?.inventoryId,
+      };
+
+      dispatch(actions.updateInventoryAction(data));
+
       return;
     }
 
@@ -148,6 +186,7 @@ export const AddInventoryPage = (props) => {
       category,
       navigation,
       availability: availablity.value,
+      vendor: selectedVendor,
     };
 
     dispatch(actions.addInventoryAction(data));
@@ -244,6 +283,7 @@ export const AddInventoryPage = (props) => {
             style={{
               width: "100%",
               flexDirection: device === "tablet" ? "row" : "column",
+              zIndex: 3,
             }}
           >
             <Input
@@ -255,6 +295,17 @@ export const AddInventoryPage = (props) => {
                 borderRadius: 0,
                 flex: 1,
               }}
+            />
+
+            <Dropdown
+              selectedMenu={selectedVendor?.name}
+              setMenu={(val) =>
+                setSelectedVendor(vendorsList.find((item) => item.name === val))
+              }
+              placeholder={"Vendor"}
+              menus={vendorsList.map((item) => item.name)}
+              style={{ zIndex: 10, marginTop: 10 }}
+              errMsg={"Looks like there is no vendor present!"}
             />
 
             {/* <View
@@ -315,6 +366,7 @@ export const AddInventoryPage = (props) => {
               flexDirection: device === "tablet" ? "row" : "column",
               alignItems: "center",
               justifyContent: "space-between",
+              marginTop: device === "tablet" ? 0 : 10,
             }}
           >
             <Input
@@ -370,7 +422,7 @@ export const AddInventoryPage = (props) => {
               }}
               masked
               maskType={"datetime"}
-              maskFormat={"DD/MM/YYYY"}
+              maskFormat={"YYYY/MM/DD"}
             />
             <Input
               placeholder={"Date of Expiry"}
@@ -383,9 +435,15 @@ export const AddInventoryPage = (props) => {
               }}
               masked
               maskType={"datetime"}
-              maskFormat={"DD/MM/YYYY"}
+              maskFormat={"YYYY/MM/DD"}
             />
-            <View style={{ zIndex: 10, flex: device === "tablet" ? 0.3 : 1 }}>
+            <View
+              style={{
+                zIndex: 10,
+                flex: device === "tablet" ? 0.3 : 1,
+                marginTop: device === "tablet" ? 0 : 10,
+              }}
+            >
               <Dropdown
                 selectedMenu={color.title}
                 setMenu={(val) =>

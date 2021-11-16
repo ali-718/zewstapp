@@ -8,6 +8,16 @@ import {
   FETCH_RECIPE,
 } from "./Types";
 
+export const fetchRecipeCategoryActions = () =>
+  new Promise((resolve, reject) => {
+    client
+      .get("/recipe/getCategories")
+      .then((data) => {
+        resolve(data.data?.categories);
+      })
+      .catch((e) => reject(e.response.data));
+  });
+
 export const fetchRecipeActions =
   ({ clientId }) =>
   (dispatch) => {
@@ -37,6 +47,7 @@ export const addRecipeAction =
     ingredients,
     recipeSteps,
     navigation,
+    category,
   }) =>
   (dispatch) => {
     dispatch({ type: ADD_RECIPE.REQUESTED });
@@ -52,6 +63,7 @@ export const addRecipeAction =
         ingredients,
         recipeSteps,
         available: true,
+        category,
       })
       .then((res) => {
         ToastSuccess("Recipe added successfully");
@@ -78,6 +90,7 @@ export const updateRecipeAction =
     recipeSteps,
     navigation,
     catalogId,
+    category,
   }) =>
   (dispatch) => {
     dispatch({ type: EDIT_RECIPE.REQUESTED });
@@ -94,6 +107,7 @@ export const updateRecipeAction =
         recipeSteps,
         available: true,
         catalogId,
+        category,
       })
       .then((res) => {
         ToastSuccess("Recipe updated successfully");

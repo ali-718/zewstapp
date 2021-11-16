@@ -187,7 +187,7 @@ export const InventoryListPage = () => {
                       colors.find((color) => item.color === color.title).color
                     }
                     onPress={() =>
-                      navigation.navigate("inventoryDetail", {
+                      navigation.navigate("inventoryAdd", {
                         data: item,
                       })
                     }

@@ -25,6 +25,7 @@ export const InventoryDetailPage = ({ data, isTab, ...props }) => {
     photos,
     notes,
     availability,
+    vendor,
   } = isTab ? data : props?.route?.params?.data;
   const device = useSelector((state) => state.system.device);
   const navigation = useNavigation();
