@@ -132,13 +132,30 @@ export const addNewMeal =
     mealCategory,
     mealAllergens,
     mealAddons,
-    mealDiscount = "",
-    mealMedia,
+    mealDiscount = "2",
+    mealMedia = "jsbdhu1233",
     navigation,
     mealRecipes,
   }) =>
   (dispatch) => {
     dispatch({ type: ADD_MEAL.REQUESTED });
+
+    console.log({
+      locationId,
+      mealName,
+      mealDescription,
+      mealPrice,
+      mealCurrency,
+      mealAvailability,
+      mealDaysAvailable,
+      mealCategory,
+      mealAllergens,
+      mealAddons,
+      mealDiscount,
+      mealMedia,
+      navigation,
+      mealRecipes,
+    });
 
     client
       .post(`/meal/manual/add`, {
@@ -155,6 +172,7 @@ export const addNewMeal =
         mealDiscount,
         mealMedia: [`data:image/jpeg;base64,${mealMedia}`],
         mealRecipes,
+        createdAt: "12-10-2021",
       })
       .then((data) => {
         dispatch({
@@ -166,6 +184,7 @@ export const addNewMeal =
         navigation.goBack();
       })
       .catch((e) => {
+        console.log(e.response.data);
         dispatch({ type: ADD_MEAL.FAILED });
         ToastError("Some error occoured! please try again later");
       });

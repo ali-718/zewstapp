@@ -23,10 +23,11 @@ import * as actions from "../../../Redux/actions/PosActions/OrderActions";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ToastError } from "../../../helpers/Toast";
 import { Spinner } from "native-base";
-import { useIsFocused } from "@react-navigation/core";
+import { useIsFocused, useNavigation } from "@react-navigation/core";
 
-const TableComponent = ({ width, tableNo, status, isLoading }) => (
-  <View
+const TableComponent = ({ width, tableNo, status, isLoading, navigation }) => (
+  <TouchableOpacity
+    onPress={() => navigation.navigate("orderTaking", { tableNo })}
     style={{
       width: width || "30%",
       borderRadius: 20,
@@ -63,11 +64,12 @@ const TableComponent = ({ width, tableNo, status, isLoading }) => (
         {status.toLowerCase()}
       </Text>
     )}
-  </View>
+  </TouchableOpacity>
 );
 
 export const TablesListScreen = () => {
   const dispatch = useDispatch();
+  const navigation = useNavigation();
   const insideRef = useRef();
   const outsideRef = useRef();
   const isScreenFocused = useIsFocused();
@@ -280,6 +282,7 @@ export const TablesListScreen = () => {
                           tableNo={item.name}
                           status={item.stature}
                           isLoading={item?.isLoading}
+                          navigation={navigation}
                         />
                       )}
                     />
@@ -338,6 +341,7 @@ export const TablesListScreen = () => {
                         tableNo={item.name}
                         status={item.stature}
                         isLoading={item?.isLoading}
+                        navigation={navigation}
                       />
                     )}
                   />

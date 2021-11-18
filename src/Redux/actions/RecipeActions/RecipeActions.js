@@ -19,11 +19,11 @@ export const fetchRecipeCategoryActions = () =>
   });
 
 export const fetchRecipeActions =
-  ({ clientId }) =>
+  ({ locationId }) =>
   (dispatch) => {
     dispatch({ type: FETCH_RECIPE.REQUESTED });
     client
-      .get(`/recipe/findAll/${clientId}`)
+      .get(`/recipe/findAll/${locationId}`)
       .then((res) => {
         dispatch({
           type: FETCH_RECIPE.SUCCEEDED,
@@ -68,7 +68,7 @@ export const addRecipeAction =
       .then((res) => {
         ToastSuccess("Recipe added successfully");
         dispatch({ type: ADD_RECIPE.SUCCEEDED });
-        dispatch(fetchRecipeActions({ clientId }));
+        dispatch(fetchRecipeActions({ locationId }));
         navigation.goBack();
       })
       .catch((e) => {
@@ -112,7 +112,7 @@ export const updateRecipeAction =
       .then((res) => {
         ToastSuccess("Recipe updated successfully");
         dispatch({ type: EDIT_RECIPE.SUCCEEDED, payload: catalogId });
-        dispatch(fetchRecipeActions({ clientId }));
+        dispatch(fetchRecipeActions({ locationId }));
         navigation.pop(2);
       })
       .catch((e) => {
@@ -132,7 +132,7 @@ export const deleteRecipeAction =
         dispatch({
           type: DELETE_RECIPE.SUCCEEDED,
         });
-        dispatch(fetchRecipeActions({ clientId }));
+        dispatch(fetchRecipeActions({ locationId }));
         navigation.navigate("Recipe");
       })
       .catch((e) => {

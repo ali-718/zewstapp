@@ -144,10 +144,10 @@ export const MenuPage = () => {
                         .map((item, i) => (
                           <ResturantName
                             key={i}
-                            name={item?.locationName}
+                            name={item?.name}
                             isLoading={item?.meal?.isLoading}
                             isError={item?.meal?.isError}
-                            address={item.address}
+                            address={item.streetInfo}
                             selected={selected === i}
                             setSelected={() =>
                               openResturant(i, item.locationId)
@@ -231,10 +231,10 @@ export const MenuPage = () => {
               .map((item, i) => (
                 <ResturantName
                   key={i}
-                  name={item?.locationName}
+                  name={item?.name}
                   isLoading={item?.meal?.isLoading}
                   isError={item?.meal?.isError}
-                  address={item.address}
+                  address={item.streetInfo}
                   selected={selected === i}
                   setSelected={() => openResturant(i, item.locationId)}
                   foodItems={item?.meal?.meals || []}

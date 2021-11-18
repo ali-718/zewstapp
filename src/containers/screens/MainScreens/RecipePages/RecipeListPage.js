@@ -29,17 +29,22 @@ export const RecipeListPage = () => {
   const [search, setSearch] = useState("");
   const [filteredItem, setFiltereditem] = useState([]);
   const [selectedRecipeItemForTab, setselectedRecipeItemForTab] = useState({});
+  const defaultLocation = useSelector(
+    (state) => state.locations.defaultLocation
+  );
 
   useEffect(() => {
     fetchRecipes();
   }, []);
 
   useEffect(() => {
-    setFiltereditem(list ?? []);
+    setFiltereditem(list);
   }, [list]);
 
   const fetchRecipes = () =>
-    dispatch(actions.fetchRecipeActions({ clientId: user.clientId }));
+    dispatch(
+      actions.fetchRecipeActions({ locationId: defaultLocation.locationId })
+    );
 
   const searchKeyword = (text) => {
     const keyword = text?.toLowerCase();

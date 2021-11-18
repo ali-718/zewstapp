@@ -1,6 +1,6 @@
 import { ToastError } from "../../../helpers/Toast";
 import { client } from "../client";
-import { FETCH_TABLES } from "./Types";
+import { FETCH_MEALS, FETCH_TABLES } from "./Types";
 
 export const addTableAction = ({ locationId, name, location }) =>
   new Promise((resolve, reject) => {
@@ -19,6 +19,25 @@ export const addTableAction = ({ locationId, name, location }) =>
         ToastError("Some error occoured please try again later!");
       });
   });
+
+export const fetchMealsAction =
+  ({ locationId, reload = true }) =>
+  (dispatch) => {
+    dispatch({ type: FETCH_MEALS.REQUESTED, payload: reload });
+
+    client
+      .get(`manual-orders/findAllMeals/${locationId}`)
+      .then(({ data }) => {
+        dispatch({
+          type: FETCH_MEALS.SUCCEEDED,
+          payload: data.meals?.Items,
+        });
+      })
+      .catch((e) => {
+        ToastError("Unable to fetch meals, please try again");
+        dispatch({ type: FETCH_MEALS.FAILED });
+      });
+  };
 
 export const fetchTablesAction =
   ({ locationId, reload = true }) =>

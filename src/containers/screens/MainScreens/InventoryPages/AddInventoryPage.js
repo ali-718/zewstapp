@@ -282,7 +282,7 @@ export const AddInventoryPage = (props) => {
           <View
             style={{
               width: "100%",
-              flexDirection: device === "tablet" ? "row" : "column",
+              flexDirection: "column",
               zIndex: 3,
             }}
           >

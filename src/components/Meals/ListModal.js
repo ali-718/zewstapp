@@ -15,6 +15,7 @@ import { Header } from "../../components/Headers/Header";
 import { grayColor, primaryColor } from "../../theme/colors";
 import { Spinner } from "native-base";
 import { RegularButton } from "../Buttons/RegularButton";
+import { HeadingBox } from "../HeadingBox/HeadingBox";
 
 export const ListModal = ({
   onRequestClose,
@@ -24,6 +25,7 @@ export const ListModal = ({
   onSelect,
   onPress,
   list,
+  string,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(list.length === 0);
@@ -54,13 +56,7 @@ export const ListModal = ({
           backgroundColor: grayColor,
         }}
       >
-        <View style={{ width: "100%" }}>
-          <Header
-            heading={title}
-            leftImage={leftImage}
-            onPressLeft={onRequestClose}
-          />
-        </View>
+        <HeadingBox heading={""} onGoBack={onRequestClose} />
         {!isLoading && !isError ? (
           <ScrollView
             showsVerticalScrollIndicator={false}
@@ -88,15 +84,23 @@ export const ListModal = ({
                       <Text
                         style={{
                           marginTop: 5,
-                          color:
-                            selected?.filter((day) => day === item)?.length > 0
+                          color: string
+                            ? selected === item
                               ? "black"
-                              : "gray",
+                              : "gray"
+                            : selected?.filter((day) => day === item)?.length >
+                              0
+                            ? "black"
+                            : "gray",
                           fontSize: 16,
-                          fontFamily:
-                            selected?.filter((day) => day === item)?.length > 0
+                          fontFamily: string
+                            ? selected === item
                               ? "openSans_bold"
-                              : "openSans_regular",
+                              : "openSans_regular"
+                            : selected?.filter((day) => day === item)?.length >
+                              0
+                            ? "openSans_bold"
+                            : "openSans_regular",
                         }}
                         numberOfLines={1}
                       >
@@ -104,17 +108,32 @@ export const ListModal = ({
                       </Text>
                     </View>
 
-                    {selected?.filter((day) => day === item)?.length > 0 && (
-                      <TouchableOpacity onPress={() => null}>
-                        <Image
-                          source={check}
-                          style={{
-                            width: 20,
-                            height: 20,
-                            resizeMode: "contain",
-                          }}
-                        />
-                      </TouchableOpacity>
+                    {string ? (
+                      selected === item ? (
+                        <TouchableOpacity onPress={() => null}>
+                          <Image
+                            source={check}
+                            style={{
+                              width: 20,
+                              height: 20,
+                              resizeMode: "contain",
+                            }}
+                          />
+                        </TouchableOpacity>
+                      ) : null
+                    ) : (
+                      selected?.filter((day) => day === item)?.length > 0 && (
+                        <TouchableOpacity onPress={() => null}>
+                          <Image
+                            source={check}
+                            style={{
+                              width: 20,
+                              height: 20,
+                              resizeMode: "contain",
+                            }}
+                          />
+                        </TouchableOpacity>
+                      )
                     )}
                   </TouchableOpacity>
                 ))}

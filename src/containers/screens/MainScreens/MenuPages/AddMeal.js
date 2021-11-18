@@ -54,7 +54,7 @@ export const AddMeal = (props) => {
   const [photoModal, setphotoModal] = useState(false);
   const [deleteModal, setdeleteModal] = useState(false);
   const [selectedDays, setselectedDays] = useState([]);
-  const [selectedCategories, setselectedCategories] = useState([]);
+  const [selectedCategories, setselectedCategories] = useState("");
   const [selectedAllergens, setselectedAllergens] = useState([]);
   const [selectedAddons, setselectedAddons] = useState([]);
   const [foodImage, setFoodImage] = useState("");
@@ -68,7 +68,11 @@ export const AddMeal = (props) => {
   }, [deleteMealError]);
 
   useEffect(() => {
-    dispatch(recipeActions.fetchRecipeActions({ clientId: user.clientId }));
+    dispatch(
+      recipeActions.fetchRecipeActions({
+        locationId: defaultLocation.locationId,
+      })
+    );
 
     if (!props.route?.params?.data) return;
 
@@ -172,14 +176,7 @@ export const AddMeal = (props) => {
   };
 
   const onSelectCategories = (val) => {
-    const check = selectedCategories.filter((item) => item === val).length > 0;
-
-    if (check) {
-      setselectedCategories(selectedCategories.filter((item) => item !== val));
-      return;
-    }
-
-    setselectedCategories([...selectedCategories, val]);
+    setselectedCategories(val);
   };
 
   const onSelectAllergens = (val) => {
@@ -209,7 +206,7 @@ export const AddMeal = (props) => {
       name.trim().length === 0 ||
       desc.trim().length === 0 ||
       selectedDays.length === 0 ||
-      selectedCategories.length === 0 ||
+      selectedCategories.trim().length === 0 ||
       unitCost.length === 0 ||
       !selectedRecipe.recipeTitle
     ) {
@@ -235,11 +232,6 @@ export const AddMeal = (props) => {
           mealRecipes: [selectedRecipe],
         })
       );
-      return;
-    }
-
-    if (foodImage.length === 0 || foodImageBase64.length === 0) {
-      ToastError("Kindly select meal image");
       return;
     }
 
@@ -388,11 +380,7 @@ export const AddMeal = (props) => {
         <View style={{ width: "100%", marginTop: 10 }}>
           <MealItem
             label={"Categories*"}
-            text={JSON.stringify(selectedCategories)
-              .replace("[", "")
-              .replace("]", "")
-              .replace(/["']/g, "")
-              .replace(",", ", ")}
+            text={selectedCategories}
             icon={forwardIcon}
             touchable
             onPress={() => setcategoriesModal(true)}
@@ -457,6 +445,7 @@ export const AddMeal = (props) => {
         selected={selectedCategories}
         list={categories}
         onPress={() => dispatch(getMealCategories())}
+        string
       />
 
       <ListModal
@@ -466,6 +455,7 @@ export const AddMeal = (props) => {
         onSelect={(item) => onSelectAllergens(item)}
         selected={selectedAllergens}
         list={allergens}
+        onPress={() => dispatch(actions.getMealAllergens())}
       />
 
       <ListModal
@@ -475,6 +465,7 @@ export const AddMeal = (props) => {
         onSelect={(item) => onSelectAddons(item)}
         selected={selectedAddons}
         list={addons}
+        onPress={() => dispatch(actions.getMealAddons())}
       />
 
       <PhotoModal

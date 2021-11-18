@@ -347,3 +347,24 @@ export const allCountries = [
   "Zambia",
   "Zimbabwe",
 ];
+
+const randomColors = [
+  "#21D19F",
+  "#E2856E",
+  "#E74A69",
+  "#03256C",
+  "#FF5154",
+  "#2A4D14",
+  "#DB4AD5",
+  "#D33DC4",
+  "#36827F",
+  "#664E4C",
+  "#5642E0",
+  "#F42C04",
+];
+
+export const getRandomColor = () => {
+  var item = randomColors[Math.floor(Math.random() * randomColors.length)];
+
+  return item;
+};

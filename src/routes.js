@@ -52,6 +52,7 @@ import { ResetPasswordVerification } from "./containers/screens/AuthScreens/Rese
 import { VendorListPage } from "./containers/screens/MainScreens/VendorPages/VendorListPage";
 import { AddVendorsPage } from "./containers/screens/MainScreens/VendorPages/AddVendorsPage";
 import { TablesListScreen } from "./containers/screens/POSscreens/TablesListScreen";
+import { OrderTakingScreen } from "./containers/screens/POSscreens/OrderTakingScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -165,6 +166,7 @@ const OrderRoutes = () => {
       screenOptions={{ headerShown: false, gestureEnabled: false }}
     >
       <Stack.Screen name="tableList" component={TablesListScreen} />
+      <Stack.Screen name="orderTaking" component={OrderTakingScreen} />
     </Stack.Navigator>
   );
 };
