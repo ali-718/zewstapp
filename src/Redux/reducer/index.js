@@ -8,6 +8,7 @@ import { employeeReducer } from "./EmployeeReducer";
 import { inventoryReducer } from "./InventoryReducer";
 import { dashboardReducer } from "./DashboardReducer";
 import { vendorReducer } from "./VendorReducer";
+import { posReducer } from "./PosReducer";
 
 export default combineReducers({
   auth: authReducer,
@@ -19,4 +20,5 @@ export default combineReducers({
   inventory: inventoryReducer,
   dashboard: dashboardReducer,
   vendor: vendorReducer,
+  pos: posReducer,
 });

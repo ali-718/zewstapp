@@ -1,5 +1,5 @@
 import React from "react";
-import { View, SafeAreaView, StatusBar } from "react-native";
+import { View, SafeAreaView, StatusBar, ScrollView } from "react-native";
 import { backgroundGrayColor } from "../theme/colors";
 import { useNavigation } from "@react-navigation/native";
 import { Header } from "../components/Headers/Header";
@@ -12,6 +12,7 @@ export const MainScreenContainer = ({
   noScroll,
   onPressRight = () => null,
   noHeader,
+  scrollRef = () => null,
   ...props
 }) => {
   const navigation = useNavigation();

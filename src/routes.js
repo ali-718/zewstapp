@@ -51,6 +51,7 @@ import BankPage from "./containers/screens/MainScreens/AdminsPages/BankPage";
 import { ResetPasswordVerification } from "./containers/screens/AuthScreens/ResetPasswordVerification";
 import { VendorListPage } from "./containers/screens/MainScreens/VendorPages/VendorListPage";
 import { AddVendorsPage } from "./containers/screens/MainScreens/VendorPages/AddVendorsPage";
+import { TablesListScreen } from "./containers/screens/POSscreens/TablesListScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -158,6 +159,16 @@ const AdminRoutes = () => {
   );
 };
 
+const OrderRoutes = () => {
+  return (
+    <Stack.Navigator
+      screenOptions={{ headerShown: false, gestureEnabled: false }}
+    >
+      <Stack.Screen name="tableList" component={TablesListScreen} />
+    </Stack.Navigator>
+  );
+};
+
 const Drawer = createDrawerNavigator();
 
 const MainRoutes = () => {
@@ -192,6 +203,7 @@ const MainRoutes = () => {
         <Drawer.Screen name="Inventory" component={InventoryRoutes} />
         <Drawer.Screen name="Admin" component={AdminRoutes} />
         <Drawer.Screen name="Vendor" component={VendorRoutes} />
+        <Drawer.Screen name="Pos" component={OrderRoutes} />
 
         <Drawer.Screen name="Messages" component={AdminPage} />
         <Drawer.Screen name="Library" component={AdminPage} />

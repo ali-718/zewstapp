@@ -37,3 +37,6 @@ export const chartPurpleColor = "#7063CB";
 export const chartHeaderColor = "#FAFAFB";
 export const inputBorderColor = "#ECECF2";
 export const buttonRedColor = "#DD0000";
+export const availableTableColor = "#57C27B";
+export const reservedTableColor = "#294BFB";
+export const occupiedTableColor = "#A461D8";
