@@ -25,9 +25,20 @@ import { ToastError } from "../../../helpers/Toast";
 import { Spinner } from "native-base";
 import { useIsFocused, useNavigation } from "@react-navigation/core";
 
-const TableComponent = ({ width, tableNo, status, isLoading, navigation }) => (
+const TableComponent = ({
+  width,
+  tableNo,
+  status,
+  isLoading,
+  navigation,
+  tableId,
+}) => (
   <TouchableOpacity
-    onPress={() => navigation.navigate("orderTaking", { tableNo })}
+    onPress={
+      status === "AVAILABLE"
+        ? () => navigation.navigate("orderTaking", { tableNo, tableId })
+        : () => null
+    }
     style={{
       width: width || "30%",
       borderRadius: 20,
@@ -283,6 +294,7 @@ export const TablesListScreen = () => {
                           status={item.stature}
                           isLoading={item?.isLoading}
                           navigation={navigation}
+                          tableId={item?.tableId}
                         />
                       )}
                     />
@@ -342,6 +354,7 @@ export const TablesListScreen = () => {
                         status={item.stature}
                         isLoading={item?.isLoading}
                         navigation={navigation}
+                        tableId={item?.tableId}
                       />
                     )}
                   />
@@ -368,5 +381,102 @@ export const TablesListScreen = () => {
     );
   }
 
-  return <View />;
+  const [tab, setTab] = useState(0);
+
+  return (
+    <MainScreenContainer>
+      <HeadingBox heading={"Orders"} noBack />
+
+      <View style={{ width: "90%", height: "100%" }}>
+        <View style={{ width: "100%", marginTop: 10 }}>
+          <Text style={{ color: "black", fontSize: 20 }}>Tables</Text>
+        </View>
+
+        <View
+          style={{
+            width: "100%",
+            alignItems: "center",
+            justifyContent: "center",
+            flexDirection: "row",
+          }}
+        >
+          <TouchableOpacity
+            onPress={() => setTab(0)}
+            style={{
+              width: "50%",
+              alignItems: "center",
+              justifyContent: "center",
+              height: 40,
+              borderBottomWidth: tab === 0 ? 2 : 0,
+              borderColor: primaryColor,
+            }}
+          >
+            <Text>INSIDE</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => setTab(1)}
+            style={{
+              width: "50%",
+              alignItems: "center",
+              justifyContent: "center",
+              height: 40,
+              borderBottomWidth: tab === 1 ? 2 : 0,
+              borderColor: primaryColor,
+            }}
+          >
+            <Text>OUTSIDE</Text>
+          </TouchableOpacity>
+        </View>
+
+        <View style={{ width: "100%", marginTop: 20 }}>
+          <TouchableOpacity
+            onPress={() =>
+              addNewTable(
+                tab === 1 ? outsidetablesToShow : insidetablesToShow,
+                tab === 1 ? "OUTSIDE" : "INSIDE"
+              )
+            }
+          >
+            <Text
+              style={{
+                color: "black",
+                textDecorationLine: "underline",
+              }}
+            >
+              + Add a table
+            </Text>
+          </TouchableOpacity>
+
+          <FlatList
+            key={tab}
+            ref={tab === 1 ? outsideRef : insideRef}
+            data={tab === 1 ? outsidetablesToShow : insidetablesToShow}
+            numColumns={2}
+            style={{
+              marginTop: 20,
+              width: "100%",
+              marginBottom: 50,
+            }}
+            columnWrapperStyle={{
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-between",
+              marginTop: 20,
+            }}
+            renderItem={({ item }) => (
+              <TableComponent
+                width={"45%"}
+                key={item.name}
+                tableNo={item.name}
+                status={item.stature}
+                isLoading={item?.isLoading}
+                navigation={navigation}
+                tableId={item?.tableId}
+              />
+            )}
+          />
+        </View>
+      </View>
+    </MainScreenContainer>
+  );
 };

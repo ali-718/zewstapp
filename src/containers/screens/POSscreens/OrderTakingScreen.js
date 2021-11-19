@@ -25,7 +25,7 @@ import * as actions from "../../../Redux/actions/PosActions/OrderActions";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ToastError } from "../../../helpers/Toast";
 import { Spinner } from "native-base";
-import { useIsFocused } from "@react-navigation/core";
+import { useIsFocused, useNavigation } from "@react-navigation/core";
 import { getRandomColor } from "../../../helpers/utlils";
 import { order } from "styled-system";
 import { RegularButton } from "../../../components/Buttons/RegularButton";
@@ -110,8 +110,7 @@ const MealComponent = ({ meal, onPress }) => (
 
 export const OrderTakingScreen = (props) => {
   const dispatch = useDispatch();
-  const insideRef = useRef();
-  const outsideRef = useRef();
+  const navigation = useNavigation();
   const isScreenFocused = useIsFocused();
   const device = useSelector((state) => state.system.device);
   const { categories, meals, isLoading, isError } = useSelector(
@@ -123,6 +122,8 @@ export const OrderTakingScreen = (props) => {
   const [tableNo, setTableNo] = useState(props.route?.params?.tableNo ?? "");
   const [orderList, setOrderList] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
+  const [charge, setCharge] = useState(false);
+  const [defaulLocation, setDefaulLocation] = useState({});
 
   useEffect(() => {
     setMealsToShow(meals.map((item) => ({ ...item, selected: 0 })));
@@ -142,6 +143,7 @@ export const OrderTakingScreen = (props) => {
       return;
     }
 
+    setDefaulLocation(JSON.parse(location));
     setIsDefaultLocation(true);
   };
 
@@ -237,6 +239,17 @@ export const OrderTakingScreen = (props) => {
       }
       return;
     }
+  };
+
+  const createOrder = () => {
+    dispatch(
+      actions.changeTableStatusAction({
+        locationId: defaulLocation.locationId,
+        tableId: props.route.params.tableId,
+        stature: "RESERVED",
+        navigation,
+      })
+    );
   };
 
   if (device === "tablet") {
@@ -472,9 +485,28 @@ export const OrderTakingScreen = (props) => {
                           style={{
                             width: "100%",
                             marginTop: 20,
+                            flexDirection: "row",
+                            alignItems: "center",
+                            justifyContent: "space-between",
                           }}
                         >
-                          <RegularButton text={`Charge $${totalPrice}`} />
+                          {charge ? (
+                            <RegularButton
+                              colors={["white", "white"]}
+                              style={{
+                                borderWidth: 1,
+                                borderColor: primaryColor,
+                              }}
+                              textStyle={{ color: primaryColor }}
+                              onPress={createOrder}
+                              text={`Cash`}
+                            />
+                          ) : (
+                            <RegularButton
+                              onPress={() => setCharge(true)}
+                              text={`Charge $${totalPrice}`}
+                            />
+                          )}
                         </View>
                       </View>
                     </View>
@@ -518,5 +550,213 @@ export const OrderTakingScreen = (props) => {
     );
   }
 
-  return <View />;
+  const [tab, setTab] = useState(0);
+
+  return (
+    <MainScreenContainer>
+      <HeadingBox heading={""} />
+      <View style={{ width: "90%", height: "100%" }}>
+        <View
+          style={{
+            width: "100%",
+            alignItems: "center",
+            justifyContent: "center",
+            flexDirection: "row",
+          }}
+        >
+          <TouchableOpacity
+            onPress={() => setTab(0)}
+            style={{
+              width: "33%",
+              alignItems: "center",
+              justifyContent: "center",
+              height: 40,
+              borderBottomWidth: tab === 0 ? 2 : 0,
+              borderColor: primaryColor,
+            }}
+          >
+            <Text>CATEGORIES</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => setTab(1)}
+            style={{
+              width: "33%",
+              alignItems: "center",
+              justifyContent: "center",
+              height: 40,
+              borderBottomWidth: tab === 1 ? 2 : 0,
+              borderColor: primaryColor,
+            }}
+          >
+            <Text>MENU</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => setTab(2)}
+            style={{
+              width: "33%",
+              alignItems: "center",
+              justifyContent: "center",
+              height: 40,
+              borderBottomWidth: tab === 2 ? 2 : 0,
+              borderColor: primaryColor,
+            }}
+          >
+            <Text>TABLE</Text>
+          </TouchableOpacity>
+        </View>
+
+        <View style={{ width: "100%", marginTop: 20 }}>
+          {tab === 0 ? (
+            <FlatList
+              data={categories}
+              numColumns={2}
+              style={{
+                marginTop: 20,
+                width: "100%",
+                height: "100%",
+                paddingBottom: 20,
+              }}
+              columnWrapperStyle={{
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "space-between",
+                marginVertical: 10,
+              }}
+              renderItem={({ item }) => (
+                <CategoryComponent
+                  onPress={() => setSelectedCategory(item)}
+                  width={"48%"}
+                  key={item}
+                  name={item}
+                />
+              )}
+            />
+          ) : tab === 1 ? (
+            <FlatList
+              data={mealsToShow.filter(
+                (item) => item.mealCategory === selectedCategory
+              )}
+              numColumns={2}
+              style={{
+                marginTop: 20,
+                width: "100%",
+                marginBottom: 50,
+              }}
+              columnWrapperStyle={{
+                marginTop: 20,
+              }}
+              renderItem={({ item }) => (
+                <MealComponent
+                  onPress={() => {
+                    incrementMealItem(item.mealId);
+                    createOrderList(item);
+                  }}
+                  meal={item}
+                />
+              )}
+            />
+          ) : (
+            <View style={{ width: "100%", marginTop: 20 }}>
+              {orderList.map((item) => (
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    marginTop: 20,
+                    width: "100%",
+                  }}
+                  key={item.mealId}
+                >
+                  <Text style={{ flex: 0.9, fontSize: 18 }}>
+                    x{item.selected} {item.mealName}
+                  </Text>
+
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <Text style={{ fontSize: 18 }}>${item.totalPrice}</Text>
+                    <TouchableOpacity onPress={() => deleteOrderList(item)}>
+                      <Image
+                        style={{
+                          width: 20,
+                          height: 20,
+                          marginLeft: 10,
+                          resizeMode: "contain",
+                        }}
+                        source={deleteIcon}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              ))}
+
+              <View
+                style={{
+                  width: "100%",
+                  borderTopWidth: 1,
+                  borderColor: grayShade2,
+                  marginTop: 20,
+                  paddingTop: 10,
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                }}
+              >
+                <Text
+                  style={{
+                    fontSize: 20,
+                    fontFamily: "openSans_semiBold",
+                  }}
+                >
+                  Total:
+                </Text>
+
+                <Text
+                  style={{
+                    fontSize: 20,
+                    fontFamily: "openSans_semiBold",
+                  }}
+                >
+                  ${totalPrice}
+                </Text>
+              </View>
+
+              <View
+                style={{
+                  width: "100%",
+                  marginTop: 20,
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                }}
+              >
+                {charge ? (
+                  <RegularButton
+                    colors={["white", "white"]}
+                    style={{
+                      borderWidth: 1,
+                      borderColor: primaryColor,
+                    }}
+                    textStyle={{ color: primaryColor }}
+                    onPress={createOrder}
+                    text={`Cash`}
+                  />
+                ) : (
+                  <RegularButton
+                    onPress={() => setCharge(true)}
+                    text={`Charge $${totalPrice}`}
+                  />
+                )}
+              </View>
+            </View>
+          )}
+        </View>
+      </View>
+    </MainScreenContainer>
+  );
 };

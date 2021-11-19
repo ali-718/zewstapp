@@ -2,6 +2,41 @@ import { ToastError } from "../../../helpers/Toast";
 import { client } from "../client";
 import { FETCH_MEALS, FETCH_TABLES } from "./Types";
 
+export const changeTableStatusAction =
+  ({ locationId, tableId, stature, navigation }) =>
+  (dispatch) => {
+    client
+      .post(`/manual-orders/updateTableStatus`, {
+        locationId,
+        tableId,
+        stature,
+      })
+      .then(() => {
+        navigation.goBack();
+      })
+      .catch((e) => {
+        ToastError("Some error occoured please try again later!");
+      });
+  };
+
+export const orderPayAction =
+  ({ locationId, orderId, tableId, navigation }) =>
+  (dispatch) => {
+    client
+      .post(`/manual-orders/orderpayed`, {
+        locationId,
+        orderId,
+        paymentDetails: "Cash",
+      })
+      .then(() => {
+        dispatch(changeTableStatusAction({ locationId, tableId, navigation }));
+      })
+      .catch((e) => {
+        reject();
+        ToastError("Some error occoured please try again later!");
+      });
+  };
+
 export const addTableAction = ({ locationId, name, location }) =>
   new Promise((resolve, reject) => {
     client
