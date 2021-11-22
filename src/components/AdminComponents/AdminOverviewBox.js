@@ -23,6 +23,7 @@ export const AdminOverviewBox = ({
   rightIcon,
   onLongPress = () => null,
   noTint,
+  noLeftMargin,
 }) => {
   const device = useSelector((state) => state.system.device);
 
@@ -60,7 +61,7 @@ export const AdminOverviewBox = ({
       <View
         style={{
           flex: 1,
-          marginLeft: device === "tablet" ? 20 : 15,
+          marginLeft: device === "tablet" ? 20 : noLeftMargin ? 0 : 15,
           marginRight: 10,
         }}
       >

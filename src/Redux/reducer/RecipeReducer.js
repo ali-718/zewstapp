@@ -11,6 +11,7 @@ const initialState = {
     isLoading: false,
     isError: false,
     list: [],
+    category: [],
   },
   addRecipe: {
     isLoading: false,
@@ -50,6 +51,15 @@ export const recipeReducer = produce(
         state.recipe.isLoading = false;
         state.recipe.isError = false;
         state.recipe.list = payload;
+
+        payload.map((item) => {
+          state.recipe.category = [
+            ...state.recipe.category,
+            item.recipeCategory,
+          ];
+        });
+
+        state.recipe.category = [...new Set(state.recipe.category)];
         break;
       }
       case FETCH_RECIPE.FAILED: {

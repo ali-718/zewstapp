@@ -31,6 +31,7 @@ export const fetchRecipeActions =
         });
       })
       .catch((e) => {
+        console.log(e);
         dispatch({ type: FETCH_RECIPE.FAILED });
       });
   };
@@ -47,7 +48,7 @@ export const addRecipeAction =
     ingredients,
     recipeSteps,
     navigation,
-    category,
+    recipeCategory,
   }) =>
   (dispatch) => {
     dispatch({ type: ADD_RECIPE.REQUESTED });
@@ -63,7 +64,7 @@ export const addRecipeAction =
         ingredients,
         recipeSteps,
         available: true,
-        category,
+        recipeCategory,
       })
       .then((res) => {
         ToastSuccess("Recipe added successfully");
@@ -72,6 +73,7 @@ export const addRecipeAction =
         navigation.goBack();
       })
       .catch((e) => {
+        console.log(e.response.data);
         ToastError("Some error occoured, please try again later");
         dispatch({ type: ADD_RECIPE.FAILED });
       });
@@ -90,7 +92,7 @@ export const updateRecipeAction =
     recipeSteps,
     navigation,
     catalogId,
-    category,
+    recipeCategory,
   }) =>
   (dispatch) => {
     dispatch({ type: EDIT_RECIPE.REQUESTED });
@@ -107,7 +109,7 @@ export const updateRecipeAction =
         recipeSteps,
         available: true,
         catalogId,
-        category,
+        recipeCategory,
       })
       .then((res) => {
         ToastSuccess("Recipe updated successfully");
@@ -133,7 +135,7 @@ export const deleteRecipeAction =
           type: DELETE_RECIPE.SUCCEEDED,
         });
         dispatch(fetchRecipeActions({ locationId }));
-        navigation.navigate("Recipe");
+        navigation.goBack();
       })
       .catch((e) => {
         ToastError("Some error occoured, please try again later");

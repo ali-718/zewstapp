@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, ScrollView } from "react-native";
+import { View, ScrollView } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { RegularButton } from "../../../../components/Buttons/RegularButton";
 import { MainScreenContainer } from "../../../MainScreenContainers";
@@ -7,7 +7,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { Input } from "../../../../components/Inputs/Input";
 import { AdminOverviewBox } from "../../../../components/AdminComponents/AdminOverviewBox";
 import recipeVessel from "../../../../assets/images/recipeVessel.png";
-import { useNavigation } from "@react-navigation/core";
+import { useIsFocused, useNavigation } from "@react-navigation/core";
 import { LoadingPage } from "../../../../components/LoadingPage/LoadingPage";
 import * as actions from "../../../../Redux/actions/RecipeActions/RecipeActions";
 import { RefetchDataError } from "../../../../components/ErrorPage/RefetchDataError";
@@ -16,6 +16,8 @@ import noRecipe from "../../../../assets/images/noRecipe.png";
 import { RecipeDetailPage } from "./RecipeDetailPage";
 import { SearchInput } from "../../../../components/SearchInput/SearchInput";
 import { HeadingBox } from "../../../../components/HeadingBox/HeadingBox";
+import { primaryColor } from "../../../../theme/colors";
+import { Text } from "../../../../components/Text/Text";
 
 export const RecipeListPage = () => {
   const navigation = useNavigation();
@@ -26,16 +28,19 @@ export const RecipeListPage = () => {
   const isLoading = useSelector((state) => state.recipe.recipe.isLoading);
   const isError = useSelector((state) => state.recipe.recipe.isError);
   const list = useSelector((state) => state.recipe.recipe.list);
+  const category = useSelector((state) => state.recipe.recipe.category);
   const [search, setSearch] = useState("");
   const [filteredItem, setFiltereditem] = useState([]);
   const [selectedRecipeItemForTab, setselectedRecipeItemForTab] = useState({});
   const defaultLocation = useSelector(
     (state) => state.locations.defaultLocation
   );
+  const isFocused = useIsFocused();
 
   useEffect(() => {
+    if (!isFocused) return;
     fetchRecipes();
-  }, []);
+  }, [isFocused]);
 
   useEffect(() => {
     setFiltereditem(list);
@@ -179,32 +184,66 @@ export const RecipeListPage = () => {
             />
           </View>
 
-          <View style={{ width: "100%", marginTop: 10 }}>
-            {filteredItem?.length === 0 ? (
+          <View
+            style={{
+              width: "100%",
+            }}
+          >
+            {category?.length === 0 ? (
               <NoMealBox image={noRecipe} text={"No recipe added. "} />
             ) : (
-              filteredItem?.map((item, i) => (
+              category.map((category) => (
                 <View
-                  key={i}
                   style={{
                     width: "100%",
-                    marginTop: 10,
-                    backgroundColor: "white",
-                    borderRadius: 10,
-                    padding: 10,
+                    marginTop: 20,
                   }}
                 >
-                  <AdminOverviewBox
-                    key={i}
-                    label={item.recipeTitle}
-                    name={`Macro: ${item.macroIngredient.itemName}`}
-                    rightText={""}
-                    onPress={() =>
-                      navigation.navigate("recipeDetailPage", {
-                        data: item,
-                      })
-                    }
-                  />
+                  <Text
+                    style={{
+                      color: primaryColor,
+                      fontSize: 16,
+                      textTransform: "uppercase",
+                    }}
+                  >
+                    {category}
+                  </Text>
+                  <View
+                    style={{
+                      backgroundColor: "white",
+                      borderRadius: 10,
+                      width: "100%",
+                      marginTop: 10,
+                    }}
+                  >
+                    {filteredItem
+                      ?.filter((recipe) => recipe.recipeCategory === category)
+                      .map((item, i) => (
+                        <View
+                          key={i}
+                          style={{
+                            width: "100%",
+                            marginTop: 10,
+                            backgroundColor: "white",
+                            borderRadius: 10,
+                            padding: 10,
+                          }}
+                        >
+                          <AdminOverviewBox
+                            key={i}
+                            label={item.recipeTitle}
+                            name={`Macro: ${item.macroIngredient.itemName}`}
+                            rightText={""}
+                            onPress={() =>
+                              navigation.navigate("recipeDetailPage", {
+                                data: item,
+                              })
+                            }
+                            noLeftMargin
+                          />
+                        </View>
+                      ))}
+                  </View>
                 </View>
               ))
             )}

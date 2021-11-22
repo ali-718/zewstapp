@@ -80,6 +80,16 @@ const IngredientBox = ({ value, unit, name }) => (
       alignItems: "center",
     }}
   >
+    <Text
+      style={{
+        color: "black",
+        fontSize: 30,
+        marginTop: -20,
+        marginRight: 10,
+      }}
+    >
+      .
+    </Text>
     <View
       style={{
         flexDirection: "row",
@@ -91,6 +101,7 @@ const IngredientBox = ({ value, unit, name }) => (
         style={{
           fontSize: 16,
           color: "black",
+          fontFamily: "openSans_semiBold",
         }}
       >
         {value}
@@ -111,8 +122,9 @@ const IngredientBox = ({ value, unit, name }) => (
       <Text
         style={{
           fontSize: 16,
-          color: grayMenuText,
+          color: "black",
           marginLeft: 20,
+          fontFamily: "openSans_semiBold",
         }}
       >
         {name}
@@ -132,13 +144,22 @@ const RecipeBox = ({ step, recipe }) => {
         alignItems: recipe.length < 100 ? "center" : "flex-start",
       }}
     >
-      <Text style={{ fontSize: 16, color: "black" }}>{step}. </Text>
+      <Text
+        style={{
+          fontSize: 16,
+          color: "black",
+          fontFamily: "openSans_semiBold",
+        }}
+      >
+        {step}.{" "}
+      </Text>
 
       <View style={{ flex: 1 }}>
         <Text
           style={{
             color: "black",
             fontSize: device === "tablet" ? 18 : 16,
+            fontFamily: "openSans_semiBold",
           }}
         >
           {recipe}
