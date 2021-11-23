@@ -242,6 +242,10 @@ export const OrderTakingScreen = (props) => {
   };
 
   const createOrder = () => {
+    if (orderList.length === 0) {
+      ToastError("Select any menu item first!");
+      return;
+    }
     dispatch(
       actions.changeTableStatusAction({
         locationId: defaulLocation.locationId,
@@ -555,208 +559,225 @@ export const OrderTakingScreen = (props) => {
   return (
     <MainScreenContainer>
       <HeadingBox heading={""} />
-      <View style={{ width: "90%", height: "100%" }}>
-        <View
-          style={{
-            width: "100%",
-            alignItems: "center",
-            justifyContent: "center",
-            flexDirection: "row",
-          }}
-        >
-          <TouchableOpacity
-            onPress={() => setTab(0)}
-            style={{
-              width: "33%",
-              alignItems: "center",
-              justifyContent: "center",
-              height: 40,
-              borderBottomWidth: tab === 0 ? 2 : 0,
-              borderColor: primaryColor,
-            }}
-          >
-            <Text>CATEGORIES</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => setTab(1)}
-            style={{
-              width: "33%",
-              alignItems: "center",
-              justifyContent: "center",
-              height: 40,
-              borderBottomWidth: tab === 1 ? 2 : 0,
-              borderColor: primaryColor,
-            }}
-          >
-            <Text>MENU</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => setTab(2)}
-            style={{
-              width: "33%",
-              alignItems: "center",
-              justifyContent: "center",
-              height: 40,
-              borderBottomWidth: tab === 2 ? 2 : 0,
-              borderColor: primaryColor,
-            }}
-          >
-            <Text>TABLE</Text>
-          </TouchableOpacity>
-        </View>
 
-        <View style={{ width: "100%", marginTop: 20 }}>
-          {tab === 0 ? (
-            <FlatList
-              data={categories}
-              numColumns={2}
+      {isDefaultLocation ? (
+        <View style={{ width: "90%", height: "100%" }}>
+          <View
+            style={{
+              width: "100%",
+              alignItems: "center",
+              justifyContent: "center",
+              flexDirection: "row",
+            }}
+          >
+            <TouchableOpacity
+              onPress={() => setTab(0)}
               style={{
-                marginTop: 20,
-                width: "100%",
-                height: "100%",
-                paddingBottom: 20,
-              }}
-              columnWrapperStyle={{
-                flexDirection: "row",
+                width: "33%",
                 alignItems: "center",
-                justifyContent: "space-between",
-                marginVertical: 10,
+                justifyContent: "center",
+                height: 40,
+                borderBottomWidth: tab === 0 ? 2 : 0,
+                borderColor: primaryColor,
               }}
-              renderItem={({ item }) => (
-                <CategoryComponent
-                  onPress={() => setSelectedCategory(item)}
-                  width={"48%"}
-                  key={item}
-                  name={item}
-                />
-              )}
-            />
-          ) : tab === 1 ? (
-            <FlatList
-              data={mealsToShow.filter(
-                (item) => item.mealCategory === selectedCategory
-              )}
-              numColumns={2}
+            >
+              <Text>CATEGORIES</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => setTab(1)}
               style={{
-                marginTop: 20,
-                width: "100%",
-                marginBottom: 50,
+                width: "33%",
+                alignItems: "center",
+                justifyContent: "center",
+                height: 40,
+                borderBottomWidth: tab === 1 ? 2 : 0,
+                borderColor: primaryColor,
               }}
-              columnWrapperStyle={{
-                marginTop: 20,
+            >
+              <Text>MENU</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => setTab(2)}
+              style={{
+                width: "33%",
+                alignItems: "center",
+                justifyContent: "center",
+                height: 40,
+                borderBottomWidth: tab === 2 ? 2 : 0,
+                borderColor: primaryColor,
               }}
-              renderItem={({ item }) => (
-                <MealComponent
-                  onPress={() => {
-                    incrementMealItem(item.mealId);
-                    createOrderList(item);
-                  }}
-                  meal={item}
-                />
-              )}
-            />
-          ) : (
-            <View style={{ width: "100%", marginTop: 20 }}>
-              {orderList.map((item) => (
-                <View
-                  style={{
-                    flexDirection: "row",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    marginTop: 20,
-                    width: "100%",
-                  }}
-                  key={item.mealId}
-                >
-                  <Text style={{ flex: 0.9, fontSize: 18 }}>
-                    x{item.selected} {item.mealName}
-                  </Text>
+            >
+              <Text>TABLE</Text>
+            </TouchableOpacity>
+          </View>
 
+          <View style={{ width: "100%", marginTop: 20 }}>
+            {tab === 0 ? (
+              <FlatList
+                data={categories}
+                numColumns={2}
+                style={{
+                  marginTop: 20,
+                  width: "100%",
+                  height: "100%",
+                  paddingBottom: 20,
+                }}
+                columnWrapperStyle={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  marginVertical: 10,
+                }}
+                renderItem={({ item }) => (
+                  <CategoryComponent
+                    onPress={() => setSelectedCategory(item)}
+                    width={"48%"}
+                    key={item}
+                    name={item}
+                  />
+                )}
+              />
+            ) : tab === 1 ? (
+              <FlatList
+                data={mealsToShow.filter(
+                  (item) => item.mealCategory === selectedCategory
+                )}
+                numColumns={2}
+                style={{
+                  marginTop: 20,
+                  width: "100%",
+                  marginBottom: 50,
+                }}
+                columnWrapperStyle={{
+                  marginTop: 20,
+                }}
+                renderItem={({ item }) => (
+                  <MealComponent
+                    onPress={() => {
+                      incrementMealItem(item.mealId);
+                      createOrderList(item);
+                    }}
+                    meal={item}
+                  />
+                )}
+              />
+            ) : (
+              <View style={{ width: "100%", marginTop: 20 }}>
+                {orderList.map((item) => (
                   <View
                     style={{
                       flexDirection: "row",
                       alignItems: "center",
-                      justifyContent: "center",
+                      justifyContent: "space-between",
+                      marginTop: 20,
+                      width: "100%",
+                    }}
+                    key={item.mealId}
+                  >
+                    <Text style={{ flex: 0.9, fontSize: 18 }}>
+                      x{item.selected} {item.mealName}
+                    </Text>
+
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <Text style={{ fontSize: 18 }}>${item.totalPrice}</Text>
+                      <TouchableOpacity onPress={() => deleteOrderList(item)}>
+                        <Image
+                          style={{
+                            width: 20,
+                            height: 20,
+                            marginLeft: 10,
+                            resizeMode: "contain",
+                          }}
+                          source={deleteIcon}
+                        />
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                ))}
+
+                <View
+                  style={{
+                    width: "100%",
+                    borderTopWidth: 1,
+                    borderColor: grayShade2,
+                    marginTop: 20,
+                    paddingTop: 10,
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 20,
+                      fontFamily: "openSans_semiBold",
                     }}
                   >
-                    <Text style={{ fontSize: 18 }}>${item.totalPrice}</Text>
-                    <TouchableOpacity onPress={() => deleteOrderList(item)}>
-                      <Image
-                        style={{
-                          width: 20,
-                          height: 20,
-                          marginLeft: 10,
-                          resizeMode: "contain",
-                        }}
-                        source={deleteIcon}
-                      />
-                    </TouchableOpacity>
-                  </View>
-                </View>
-              ))}
+                    Total:
+                  </Text>
 
-              <View
-                style={{
-                  width: "100%",
-                  borderTopWidth: 1,
-                  borderColor: grayShade2,
-                  marginTop: 20,
-                  paddingTop: 10,
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                }}
-              >
-                <Text
-                  style={{
-                    fontSize: 20,
-                    fontFamily: "openSans_semiBold",
-                  }}
-                >
-                  Total:
-                </Text>
-
-                <Text
-                  style={{
-                    fontSize: 20,
-                    fontFamily: "openSans_semiBold",
-                  }}
-                >
-                  ${totalPrice}
-                </Text>
-              </View>
-
-              <View
-                style={{
-                  width: "100%",
-                  marginTop: 20,
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                }}
-              >
-                {charge ? (
-                  <RegularButton
-                    colors={["white", "white"]}
+                  <Text
                     style={{
-                      borderWidth: 1,
-                      borderColor: primaryColor,
+                      fontSize: 20,
+                      fontFamily: "openSans_semiBold",
                     }}
-                    textStyle={{ color: primaryColor }}
-                    onPress={createOrder}
-                    text={`Cash`}
-                  />
-                ) : (
-                  <RegularButton
-                    onPress={() => setCharge(true)}
-                    text={`Charge $${totalPrice}`}
-                  />
-                )}
+                  >
+                    ${totalPrice}
+                  </Text>
+                </View>
+
+                <View
+                  style={{
+                    width: "100%",
+                    marginTop: 20,
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  {charge ? (
+                    <RegularButton
+                      colors={["white", "white"]}
+                      style={{
+                        borderWidth: 1,
+                        borderColor: primaryColor,
+                      }}
+                      textStyle={{ color: primaryColor }}
+                      onPress={createOrder}
+                      text={`Cash`}
+                    />
+                  ) : (
+                    <RegularButton
+                      onPress={() => setCharge(true)}
+                      text={`Charge $${totalPrice}`}
+                    />
+                  )}
+                </View>
               </View>
-            </View>
-          )}
+            )}
+          </View>
         </View>
-      </View>
+      ) : (
+        <View
+          style={{
+            width: "100%",
+            flex: 1,
+            alignItems: "center",
+            justifyContent: "center",
+            height: HEIGHT - 100,
+          }}
+        >
+          <Text style={{ fontSize: 20, width: "80%", textAlign: "center" }}>
+            You need to add atleast one location to start order 😃
+          </Text>
+        </View>
+      )}
     </MainScreenContainer>
   );
 };

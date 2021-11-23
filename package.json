@@ -19,6 +19,7 @@
     "expo-barcode-scanner": "~10.2.2",
     "expo-camera": "~11.2.2",
     "expo-device": "~3.3.0",
+    "expo-document-picker": "~9.2.4",
     "expo-image-picker": "~10.2.2",
     "expo-linear-gradient": "~9.2.0",
     "expo-screen-orientation": "~3.2.1",

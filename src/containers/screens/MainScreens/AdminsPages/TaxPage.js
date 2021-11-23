@@ -10,6 +10,7 @@ import { useSelector } from "react-redux";
 import { SearchInput } from "../../../../components/SearchInput/SearchInput";
 import { HeadingBox } from "../../../../components/HeadingBox/HeadingBox";
 import { RegularButton } from "../../../../components/Buttons/RegularButton";
+import * as DocumentPicker from "expo-document-picker";
 
 const dummyTax = ["IRS-2019.pdf", "IRS-2019.pdf", "IRS-2019.pdf"];
 
@@ -18,6 +19,13 @@ export const TaxPage = () => {
   const device = useSelector((state) => state.system.device);
   const [tax, settax] = useState(dummyTax);
   const [search, setSearch] = useState("");
+
+  const selectDocument = () => {
+    DocumentPicker.getDocumentAsync({
+      type: "application/pdf",
+      multiple: false,
+    });
+  };
 
   const searchKeyword = (text) => {
     const keyword = text?.toLowerCase();
@@ -54,7 +62,11 @@ export const TaxPage = () => {
           ))}
         </View>
 
-        <RegularButton style={{ marginTop: 20 }} text={"Upload document"} />
+        <RegularButton
+          onPress={selectDocument}
+          style={{ marginTop: 20 }}
+          text={"Upload document"}
+        />
       </View>
     </MainScreenContainer>
   );

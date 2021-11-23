@@ -53,6 +53,7 @@ import { VendorListPage } from "./containers/screens/MainScreens/VendorPages/Ven
 import { AddVendorsPage } from "./containers/screens/MainScreens/VendorPages/AddVendorsPage";
 import { TablesListScreen } from "./containers/screens/POSscreens/TablesListScreen";
 import { OrderTakingScreen } from "./containers/screens/POSscreens/OrderTakingScreen";
+import { StripePage } from "./containers/screens/MainScreens/AdminsPages/StripePage";
 
 const Stack = createNativeStackNavigator();
 
@@ -156,6 +157,7 @@ const AdminRoutes = () => {
       <Stack.Screen name="bankPage" component={BankPage} />
       <Stack.Screen name="bankDetails" component={BankDetailsPage} />
       <Stack.Screen name="changePass" component={ChangePasswordPage} />
+      <Stack.Screen name="stripe" component={StripePage} />
     </Stack.Navigator>
   );
 };

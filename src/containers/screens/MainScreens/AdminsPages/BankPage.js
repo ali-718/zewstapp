@@ -26,7 +26,7 @@ const BankPage = () => {
       >
         <View style={{ width: "100%", alignItems: "center" }}>
           <View style={{ width: "100%", marginTop: 20 }}>
-            <View style={{ width: "100%" }}>
+            {/* <View style={{ width: "100%" }}>
               <AdminOverviewBox
                 label={"Visa"}
                 name={"**** 2345"}
@@ -44,14 +44,14 @@ const BankPage = () => {
                 image={mastercardLogo}
                 onPress={() => navigation.navigate("bankDetails")}
               />
-            </View>
+            </View> */}
             <View style={{ width: "100%", marginTop: 10 }}>
               <AdminOverviewBox
                 noTint
                 label={"Stripe"}
-                name={"**** 2345"}
+                name={""}
                 image={stripeLogo}
-                onPress={() => navigation.navigate("bankDetails")}
+                onPress={() => navigation.navigate("stripe")}
               />
             </View>
           </View>

@@ -133,7 +133,7 @@ export const AdminPage = () => {
             <View style={{ width: "100%", marginTop: 10 }}>
               <AdminOverviewBox
                 label={"Payment methods"}
-                name={"HBL Bank"}
+                name={"Stripe"}
                 rightText={"Active"}
                 image={bankIcon}
                 onPress={() => navigation.navigate("bankPage")}
