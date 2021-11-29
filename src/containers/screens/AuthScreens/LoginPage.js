@@ -99,7 +99,7 @@ export const LoginPage = (props) => {
         <View style={{ width: "100%", marginTop: 20 }}>
           <Input
             keyboardType={"email-address"}
-            placeholder={"Email address*"}
+            placeholder={"Email address"}
             value={email}
             setValue={(val) => setEmail(val)}
             rule={emailValidator}
@@ -112,7 +112,7 @@ export const LoginPage = (props) => {
           <PasswordInput
             value={password}
             setValue={(val) => setPassword(val)}
-            placeholder={"Password*"}
+            placeholder={"Password"}
             rule={passwordValidator}
             showError={showError}
             setHighOrderError={(val) =>

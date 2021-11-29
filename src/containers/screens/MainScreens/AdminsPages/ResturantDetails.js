@@ -1,28 +1,23 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Image, TouchableOpacity, View } from "react-native";
 import { Input } from "../../../../components/Inputs/Input";
 import { MealItem } from "../../../../components/Meals/MealItem";
 import { MainScreenContainer } from "../../../MainScreenContainers";
 import forwardIcon from "../../../../assets/images/forwardIcon.png";
 import { ListModal } from "../../../../components/Meals/ListModal";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useIsFocused } from "@react-navigation/native";
 import { RegularButton } from "../../../../components/Buttons/RegularButton";
 import blackBackArrow from "../../../../assets/images/blackBackArrow.png";
 import { Text } from "../../../../components/Text/Text";
 import { useSelector } from "react-redux";
 import { HeadingBox } from "../../../../components/HeadingBox/HeadingBox";
 import { TimeModal } from "../../../../components/TimeModal/TimeModal";
+import moment from "moment";
+import validator from "validator";
+import * as action from "../../../../Redux/actions/AdminActions/ResturantDetailActions";
+import { ToastError, ToastSuccess } from "../../../../helpers/Toast";
 
 const emp = ["Ali", "Zainab", "Umer", "Kanwal", "Zaid", "Yahya"];
-const time = [
-  "11:30am - 11:45pm",
-  "12:10am - 12:45pm",
-  "1:30am - 11:45pm",
-  "2:30am - 2:45pm",
-  "3:30am - 3:45pm",
-  "4:30am - 4:45pm",
-  "5:30am - 5:45pm",
-];
 
 export const ResturantDetails = () => {
   const navigation = useNavigation();
@@ -34,7 +29,98 @@ export const ResturantDetails = () => {
   const [selectedCsr, setSelectedCsr] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
   const [timeModal, setTimeModal] = useState(false);
+  const [timeDays, setTimeDays] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const user = useSelector((state) => state.auth.user.user);
   const device = useSelector((state) => state.system.device);
+  const isFocused = useIsFocused();
+  const defaultLocation = useSelector(
+    (state) => state.locations.defaultLocation
+  );
+
+  useEffect(() => {
+    if (!isFocused) return;
+
+    action
+      .getResturantDetail({ clientId: user.clientId })
+      .then(({ client }) => {
+        const {
+          owner_name = "",
+          restaurantName = "",
+          representative = "",
+          contact_no = "",
+          address = "",
+          timmings = [],
+          email = "",
+          logo = [],
+          clientId = "",
+        } = client;
+
+        setEmail(email);
+        setTimeDays(timmings);
+        setAddress(address);
+        setPhone(contact_no);
+        setSelectedCsr(representative);
+        setName(restaurantName);
+      });
+  }, [isFocused]);
+
+  const saveDetails = () => {
+    if (
+      validator.isEmpty(name, { ignore_whitespace: false }) ||
+      validator.isEmpty(email, { ignore_whitespace: false }) ||
+      validator.isEmpty(phone, { ignore_whitespace: false }) ||
+      validator.isEmpty(address, { ignore_whitespace: false })
+    ) {
+      ToastError("kindly fill all fields");
+      return;
+    }
+
+    setIsLoading(true);
+
+    const data = {
+      restaurantName: name,
+      address: address,
+      contact_no: phone,
+      email: email,
+      clientId: user.clientId,
+      timmings: timeDays,
+      representative: selectedCsr,
+    };
+
+    action
+      .saveClientDetails(data)
+      .then((data) => {
+        console.log(data);
+        ToastSuccess("Success", "Data saved successfully");
+        setIsLoading(false);
+      })
+      .catch((e) => {
+        setIsLoading(false);
+      });
+  };
+
+  const setTime = (start, end, day) => {
+    if (timeDays.filter((item) => item.day === day).length > 0) {
+      const localTime = [...timeDays];
+      const index = timeDays.findIndex((item) => item.day === day);
+      localTime[index] = {
+        start: moment(start).format("h:mm a"),
+        end: moment(end).format("h:mm a"),
+        day,
+      };
+
+      setTimeDays(localTime);
+
+      return;
+    }
+    const time = {
+      start: moment(start).format("h:mm a"),
+      end: moment(end).format("h:mm a"),
+      day,
+    };
+    setTimeDays([...timeDays, time]);
+  };
 
   return (
     <MainScreenContainer>
@@ -50,14 +136,14 @@ export const ResturantDetails = () => {
         <View style={{ width: "100%" }}>
           <Input
             value={name}
-            onChangeText={(val) => setName(val)}
+            setValue={(val) => setName(val)}
             placeholder={"Restaurant name"}
           />
         </View>
         <View style={{ width: "100%", marginTop: 10 }}>
           <Input
             value={address}
-            onChangeText={(val) => setAddress(val)}
+            setValue={(val) => setAddress(val)}
             placeholder={"Main/Head Office Address"}
           />
         </View>
@@ -65,7 +151,7 @@ export const ResturantDetails = () => {
         <View style={{ width: "100%", marginTop: 10 }}>
           <Input
             value={phone}
-            onChangeText={(val) => setPhone(val)}
+            setValue={(val) => setPhone(val)}
             placeholder={"Phone"}
             keyboardType={"number-pad"}
           />
@@ -74,7 +160,7 @@ export const ResturantDetails = () => {
         <View style={{ width: "100%", marginTop: 10 }}>
           <Input
             value={email}
-            onChangeText={(val) => setEmail(val)}
+            setValue={(val) => setEmail(val)}
             placeholder={"Email"}
             keyboardType={"email-address"}
           />
@@ -114,6 +200,7 @@ export const ResturantDetails = () => {
         <TimeModal
           onRequestClose={() => setTimeModal(false)}
           visible={timeModal}
+          onchange={(start, end, day) => setTime(start, end, day)}
         />
 
         <View style={{ width: "100%", marginTop: 10 }}>
@@ -128,7 +215,11 @@ export const ResturantDetails = () => {
         </View>
 
         <View style={{ width: "100%", marginTop: 20 }}>
-          <RegularButton text={"Save"} />
+          <RegularButton
+            onPress={saveDetails}
+            isLoading={isLoading}
+            text={"Save"}
+          />
         </View>
       </View>
     </MainScreenContainer>

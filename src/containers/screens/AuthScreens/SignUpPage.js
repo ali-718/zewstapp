@@ -73,8 +73,6 @@ export const SignUpPage = (props) => {
     setIsLoading(true);
 
     signupAction({
-      restaurant_name: resturantName,
-      designation: selectedType,
       owner_name: name,
       contact_no: contact,
       email: email,
