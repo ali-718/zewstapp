@@ -36,8 +36,6 @@ import { RecipeAdd } from "./containers/screens/MainScreens/RecipePages/RecipeAd
 import { AddInventoryPage } from "./containers/screens/MainScreens/InventoryPages/AddInventoryPage";
 import { InventoryDetailPage } from "./containers/screens/MainScreens/InventoryPages/InventoryDetailPage";
 import { LossInKitchen } from "./containers/screens/MainScreens/LossInKitchen/LossInKitchen";
-import { KitchenPage } from "./containers/screens/MainScreens/KitchenPage/KitchenPage";
-import { KitchenDetailPage } from "./containers/screens/MainScreens/KitchenPage/KitchenDetailPage";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { HomePage } from "./containers/screens/MainScreens/HomePages/HomePage";
 import { DailyFoodLogListPage } from "./containers/screens/MainScreens/DailyFoodLog/DailyFoodLogListPage";
@@ -54,6 +52,7 @@ import { AddVendorsPage } from "./containers/screens/MainScreens/VendorPages/Add
 import { TablesListScreen } from "./containers/screens/POSscreens/TablesListScreen";
 import { OrderTakingScreen } from "./containers/screens/POSscreens/OrderTakingScreen";
 import { StripePage } from "./containers/screens/MainScreens/AdminsPages/StripePage";
+import { KitchenPage } from "./containers/screens/MainScreens/KitchenPages/KitchenPage";
 
 const Stack = createNativeStackNavigator();
 
@@ -208,6 +207,7 @@ const MainRoutes = () => {
         <Drawer.Screen name="Admin" component={AdminRoutes} />
         <Drawer.Screen name="Vendor" component={VendorRoutes} />
         <Drawer.Screen name="Pos" component={OrderRoutes} />
+        <Drawer.Screen name="Kitchen" component={KitchenPage} />
 
         <Drawer.Screen name="Messages" component={AdminPage} />
         <Drawer.Screen name="Library" component={AdminPage} />
@@ -215,8 +215,6 @@ const MainRoutes = () => {
         <Drawer.Screen name="Support" component={AdminPage} />
 
         <Stack.Screen name="orderDetail" component={OrderDetailPage} />
-        <Stack.Screen name="KitchenPage" component={KitchenPage} />
-        <Stack.Screen name="KitchenDetailPage" component={KitchenDetailPage} />
       </Drawer.Navigator>
     </NavigationContainer>
   );

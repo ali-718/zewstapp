@@ -357,11 +357,7 @@ export const InventoryDetailPage = ({ data, isTab, ...props }) => {
   }
 
   return (
-    <MainScreenContainer
-      rightImage={""}
-      title={"Inventory Item"}
-      onPressRight={() => null}
-    >
+    <MainScreenContainer>
       <HeadingBox heading={"Inventory Item"} />
       <View
         style={{

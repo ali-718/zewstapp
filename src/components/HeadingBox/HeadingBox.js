@@ -33,16 +33,18 @@ export const HeadingBox = ({ noBack, heading, onGoBack }) => {
           </TouchableOpacity>
         )}
 
-        <Text
-          style={{
-            color: "black",
-            fontSize: device === "tablet" ? 28 : 22,
-            fontFamily: "openSans_semiBold",
-            marginLeft: noBack ? 0 : 20,
-          }}
-        >
-          {heading}
-        </Text>
+        {!!heading && (
+          <Text
+            style={{
+              color: "black",
+              fontSize: device === "tablet" ? 28 : 22,
+              fontFamily: "openSans_semiBold",
+              marginLeft: noBack ? 0 : 20,
+            }}
+          >
+            {heading}
+          </Text>
+        )}
       </View>
     </View>
   );

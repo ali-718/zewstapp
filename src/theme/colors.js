@@ -40,3 +40,4 @@ export const buttonRedColor = "#DD0000";
 export const availableTableColor = "#57C27B";
 export const reservedTableColor = "#294BFB";
 export const occupiedTableColor = "#A461D8";
+export const kitchenMenuColor = "#F2F2F2";

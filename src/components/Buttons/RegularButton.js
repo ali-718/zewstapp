@@ -16,6 +16,7 @@ export const RegularButton = ({
   isLoading,
   disabled,
   noText,
+  white,
   ...props
 }) => {
   const device = useSelector((state) => state.system.device);
@@ -32,11 +33,15 @@ export const RegularButton = ({
         borderRadius: 5,
         backgroundColor: primaryColor,
         overflow: "hidden",
+        borderColor: primaryColor,
+        borderWidth: white ? 1 : 0,
         ...style,
       }}
     >
       <LinearGradient
-        colors={colors || [primaryColor, primaryColor]}
+        colors={
+          colors || (white ? ["white", "white"] : [primaryColor, primaryColor])
+        }
         style={{
           width: "100%",
           flex: 1,
@@ -47,7 +52,7 @@ export const RegularButton = ({
       >
         {isLoading ? (
           <>
-            <Spinner size="large" color={"white"} />
+            <Spinner size="large" color={white ? primaryColor : "white"} />
           </>
         ) : (
           <View
@@ -65,7 +70,7 @@ export const RegularButton = ({
             {!noText && (
               <Text
                 style={{
-                  color: "white",
+                  color: white ? primaryColor : "white",
                   fontWeight: "bold",
                   fontSize: device === "tablet" ? 20 : 15,
                   fontFamily: "openSans_bold",
