@@ -29,7 +29,7 @@ export const RegularButton = ({
         width: "100%",
         alignItems: "center",
         justifyContent: "center",
-        height: device === "tablet" ? 60 : 50,
+        height: 50,
         borderRadius: 5,
         backgroundColor: primaryColor,
         overflow: "hidden",
@@ -72,7 +72,7 @@ export const RegularButton = ({
                 style={{
                   color: white ? primaryColor : "white",
                   fontWeight: "bold",
-                  fontSize: device === "tablet" ? 20 : 15,
+                  fontSize: device === "tablet" ? 16 : 12,
                   fontFamily: "openSans_bold",
                   marginLeft: iconLeft ? 10 : 0,
                   letterSpacing: 1,

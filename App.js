@@ -5,6 +5,7 @@ import { NativeBaseProvider, extendTheme } from "native-base";
 import { fontAssets } from "./src/theme/fonts";
 import { Routes } from "./src/routes";
 import {
+  availableTableColor,
   primaryShade1,
   progressDarkPurple,
   textColor,
@@ -23,6 +24,9 @@ const theme = extendTheme({
     },
     cancelled: {
       600: textColor,
+    },
+    green: {
+      600: availableTableColor,
     },
   },
 });

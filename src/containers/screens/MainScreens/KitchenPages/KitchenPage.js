@@ -8,6 +8,8 @@ import { Dropdown } from "../../../../components/Inputs/DropDown";
 import { Text } from "../../../../components/Text/Text";
 import { kitchenMenuColor } from "../../../../theme/colors";
 import { MainScreenContainer } from "../../../MainScreenContainers";
+import { SpikeOrder } from "../../../../components/SpikeOrder/SpikeOrder";
+import { MainOrder } from "../../../../components/MainOrder/MainOrder";
 
 export const KitchenPage = () => {
   const device = useSelector((state) => state.system.device);
@@ -74,62 +76,18 @@ export const KitchenPage = () => {
           </View>
 
           <View style={{ marginTop: 20, zIndex: 0 }} />
+
           <FlatList
             data={[1, 2, 3, 4, 5, 6, 7, 8, 9]}
             numColumns={3}
             columnWrapperStyle={{ marginLeft: -10, marginTop: 10 }}
-            renderItem={({ item, index }) => (
-              <View
-                style={{
-                  backgroundColor: kitchenMenuColor,
-                  borderColor: "#D8D8D8",
-                  borderWidth: 1,
-                  marginLeft: 10,
-                  width: "32%",
-                  padding: 15,
-                }}
-              >
-                <Text style={{ color: "black" }}>2021-04-13 01:49:23</Text>
-                <Text style={{ color: "black" }}>Served By: Sara</Text>
-
-                <Text style={{ color: "black", marginVertical: 20 }}>
-                  In House
-                </Text>
-
-                {[1, 2, 3].map((item) => (
-                  <View
-                    style={{
-                      width: "100%",
-                      flexDirection: "row",
-                      marginTop: 0,
-                    }}
-                  >
-                    <Text style={{ color: "black", flex: 1 }}>Margarita</Text>
-                    <Text style={{ color: "black" }}>8.63</Text>
-                  </View>
-                ))}
-                <View
-                  style={{
-                    width: "100%",
-                    flexDirection: "row",
-                  }}
-                >
-                  <Text style={{ color: "black", flex: 1 }}>
-                    ........................
-                  </Text>
-                  <Text style={{ color: "black" }}>............</Text>
-                </View>
-                <View
-                  style={{
-                    width: "100%",
-                    flexDirection: "row",
-                  }}
-                >
-                  <Text style={{ color: "black", flex: 1 }}>Cash:</Text>
-                  <Text style={{ color: "black" }}>-72.48</Text>
-                </View>
-              </View>
-            )}
+            renderItem={
+              selected === 3
+                ? ({ item, index }) => <SpikeOrder />
+                : selected === 0
+                ? ({ item, index }) => <MainOrder />
+                : () => <View />
+            }
           />
         </View>
       </MainScreenContainer>
