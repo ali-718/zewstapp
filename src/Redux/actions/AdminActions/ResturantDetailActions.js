@@ -25,16 +25,6 @@ export const saveClientDetails = ({
   logo,
 }) =>
   new Promise((resolve, reject) => {
-    console.log({
-      restaurantName,
-      address,
-      contact_no,
-      email,
-      clientId,
-      timmings,
-      representative,
-      logo,
-    });
     client
       .post(`/client/editClientDetails`, {
         restaurantName,

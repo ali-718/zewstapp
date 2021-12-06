@@ -1,6 +1,7 @@
 import { ToastError } from "../../../helpers/Toast";
 import { client } from "../client";
-import { FETCH_MEALS, FETCH_TABLES } from "./Types";
+import { CREATE_ORDER, FETCH_MEALS, FETCH_TABLES } from "./Types";
+import moment from "moment";
 
 export const changeTableStatusAction =
   ({ locationId, tableId, stature, navigation }) =>
@@ -92,5 +93,32 @@ export const fetchTablesAction =
       })
       .catch((e) => {
         dispatch({ type: FETCH_TABLES.FAILED });
+      });
+  };
+
+export const createOrder =
+  ({ client_id, locationId, catalog, price, discount, customerId }) =>
+  (dispatch) => {
+    dispatch({ type: CREATE_ORDER.REQUESTED });
+
+    client
+      .post(`/manual-orders/addOrder`, {
+        client_id,
+        locationId,
+        catalog,
+        timestamp: moment().format("DD-M-yyy"),
+        price,
+        discount,
+        customerId,
+        orderType: "Dine-In",
+      })
+      .then(() => {
+        dispatch({
+          type: CREATE_ORDER.SUCCEEDED,
+        });
+      })
+      .catch((e) => {
+        dispatch({ type: CREATE_ORDER.FAILED });
+        console.log(e.response.data);
       });
   };

@@ -113,6 +113,10 @@ export const OrderTakingScreen = (props) => {
   const navigation = useNavigation();
   const isScreenFocused = useIsFocused();
   const device = useSelector((state) => state.system.device);
+  const user = useSelector((state) => state.auth.user.user);
+  const defaultLocation = useSelector(
+    (state) => state.locations.defaultLocation
+  );
   const { categories, meals, isLoading, isError } = useSelector(
     (state) => state.pos.meal
   );
@@ -124,6 +128,29 @@ export const OrderTakingScreen = (props) => {
   const [totalPrice, setTotalPrice] = useState(0);
   const [charge, setCharge] = useState(false);
   const [defaulLocation, setDefaulLocation] = useState({});
+
+  const createOrder = () => {
+    if (orderList.length === 0) {
+      ToastError("Select any menu item first!");
+      return;
+    }
+
+    const data = {
+      client_id: user.clientId,
+      locationId: defaultLocation.locationId,
+      catalog: [
+        ...orderList.map((item) => ({
+          quantity: item.selected,
+          recipe: item.mealRecipes[0],
+        })),
+      ],
+      price: totalPrice,
+      discount: 0,
+      customerId: "12345",
+    };
+
+    dispatch(actions.createOrder(data));
+  };
 
   useEffect(() => {
     setMealsToShow(meals.map((item) => ({ ...item, selected: 0 })));
@@ -241,20 +268,20 @@ export const OrderTakingScreen = (props) => {
     }
   };
 
-  const createOrder = () => {
-    if (orderList.length === 0) {
-      ToastError("Select any menu item first!");
-      return;
-    }
-    dispatch(
-      actions.changeTableStatusAction({
-        locationId: defaulLocation.locationId,
-        tableId: props.route.params.tableId,
-        stature: "RESERVED",
-        navigation,
-      })
-    );
-  };
+  // const createOrder = () => {
+  //   if (orderList.length === 0) {
+  //     ToastError("Select any menu item first!");
+  //     return;
+  //   }
+  //   dispatch(
+  //     actions.changeTableStatusAction({
+  //       locationId: defaulLocation.locationId,
+  //       tableId: props.route.params.tableId,
+  //       stature: "RESERVED",
+  //       navigation,
+  //     })
+  //   );
+  // };
 
   if (device === "tablet") {
     return (

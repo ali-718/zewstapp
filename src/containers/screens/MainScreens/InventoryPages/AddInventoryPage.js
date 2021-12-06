@@ -22,6 +22,7 @@ import { useNavigation } from "@react-navigation/core";
 import { DeleteModal } from "../../../../components/Meals/DeleteModal";
 import { HeadingBox } from "../../../../components/HeadingBox/HeadingBox";
 import { RegularButton } from "../../../../components/Buttons/RegularButton";
+import { inventoryCategory } from "../../../../helpers/utlils";
 
 export const AddInventoryPage = (props) => {
   const navigation = useNavigation();
@@ -59,6 +60,7 @@ export const AddInventoryPage = (props) => {
   const [isEdit, setIsEdit] = useState(false);
   const [deleteModal, setdeleteModal] = useState(false);
   const [selectedVendor, setSelectedVendor] = useState({});
+  const [allUnits, setallUnits] = useState([]);
 
   useEffect(() => {
     if (!deleteError) return;
@@ -66,6 +68,10 @@ export const AddInventoryPage = (props) => {
   }, [deleteError]);
 
   useEffect(() => {
+    actions
+      .getUnits()
+      .then((res) => setallUnits(res))
+      .catch((e) => setallUnits([]));
     dispatch(
       actionsVendor.fetchVendorActions({
         locationId: defaultLocation.locationId,
@@ -129,9 +135,7 @@ export const AddInventoryPage = (props) => {
       dateOfExpiry.trim().length === 0 ||
       dateOfPurchase.trim().length === 0 ||
       costPerUnit.trim().length === 0 ||
-      threshold.trim().length === 0 ||
       category.trim().length === 0 ||
-      !color.color ||
       !availablity.value ||
       !selectedVendor.name
     ) {
@@ -283,7 +287,7 @@ export const AddInventoryPage = (props) => {
             style={{
               width: "100%",
               flexDirection: "column",
-              zIndex: 3,
+              zIndex: 12,
             }}
           >
             <Input
@@ -304,60 +308,9 @@ export const AddInventoryPage = (props) => {
               }
               placeholder={"Vendor"}
               menus={vendorsList.map((item) => item.name)}
-              style={{ zIndex: 10, marginTop: 10 }}
+              style={{ zIndex: 13, marginTop: 10 }}
               errMsg={"Looks like there is no vendor present!"}
             />
-
-            {/* <View
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                flex: device === "tablet" ? 0.5 : 1,
-                justifyContent: "space-around",
-                marginTop: device === "tablet" ? 0 : 10,
-                marginBottom: device === "tablet" ? 0 : 10,
-              }}
-            >
-              <Image
-                style={{
-                  width: device === "tablet" ? 30 : 20,
-                  resizeMode: "contain",
-                }}
-                source={purpleBarcode}
-              />
-              <Image
-                style={{
-                  width: device === "tablet" ? 30 : 20,
-                  resizeMode: "contain",
-                }}
-                source={purpleBackArrow}
-              />
-              {isEdit && (
-                <TouchableOpacity onPress={() => setdeleteModal(true)}>
-                  <Image
-                    style={{
-                      width: device === "tablet" ? 30 : 20,
-                      resizeMode: "contain",
-                    }}
-                    source={deletePurple}
-                  />
-                </TouchableOpacity>
-              )}
-
-              {isLoading ? (
-                <Spinner size="large" color={primaryColor} />
-              ) : (
-                <TouchableOpacity onPress={addInventoryItem}>
-                  <Image
-                    style={{
-                      width: device === "tablet" ? 30 : 20,
-                      resizeMode: "contain",
-                    }}
-                    source={purpleSave}
-                  />
-                </TouchableOpacity>
-              )}
-            </View> */}
           </View>
 
           <View
@@ -367,6 +320,7 @@ export const AddInventoryPage = (props) => {
               alignItems: "center",
               justifyContent: "space-between",
               marginTop: device === "tablet" ? 0 : 10,
+              zIndex: 11,
             }}
           >
             <Input
@@ -380,7 +334,7 @@ export const AddInventoryPage = (props) => {
               }}
             />
             <Input
-              keyboardType={"number-pad"}
+              keyboardType={"numeric"}
               placeholder={"Quantity"}
               value={quantity}
               setValue={(val) => setQuantity(val)}
@@ -390,14 +344,16 @@ export const AddInventoryPage = (props) => {
                 flex: device === "tablet" ? 0.3 : 1,
               }}
             />
-            <Input
+            <Dropdown
+              selectedMenu={unit}
+              setMenu={setUnit}
               placeholder={"Unit"}
-              value={unit}
-              setValue={(val) => setUnit(val)}
+              menus={allUnits}
               style={{
                 marginTop: 10,
                 borderRadius: 0,
                 flex: device === "tablet" ? 0.3 : 1,
+                zIndex: 11,
               }}
             />
           </View>
@@ -443,18 +399,7 @@ export const AddInventoryPage = (props) => {
                 flex: device === "tablet" ? 0.3 : 1,
                 marginTop: device === "tablet" ? 0 : 10,
               }}
-            >
-              <Dropdown
-                selectedMenu={color.title}
-                setMenu={(val) =>
-                  setColor(colors.find((item) => item.title === val))
-                }
-                placeholder={"Color"}
-                menus={colors.map((item) => item.title)}
-                style={{ zIndex: 10 }}
-                colors={colors}
-              />
-            </View>
+            ></View>
           </View>
 
           <View
@@ -463,11 +408,11 @@ export const AddInventoryPage = (props) => {
               flexDirection: device === "tablet" ? "row" : "column",
               alignItems: "center",
               justifyContent: "space-between",
-              zIndex: 0,
+              zIndex: 9,
             }}
           >
             <Input
-              keyboardType={"number-pad"}
+              keyboardType={"numeric"}
               placeholder={"Cost Per Unit"}
               value={costPerUnit}
               setValue={(val) => setCostPerUnit(val)}
@@ -477,25 +422,16 @@ export const AddInventoryPage = (props) => {
                 flex: device === "tablet" ? 0.3 : 1,
               }}
             />
-            <Input
-              keyboardType={"number-pad"}
-              placeholder={"Threshold"}
-              value={threshold}
-              setValue={(val) => setThreshold(val)}
-              style={{
-                marginTop: 10,
-                borderRadius: 0,
-                flex: device === "tablet" ? 0.3 : 1,
-              }}
-            />
-            <Input
+            <Dropdown
+              selectedMenu={category}
+              setMenu={setcategory}
               placeholder={"Category"}
-              value={category}
-              setValue={(val) => setcategory(val)}
+              menus={inventoryCategory}
               style={{
                 marginTop: 10,
                 borderRadius: 0,
                 flex: device === "tablet" ? 0.3 : 1,
+                zIndex: 11,
               }}
             />
           </View>

@@ -108,22 +108,22 @@ export const AddInventoryPage = (props) => {
     );
 
   const addInventoryItem = () => {
-    if (
-      itemName.trim().length === 0 ||
-      brand.trim().length === 0 ||
-      quantity.trim().length === 0 ||
-      unit.trim().length === 0 ||
-      dateOfExpiry.trim().length === 0 ||
-      dateOfPurchase.trim().length === 0 ||
-      costPerUnit.trim().length === 0 ||
-      threshold.trim().length === 0 ||
-      category.trim().length === 0 ||
-      !color.color ||
-      !availablity.value
-    ) {
-      ToastError("Kindly fill all fields");
-      return;
-    }
+    // if (
+    //   itemName.trim().length === 0 ||
+    //   brand.trim().length === 0 ||
+    //   quantity.trim().length === 0 ||
+    //   unit.trim().length === 0 ||
+    //   dateOfExpiry.trim().length === 0 ||
+    //   dateOfPurchase.trim().length === 0 ||
+    //   costPerUnit.trim().length === 0 ||
+    //   threshold.trim().length === 0 ||
+    //   category.trim().length === 0 ||
+    //   !color.color ||
+    //   !availablity.value
+    // ) {
+    //   ToastError("Kindly fill all fields");
+    //   return;
+    // }
 
     if (!defaultLocation.locationId) {
       ToastError("Kindly select primary location, first");

@@ -94,6 +94,7 @@ export const RecipeStepsAccordion = ({
               borderWidth: 0,
             }}
             value={item.description}
+            placeholder={"Enter your steps here"}
             autoFocus
           />
         </View>

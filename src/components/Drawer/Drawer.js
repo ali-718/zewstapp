@@ -157,12 +157,14 @@ export const DrawerMenu = ({ state: { index } }) => {
               image={inventoryIcon}
               name={"POS"}
             />
-            <Menu
-              selected={index === 9}
-              setselected={() => navigation.navigate("Kitchen")}
-              image={inventoryIcon}
-              name={"Kitchen"}
-            />
+            {device === "tablet" ? (
+              <Menu
+                selected={index === 9}
+                setselected={() => navigation.navigate("Kitchen")}
+                image={inventoryIcon}
+                name={"Kitchen"}
+              />
+            ) : null}
 
             <RegularButton
               text={"Logout"}

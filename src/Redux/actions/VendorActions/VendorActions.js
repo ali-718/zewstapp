@@ -26,13 +26,12 @@ export const addVendorActions =
     client
       .post(`/vendors/add`, { locationId, name, email, address, phoneNo })
       .then((res) => {
-        ToastSuccess("Success", "Recipe added successfully");
+        ToastSuccess("Success", "Vendor added successfully");
         dispatch(fetchVendorActions({ locationId }));
         dispatch({ type: ADD_VENDOR.SUCCEEDED });
         navigation.goBack();
       })
       .catch((e) => {
-        console.log(e);
         ToastError("Some error occoured, please try again later");
         dispatch({ type: ADD_VENDOR.FAILED });
       });

@@ -140,23 +140,6 @@ export const addNewMeal =
   (dispatch) => {
     dispatch({ type: ADD_MEAL.REQUESTED });
 
-    console.log({
-      locationId,
-      mealName,
-      mealDescription,
-      mealPrice,
-      mealCurrency,
-      mealAvailability,
-      mealDaysAvailable,
-      mealCategory,
-      mealAllergens,
-      mealAddons,
-      mealDiscount,
-      mealMedia,
-      navigation,
-      mealRecipes,
-    });
-
     client
       .post(`/meal/manual/add`, {
         locationId,

@@ -36,8 +36,6 @@ export const AdminOverviewBox = ({
         padding: device === "tablet" ? 20 : 10,
         borderRadius: 10,
         alignItems: "center",
-        borderLeftWidth: inventory ? 5 : 0,
-        borderLeftColor: inventory ? borderLeftColor : "",
         borderBottomWidth: 1,
         borderBottomColor: borderColor2,
         paddingBottom: 20,

@@ -91,7 +91,6 @@ export const ResturantDetails = () => {
     action
       .saveClientDetails(data)
       .then((data) => {
-        console.log(data);
         ToastSuccess("Success", "Data saved successfully");
         setIsLoading(false);
       })
@@ -198,12 +197,13 @@ export const ResturantDetails = () => {
         </View>
 
         <TimeModal
+          timedays={timeDays}
           onRequestClose={() => setTimeModal(false)}
           visible={timeModal}
           onchange={(start, end, day) => setTime(start, end, day)}
         />
 
-        <View style={{ width: "100%", marginTop: 10 }}>
+        {/* <View style={{ width: "100%", marginTop: 10 }}>
           <MealItem
             label={"Resturant Logo"}
             text={"Square, Horizontal"}
@@ -212,7 +212,7 @@ export const ResturantDetails = () => {
             onPress={() => navigation.navigate("resturantLogo")}
             iconStyle={{ width: 20, height: 20 }}
           />
-        </View>
+        </View> */}
 
         <View style={{ width: "100%", marginTop: 20 }}>
           <RegularButton

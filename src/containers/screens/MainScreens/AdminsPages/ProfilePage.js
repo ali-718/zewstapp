@@ -27,7 +27,7 @@ export const ProfilePage = () => {
         <View style={{ width: "100%" }}>
           <Input
             value={name}
-            onChangeText={(val) => setName(val)}
+            setValue={(val) => setName(val)}
             placeholder={"Owner name"}
           />
         </View>
@@ -35,7 +35,7 @@ export const ProfilePage = () => {
         <View style={{ width: "100%", marginTop: 10 }}>
           <Input
             value={phone}
-            onChangeText={(val) => setPhone(val)}
+            setValue={(val) => setPhone(val)}
             placeholder={"Owner phone"}
             keyboardType={"number-pad"}
           />
@@ -43,7 +43,7 @@ export const ProfilePage = () => {
         <View style={{ width: "100%", marginTop: 10 }}>
           <Input
             value={email}
-            onChangeText={(val) => setEmail(val)}
+            setValue={(val) => setEmail(val)}
             placeholder={"Owner email"}
             keyboardType={"email-address"}
           />

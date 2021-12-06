@@ -31,7 +31,6 @@ export const fetchRecipeActions =
         });
       })
       .catch((e) => {
-        console.log(e);
         dispatch({ type: FETCH_RECIPE.FAILED });
       });
   };

@@ -29,14 +29,15 @@ export const fetchInventoryAction =
     dispatch({ type: FETCH_INVENTORY.REQUESTED });
 
     client
-      .get(`inventory/findAll/${locationId}`)
+      .get(`/inventory/findAll/${locationId}`)
       .then(({ data }) => {
         dispatch({
           type: FETCH_INVENTORY.SUCCEEDED,
-          payload: data.inventory.Items,
+          payload: data.inventory.data,
         });
       })
       .catch((e) => {
+        console.log(e.response.data);
         dispatch({ type: FETCH_INVENTORY.FAILED });
       });
   };
@@ -49,12 +50,10 @@ export const addInventoryAction =
     units,
     expiryDate,
     purchaseDate,
-    color,
     notes,
     photos,
     itemName,
     costPerUnit,
-    threshold,
     category,
     navigation,
     availability,
@@ -72,10 +71,8 @@ export const addInventoryAction =
         units: units,
         costPerUnit: parseInt(costPerUnit),
         currency: "USD",
-        threshold: parseInt(threshold),
         expiryDate,
         purchaseDate,
-        color,
         notes,
         photos,
         itemName,
@@ -102,12 +99,10 @@ export const updateInventoryAction =
     units,
     expiryDate,
     purchaseDate,
-    color,
     notes,
     photos,
     itemName,
     costPerUnit,
-    threshold,
     category,
     navigation,
     availability,
@@ -127,10 +122,8 @@ export const updateInventoryAction =
         units: units,
         costPerUnit: parseInt(costPerUnit),
         currency: "USD",
-        threshold: parseInt(threshold),
         expiryDate,
         purchaseDate,
-        color,
         notes,
         photos,
         itemName,
@@ -149,3 +142,15 @@ export const updateInventoryAction =
         ToastError("Some error occoured, please try again later");
       });
   };
+
+export const getUnits = () =>
+  new Promise((resolve, reject) => {
+    client
+      .get("/inventory/getWeightUnits")
+      .then(({ data }) => {
+        resolve(data.units);
+      })
+      .catch((e) => {
+        reject();
+      });
+  });

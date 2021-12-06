@@ -5,7 +5,7 @@ import { RegularButton } from "../../../../components/Buttons/RegularButton";
 import { MainScreenContainer } from "../../../MainScreenContainers";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Input } from "../../../../components/Inputs/Input";
-import { useNavigation } from "@react-navigation/core";
+import { useIsFocused, useNavigation } from "@react-navigation/core";
 import * as actions from "../../../../Redux/actions/InventoryAction/InventoryActions";
 import { SearchInput } from "../../../../components/SearchInput/SearchInput";
 import { AdminOverviewBox } from "../../../../components/AdminComponents/AdminOverviewBox";
@@ -33,6 +33,7 @@ export const InventoryListPage = () => {
   const [filteredItem, setFiltereditem] = useState([]);
   const [selectedInventoryItemForTab, setselectedInventoryItemForTab] =
     useState({});
+  const isFocused = useIsFocused();
 
   const fetchInventoryItems = () =>
     dispatch(
@@ -40,11 +41,12 @@ export const InventoryListPage = () => {
     );
 
   useEffect(() => {
+    if (!isFocused) return;
     fetchInventoryItems();
-  }, []);
+  }, [isFocused]);
 
   useEffect(() => {
-    setFiltereditem(list);
+    setFiltereditem(list ?? []);
   }, [list]);
 
   const searchKeyword = (text) => {
@@ -158,12 +160,14 @@ export const InventoryListPage = () => {
       >
         {isLoading ? (
           <LoadingPage />
-        ) : isError ? (
-          <RefetchDataError
-            onPress={fetchInventoryItems}
-            isLoading={isLoading}
-          />
         ) : (
+          // : isError ? (
+          //   <RefetchDataError
+          //     onPress={fetchInventoryItems}
+          //     isLoading={isLoading}
+          //   />
+          // )
+
           <View style={{ width: "100%", flex: 1 }}>
             {/* <SearchInput
               search={search}
@@ -171,7 +175,7 @@ export const InventoryListPage = () => {
               searchKeyword={searchKeyword}
             /> */}
 
-            {filteredItem.length === 0 ? (
+            {filteredItem?.length === 0 ? (
               <NoMealBox image={InventoryIcon} text={"No item added. "} />
             ) : (
               filteredItem.map((item, i) => (
@@ -183,9 +187,6 @@ export const InventoryListPage = () => {
                     rightText={""}
                     image={InventoryIcon}
                     inventory
-                    borderLeftColor={
-                      colors.find((color) => item.color === color.title).color
-                    }
                     onPress={() =>
                       navigation.navigate("inventoryAdd", {
                         data: item,
