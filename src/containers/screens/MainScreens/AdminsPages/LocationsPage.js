@@ -147,7 +147,7 @@ export const LocationsPage = () => {
                   key={i}
                   label={`Location ${i + 1}`}
                   name={item.streetInfo}
-                  rightText={
+                  primary={
                     defaultLocation.locationId === item.locationId
                       ? "Primary"
                       : ""

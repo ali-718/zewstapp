@@ -9,6 +9,7 @@ import {
 import { Text } from "../Text/Text";
 import forwardIcon from "../../assets/images/forwardIcon.png";
 import { useSelector } from "react-redux";
+import Icon from 'react-native-vector-icons/Feather';
 
 export const AdminOverviewBox = ({
   label,
@@ -24,6 +25,7 @@ export const AdminOverviewBox = ({
   onLongPress = () => null,
   noTint,
   noLeftMargin,
+  primary = null
 }) => {
   const device = useSelector((state) => state.system.device);
 
@@ -109,7 +111,18 @@ export const AdminOverviewBox = ({
           >
             {rightText}
           </Text>
-        ) : null}
+        ) : 
+        null
+        }
+        {
+          primary ?
+          <Icon name="check-circle" color={primaryColor} size={25} />
+          :
+          !rightText ?
+          <Icon name="check-circle" color={"black"} size={25} />
+          :
+          null
+        }
         <Image
           source={rightIcon ?? forwardIcon}
           style={{
