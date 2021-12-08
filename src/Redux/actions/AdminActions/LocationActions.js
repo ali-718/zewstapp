@@ -74,7 +74,6 @@ export const updateLocation =
   }) =>
   (dispatch) => {
     dispatch({ type: EDIT_LOCATION.REQUESTED });
-
     client
       .post(`/location/update`, {
         clientId,
@@ -85,6 +84,7 @@ export const updateLocation =
         district,
         default_location,
         locationId,
+        mode: "Manual"
       })
       .then((data) => {
         dispatch({
@@ -95,18 +95,39 @@ export const updateLocation =
         navigation.goBack();
       })
       .catch((e) => {
+
         dispatch({ type: EDIT_LOCATION.FAILED });
         ToastError("Some error occoured, please try again later");
       });
   };
 
 export const setPrimaryLocationAction =
-  (payload, noSuccess = false) =>
+  (payload) =>
   (dispatch) => {
-    dispatch({ type: PRIMARY_LOCATION, payload });
-    AsyncStorage.setItem("defaultLocation", JSON.stringify(payload));
+    client
+      .post(`/location/setDefaultLocation`, {
+        clientId: payload?.clientId,
+        locationId: payload?.locationId
+      })
+      .then((data) => {
+        dispatch({ type: PRIMARY_LOCATION, payload: { locationId: payload?.locationId} });
+        dispatch(getAllUserLocations({ userId: payload?.clientId }));
+        ToastSuccess("Success", "Location set to primary.");
+      })
+      .catch((e) => {
+        ToastError("Some error occoured, please try again later");
+      });
+};
 
-    if (!noSuccess) {
-      ToastSuccess("Primary location changed");
-    }
-  };
+export const getPrimaryLocationAction =
+  (clientId) =>
+  (dispatch) => {
+    client
+      .get(`/location/getDefaultLocation/${clientId}`)
+      .then((data) => {
+        dispatch({ type: PRIMARY_LOCATION, payload: { locationId: data?.data?.default_location} });
+      })
+      .catch((e) => {
+        ToastError("Some error occoured, unable to fetch primary location");
+      });
+};

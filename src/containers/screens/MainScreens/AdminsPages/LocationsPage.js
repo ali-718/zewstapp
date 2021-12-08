@@ -13,6 +13,7 @@ import { LoadingPage } from "../../../../components/LoadingPage/LoadingPage";
 import { RefetchDataError } from "../../../../components/ErrorPage/RefetchDataError";
 import {
   getAllUserLocations,
+  getPrimaryLocationAction,
   setPrimaryLocationAction,
 } from "../../../../Redux/actions/AdminActions/LocationActions";
 import { SearchInput } from "../../../../components/SearchInput/SearchInput";
@@ -46,8 +47,8 @@ export const LocationsPage = () => {
   };
 
   useEffect(() => {
+    dispatch(getPrimaryLocationAction(user?.clientId));
     if (list.length > 0) return;
-
     fetchLocations();
   }, []);
 
@@ -60,8 +61,15 @@ export const LocationsPage = () => {
   const fetchLocations = () =>
     dispatch(getAllUserLocations({ userId: user.clientId }));
 
-  const setPrimaryLocation = (payload) =>
-    dispatch(setPrimaryLocationAction(payload));
+  const setPrimaryLocation = (payload) => {
+    let data = {
+      clientId: payload.clientId,
+      locationId: payload.locationId
+    }
+    dispatch(setPrimaryLocationAction(data));
+  }
+    
+  //console.log(defaultLocation, "lalalla")
 
   return (
     <MainScreenContainer title={"Locations"}>
@@ -134,8 +142,8 @@ export const LocationsPage = () => {
               searchKeyword={searchKeyword}
             /> */}
             <View style={{ width: "100%", marginTop: 10 }}>
-              {locations.map((item, i) => (
-                <AdminOverviewBox
+              {locations.map((item, i) => {
+               return <AdminOverviewBox
                   key={i}
                   label={`Location ${i + 1}`}
                   name={item.streetInfo}
@@ -149,7 +157,7 @@ export const LocationsPage = () => {
                   }
                   onLongPress={() => setPrimaryLocation(item)}
                 />
-              ))}
+                })}
 
               <RegularButton
                 style={{ marginTop: 20 }}
