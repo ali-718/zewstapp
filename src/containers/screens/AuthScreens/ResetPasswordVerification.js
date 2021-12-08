@@ -133,7 +133,7 @@ export const ResetPasswordVerification = (props) => {
   };
 
   return (
-    <AuthScreenContainer title={"Register"}>
+    <AuthScreenContainer title={props?.route?.params?.title ?? "Register"}>
       <View style={{ width: "100%", marginVertical: 20, marginBottom: 40 }}>
         <View style={{ width: "100%" }}>
           <Text style={{ fontSize: 28, fontFamily: "openSans_bold" }}>
@@ -147,7 +147,8 @@ export const ResetPasswordVerification = (props) => {
               color: grayTextColor,
             }}
           >
-            Enter the 6-Digit code sent to you at {username}
+            Enter the 6-Digit code sent to you
+            {/* at {username} */}
           </Text>
         </View>
         <View

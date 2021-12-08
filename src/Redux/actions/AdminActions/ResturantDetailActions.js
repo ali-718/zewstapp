@@ -14,28 +14,42 @@ export const getResturantDetail = ({ clientId }) =>
       });
   });
 
-export const saveClientDetails = ({
-  restaurantName,
-  address,
-  contact_no,
-  email,
-  clientId,
-  timmings,
-  representative,
-  logo,
-}) =>
+export const saveClientDetails = (
+  {
+    restaurantName,
+    address,
+    contact_no,
+    email,
+    clientId,
+    timmings,
+    representative,
+    logo,
+    owner_name,
+  },
+  isProfile = false
+) =>
   new Promise((resolve, reject) => {
     client
-      .post(`/client/editClientDetails`, {
-        restaurantName,
-        address,
-        contact_no,
-        email,
-        clientId,
-        timmings,
-        representative,
-        logo: [`data:image/jpeg;base64,${logo ?? "abc"}`],
-      })
+      .post(
+        `/client/editClientDetails`,
+        isProfile
+          ? {
+              owner_name,
+              contact_no,
+              email,
+              clientId,
+            }
+          : {
+              restaurantName,
+              address,
+              contact_no,
+              email,
+              clientId,
+              timmings,
+              representative,
+              logo: [`data:image/jpeg;base64,${logo ?? "abc"}`],
+            }
+      )
       .then((data) => {
         getResturantDetail({ clientId }).then((res) => {
           resolve(res);
@@ -43,6 +57,6 @@ export const saveClientDetails = ({
       })
       .catch((e) => {
         reject();
-        console.log(e);
+        console.log(e.response.data);
       });
   });

@@ -1,5 +1,10 @@
 import { client } from "../client";
-import { COST_BY_CATEGORY, FETCH_FOOD_COUNT, LOSS_IN_KITCHEN } from "./Types";
+import {
+  COST_BY_CATEGORY,
+  FETCH_FOOD_COUNT,
+  FORECASTED_SALES,
+  LOSS_IN_KITCHEN,
+} from "./Types";
 
 export const fetchFoodCountAction =
   ({ locationId, interval, startDate, endDate }) =>
@@ -55,5 +60,24 @@ export const fetchCostByCategoryAction =
       })
       .catch((e) => {
         dispatch({ type: COST_BY_CATEGORY.FAILED });
+      });
+  };
+
+export const fetchForecastedSalesAction =
+  ({ locationId, interval, startDate, endDate }) =>
+  (dispatch) => {
+    dispatch({ type: FORECASTED_SALES.REQUESTED });
+    client
+      .get(
+        `/dashboard/orders/revenue/${locationId}?interval=${interval}&startDate=${startDate}&endDate=${endDate}`
+      )
+      .then((data) => {
+        dispatch({
+          type: FORECASTED_SALES.SUCCEEDED,
+          payload: data.data,
+        });
+      })
+      .catch((e) => {
+        dispatch({ type: FORECASTED_SALES.FAILED });
       });
   };

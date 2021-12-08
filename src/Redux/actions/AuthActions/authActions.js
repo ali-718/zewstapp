@@ -41,7 +41,10 @@ export const loginAction = ({ email, password }) =>
       .then((data) => {
         resolve(data.data);
       })
-      .catch((e) => reject(e.response.data));
+      .catch((e) => {
+        console.log(e.response.data);
+        reject(e.response.data);
+      });
   });
 
 export const refreshTokenAction = ({ refreshToken, email }) =>

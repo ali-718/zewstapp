@@ -33,24 +33,39 @@ export const Dropdown = ({
   return (
     <>
       {Platform.OS === "android" ? (
-        <Select
-          variant={!styled && "unstyled"}
-          selectedValue={selectedMenu}
-          minWidth="150"
-          placeholder=""
-          onValueChange={(item) => {
-            setMenu(item);
-            setIsOpen(false);
-          }}
-          _selectedItem={{
-            bg: "teal.600",
-            endIcon: <ArrowDownIcon size={5} />,
+        <View
+          style={{
+            width: "100%",
+            backgroundColor: "white",
+            borderRadius: 0,
+            padding: 10,
+            height: 70,
+            flexDirection: "row",
+            borderBottomWidth: 1,
+            borderColor: grayColor,
+            ...style,
           }}
         >
-          {menus.map((item, i) => (
-            <Select.Item key={i} label={item} value={item} />
-          ))}
-        </Select>
+          <Select
+            variant={!styled && "unstyled"}
+            selectedValue={selectedMenu}
+            // minWidth="150"
+            placeholder={placeholder}
+            onValueChange={(item) => {
+              setMenu(item);
+              setIsOpen(false);
+            }}
+            _selectedItem={{
+              bg: "teal.600",
+              endIcon: <ArrowDownIcon size={5} />,
+            }}
+            width={"100%"}
+          >
+            {menus.map((item, i) => (
+              <Select.Item key={i} label={item} value={item} />
+            ))}
+          </Select>
+        </View>
       ) : (
         <View
           style={{

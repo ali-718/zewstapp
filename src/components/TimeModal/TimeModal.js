@@ -10,12 +10,24 @@ import { LinearGradient } from "expo-linear-gradient";
 import { RegularButton } from "../Buttons/RegularButton";
 import moment from "moment";
 
-const TimeBox = ({ day, onchange }) => {
+const TimeBox = ({ day, onchange, timedays = [] }) => {
   const device = useSelector((state) => state.system.device);
   const [show1, setShow1] = useState(false);
   const [show2, setShow2] = useState(false);
-  const [start, setStart] = useState(new Date(1598051730000));
-  const [end, setEnd] = useState(new Date(1598051730000));
+  const [start, setStart] = useState(
+    timedays.length > 0
+      ? new Date(
+          moment(`${moment().format("d-M-y")} ${timedays[0].start}`).valueOf()
+        )
+      : new Date(1598051730000)
+  );
+  const [end, setEnd] = useState(
+    timedays.length > 0
+      ? new Date(
+          moment(`${moment().format("d-M-y")} ${timedays[0].end}`).valueOf()
+        )
+      : new Date(1598051730000)
+  );
 
   return (
     <View style={{ width: "100%", marginTop: 20 }}>
@@ -114,26 +126,32 @@ export const TimeModal = ({ onRequestClose, visible, onchange, timedays }) => {
             <TimeBox
               onchange={(start, end) => onchange(start, end, "Tuesday")}
               day={"Tuesday"}
+              timedays={timedays.filter((item) => item.day === "Tuesday")}
             />
             <TimeBox
               onchange={(start, end) => onchange(start, end, "Wednesday")}
               day={"Wednesday"}
+              timedays={timedays.filter((item) => item.day === "Wednesday")}
             />
             <TimeBox
               onchange={(start, end) => onchange(start, end, "Thursday")}
               day={"Thursday"}
+              timedays={timedays.filter((item) => item.day === "Thursday")}
             />
             <TimeBox
               onchange={(start, end) => onchange(start, end, "Friday")}
               day={"Friday"}
+              timedays={timedays.filter((item) => item.day === "Friday")}
             />
             <TimeBox
               onchange={(start, end) => onchange(start, end, "Saturday")}
               day={"Saturday"}
+              timedays={timedays.filter((item) => item.day === "Saturday")}
             />
             <TimeBox
               onchange={(start, end) => onchange(start, end, "Sunday")}
               day={"Sunday"}
+              timedays={timedays.filter((item) => item.day === "Sunday")}
             />
           </LinearGradient>
         </View>

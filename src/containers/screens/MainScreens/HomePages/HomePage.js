@@ -49,7 +49,7 @@ import { ToastError, ToastSuccess } from "../../../../helpers/Toast";
 import { useDispatch, useSelector } from "react-redux";
 import { setPrimaryLocationAction } from "../../../../Redux/actions/AdminActions/LocationActions";
 import { LinearGradient } from "expo-linear-gradient";
-import { colors, HEIGHT } from "../../../../helpers/utlils";
+import { colors, HEIGHT, numberWithCommas } from "../../../../helpers/utlils";
 import purpleCalender from "../../../../assets/images/purpleCalender.png";
 import grayCalender from "../../../../assets/images/grayCalender.png";
 import purpleMenuItem from "../../../../assets/images/purpleMenuItem.png";
@@ -82,6 +82,7 @@ import {
   fetchCostByCategoryAction,
   fetchFoodCountAction,
   fetchLossInKitchenAction,
+  fetchForecastedSalesAction,
 } from "../../../../Redux/actions/DashboardActions/DashboardActions";
 import moment from "moment";
 import { order } from "styled-system";
@@ -90,22 +91,6 @@ const chartData = [50, 10, 40, 95, 4, 24, 85, 91, 35, 53, 53, 24, 50, 20, 80];
 
 const data1 = [72, 96, 33, 66];
 const data2 = [89, 70, 86, 84];
-
-const barData = [
-  {
-    data: data1.map((value) => ({ value })),
-    svg: {
-      fill: chartColor1,
-    },
-  },
-  {
-    data: data2.map((value) => ({ value })),
-    svg: {
-      fill: chartColor2,
-    },
-  },
-];
-
 const lineChartData = [
   {
     data: data1,
@@ -371,7 +356,36 @@ export const HomePage = ({ setselected }) => {
     list: costByCategoryList = [],
     totalPrice: costByCategoryPrice,
   } = useSelector((state) => state.dashboard.costByCategory);
+  const {
+    isLoading: foreCastedSalesLoading,
+    revenue: forecastedRevenue,
+    sales: forecastedSales,
+    actualSale: forecastedActualSales,
+    interval: forecastedInterval,
+  } = useSelector((state) => state.dashboard.forecastedSales);
   const [costByCategoryListData, setCostByCategoryListData] = useState([]);
+  const [data1, setData1] = useState([0]);
+  const [data2, setData2] = useState([0]);
+
+  useEffect(() => {
+    setData1([0, forecastedSales]);
+    setData2([0, forecastedActualSales]);
+  }, [forecastedSales, forecastedActualSales]);
+
+  const barData = [
+    {
+      data: data1.map((value) => ({ value })),
+      svg: {
+        fill: chartColor1,
+      },
+    },
+    {
+      data: data2.map((value) => ({ value })),
+      svg: {
+        fill: chartColor2,
+      },
+    },
+  ];
 
   useEffect(() => {
     if (costByCategoryList.length === 0) return;
@@ -422,6 +436,7 @@ export const HomePage = ({ setselected }) => {
       fetchFirstSection(),
       fetchLossInKitchenSection(),
       fetchCostByCategorySection(),
+      fetchForecastedSalesSection(),
     ]);
   }, [selectedTime]);
 
@@ -434,6 +449,7 @@ export const HomePage = ({ setselected }) => {
       fetchFirstSection(),
       fetchLossInKitchenSection(),
       fetchCostByCategorySection(),
+      fetchForecastedSalesSection(),
     ]);
   }, [isScreenFocused]);
 
@@ -473,6 +489,36 @@ export const HomePage = ({ setselected }) => {
 
     dispatch(
       fetchCostByCategoryAction({
+        // locationId: "0f06628b-9b71-48b6-be64-5cc7a377f501",
+        locationId: JSON.parse(location).locationId ?? "",
+        interval:
+          selectedTime === "This month"
+            ? "month"
+            : selectedTime === "This year"
+            ? "year"
+            : selectedTime === "This day"
+            ? "day"
+            : "",
+        startDate:
+          selectedTime === "This month"
+            ? moment().subtract(30, "days").format("DD-M-yyy")
+            : selectedTime === "This year"
+            ? moment().subtract(365, "days").format("DD-M-yyy")
+            : selectedTime === "This day"
+            ? moment().format("DD-M-yyy")
+            : "",
+        endDate: moment().format("DD-M-yyy"),
+      })
+    );
+  };
+
+  const fetchForecastedSalesSection = async () => {
+    const location = await AsyncStorage.getItem("defaultLocation");
+
+    if (location === null) return;
+
+    dispatch(
+      fetchForecastedSalesAction({
         // locationId: "0f06628b-9b71-48b6-be64-5cc7a377f501",
         locationId: JSON.parse(location).locationId ?? "",
         interval:
@@ -693,67 +739,38 @@ export const HomePage = ({ setselected }) => {
                   </View>
                 )}
 
-                <View
-                  style={{
-                    flex: 1,
-                    flexDirection: "column",
-                    backgroundColor: "white",
-                    borderRadius: 10,
-                    padding: 10,
-                    paddingVertical: 20,
-                    marginTop: 20,
-                  }}
-                >
+                {foreCastedSalesLoading ? (
                   <View
                     style={{
                       flex: 1,
                       flexDirection: "row",
                       alignItems: "center",
-                      justifyContent: "space-between",
+                      justifyContent: "center",
+                      backgroundColor: "white",
+                      borderRadius: 10,
+                      padding: 10,
+                      paddingVertical: 20,
                     }}
                   >
-                    <View>
-                      <View
-                        style={{
-                          flexDirection: "row",
-                          alignItems: "center",
-                          justifyContent: "center",
-                        }}
-                      >
-                        <Text
-                          style={{
-                            fontSize: 18,
-                            color: "black",
-                            fontFamily: "openSans_semiBold",
-                          }}
-                        >
-                          Revenue
-                        </Text>
-                        <Text
-                          style={{
-                            fontSize: 14,
-                            color: grayTextColor,
-                            marginLeft: 10,
-                          }}
-                        >
-                          This month
-                        </Text>
-                      </View>
-                      <Text
-                        style={{
-                          fontSize: 16,
-                          color: grayTextColor,
-                          fontFamily: "openSans_semiBold",
-                        }}
-                      >
-                        Total: $38,451
-                      </Text>
-                    </View>
-
+                    <Spinner size={"large"} color={primaryColor} />
+                  </View>
+                ) : (
+                  <View
+                    style={{
+                      flex: 1,
+                      flexDirection: "column",
+                      backgroundColor: "white",
+                      borderRadius: 10,
+                      padding: 10,
+                      paddingVertical: 20,
+                      marginTop: 20,
+                    }}
+                  >
                     <View
                       style={{
-                        flex: 0.9,
-                        flexDirection: device === "tablet" ? "row" : "column",
+                        flex: 1,
+                        flexDirection: "row",
+                        alignItems: "center",
                         justifyContent: "space-between",
                       }}
                     >
@@ -762,16 +779,18 @@ export const HomePage = ({ setselected }) => {
                           style={{
                             flexDirection: "row",
                             alignItems: "center",
+                            justifyContent: "center",
                           }}
                         >
-                          <View
+                          <Text
                             style={{
-                              backgroundColor: chartColor1,
-                              width: 12,
-                              height: 12,
-                              borderRadius: 100,
+                              fontSize: 18,
+                              color: "black",
+                              fontFamily: "openSans_semiBold",
                             }}
-                          />
+                          >
+                            Revenue
+                          </Text>
                           <Text
                             style={{
                               fontSize: 14,
@@ -779,82 +798,126 @@ export const HomePage = ({ setselected }) => {
                               marginLeft: 10,
                             }}
                           >
-                            Forecasted Sales
+                            This {forecastedInterval}
                           </Text>
                         </View>
                         <Text
                           style={{
                             fontSize: 16,
-                            color: "black",
+                            color: grayTextColor,
                             fontFamily: "openSans_semiBold",
                           }}
                         >
-                          Total: $38,451
+                          Total: ${numberWithCommas(forecastedRevenue)}
                         </Text>
                       </View>
 
-                      <View>
-                        <View
-                          style={{
-                            flexDirection: "row",
-                            alignItems: "center",
-                            marginTop: device === "tablet" ? 0 : 10,
-                          }}
-                        >
+                      <View
+                        style={{
+                          flex: 0.9,
+                          flexDirection: device === "tablet" ? "row" : "column",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        <View>
                           <View
                             style={{
-                              backgroundColor: chartColor2,
-                              width: 12,
-                              height: 12,
-                              borderRadius: 100,
-                            }}
-                          />
-                          <Text
-                            style={{
-                              fontSize: 14,
-                              color: grayTextColor,
-                              marginLeft: 10,
+                              flexDirection: "row",
+                              alignItems: "center",
                             }}
                           >
-                            Actual Sales
+                            <View
+                              style={{
+                                backgroundColor: chartColor1,
+                                width: 12,
+                                height: 12,
+                                borderRadius: 100,
+                              }}
+                            />
+                            <Text
+                              style={{
+                                fontSize: 14,
+                                color: grayTextColor,
+                                marginLeft: 10,
+                              }}
+                            >
+                              Forecasted Sales
+                            </Text>
+                          </View>
+                          <Text
+                            style={{
+                              fontSize: 16,
+                              color: "black",
+                              fontFamily: "openSans_semiBold",
+                            }}
+                          >
+                            Total: ${numberWithCommas(forecastedSales)}
                           </Text>
                         </View>
-                        <Text
-                          style={{
-                            fontSize: 16,
-                            color: "black",
-                            fontFamily: "openSans_semiBold",
-                          }}
-                        >
-                          Total: $38,451
-                        </Text>
+
+                        <View>
+                          <View
+                            style={{
+                              flexDirection: "row",
+                              alignItems: "center",
+                              marginTop: device === "tablet" ? 0 : 10,
+                            }}
+                          >
+                            <View
+                              style={{
+                                backgroundColor: chartColor2,
+                                width: 12,
+                                height: 12,
+                                borderRadius: 100,
+                              }}
+                            />
+                            <Text
+                              style={{
+                                fontSize: 14,
+                                color: grayTextColor,
+                                marginLeft: 10,
+                              }}
+                            >
+                              Actual Sales
+                            </Text>
+                          </View>
+                          <Text
+                            style={{
+                              fontSize: 16,
+                              color: "black",
+                              fontFamily: "openSans_semiBold",
+                            }}
+                          >
+                            Total: ${numberWithCommas(forecastedActualSales)}
+                          </Text>
+                        </View>
                       </View>
                     </View>
+                    <View
+                      style={{
+                        flex: 1,
+                        flexDirection: "row",
+                        marginTop: 20,
+                      }}
+                    >
+                      <YAxis
+                        data={[...data1, ...data2]}
+                        style={{ marginBottom: 10 }}
+                        contentInset={{ top: 20, bottom: 20 }}
+                        svg={{ fontSize: 10, fill: "grey" }}
+                      />
+                      <BarChart
+                        animate={true}
+                        style={{ height: 200, marginLeft: 10, flex: 1 }}
+                        data={barData}
+                        yAccessor={({ item }) => item.value}
+                        xAccessor={({ item }) => item.value}
+                        spacingInner={0.8}
+                        contentInset={{ top: 20, bottom: 20 }}
+                      ></BarChart>
+                    </View>
                   </View>
-                  <View
-                    style={{
-                      flex: 1,
-                      flexDirection: "row",
-                      marginTop: 20,
-                    }}
-                  >
-                    <YAxis
-                      data={[...data1, ...data2]}
-                      style={{ marginBottom: 10 }}
-                      contentInset={{ top: 20, bottom: 0 }}
-                      svg={{ fontSize: 10, fill: "grey" }}
-                    />
-                    <BarChart
-                      animate={true}
-                      style={{ height: 200, marginLeft: 10, flex: 1 }}
-                      data={barData}
-                      yAccessor={({ item }) => item.value}
-                      xAccessor={({ item }) => item.value}
-                      spacingInner={0.8}
-                      contentInset={{ top: 20, bottom: 20 }}
-                    ></BarChart>
-                  </View>
-                </View>
+                )}
 
                 <View
                   style={{

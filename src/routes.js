@@ -157,6 +157,10 @@ const AdminRoutes = () => {
       <Stack.Screen name="bankDetails" component={BankDetailsPage} />
       <Stack.Screen name="changePass" component={ChangePasswordPage} />
       <Stack.Screen name="stripe" component={StripePage} />
+      <Stack.Screen
+        name="ResetPasswordVerification"
+        component={ResetPasswordVerification}
+      />
     </Stack.Navigator>
   );
 };
@@ -246,6 +250,7 @@ export const Routes = () => {
 
         return;
       }
+
       dispatch(actions.changeOrientationAction({ type: PORTRAIT }));
     });
 
@@ -255,6 +260,11 @@ export const Routes = () => {
       } else {
         dispatch(actions.deviceType({ type: MOBILE }));
       }
+      return;
+    }
+
+    if (width > 768) {
+      dispatch(actions.deviceType({ type: MOBILE }));
       return;
     }
 

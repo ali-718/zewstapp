@@ -34,9 +34,6 @@ export const ResturantDetails = () => {
   const user = useSelector((state) => state.auth.user.user);
   const device = useSelector((state) => state.system.device);
   const isFocused = useIsFocused();
-  const defaultLocation = useSelector(
-    (state) => state.locations.defaultLocation
-  );
 
   useEffect(() => {
     if (!isFocused) return;
@@ -55,6 +52,8 @@ export const ResturantDetails = () => {
           logo = [],
           clientId = "",
         } = client;
+
+        console.log(client);
 
         setEmail(email);
         setTimeDays(timmings);
@@ -165,7 +164,7 @@ export const ResturantDetails = () => {
           />
         </View>
 
-        <View style={{ width: "100%", marginTop: 10 }}>
+        {/* <View style={{ width: "100%", marginTop: 10 }}>
           <MealItem
             label={"Customer Service Reprenstative"}
             text={selectedCsr}
@@ -174,7 +173,7 @@ export const ResturantDetails = () => {
             onPress={() => setCsrModal(true)}
             iconStyle={{ width: 20, height: 20 }}
           />
-        </View>
+        </View> */}
 
         <ListModal
           onRequestClose={() => setCsrModal(false)}
@@ -188,7 +187,9 @@ export const ResturantDetails = () => {
         <View style={{ width: "100%", marginTop: 10 }}>
           <MealItem
             label={"Timings"}
-            text={selectedTime}
+            text={JSON.stringify(timeDays.map((item) => item.day))
+              .replace(/[\[\]']+/g, "")
+              .replace(/['"]+/g, "")}
             icon={forwardIcon}
             touchable
             onPress={() => setTimeModal(true)}

@@ -313,7 +313,6 @@ export const AddMeal = (props) => {
             value={name}
             setValue={(val) => setName(val)}
             placeholder={"Title*"}
-            rule={nameValidator}
           />
         </View>
 
@@ -324,7 +323,6 @@ export const AddMeal = (props) => {
             setValue={(val) => setdesc(val)}
             placeholder={"Description*"}
             textarea
-            rule={nameValidator}
           />
         </View>
 
@@ -420,7 +418,6 @@ export const AddMeal = (props) => {
 
         <View style={{ width: "100%", marginTop: 20 }}>
           <RegularButton
-            style={{ borderRadius: 100 }}
             text={isEdit ? "SAVE" : "ADD"}
             onPress={onSaveMeal}
             isLoading={isLoading}

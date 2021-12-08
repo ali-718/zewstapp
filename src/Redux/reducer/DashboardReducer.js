@@ -2,6 +2,7 @@ import produce from "immer";
 import {
   COST_BY_CATEGORY,
   FETCH_FOOD_COUNT,
+  FORECASTED_SALES,
   LOSS_IN_KITCHEN,
 } from "../actions/DashboardActions/Types";
 
@@ -25,11 +26,38 @@ const initialState = {
     list: [],
     totalPrice: 0,
   },
+  forecastedSales: {
+    isLoading: true,
+    isError: false,
+    revenue: 0,
+    sales: 0,
+    actualSale: 0,
+    interval: "month",
+  },
 };
 
 export const dashboardReducer = produce(
   (state = initialState, { payload, type }) => {
     switch (type) {
+      case FORECASTED_SALES.REQUESTED: {
+        state.forecastedSales.isLoading = true;
+        state.forecastedSales.isError = false;
+        break;
+      }
+      case FORECASTED_SALES.SUCCEEDED: {
+        state.forecastedSales.isLoading = false;
+        state.forecastedSales.isError = false;
+        state.forecastedSales.actualSale = payload.actualSale;
+        state.forecastedSales.revenue = payload.forecast?.revenue;
+        state.forecastedSales.sales = payload.forecast?.sales;
+        state.forecastedSales.interval = payload.interval;
+        break;
+      }
+      case FORECASTED_SALES.FAILED: {
+        state.forecastedSales.isLoading = false;
+        state.forecastedSales.isError = true;
+        break;
+      }
       case COST_BY_CATEGORY.REQUESTED: {
         state.costByCategory.isLoading = true;
         state.costByCategory.isError = false;

@@ -23,6 +23,8 @@ import { DeleteModal } from "../../../../components/Meals/DeleteModal";
 import { HeadingBox } from "../../../../components/HeadingBox/HeadingBox";
 import { RegularButton } from "../../../../components/Buttons/RegularButton";
 import { inventoryCategory } from "../../../../helpers/utlils";
+import { DateTimeSelector } from "../../../../components/DateTimeSelector/DateTimeSelector";
+import moment from "moment";
 
 export const AddInventoryPage = (props) => {
   const navigation = useNavigation();
@@ -61,6 +63,8 @@ export const AddInventoryPage = (props) => {
   const [deleteModal, setdeleteModal] = useState(false);
   const [selectedVendor, setSelectedVendor] = useState({});
   const [allUnits, setallUnits] = useState([]);
+  const [showDateTime, setShowDateTime] = useState(false);
+  const [showDateTime2, setShowDateTime2] = useState(false);
 
   useEffect(() => {
     if (!deleteError) return;
@@ -154,8 +158,8 @@ export const AddInventoryPage = (props) => {
         brand,
         quantity,
         units: unit,
-        expiryDate: dateOfExpiry,
-        purchaseDate: dateOfPurchase,
+        expiryDate: moment(dateOfExpiry).format("YYYY/MM/DD"),
+        purchaseDate: moment(dateOfPurchase).format("YYYY/MM/DD"),
         color: color.title,
         notes,
         itemName,
@@ -179,8 +183,8 @@ export const AddInventoryPage = (props) => {
       brand,
       quantity,
       units: unit,
-      expiryDate: dateOfExpiry,
-      purchaseDate: dateOfPurchase,
+      expiryDate: moment(dateOfExpiry).format("YYYY/MM/DD"),
+      purchaseDate: moment(dateOfPurchase).format("YYYY/MM/DD"),
       color: color.title,
       notes,
       itemName,
@@ -370,17 +374,31 @@ export const AddInventoryPage = (props) => {
             <Input
               placeholder={"Date of Purchase"}
               value={dateOfPurchase}
-              setValue={(val) => setDateOfPurchase(val)}
               style={{
                 marginTop: 10,
                 borderRadius: 0,
                 flex: device === "tablet" ? 0.3 : 1,
               }}
+              onPress={() => setShowDateTime(true)}
               masked
               maskType={"datetime"}
               maskFormat={"YYYY/MM/DD"}
+              noInput
+            />
+            <DateTimeSelector
+              value={
+                dateOfPurchase !== ""
+                  ? new Date(moment(dateOfPurchase).valueOf())
+                  : new Date(moment().valueOf())
+              }
+              onChange={(val, date) =>
+                setDateOfPurchase(moment(date).format("YYYY/MM/DD"))
+              }
+              show={showDateTime}
+              onPress={() => setShowDateTime(false)}
             />
             <Input
+              noInput
               placeholder={"Date of Expiry"}
               value={dateOfExpiry}
               setValue={(val) => setDateOfExpiry(val)}
@@ -391,7 +409,20 @@ export const AddInventoryPage = (props) => {
               }}
               masked
               maskType={"datetime"}
+              onPress={() => setShowDateTime2(true)}
               maskFormat={"YYYY/MM/DD"}
+            />
+            <DateTimeSelector
+              value={
+                dateOfExpiry !== ""
+                  ? new Date(moment(dateOfExpiry).valueOf())
+                  : new Date(moment().valueOf())
+              }
+              onChange={(val, date) =>
+                setDateOfExpiry(moment(date).format("YYYY/MM/DD"))
+              }
+              show={showDateTime2}
+              onPress={() => setShowDateTime2(false)}
             />
             <View
               style={{

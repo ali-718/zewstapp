@@ -7,7 +7,7 @@ import { Dropdown } from "../Inputs/DropDown";
 import { Text } from "../Text/Text";
 import { Icon } from "native-base";
 import { Entypo } from "@expo/vector-icons";
-import { recipePacking } from "../../helpers/utlils";
+import { inventoryCategory, recipePacking } from "../../helpers/utlils";
 
 export const IngredientAccordionList = ({
   ingredients,
@@ -19,6 +19,8 @@ export const IngredientAccordionList = ({
   updatePacking,
   updateName,
   deleteIngredient,
+  updateUnit,
+  allUnits,
 }) => {
   const [isOpen, setIsOpen] = useState(true);
 
@@ -146,10 +148,10 @@ export const IngredientAccordionList = ({
             )}
 
             <Dropdown
-              // selectedMenu={item.type}
-              setMenu={(val) => null}
+              selectedMenu={item.unit}
+              setMenu={(val) => updateUnit(val, i)}
               placeholder={"Unit"}
-              menus={["oz"]}
+              menus={allUnits}
               style={{
                 zIndex: i + 1,
                 flex: 1,

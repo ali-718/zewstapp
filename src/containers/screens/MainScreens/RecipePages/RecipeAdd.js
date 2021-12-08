@@ -42,12 +42,18 @@ export const RecipeAdd = (props) => {
   const [coveredIngredients, setcoveredIngredients] = useState([]);
   const [recipeList, setrecipeList] = useState([]);
   const [isEdit, setIsEdit] = useState(false);
+  const [allUnits, setallUnits] = useState([]);
   const isLoading = useSelector((state) => state.recipe.addRecipe.isLoading);
   const defaultLocation = useSelector(
     (state) => state.locations.defaultLocation
   );
 
   useEffect(() => {
+    inventoryActions
+      .getUnits()
+      .then((res) => setallUnits(res))
+      .catch((e) => setallUnits([]));
+
     const data = props.route?.params?.data;
 
     dispatch(
@@ -312,7 +318,7 @@ export const RecipeAdd = (props) => {
                   { length: macroIngredient.totalQuantity },
                   (_, i) => i + 1
                 )}
-                style={{ zIndex: 2, marginTop: 10 }}
+                style={{ zIndex: 4, marginTop: 10 }}
               />
             )}
 
@@ -333,7 +339,7 @@ export const RecipeAdd = (props) => {
               setMenu={settype}
               placeholder={"Type"}
               menus={["completed", "pending"]}
-              style={{ zIndex: 1 }}
+              style={{ zIndex: 3 }}
             />
 
             <Input
@@ -424,6 +430,8 @@ export const RecipeAdd = (props) => {
                   updatePacking={updatePacking}
                   updateName={updateName}
                   deleteIngredient={deleteIngredient}
+                  updateUnit={updateUnit}
+                  allUnits={allUnits}
                 />
               </View>
             ))}

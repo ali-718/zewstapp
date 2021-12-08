@@ -30,6 +30,8 @@ export const Input = ({
   maskFormat,
   showError,
   setHighOrderError,
+  onPress,
+  noInput,
   ...props
 }) => {
   const device = useSelector((state) => state.system.device);
@@ -87,14 +89,16 @@ export const Input = ({
           flexDirection: "row",
           borderBottomWidth: isError && showError ? 1 : 0,
           borderColor: inputBorderColor,
+          zIndex: 1,
           ...style,
         }}
         activeOpacity={1}
-        onPress={() => ref.current?.focus()}
+        onPress={onPress ? onPress : () => ref.current?.focus()}
       >
         <View
           style={{
             width: "90%",
+            zIndex: 0,
           }}
         >
           <View
@@ -104,7 +108,7 @@ export const Input = ({
               alignItems: "center",
             }}
           >
-            {isFocused && (
+            {noInput ? (
               <Text style={{ marginBottom: 5, color: "gray" }}>
                 {placeholder}{" "}
                 {isError && showError && (
@@ -113,10 +117,32 @@ export const Input = ({
                   </Text>
                 )}
               </Text>
+            ) : (
+              isFocused && (
+                <Text style={{ marginBottom: 5, color: "gray" }}>
+                  {placeholder}{" "}
+                  {isError && showError && (
+                    <Text>
+                      - <Text style={{ color: "red" }}>{errorText}</Text>
+                    </Text>
+                  )}
+                </Text>
+              )
             )}
           </View>
 
-          {masked ? (
+          {noInput ? (
+            <Text
+              style={{
+                width: "100%",
+                fontSize: device === "tablet" ? 20 : 16,
+                ...inputStyle,
+                flex: 1,
+              }}
+            >
+              {value}
+            </Text>
+          ) : masked ? (
             <TextInputMask
               onBlur={() => {
                 if (value.length > 0) {
