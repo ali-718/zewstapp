@@ -184,7 +184,7 @@ export const InventoryListPage = () => {
                     key={i}
                     label={item?.itemName}
                     name={item.brand}
-                    rightText={""}
+                    rightText={" "}
                     image={InventoryIcon}
                     inventory
                     onPress={() =>

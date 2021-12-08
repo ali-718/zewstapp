@@ -154,9 +154,9 @@ export const AddInventoryPage = (props) => {
         brand,
         quantity,
         units: unit,
-        expiryDate: dateOfExpiry,
-        purchaseDate: dateOfPurchase,
-        color: color.title,
+        expiryDate: dateOfExpiry?.split("/")?.join("-"),
+        purchaseDate: dateOfPurchase?.split("/")?.join("-"),
+        color: "",
         notes,
         itemName,
         photos: image64,
@@ -179,20 +179,19 @@ export const AddInventoryPage = (props) => {
       brand,
       quantity,
       units: unit,
-      expiryDate: dateOfExpiry,
-      purchaseDate: dateOfPurchase,
+      expiryDate: dateOfExpiry?.split("/")?.join("-"),
+      purchaseDate: dateOfPurchase?.split("/")?.join("-"),
       color: color.title,
       notes,
       itemName,
       photos: image64,
-      costPerUnit,
+      costPerUnit: costPerUnit,
       threshold,
       category,
       navigation,
       availability: availablity.value,
       vendor: selectedVendor,
     };
-
     dispatch(actions.addInventoryAction(data));
   };
 
