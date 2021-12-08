@@ -160,12 +160,10 @@ export const AddInventoryPage = (props) => {
         units: unit,
         expiryDate: moment(dateOfExpiry).format("YYYY/MM/DD"),
         purchaseDate: moment(dateOfPurchase).format("YYYY/MM/DD"),
-        color: color.title,
         notes,
         itemName,
         photos: image64,
         costPerUnit,
-        threshold,
         category,
         navigation,
         availability: availablity.value,
@@ -185,18 +183,15 @@ export const AddInventoryPage = (props) => {
       units: unit,
       expiryDate: moment(dateOfExpiry).format("YYYY/MM/DD"),
       purchaseDate: moment(dateOfPurchase).format("YYYY/MM/DD"),
-      color: color.title,
       notes,
       itemName,
       photos: image64,
-      costPerUnit,
-      threshold,
+      costPerUnit: costPerUnit,
       category,
       navigation,
       availability: availablity.value,
       vendor: selectedVendor,
     };
-
     dispatch(actions.addInventoryAction(data));
   };
 

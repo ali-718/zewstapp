@@ -77,6 +77,7 @@ export const AddLocationsPage = (props) => {
         townCity: city,
         district: district,
         locationId: props?.route?.params?.data?.locationId,
+        navigation
       };
 
       dispatch(actions.updateLocation(data));

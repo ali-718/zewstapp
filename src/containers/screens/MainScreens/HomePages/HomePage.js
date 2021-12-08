@@ -47,7 +47,10 @@ import { useNavigation, useIsFocused } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ToastError, ToastSuccess } from "../../../../helpers/Toast";
 import { useDispatch, useSelector } from "react-redux";
-import { setPrimaryLocationAction } from "../../../../Redux/actions/AdminActions/LocationActions";
+import {
+  getPrimaryLocationAction,
+  setPrimaryLocationAction,
+} from "../../../../Redux/actions/AdminActions/LocationActions";
 import { LinearGradient } from "expo-linear-gradient";
 import { colors, HEIGHT, numberWithCommas } from "../../../../helpers/utlils";
 import purpleCalender from "../../../../assets/images/purpleCalender.png";
@@ -336,6 +339,7 @@ export const HomePage = ({ setselected }) => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const device = useSelector((state) => state.system.device);
+  const user = useSelector((state) => state.auth.user.user);
   const [qrModal, setQrModal] = useState(false);
   const [selectedTime, setSelectedTime] = useState("This month");
   const [isDefaultLocation, setIsDefaultLocation] = useState(true);
@@ -363,6 +367,10 @@ export const HomePage = ({ setselected }) => {
     actualSale: forecastedActualSales,
     interval: forecastedInterval,
   } = useSelector((state) => state.dashboard.forecastedSales);
+
+  const defaultLocation = useSelector(
+    (state) => state.locations.defaultLocation
+  );
   const [costByCategoryListData, setCostByCategoryListData] = useState([]);
   const [data1, setData1] = useState([0]);
   const [data2, setData2] = useState([0]);
@@ -412,25 +420,8 @@ export const HomePage = ({ setselected }) => {
     setQrModal(true);
   };
 
-  const checkDefaultLocation = async (noRedirect = false) => {
-    const location = await AsyncStorage.getItem("defaultLocation");
-
-    if (location === null) {
-      setIsDefaultLocation(false);
-      if (noRedirect) return;
-      navigation.navigate("location");
-      ToastSuccess("Kindly select your default location");
-      return;
-    }
-
-    setIsDefaultLocation(true);
-
-    dispatch(setPrimaryLocationAction(JSON.parse(location), true));
-  };
-
   useEffect(() => {
     if (!isScreenFocused) return;
-    checkDefaultLocation();
 
     Promise.all([
       fetchFirstSection(),
@@ -443,7 +434,6 @@ export const HomePage = ({ setselected }) => {
   useEffect(() => {
     // so when user get back here after selecting default location
     if (!isScreenFocused) return;
-    checkDefaultLocation(true);
 
     Promise.all([
       fetchFirstSection(),
@@ -452,6 +442,24 @@ export const HomePage = ({ setselected }) => {
       fetchForecastedSalesSection(),
     ]);
   }, [isScreenFocused]);
+
+  useEffect(() => {
+    dispatch(getPrimaryLocationAction(user?.clientId));
+  }, [user]);
+
+  useEffect(() => {
+    const location = defaultLocation?.locationId;
+
+    if (location === null) {
+      setIsDefaultLocation(false);
+      if (noRedirect) return;
+      navigation.navigate("location");
+      ToastSuccess("Kindly select your default location");
+      return;
+    }
+
+    setIsDefaultLocation(true);
+  }, [defaultLocation]);
 
   const fetchFirstSection = async () => {
     const location = await AsyncStorage.getItem("defaultLocation");
