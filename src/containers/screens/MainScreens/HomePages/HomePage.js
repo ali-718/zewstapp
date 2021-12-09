@@ -660,6 +660,14 @@ export const HomePage = ({ setselected }) => {
                       height: device === "tablet" ? 50 : 40,
                       backgroundColor: "rgba(0,0,0,0)",
                     }}
+                    innerStyle={{
+                      zIndex: 3,
+                      width: device === "tablet" ? 150 : 130,
+                      borderBottomWidth: 0,
+                      marginTop: 0,
+                      height: device === "tablet" ? 50 : 40,
+                      backgroundColor: "rgba(0,0,0,0)",
+                    }}
                     iconStyle={{ marginTop: 10 }}
                     dropDownOffset={device === "tablet" ? 50 : 40}
                   />

@@ -299,17 +299,6 @@ export const AddInventoryPage = (props) => {
                 flex: 1,
               }}
             />
-
-            <Dropdown
-              selectedMenu={selectedVendor?.name}
-              setMenu={(val) =>
-                setSelectedVendor(vendorsList.find((item) => item.name === val))
-              }
-              placeholder={"Vendor"}
-              menus={vendorsList.map((item) => item.name)}
-              style={{ zIndex: 13, marginTop: 10 }}
-              errMsg={"Looks like there is no vendor present!"}
-            />
           </View>
 
           <View
@@ -329,7 +318,7 @@ export const AddInventoryPage = (props) => {
               style={{
                 marginTop: 10,
                 borderRadius: 0,
-                flex: device === "tablet" ? 0.3 : 1,
+                width: device === "tablet" ? "32%" : "100%",
               }}
             />
             <Input
@@ -340,7 +329,7 @@ export const AddInventoryPage = (props) => {
               style={{
                 marginTop: 10,
                 borderRadius: 0,
-                flex: device === "tablet" ? 0.3 : 1,
+                width: device === "tablet" ? "32%" : "100%",
               }}
             />
             <Dropdown
@@ -351,8 +340,8 @@ export const AddInventoryPage = (props) => {
               style={{
                 marginTop: 10,
                 borderRadius: 0,
-                flex: device === "tablet" ? 0.3 : 1,
-                zIndex: 11,
+                width: device === "tablet" ? "32%" : "100%",
+                zIndex: 12,
               }}
             />
           </View>
@@ -364,6 +353,7 @@ export const AddInventoryPage = (props) => {
               alignItems: "center",
               justifyContent: "space-between",
               zIndex: 10,
+              margin: 0,
             }}
           >
             <Input
@@ -372,7 +362,7 @@ export const AddInventoryPage = (props) => {
               style={{
                 marginTop: 10,
                 borderRadius: 0,
-                flex: device === "tablet" ? 0.3 : 1,
+                width: device === "tablet" ? "48%" : "100%",
               }}
               onPress={() => setShowDateTime(true)}
               masked
@@ -400,7 +390,7 @@ export const AddInventoryPage = (props) => {
               style={{
                 marginTop: 10,
                 borderRadius: 0,
-                flex: device === "tablet" ? 0.3 : 1,
+                width: device === "tablet" ? "48%" : "100%",
               }}
               masked
               maskType={"datetime"}
@@ -445,8 +435,25 @@ export const AddInventoryPage = (props) => {
               style={{
                 marginTop: 10,
                 borderRadius: 0,
-                flex: device === "tablet" ? 0.3 : 1,
+                width: device === "tablet" ? "32%" : "100%",
+                zIndex: 12,
               }}
+            />
+
+            <Dropdown
+              selectedMenu={selectedVendor?.name}
+              setMenu={(val) =>
+                setSelectedVendor(vendorsList.find((item) => item.name === val))
+              }
+              placeholder={"Vendor"}
+              menus={vendorsList.map((item) => item.name)}
+              style={{
+                marginTop: 10,
+                borderRadius: 0,
+                width: device === "tablet" ? "32%" : "100%",
+                zIndex: 12,
+              }}
+              errMsg={"Looks like there is no vendor present!"}
             />
             <Dropdown
               selectedMenu={category}
@@ -456,8 +463,8 @@ export const AddInventoryPage = (props) => {
               style={{
                 marginTop: 10,
                 borderRadius: 0,
-                flex: device === "tablet" ? 0.3 : 1,
-                zIndex: 11,
+                width: device === "tablet" ? "32%" : "100%",
+                zIndex: 12,
               }}
             />
           </View>

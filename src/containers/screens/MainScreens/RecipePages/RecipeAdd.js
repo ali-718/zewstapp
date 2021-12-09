@@ -106,7 +106,7 @@ export const RecipeAdd = (props) => {
       serving.trim().length === 0 ||
       cookingTime.trim().length === 0 ||
       quantity === "" ||
-      type.trim().length === 0 ||
+      // type.trim().length === 0 ||
       selectedCategory.trim().length === 0
     ) {
       ToastError("Please fill all fields");
@@ -261,7 +261,12 @@ export const RecipeAdd = (props) => {
           />
 
           <View
-            style={{ width: "100%", flexDirection: "column", marginTop: 20 }}
+            style={{
+              width: "100%",
+              flexDirection: "column",
+              marginTop: 20,
+              zIndex: 2,
+            }}
           >
             <Text
               style={{
@@ -272,15 +277,6 @@ export const RecipeAdd = (props) => {
             >
               Recipe Details
             </Text>
-
-            <Dropdown
-              selectedMenu={selectedCategory}
-              errMsg={"Looks like there are no category available"}
-              setMenu={setSelectedCategory}
-              placeholder={"Category"}
-              menus={recipeCategories}
-              style={{ zIndex: 4, marginTop: 10 }}
-            />
 
             <Dropdown
               selectedMenu={macroIngredient.itemName}
@@ -297,18 +293,11 @@ export const RecipeAdd = (props) => {
                 )
               }
               placeholder={"Macro Ingredients"}
-              menus={inventoryList
-                .filter(
-                  (item) =>
-                    item.itemName !== macroIngredient.itemName &&
-                    ingredients.filter((val) => val.itemName === item.itemName)
-                      .length === 0
-                )
-                .map((item) => item.itemName)}
+              menus={inventoryList.map((item) => item.itemName)}
               style={{ zIndex: 3, marginTop: 10 }}
             />
 
-            {macroIngredient.totalQuantity && (
+            {/* {macroIngredient.totalQuantity && (
               <Dropdown
                 errMsg={"Looks like there are no items left in inventory 😞"}
                 selectedMenu={quantity}
@@ -320,7 +309,7 @@ export const RecipeAdd = (props) => {
                 )}
                 style={{ zIndex: 4, marginTop: 10 }}
               />
-            )}
+            )} */}
 
             <Input
               keyboardType={"number-pad"}
@@ -328,18 +317,9 @@ export const RecipeAdd = (props) => {
               value={serving}
               setValue={(val) => setServing(val)}
               style={{
-                marginTop: 20,
+                marginTop: 10,
                 borderRadius: 0,
-                marginBottom: 10,
               }}
-            />
-
-            <Dropdown
-              selectedMenu={type}
-              setMenu={settype}
-              placeholder={"Type"}
-              menus={["completed", "pending"]}
-              style={{ zIndex: 3 }}
             />
 
             <Input
@@ -352,63 +332,43 @@ export const RecipeAdd = (props) => {
                 borderRadius: 0,
               }}
             />
+
+            <Dropdown
+              selectedMenu={selectedCategory}
+              errMsg={"Looks like there are no category available"}
+              setMenu={setSelectedCategory}
+              placeholder={"Category"}
+              menus={recipeCategories}
+              style={{ zIndex: 2, marginTop: 10 }}
+            />
+
+            {/* <Dropdown
+              selectedMenu={type}
+              setMenu={settype}
+              placeholder={"Type"}
+              menus={["completed", "pending"]}
+              style={{ zIndex: 3 }}
+            /> */}
           </View>
 
           <View
             style={{
               width: "100%",
               flexDirection: "column",
-              marginTop: 40,
-              zIndex: 0,
+              marginTop: 20,
+              zIndex: 1,
             }}
           >
-            {recipeList.map((item, i) => (
-              <RecipeStepsAccordion
-                key={i}
-                i={i}
-                item={item}
-                deleteRecipe={deleteRecipe}
-                addRecipeDescription={addRecipeDescription}
-              />
-            ))}
-
-            <TouchableOpacity
+            <Text
               style={{
-                marginTop: 0,
-                flexDirection: "row",
-                alignItems: "center",
-                backgroundColor: "white",
-                paddingVertical: 10,
-                borderWidth: 2,
-                borderColor: borderColor2,
+                fontSize: 20,
+                color: "black",
+                fontFamily: "openSans_bold",
+                marginBottom: 20,
               }}
-              onPress={() => addRecipe(recipeList.length + 1)}
             >
-              <Text
-                style={{
-                  fontSize: 18,
-                  color: primaryColor,
-                  fontFamily: "openSans_bold",
-                  marginLeft: 10,
-                  flex: 1,
-                }}
-              >
-                Add Step
-              </Text>
-              <Icon
-                name={"plus"}
-                as={Entypo}
-                style={{
-                  fontSize: device === "tablet" ? 30 : 20,
-                  color: primaryColor,
-                }}
-              />
-            </TouchableOpacity>
-          </View>
-
-          <View
-            style={{ width: "100%", flexDirection: "column", marginTop: 20 }}
-          >
+              Ingredients
+            </Text>
             {ingredients.map((item, i) => (
               <View
                 key={i}
@@ -458,6 +418,69 @@ export const RecipeAdd = (props) => {
                 }}
               >
                 Add Ingredients
+              </Text>
+              <Icon
+                name={"plus"}
+                as={Entypo}
+                style={{
+                  fontSize: device === "tablet" ? 30 : 20,
+                  color: primaryColor,
+                }}
+              />
+            </TouchableOpacity>
+          </View>
+
+          <View
+            style={{
+              width: "100%",
+              flexDirection: "column",
+              marginTop: 20,
+              zIndex: 0,
+            }}
+          >
+            <Text
+              style={{
+                fontSize: 20,
+                color: "black",
+                fontFamily: "openSans_bold",
+                marginBottom: 20,
+                zIndex: 0,
+              }}
+            >
+              Recipe steps
+            </Text>
+            {recipeList.map((item, i) => (
+              <RecipeStepsAccordion
+                key={i}
+                i={i}
+                item={item}
+                deleteRecipe={deleteRecipe}
+                addRecipeDescription={addRecipeDescription}
+              />
+            ))}
+
+            <TouchableOpacity
+              style={{
+                marginTop: 0,
+                flexDirection: "row",
+                alignItems: "center",
+                backgroundColor: "white",
+                paddingVertical: 10,
+                borderWidth: 2,
+                borderColor: borderColor2,
+              }}
+              onPress={() => addRecipe(recipeList.length + 1)}
+            >
+              <Text
+                style={{
+                  fontSize: 18,
+                  color: primaryColor,
+                  fontFamily: "openSans_bold",
+                  marginLeft: 10,
+                  flex: 1,
+                }}
+              >
+                Add Step
               </Text>
               <Icon
                 name={"plus"}

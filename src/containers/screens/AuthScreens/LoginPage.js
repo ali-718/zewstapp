@@ -146,8 +146,8 @@ export const LoginPage = (props) => {
       </View>
       <FullPageLoadingModall
         visible={isLoading}
-        accessibilityLabel={"Singing you in"}
-        text={"Singing you in..."}
+        accessibilityLabel={"Singning you in"}
+        text={"Singning you in..."}
       />
     </AuthScreenContainer>
   );

@@ -25,6 +25,7 @@ export const Dropdown = ({
   dropDownOffset,
   styled,
   errMsg,
+  innerStyle,
 }) => {
   const device = useSelector((state) => state.system.device);
   const [isFocused, setIsFocused] = useState(false);
@@ -87,7 +88,7 @@ export const Dropdown = ({
               flexDirection: "row",
               borderBottomWidth: 1,
               borderColor: grayColor,
-              ...style,
+              ...innerStyle,
             }}
             activeOpacity={1}
             onPress={() => {
@@ -100,8 +101,17 @@ export const Dropdown = ({
                 width: "90%",
               }}
             >
-              {!noPlaceholder && (
+              {!noPlaceholder && selectedMenu ? (
                 <Text style={{ marginBottom: 5, color: "gray" }}>
+                  {placeholder}
+                </Text>
+              ) : (
+                <Text
+                  style={{
+                    fontSize: device === "tablet" ? 20 : 14,
+                    color: "gray",
+                  }}
+                >
                   {placeholder}
                 </Text>
               )}

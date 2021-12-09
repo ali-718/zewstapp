@@ -180,6 +180,8 @@ export const Input = ({
             />
           ) : (
             <TextInput
+              autoCorrect={false}
+              autoCapitalize={"words"}
               selectionColor={primaryColor}
               onBlur={() => {
                 if (value.length > 0) {

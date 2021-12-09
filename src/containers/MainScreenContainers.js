@@ -6,7 +6,7 @@ import { Header } from "../components/Headers/Header";
 import back from "../assets/images/backIcon.png";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { DrawerActions } from "@react-navigation/routers";
-import menuIcon from "../assets/images/MenuIcon.png";
+import menuIcon from "../assets/images/menuIcon.png";
 
 export const MainScreenContainer = ({
   noScroll,

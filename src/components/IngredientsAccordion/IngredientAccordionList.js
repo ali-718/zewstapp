@@ -56,7 +56,7 @@ export const IngredientAccordionList = ({
             color: grayMenuText,
           }}
         >
-          {ingredients[i].quantity}
+          {ingredients[i].quantity} {ingredients[i].unit}
         </Text>
         <Image
           style={{
@@ -117,7 +117,6 @@ export const IngredientAccordionList = ({
             menus={inventoryList
               .filter(
                 (item) =>
-                  item.itemName !== macroIngredient.itemName &&
                   ingredients.filter((val) => val.itemName === item.itemName)
                     .length === 0
               )
