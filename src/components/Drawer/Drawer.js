@@ -193,26 +193,26 @@ export const DrawerMenu = ({ state: { index } }) => {
               Help
             </Text>
             <Menu
-              selected={index === 7}
+              selected={index === 10}
               setselected={() => navigation.navigate("")}
               image={messageIcon}
               name={"Messages"}
               style={{ marginTop: 20 }}
             />
             <Menu
-              selected={index === 8}
+              selected={index === 11}
               setselected={() => navigation.navigate("")}
               image={libraryIcon}
               name={"Library"}
             />
             <Menu
-              selected={index === 8}
+              selected={index === 12}
               setselected={() => navigation.navigate("")}
               image={settingsIcon}
               name={"Settings"}
             />
             <Menu
-              selected={index === 8}
+              selected={index === 13}
               setselected={() => navigation.navigate("")}
               image={supportIcon}
               name={"Support"}

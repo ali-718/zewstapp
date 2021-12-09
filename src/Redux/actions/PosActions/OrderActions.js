@@ -20,24 +20,6 @@ export const changeTableStatusAction =
       });
   };
 
-export const orderPayAction =
-  ({ locationId, orderId, tableId, navigation }) =>
-  (dispatch) => {
-    client
-      .post(`/manual-orders/orderpayed`, {
-        locationId,
-        orderId,
-        paymentDetails: "Cash",
-      })
-      .then(() => {
-        dispatch(changeTableStatusAction({ locationId, tableId, navigation }));
-      })
-      .catch((e) => {
-        reject();
-        ToastError("Some error occoured please try again later!");
-      });
-  };
-
 export const addTableAction = ({ locationId, name, location }) =>
   new Promise((resolve, reject) => {
     client
@@ -112,13 +94,54 @@ export const createOrder =
         customerId,
         orderType: "Dine-In",
       })
-      .then(() => {
+      .then((res) => {
         dispatch({
           type: CREATE_ORDER.SUCCEEDED,
+          payload: res.data.orderId,
         });
       })
       .catch((e) => {
         dispatch({ type: CREATE_ORDER.FAILED });
         console.log(e.response.data);
+        ToastError(
+          e.response.data.err || "Some error occoured,please try again later"
+        );
       });
   };
+
+export const payOrderAction = ({ orderId, locationId }) =>
+  new Promise((resolve, reject) => {
+    console.log(locationId, orderId);
+    client
+      .post(`/manual-orders/orderpayed`, {
+        locationId,
+        orderId,
+        paymentDetails: "Cash",
+      })
+      .then(() => {
+        resolve();
+      })
+      .catch((e) => {
+        reject();
+        console.log(e.response.data);
+        ToastError("Some error occoured, please try again later");
+      });
+  });
+
+export const attachOrderToTableAction = ({ orderId, locationId, tableId }) =>
+  new Promise((resolve, reject) => {
+    client
+      .post(`/manual-orders/attachOrderTable`, {
+        locationId,
+        orderId,
+        tableId,
+      })
+      .then(() => {
+        resolve();
+      })
+      .catch((e) => {
+        reject();
+        console.log(e.response.data);
+        ToastError("Some error occoured, please try again later");
+      });
+  });

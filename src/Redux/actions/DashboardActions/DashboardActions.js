@@ -22,6 +22,7 @@ export const fetchFoodCountAction =
       })
       .catch((e) => {
         dispatch({ type: FETCH_FOOD_COUNT.FAILED });
+        console.log(e);
       });
   };
 
@@ -41,6 +42,7 @@ export const fetchLossInKitchenAction =
       })
       .catch((e) => {
         dispatch({ type: LOSS_IN_KITCHEN.FAILED });
+        console.log(e);
       });
   };
 
@@ -60,6 +62,7 @@ export const fetchCostByCategoryAction =
       })
       .catch((e) => {
         dispatch({ type: COST_BY_CATEGORY.FAILED });
+        console.log(e);
       });
   };
 
@@ -79,5 +82,6 @@ export const fetchForecastedSalesAction =
       })
       .catch((e) => {
         dispatch({ type: FORECASTED_SALES.FAILED });
+        console.log(e);
       });
   };

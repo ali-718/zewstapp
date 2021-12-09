@@ -53,8 +53,6 @@ export const ResturantDetails = () => {
           clientId = "",
         } = client;
 
-        console.log(client);
-
         setEmail(email);
         setTimeDays(timmings);
         setAddress(address);

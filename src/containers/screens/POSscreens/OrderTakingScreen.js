@@ -20,7 +20,7 @@ import {
   primaryColor,
   reservedTableColor,
 } from "../../../theme/colors";
-import { HEIGHT } from "../../../helpers/utlils";
+import { categoriesList, HEIGHT } from "../../../helpers/utlils";
 import * as actions from "../../../Redux/actions/PosActions/OrderActions";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ToastError } from "../../../helpers/Toast";
@@ -30,6 +30,7 @@ import { getRandomColor } from "../../../helpers/utlils";
 import { order } from "styled-system";
 import { RegularButton } from "../../../components/Buttons/RegularButton";
 import deleteIcon from "../../../assets/images/deleteIcon.png";
+import { Chip } from "../../../components/Chip/Chip";
 
 const CategoryComponent = ({ width, name, onPress }) => {
   const [color, setColor] = useState("");
@@ -63,50 +64,60 @@ const CategoryComponent = ({ width, name, onPress }) => {
   );
 };
 
-const MealComponent = ({ meal, onPress }) => (
-  <TouchableOpacity
-    style={{
-      width: "45%",
-      borderRadius: 20,
-      backgroundColor: grayShade2,
-      minHeight: 100,
-      marginLeft: "5%",
-    }}
-    onPress={onPress}
-  >
-    <Text
+const MealComponent = ({ meal, onPress }) => {
+  const [color, setColor] = useState("");
+
+  useEffect(() => {
+    if (color === "") {
+      setColor(getRandomColor());
+    }
+  }, []);
+
+  return (
+    <TouchableOpacity
       style={{
-        fontSize: 25,
-        color: "black",
-        margin: 10,
-        fontFamily: "openSans_semiBold",
-        textAlign: "center",
+        width: "30%",
+        borderRadius: 20,
+        backgroundColor: color,
+        minHeight: 100,
+        marginLeft: "2%",
       }}
+      onPress={onPress}
     >
-      {meal.selected}
-    </Text>
-    <Text
-      style={{
-        fontSize: 16,
-        color: "black",
-        margin: 10,
-        marginTop: 0,
-      }}
-    >
-      {meal.mealName}
-    </Text>
-    <Text
-      style={{
-        fontSize: 16,
-        color: "black",
-        margin: 10,
-        marginTop: 0,
-      }}
-    >
-      ${meal.mealPrice}
-    </Text>
-  </TouchableOpacity>
-);
+      <Text
+        style={{
+          fontSize: 25,
+          color: "white",
+          margin: 10,
+          fontFamily: "openSans_semiBold",
+          textAlign: "center",
+        }}
+      >
+        {meal.selected}
+      </Text>
+      <Text
+        style={{
+          fontSize: 16,
+          color: "white",
+          margin: 10,
+          marginTop: 0,
+        }}
+      >
+        {meal.mealName}
+      </Text>
+      <Text
+        style={{
+          fontSize: 16,
+          color: "white",
+          margin: 10,
+          marginTop: 0,
+        }}
+      >
+        ${meal.mealPrice}
+      </Text>
+    </TouchableOpacity>
+  );
+};
 
 export const OrderTakingScreen = (props) => {
   const dispatch = useDispatch();
@@ -120,6 +131,11 @@ export const OrderTakingScreen = (props) => {
   const { categories, meals, isLoading, isError } = useSelector(
     (state) => state.pos.meal
   );
+  const {
+    isSuccess,
+    orderId,
+    isLoading: orderLoading,
+  } = useSelector((state) => state.pos.createOrder);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [isDefaultLocation, setIsDefaultLocation] = useState(false);
   const [mealsToShow, setMealsToShow] = useState([]);
@@ -128,6 +144,36 @@ export const OrderTakingScreen = (props) => {
   const [totalPrice, setTotalPrice] = useState(0);
   const [charge, setCharge] = useState(false);
   const [defaulLocation, setDefaulLocation] = useState({});
+  const [createOrderLoading, setcreateOrderLoading] = useState(false);
+
+  useEffect(() => {
+    if (!isSuccess) return;
+
+    setcreateOrderLoading(true);
+
+    actions
+      .payOrderAction({
+        orderId,
+        locationId: defaultLocation.locationId,
+      })
+      .then((res) => {
+        actions
+          .attachOrderToTableAction({
+            tableId: props.route.params.tableId,
+            orderId,
+            locationId: defaultLocation.locationId,
+          })
+          .then((res) => {
+            setcreateOrderLoading(false);
+          })
+          .catch((res) => {
+            setcreateOrderLoading(false);
+          });
+      })
+      .catch((res) => {
+        setcreateOrderLoading(false);
+      });
+  }, [isSuccess]);
 
   const createOrder = () => {
     if (orderList.length === 0) {
@@ -163,25 +209,25 @@ export const OrderTakingScreen = (props) => {
   }, [isScreenFocused]);
 
   const checkDefaultLocation = async () => {
-    const location = await AsyncStorage.getItem("defaultLocation");
+    const location = defaultLocation.locationId;
 
     if (location === null) {
       setIsDefaultLocation(false);
       return;
     }
 
-    setDefaulLocation(JSON.parse(location));
+    setDefaulLocation(location);
     setIsDefaultLocation(true);
   };
 
   const fetchAllMeals = async () => {
-    const location = await AsyncStorage.getItem("defaultLocation");
+    const location = defaultLocation.locationId;
 
     if (location === null) return;
 
     dispatch(
       actions.fetchMealsAction({
-        locationId: JSON.parse(location)?.locationId,
+        locationId: location,
       })
     );
   };
@@ -320,102 +366,55 @@ export const OrderTakingScreen = (props) => {
                     height: "100%",
                   }}
                 >
-                  <View style={{ width: "32%" }}>
-                    <View
-                      style={{
-                        width: "100%",
-                        flexDirection: "row",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                      }}
-                    >
-                      <Text
-                        style={{
-                          color: "black",
-                          fontSize: device === "tablet" ? 28 : 22,
-                          fontFamily: "openSans_semiBold",
-                        }}
-                      >
-                        Categories
-                      </Text>
-                    </View>
-
-                    <View style={{ width: "100%", flex: 1 }}>
-                      <FlatList
-                        scrollEnabled={false}
-                        data={categories}
-                        numColumns={2}
-                        style={{
-                          marginTop: 20,
-                          width: "100%",
-                          height: "100%",
-                          paddingBottom: 20,
-                        }}
-                        columnWrapperStyle={{
-                          flexDirection: "row",
-                          alignItems: "center",
-                          justifyContent: "space-between",
-                          marginVertical: 10,
-                        }}
-                        renderItem={({ item }) => (
-                          <CategoryComponent
-                            onPress={() => setSelectedCategory(item)}
-                            width={"48%"}
-                            key={item}
-                            name={item}
-                          />
-                        )}
-                      />
-                    </View>
-                  </View>
-                  {selectedCategory.length > 0 ? (
-                    <View style={{ width: "32%" }}>
+                  <View style={{ width: "65%" }}>
+                    <View style={{ width: "100%", marginTop: 20 }}>
                       <View
                         style={{
-                          width: "100%",
+                          flex: 1,
+                          flexWrap: "wrap",
                           flexDirection: "row",
-                          alignItems: "center",
-                          justifyContent: "space-between",
                         }}
                       >
-                        <Text
-                          style={{
-                            color: "black",
-                            fontSize: device === "tablet" ? 28 : 22,
-                            fontFamily: "openSans_semiBold",
-                          }}
-                          numberOfLines={1}
-                        >
-                          {selectedCategory}
-                        </Text>
+                        {categories.map((item) => (
+                          <TouchableOpacity
+                            onPress={() => setSelectedCategory(item)}
+                            style={{ marginLeft: 10, marginTop: 10 }}
+                          >
+                            <Chip
+                              selected={selectedCategory === item}
+                              text={item}
+                            />
+                          </TouchableOpacity>
+                        ))}
                       </View>
 
-                      <FlatList
-                        scrollEnabled={false}
-                        data={mealsToShow.filter(
-                          (item) => item.mealCategory === selectedCategory
-                        )}
-                        numColumns={2}
-                        style={{
-                          marginTop: 20,
-                          width: "100%",
-                          marginBottom: 50,
-                        }}
-                        columnWrapperStyle={{
-                          marginTop: 20,
-                        }}
-                        renderItem={({ item }) => (
-                          <MealComponent
-                            onPress={() => {
-                              incrementMealItem(item.mealId);
-                              createOrderList(item);
+                      {selectedCategory.length > 0 ? (
+                        <View style={{ width: "100%", marginTop: 30 }}>
+                          <FlatList
+                            scrollEnabled={false}
+                            data={mealsToShow.filter(
+                              (item) => item.mealCategory === selectedCategory
+                            )}
+                            numColumns={3}
+                            style={{
+                              marginTop: 20,
+                              width: "100%",
+                              marginBottom: 50,
                             }}
-                            meal={item}
+                            renderItem={({ item }) => (
+                              <MealComponent
+                                onPress={() => {
+                                  incrementMealItem(item.mealId);
+                                  createOrderList(item);
+                                }}
+                                meal={item}
+                              />
+                            )}
                           />
-                        )}
-                      />
+                        </View>
+                      ) : null}
                     </View>
-                  ) : null}
+                  </View>
 
                   {selectedCategory.length > 0 ? (
                     <View style={{ width: "30%" }}>
@@ -462,7 +461,7 @@ export const OrderTakingScreen = (props) => {
                               }}
                             >
                               <Text style={{ fontSize: 18 }}>
-                                ${item.totalPrice}
+                                ${item.totalPrice?.toFixed(2)}
                               </Text>
                               <TouchableOpacity
                                 onPress={() => deleteOrderList(item)}
@@ -523,11 +522,13 @@ export const OrderTakingScreen = (props) => {
                         >
                           {charge ? (
                             <RegularButton
+                              isLoading={orderLoading ?? createOrderLoading}
                               colors={["white", "white"]}
                               style={{
                                 borderWidth: 1,
                                 borderColor: primaryColor,
                               }}
+                              white
                               textStyle={{ color: primaryColor }}
                               onPress={createOrder}
                               text={`Cash`}
@@ -770,6 +771,7 @@ export const OrderTakingScreen = (props) => {
                 >
                   {charge ? (
                     <RegularButton
+                      isLoading={orderLoading ?? createOrderLoading}
                       colors={["white", "white"]}
                       style={{
                         borderWidth: 1,
@@ -778,6 +780,7 @@ export const OrderTakingScreen = (props) => {
                       textStyle={{ color: primaryColor }}
                       onPress={createOrder}
                       text={`Cash`}
+                      white
                     />
                   ) : (
                     <RegularButton

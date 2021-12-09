@@ -462,13 +462,13 @@ export const HomePage = ({ setselected }) => {
   }, [defaultLocation]);
 
   const fetchFirstSection = async () => {
-    const location = await AsyncStorage.getItem("defaultLocation");
+    const location = defaultLocation.locationId;
 
-    if (location === null) return;
+    if (location == "") return;
 
     dispatch(
       fetchFoodCountAction({
-        locationId: JSON.parse(location).locationId ?? "",
+        locationId: location ?? "",
         interval:
           selectedTime === "This month"
             ? "month"
@@ -491,14 +491,14 @@ export const HomePage = ({ setselected }) => {
   };
 
   const fetchCostByCategorySection = async () => {
-    const location = await AsyncStorage.getItem("defaultLocation");
+    const location = defaultLocation.locationId;
 
     if (location === null) return;
 
     dispatch(
       fetchCostByCategoryAction({
         // locationId: "0f06628b-9b71-48b6-be64-5cc7a377f501",
-        locationId: JSON.parse(location).locationId ?? "",
+        locationId: location ?? "",
         interval:
           selectedTime === "This month"
             ? "month"
@@ -521,14 +521,14 @@ export const HomePage = ({ setselected }) => {
   };
 
   const fetchForecastedSalesSection = async () => {
-    const location = await AsyncStorage.getItem("defaultLocation");
+    const location = defaultLocation.locationId;
 
     if (location === null) return;
 
     dispatch(
       fetchForecastedSalesAction({
         // locationId: "0f06628b-9b71-48b6-be64-5cc7a377f501",
-        locationId: JSON.parse(location).locationId ?? "",
+        locationId: location ?? "",
         interval:
           selectedTime === "This month"
             ? "month"
@@ -551,13 +551,13 @@ export const HomePage = ({ setselected }) => {
   };
 
   const fetchLossInKitchenSection = async () => {
-    const location = await AsyncStorage.getItem("defaultLocation");
+    const location = defaultLocation.locationId;
 
     if (location === null) return;
 
     dispatch(
       fetchLossInKitchenAction({
-        locationId: JSON.parse(location).locationId ?? "",
+        locationId: location ?? "",
         interval:
           selectedTime === "This month"
             ? "month"
