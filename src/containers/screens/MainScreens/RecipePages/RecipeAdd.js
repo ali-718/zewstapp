@@ -105,8 +105,6 @@ export const RecipeAdd = (props) => {
       !macroIngredient.itemName ||
       serving.trim().length === 0 ||
       cookingTime.trim().length === 0 ||
-      quantity === "" ||
-      // type.trim().length === 0 ||
       selectedCategory.trim().length === 0
     ) {
       ToastError("Please fill all fields");
@@ -128,7 +126,7 @@ export const RecipeAdd = (props) => {
         clientId: user.clientId,
         locationId: defaultLocation?.locationId,
         recipeTitle: title,
-        macroIngredient: { ...macroIngredient, quantity },
+        macroIngredient: { ...macroIngredient },
         serving,
         recipeType: type,
         cookingTime: cookingTime,
@@ -147,7 +145,7 @@ export const RecipeAdd = (props) => {
       clientId: user.clientId,
       locationId: defaultLocation?.locationId,
       recipeTitle: title,
-      macroIngredient: { ...macroIngredient, quantity },
+      macroIngredient: { ...macroIngredient },
       serving,
       recipeType: type,
       cookingTime: cookingTime,
