@@ -59,7 +59,7 @@ export const FoodDetailPage = ({
             height: WIDTH > 600 ? 400 : 250,
             resizeMode: "contain",
           }}
-          source={image ? { uri: image[0] } : dash}
+          source={image ? { uri: image[0] } : placeholder}
         />
         {console.log(image)}
         {console.log(mealCategory)}

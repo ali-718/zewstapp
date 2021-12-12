@@ -133,7 +133,7 @@ export const addNewMeal =
     mealAllergens,
     mealAddons,
     mealDiscount = "2",
-    mealMedia = "jsbdhu1233",
+    mealMedia = "",
     navigation,
     mealRecipes,
   }) =>
@@ -141,22 +141,41 @@ export const addNewMeal =
     dispatch({ type: ADD_MEAL.REQUESTED });
 
     client
-      .post(`/meal/manual/add`, {
-        locationId,
-        mealName,
-        mealDescription,
-        mealPrice,
-        mealCurrency,
-        mealAvailability,
-        mealDaysAvailable,
-        mealCategory,
-        mealAllergens,
-        mealAddons,
-        mealDiscount,
-        mealMedia: [`data:image/jpeg;base64,${mealMedia}`],
-        mealRecipes,
-        createdAt: "12-10-2021",
-      })
+      .post(
+        `/meal/manual/add`,
+        mealMedia.length > 0
+          ? {
+              locationId,
+              mealName,
+              mealDescription,
+              mealPrice,
+              mealCurrency,
+              mealAvailability,
+              mealDaysAvailable,
+              mealCategory,
+              mealAllergens,
+              mealAddons,
+              mealDiscount,
+              mealMedia: [`data:image/jpeg;base64,${mealMedia}`],
+              mealRecipes,
+              createdAt: "12-10-2021",
+            }
+          : {
+              locationId,
+              mealName,
+              mealDescription,
+              mealPrice,
+              mealCurrency,
+              mealAvailability,
+              mealDaysAvailable,
+              mealCategory,
+              mealAllergens,
+              mealAddons,
+              mealDiscount,
+              mealRecipes,
+              createdAt: "12-10-2021",
+            }
+      )
       .then((data) => {
         dispatch({
           type: ADD_MEAL.SUCCEEDED,

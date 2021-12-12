@@ -575,7 +575,7 @@ export const HomePage = ({ setselected }) => {
 
   return (
     <MainScreenContainer>
-      {isDefaultLocation ? (
+      {!!defaultLocation.locationId ? (
         <LinearGradient
           colors={[backgroundGrayColor, backgroundGrayColor]}
           style={{

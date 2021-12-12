@@ -33,6 +33,11 @@ const initialState = {
     isLoading: false,
     isError: false,
   },
+  tabletMeals: {
+    meals: [],
+    isLoading: false,
+    isError: false,
+  },
 };
 
 export const mealReducer = produce(
@@ -114,6 +119,9 @@ export const mealReducer = produce(
           (item) => item.locationId === payload.id
         );
 
+        state.tabletMeals.isLoading = true;
+        state.tabletMeals.isError = false;
+
         if (index !== -1) {
           state.hotel.hotels[0].locations[index] = {
             ...state.hotel.hotels[0].locations[index],
@@ -132,6 +140,10 @@ export const mealReducer = produce(
         const index = state.hotel.hotels[0].locations.findIndex(
           (item) => item.locationId === payload.id
         );
+
+        state.tabletMeals.meals = payload.meals;
+        state.tabletMeals.isLoading = false;
+        state.tabletMeals.isError = false;
 
         if (index !== -1) {
           state.hotel.hotels[0].locations[index] = {
@@ -152,6 +164,9 @@ export const mealReducer = produce(
         const index = state.hotel.hotels[0].locations.filter(
           (item) => item.locationId === payload.id
         );
+
+        state.tabletMeals.isLoading = false;
+        state.tabletMeals.isError = true;
 
         if (index !== -1) {
           state.hotel.hotels[0].locations[index] = {

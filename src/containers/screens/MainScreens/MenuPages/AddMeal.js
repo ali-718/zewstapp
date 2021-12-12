@@ -24,6 +24,7 @@ import * as actions from "../../../../Redux/actions/HomeActions/MealActions";
 import * as recipeActions from "../../../../Redux/actions/RecipeActions/RecipeActions";
 import { useNavigation } from "@react-navigation/core";
 import { Dropdown } from "../../../../components/Inputs/DropDown";
+import { HeadingBox } from "../../../../components/HeadingBox/HeadingBox";
 
 export const AddMeal = (props) => {
   const dispatch = useDispatch();
@@ -271,12 +272,14 @@ export const AddMeal = (props) => {
       rightImage={isEdit && deleteIconWhite}
       onPressRight={() => setdeleteModal(true)}
     >
+      <HeadingBox heading={isEdit ? "Edit Meal" : "Add Meal"} />
       <TouchableOpacity
         style={{
           width: "100%",
           height: WIDTH > 600 ? 400 : 250,
           alignItems: "center",
           justifyContent: "center",
+          marginTop: 20,
         }}
         onPress={() => setphotoModal(true)}
       >
