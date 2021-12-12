@@ -422,6 +422,7 @@ export const HomePage = ({ setselected }) => {
 
   useEffect(() => {
     if (!isScreenFocused) return;
+    if (!!defaultLocation.locationId == false) return;
 
     Promise.all([
       fetchFirstSection(),
@@ -429,19 +430,7 @@ export const HomePage = ({ setselected }) => {
       fetchCostByCategorySection(),
       fetchForecastedSalesSection(),
     ]);
-  }, [selectedTime]);
-
-  useEffect(() => {
-    // so when user get back here after selecting default location
-    if (!isScreenFocused) return;
-
-    Promise.all([
-      fetchFirstSection(),
-      fetchLossInKitchenSection(),
-      fetchCostByCategorySection(),
-      fetchForecastedSalesSection(),
-    ]);
-  }, [isScreenFocused]);
+  }, [selectedTime, isScreenFocused, defaultLocation]);
 
   useEffect(() => {
     dispatch(getPrimaryLocationAction(user?.clientId));
@@ -464,7 +453,10 @@ export const HomePage = ({ setselected }) => {
   const fetchFirstSection = async () => {
     const location = defaultLocation.locationId;
 
-    if (location == "") return;
+    console.log("location");
+    console.log(location);
+
+    if (!!location == false) return;
 
     dispatch(
       fetchFoodCountAction({
@@ -493,7 +485,7 @@ export const HomePage = ({ setselected }) => {
   const fetchCostByCategorySection = async () => {
     const location = defaultLocation.locationId;
 
-    if (location === null) return;
+    if (!!location === false) return;
 
     dispatch(
       fetchCostByCategoryAction({
@@ -523,7 +515,7 @@ export const HomePage = ({ setselected }) => {
   const fetchForecastedSalesSection = async () => {
     const location = defaultLocation.locationId;
 
-    if (location === null) return;
+    if (!!location === false) return;
 
     dispatch(
       fetchForecastedSalesAction({
@@ -553,7 +545,7 @@ export const HomePage = ({ setselected }) => {
   const fetchLossInKitchenSection = async () => {
     const location = defaultLocation.locationId;
 
-    if (location === null) return;
+    if (!!location === false) return;
 
     dispatch(
       fetchLossInKitchenAction({

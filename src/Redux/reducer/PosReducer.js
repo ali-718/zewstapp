@@ -52,6 +52,7 @@ export const posReducer = produce((state = initialState, { payload, type }) => {
     case FETCH_MEALS.REQUESTED: {
       state.meal.isLoading = true;
       state.meal.isError = false;
+      state.createOrder.isSuccess = false;
       state.meal.meals = [];
       break;
     }

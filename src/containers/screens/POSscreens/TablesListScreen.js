@@ -105,7 +105,6 @@ export const TablesListScreen = () => {
 
   useEffect(() => {
     if (!isScreenFocused) return;
-    console.log("ji");
     checkDefaultLocation();
     fetchAllTables();
   }, [isScreenFocused]);
@@ -113,7 +112,7 @@ export const TablesListScreen = () => {
   const checkDefaultLocation = async () => {
     const location = defaultLocation.locationId;
 
-    if (location === null) {
+    if (!!location == false) {
       setIsDefaultLocation(false);
       return;
     }
@@ -124,7 +123,7 @@ export const TablesListScreen = () => {
   const fetchAllTables = async () => {
     const location = defaultLocation.locationId;
 
-    if (location === null) return;
+    if (!!location == false) return;
 
     dispatch(
       actions.fetchTablesAction({
@@ -134,7 +133,9 @@ export const TablesListScreen = () => {
   };
 
   const addNewTable = async (type, location) => {
-    const defaultLocation = defaultLocation.locationId;
+    const constlocation = defaultLocation.locationId;
+
+    console.log(constlocation);
 
     if (location === "INSIDE") {
       insideRef.current.scrollToEnd();
@@ -150,7 +151,7 @@ export const TablesListScreen = () => {
 
       actions
         .addTableAction({
-          locationId: defaultLocation,
+          locationId: constlocation,
           name: insidetablesToShow.length + 1,
           location,
         })
@@ -182,7 +183,7 @@ export const TablesListScreen = () => {
 
       actions
         .addTableAction({
-          locationId: JSON.parse(defaultLocation).locationId,
+          locationId: constlocation,
           name: outsidetablesToShow.length + 1,
           location,
         })

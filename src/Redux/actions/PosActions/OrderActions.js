@@ -99,6 +99,7 @@ export const createOrder =
           type: CREATE_ORDER.SUCCEEDED,
           payload: res.data.orderId,
         });
+        console.log(res.data);
       })
       .catch((e) => {
         dispatch({ type: CREATE_ORDER.FAILED });
@@ -111,7 +112,7 @@ export const createOrder =
 
 export const payOrderAction = ({ orderId, locationId }) =>
   new Promise((resolve, reject) => {
-    console.log(locationId, orderId);
+    console.log({ locationId, orderId, paymentDetails: "Cash" });
     client
       .post(`/manual-orders/orderpayed`, {
         locationId,
@@ -120,9 +121,11 @@ export const payOrderAction = ({ orderId, locationId }) =>
       })
       .then(() => {
         resolve();
+        console.log("Order created Successfully");
       })
       .catch((e) => {
         reject();
+        console.log("order pay error");
         console.log(e.response.data);
         ToastError("Some error occoured, please try again later");
       });
@@ -130,6 +133,7 @@ export const payOrderAction = ({ orderId, locationId }) =>
 
 export const attachOrderToTableAction = ({ orderId, locationId, tableId }) =>
   new Promise((resolve, reject) => {
+    console.log({ locationId, orderId, tableId });
     client
       .post(`/manual-orders/attachOrderTable`, {
         locationId,
@@ -138,9 +142,11 @@ export const attachOrderToTableAction = ({ orderId, locationId, tableId }) =>
       })
       .then(() => {
         resolve();
+        console.log("Table attached Successfully");
       })
       .catch((e) => {
         reject();
+        console.log("Table attached error");
         console.log(e.response.data);
         ToastError("Some error occoured, please try again later");
       });

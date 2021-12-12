@@ -64,7 +64,7 @@ const CategoryComponent = ({ width, name, onPress }) => {
   );
 };
 
-const MealComponent = ({ meal, onPress }) => {
+const MealComponent = ({ meal, onPress, width }) => {
   const [color, setColor] = useState("");
 
   useEffect(() => {
@@ -76,7 +76,7 @@ const MealComponent = ({ meal, onPress }) => {
   return (
     <TouchableOpacity
       style={{
-        width: "30%",
+        width: width || "30%",
         borderRadius: 20,
         backgroundColor: color,
         minHeight: 100,
@@ -151,28 +151,28 @@ export const OrderTakingScreen = (props) => {
 
     setcreateOrderLoading(true);
 
+    // actions
+    //   .payOrderAction({
+    //     orderId,
+    //     locationId: defaultLocation.locationId,
+    //   })
+    //   .then((res) => {
     actions
-      .payOrderAction({
+      .attachOrderToTableAction({
+        tableId: props.route.params.tableId,
         orderId,
         locationId: defaultLocation.locationId,
       })
       .then((res) => {
-        actions
-          .attachOrderToTableAction({
-            tableId: props.route.params.tableId,
-            orderId,
-            locationId: defaultLocation.locationId,
-          })
-          .then((res) => {
-            setcreateOrderLoading(false);
-          })
-          .catch((res) => {
-            setcreateOrderLoading(false);
-          });
+        setcreateOrderLoading(false);
       })
       .catch((res) => {
         setcreateOrderLoading(false);
       });
+    // })
+    // .catch((res) => {
+    //   setcreateOrderLoading(false);
+    // });
   }, [isSuccess]);
 
   const createOrder = () => {
@@ -681,6 +681,7 @@ export const OrderTakingScreen = (props) => {
                 }}
                 renderItem={({ item }) => (
                   <MealComponent
+                    width={"45%"}
                     onPress={() => {
                       incrementMealItem(item.mealId);
                       createOrderList(item);

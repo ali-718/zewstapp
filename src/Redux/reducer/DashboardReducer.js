@@ -15,19 +15,19 @@ const initialState = {
     customerItems: 0,
   },
   lossInKitchen: {
-    isLoading: true,
+    isLoading: false,
     isError: false,
     list: [],
     totalLoss: 0,
   },
   costByCategory: {
-    isLoading: true,
+    isLoading: false,
     isError: false,
     list: [],
     totalPrice: 0,
   },
   forecastedSales: {
-    isLoading: true,
+    isLoading: false,
     isError: false,
     revenue: 0,
     sales: 0,
