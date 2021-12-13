@@ -3,9 +3,9 @@ import { client } from "../client";
 import { CREATE_ORDER, FETCH_MEALS, FETCH_TABLES } from "./Types";
 import moment from "moment";
 
-export const changeTableStatusAction =
-  ({ locationId, tableId, stature, navigation }) =>
-  (dispatch) => {
+export const changeTableStatusAction = ({ locationId, tableId, stature }) =>
+  new Promise((resolve, reject) => {
+    console.log({ locationId, tableId, stature });
     client
       .post(`/manual-orders/updateTableStatus`, {
         locationId,
@@ -13,12 +13,17 @@ export const changeTableStatusAction =
         stature,
       })
       .then(() => {
-        navigation.goBack();
+        resolve();
       })
       .catch((e) => {
-        ToastError("Some error occoured please try again later!");
+        reject();
+        console.log("Status changing error");
+        console.log(e.response.data);
+        ToastError(
+          e.response.data.err || "Some error occoured, while confirming table"
+        );
       });
-  };
+  });
 
 export const addTableAction = ({ locationId, name, location }) =>
   new Promise((resolve, reject) => {
@@ -105,7 +110,7 @@ export const createOrder =
         dispatch({ type: CREATE_ORDER.FAILED });
         console.log(e.response.data);
         ToastError(
-          e.response.data.err || "Some error occoured,please try again later"
+          e.response.data.err || "Some error occoured, while confirming order"
         );
       });
   };
@@ -114,31 +119,32 @@ export const payOrderAction = ({ orderId, locationId }) =>
   new Promise((resolve, reject) => {
     console.log({ locationId, orderId, paymentDetails: "Cash" });
     client
-      .post(`/manual-orders/orderpayed`, {
+      .post(`/manual-orders/orderPaid`, {
         locationId,
         orderId,
         paymentDetails: "Cash",
       })
       .then(() => {
         resolve();
-        console.log("Order created Successfully");
+        console.log("payment created Successfully");
       })
       .catch((e) => {
         reject();
         console.log("order pay error");
         console.log(e.response.data);
-        ToastError("Some error occoured, please try again later");
+        ToastError(
+          e.response.data.err || "Some error occoured, while confirming payment"
+        );
       });
   });
 
-export const attachOrderToTableAction = ({ orderId, locationId, tableId }) =>
+export const attachOrderToTableAction = ({ orderId, table }) =>
   new Promise((resolve, reject) => {
-    console.log({ locationId, orderId, tableId });
+    console.log({ orderId, table });
     client
       .post(`/manual-orders/attachOrderTable`, {
-        locationId,
+        table,
         orderId,
-        tableId,
       })
       .then(() => {
         resolve();
@@ -148,6 +154,9 @@ export const attachOrderToTableAction = ({ orderId, locationId, tableId }) =>
         reject();
         console.log("Table attached error");
         console.log(e.response.data);
-        ToastError("Some error occoured, please try again later");
+        ToastError(
+          e.response.data.err ||
+            "Some error occoured, while attaching order to table"
+        );
       });
   });

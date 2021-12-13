@@ -318,7 +318,7 @@ export const MenuPage = () => {
                                       color: menuHeadingColor,
                                     }}
                                   >
-                                    {item.mealPrice}
+                                    {item.mealTotalUnitCost}
                                   </Text>
                                 </View>
                                 <View style={{ width: 150 }}>
@@ -330,7 +330,7 @@ export const MenuPage = () => {
                                       textTansform: "uppercase",
                                     }}
                                   >
-                                    Menu Price
+                                    {item.mealPrice}
                                   </Text>
                                 </View>
                                 <View style={{ width: 150 }}>

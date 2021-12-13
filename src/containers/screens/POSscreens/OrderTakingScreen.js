@@ -135,6 +135,7 @@ export const OrderTakingScreen = (props) => {
     isSuccess,
     orderId,
     isLoading: orderLoading,
+    isError: orderError,
   } = useSelector((state) => state.pos.createOrder);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [isDefaultLocation, setIsDefaultLocation] = useState(false);
@@ -143,36 +144,58 @@ export const OrderTakingScreen = (props) => {
   const [orderList, setOrderList] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
   const [charge, setCharge] = useState(false);
-  const [defaulLocation, setDefaulLocation] = useState({});
-  const [createOrderLoading, setcreateOrderLoading] = useState(false);
+  const [createOrderLoading, setcreateOrderLoading] = useState(orderLoading);
+  const [loadingLabel, setLoadingLabel] = useState("Loading");
+  const [firstTime, setFirstTime] = useState(true);
+
+  useEffect(() => {
+    if (!orderError) return;
+
+    setcreateOrderLoading(orderLoading);
+  }, [orderError]);
 
   useEffect(() => {
     if (!isSuccess) return;
+    if (firstTime) return;
 
     setcreateOrderLoading(true);
+    setLoadingLabel("Confirming payment");
 
-    // actions
-    //   .payOrderAction({
-    //     orderId,
-    //     locationId: defaultLocation.locationId,
-    //   })
-    //   .then((res) => {
     actions
-      .attachOrderToTableAction({
-        tableId: props.route.params.tableId,
+      .payOrderAction({
         orderId,
         locationId: defaultLocation.locationId,
       })
       .then((res) => {
-        setcreateOrderLoading(false);
+        setLoadingLabel("Attaching order to table");
+        actions
+          .attachOrderToTableAction({
+            table: props.route.params.table,
+            orderId,
+          })
+          .then((res) => {
+            setLoadingLabel("Reserving table for customer");
+            actions
+              .changeTableStatusAction({
+                locationId: defaultLocation.locationId,
+                tableId: props.route.params.tableId,
+                stature: "RESERVED",
+              })
+              .then(() => {
+                navigation.goBack();
+                setcreateOrderLoading(false);
+              })
+              .catch((res) => {
+                setcreateOrderLoading(false);
+              });
+          })
+          .catch((res) => {
+            setcreateOrderLoading(false);
+          });
       })
       .catch((res) => {
         setcreateOrderLoading(false);
       });
-    // })
-    // .catch((res) => {
-    //   setcreateOrderLoading(false);
-    // });
   }, [isSuccess]);
 
   const createOrder = () => {
@@ -180,6 +203,10 @@ export const OrderTakingScreen = (props) => {
       ToastError("Select any menu item first!");
       return;
     }
+
+    setFirstTime(false);
+    setcreateOrderLoading(true);
+    setLoadingLabel("Confirming order");
 
     const data = {
       client_id: user.clientId,
@@ -216,7 +243,6 @@ export const OrderTakingScreen = (props) => {
       return;
     }
 
-    setDefaulLocation(location);
     setIsDefaultLocation(true);
   };
 
@@ -313,21 +339,6 @@ export const OrderTakingScreen = (props) => {
       return;
     }
   };
-
-  // const createOrder = () => {
-  //   if (orderList.length === 0) {
-  //     ToastError("Select any menu item first!");
-  //     return;
-  //   }
-  //   dispatch(
-  //     actions.changeTableStatusAction({
-  //       locationId: defaulLocation.locationId,
-  //       tableId: props.route.params.tableId,
-  //       stature: "RESERVED",
-  //       navigation,
-  //     })
-  //   );
-  // };
 
   if (device === "tablet") {
     return (
@@ -522,7 +533,7 @@ export const OrderTakingScreen = (props) => {
                         >
                           {charge ? (
                             <RegularButton
-                              isLoading={orderLoading ?? createOrderLoading}
+                              isLoading={orderLoading || createOrderLoading}
                               colors={["white", "white"]}
                               style={{
                                 borderWidth: 1,
@@ -532,6 +543,8 @@ export const OrderTakingScreen = (props) => {
                               textStyle={{ color: primaryColor }}
                               onPress={createOrder}
                               text={`Cash`}
+                              fullPageLoad
+                              loadingLabel={loadingLabel}
                             />
                           ) : (
                             <RegularButton
@@ -772,7 +785,7 @@ export const OrderTakingScreen = (props) => {
                 >
                   {charge ? (
                     <RegularButton
-                      isLoading={orderLoading ?? createOrderLoading}
+                      isLoading={orderLoading || createOrderLoading}
                       colors={["white", "white"]}
                       style={{
                         borderWidth: 1,

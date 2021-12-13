@@ -363,6 +363,15 @@ export const AddMeal = (props) => {
           />
         </View>
 
+        <View style={{ width: "100%", marginTop: 10 }}>
+          <Input
+            editable={false}
+            value={`${selectedRecipe?.totalUnitCost}` ?? ""}
+            placeholder={"Meal Unit Cost"}
+            style={{ opacity: 0.5 }}
+          />
+        </View>
+
         <View style={{ width: "100%", marginTop: 10, zIndex: 0 }}>
           <MealItem
             label={"Days Available*"}

@@ -32,11 +32,12 @@ const TableComponent = ({
   isLoading,
   navigation,
   tableId,
+  table,
 }) => (
   <TouchableOpacity
     onPress={
       status === "AVAILABLE"
-        ? () => navigation.navigate("orderTaking", { tableNo, tableId })
+        ? () => navigation.navigate("orderTaking", { tableNo, tableId, table })
         : () => null
     }
     style={{
@@ -299,6 +300,7 @@ export const TablesListScreen = () => {
                           isLoading={item?.isLoading}
                           navigation={navigation}
                           tableId={item?.tableId}
+                          table={item}
                         />
                       )}
                     />
@@ -359,6 +361,7 @@ export const TablesListScreen = () => {
                         isLoading={item?.isLoading}
                         navigation={navigation}
                         tableId={item?.tableId}
+                        table={item}
                       />
                     )}
                   />
@@ -476,6 +479,7 @@ export const TablesListScreen = () => {
                 isLoading={item?.isLoading}
                 navigation={navigation}
                 tableId={item?.tableId}
+                table={item}
               />
             )}
           />
