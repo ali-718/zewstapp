@@ -366,7 +366,7 @@ export const AddMeal = (props) => {
         <View style={{ width: "100%", marginTop: 10 }}>
           <Input
             editable={false}
-            value={`${selectedRecipe?.totalUnitCost}` ?? ""}
+            value={`${selectedRecipe?.totalUnitCost ?? ""}`}
             placeholder={"Meal Unit Cost"}
             style={{ opacity: 0.5 }}
           />
