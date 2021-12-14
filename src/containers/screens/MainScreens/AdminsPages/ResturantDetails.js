@@ -104,6 +104,8 @@ export const ResturantDetails = () => {
         start: moment(start).format("h:mm a"),
         end: moment(end).format("h:mm a"),
         day,
+        originalStart: start,
+        originalEnd: end,
       };
 
       setTimeDays(localTime);

@@ -37,6 +37,11 @@ export const DateTimeSelector = ({
               is24Hour={true}
               display={display ?? "spinner"}
               onChange={onChange}
+              style={{
+                backgroundColor: "rgba(0,0,0,0.6)",
+                height: 200,
+                marginBottom: 20,
+              }}
             />
             <RegularButton text={"Done"} onPress={onPress} />
           </View>
@@ -53,6 +58,11 @@ export const DateTimeSelector = ({
       is24Hour={true}
       display={display ?? "calendar"}
       onChange={onChange}
+      style={{
+        backgroundColor: "rgba(0,0,0,0.6)",
+        height: 200,
+        marginBottom: 20,
+      }}
     />
   );
 };

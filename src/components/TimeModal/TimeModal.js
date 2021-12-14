@@ -16,16 +16,12 @@ const TimeBox = ({ day, onchange, timedays = [] }) => {
   const [show2, setShow2] = useState(false);
   const [start, setStart] = useState(
     timedays.length > 0
-      ? new Date(
-          moment(`${moment().format("d-M-y")} ${timedays[0].start}`).valueOf()
-        )
+      ? new Date(moment(timedays[0]?.originalStart).valueOf())
       : new Date(1598051730000)
   );
   const [end, setEnd] = useState(
     timedays.length > 0
-      ? new Date(
-          moment(`${moment().format("d-M-y")} ${timedays[0].end}`).valueOf()
-        )
+      ? new Date(moment(timedays[0]?.originalEnd).valueOf())
       : new Date(1598051730000)
   );
 
@@ -84,6 +80,11 @@ const TimeBox = ({ day, onchange, timedays = [] }) => {
                 ? (val, date) => setStart(date)
                 : (val, date) => setEnd(date)
             }
+            style={{
+              backgroundColor: "rgba(0,0,0,0.6)",
+              height: 200,
+              marginBottom: 20,
+            }}
           />
           <RegularButton
             text={"Done"}
