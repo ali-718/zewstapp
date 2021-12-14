@@ -181,8 +181,8 @@ export const AddInventoryPage = (props) => {
       brand,
       quantity,
       units: unit,
-      expiryDate: moment(dateOfExpiry).format("YYYY/MM/DD"),
-      purchaseDate: moment(dateOfPurchase).format("YYYY/MM/DD"),
+      expiryDate: moment(dateOfExpiry).format("YYYY-MM-DD"),
+      purchaseDate: moment(dateOfPurchase).format("YYYY-MM-DD"),
       notes,
       itemName,
       photos: image64,
@@ -367,7 +367,7 @@ export const AddInventoryPage = (props) => {
               onPress={() => setShowDateTime(true)}
               masked
               maskType={"datetime"}
-              maskFormat={"YYYY/MM/DD"}
+              maskFormat={"YYYY-MM-DD"}
               noInput
             />
             <DateTimeSelector
@@ -376,8 +376,8 @@ export const AddInventoryPage = (props) => {
                   ? new Date(moment(dateOfPurchase).valueOf())
                   : new Date(moment().valueOf())
               }
-              onChange={(val, date) =>
-                setDateOfPurchase(moment(date).format("YYYY/MM/DD"))
+              onChange={(date) =>
+                setDateOfPurchase(moment(date).format("YYYY-MM-DD"))
               }
               show={showDateTime}
               onPress={() => setShowDateTime(false)}
@@ -395,7 +395,7 @@ export const AddInventoryPage = (props) => {
               masked
               maskType={"datetime"}
               onPress={() => setShowDateTime2(true)}
-              maskFormat={"YYYY/MM/DD"}
+              maskFormat={"YYYY-MM-DD"}
             />
             <DateTimeSelector
               value={
@@ -403,8 +403,8 @@ export const AddInventoryPage = (props) => {
                   ? new Date(moment(dateOfExpiry).valueOf())
                   : new Date(moment().valueOf())
               }
-              onChange={(val, date) =>
-                setDateOfExpiry(moment(date).format("YYYY/MM/DD"))
+              onChange={(date) =>
+                setDateOfExpiry(moment(date).format("YYYY-MM-DD"))
               }
               show={showDateTime2}
               onPress={() => setShowDateTime2(false)}

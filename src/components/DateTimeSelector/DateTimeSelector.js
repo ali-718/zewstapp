@@ -1,4 +1,4 @@
-import React from "react";
+/* import React from "react";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Modal, Platform, View } from "react-native";
 import { RegularButton } from "../Buttons/RegularButton";
@@ -63,6 +63,31 @@ export const DateTimeSelector = ({
         height: 200,
         marginBottom: 20,
       }}
+    />
+  );
+}; */
+
+import React from "react";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
+
+export const DateTimeSelector = ({ value, mode, display, onChange, show, onPress }) => {
+
+  const hideDatePicker = () => {
+    onPress();
+  };
+
+  const handleConfirm = (date) => {
+    onChange(date);
+    hideDatePicker();
+  };
+
+  return (
+    <DateTimePickerModal
+      isVisible={show}
+      mode="date"
+      onConfirm={handleConfirm}
+      onCancel={hideDatePicker}
+      date={value}
     />
   );
 };
