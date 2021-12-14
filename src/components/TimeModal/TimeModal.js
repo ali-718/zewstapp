@@ -3,12 +3,12 @@ import { Modal, TouchableOpacity, View } from "react-native";
 import { backgroundGrayColor, grayColor } from "../../theme/colors";
 import { HeadingBox } from "../HeadingBox/HeadingBox";
 import { Text } from "../Text/Text";
-import DateTimePicker from "@react-native-community/datetimepicker";
 import { useSelector } from "react-redux";
 import { MainScreenContainer } from "../../containers/MainScreenContainers";
 import { LinearGradient } from "expo-linear-gradient";
 import { RegularButton } from "../Buttons/RegularButton";
 import moment from "moment";
+import { DateTimeSelector } from "../DateTimeSelector/DateTimeSelector";
 
 const TimeBox = ({ day, onchange, timedays = [] }) => {
   const device = useSelector((state) => state.system.device);
@@ -67,36 +67,18 @@ const TimeBox = ({ day, onchange, timedays = [] }) => {
         </TouchableOpacity>
       </View>
 
-      {(show1 || show2) && (
-        <>
-          <DateTimePicker
-            testID="dateTimePicker"
-            value={show1 ? start : end}
-            mode={"time"}
-            is24Hour={true}
-            display="spinner"
-            onChange={
-              show1
-                ? (val, date) => setStart(date)
-                : (val, date) => setEnd(date)
-            }
-            style={{
-              backgroundColor: "rgba(0,0,0,0.6)",
-              height: 200,
-              marginBottom: 20,
-            }}
-          />
-          <RegularButton
-            text={"Done"}
-            onPress={() => {
-              onchange(start, end);
-
-              setShow1(false);
-              setShow2(false);
-            }}
-          />
-        </>
-      )}
+      <DateTimeSelector
+        show={show1 || show2}
+        value={show1 ? start : end}
+        mode={"time"}
+        is24Hour={true}
+        onChange={show1 ? (date) => setStart(date) : (date) => setEnd(date)}
+        onPress={() => {
+          setShow1(false);
+          setShow2(false);
+          onchange(start, end);
+        }}
+      />
     </View>
   );
 };
