@@ -5,12 +5,14 @@ import {
   TouchableOpacity,
   ScrollView,
   Platform,
+  TouchableWithoutFeedback,
 } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { ArrowDownIcon, Icon, Select } from "native-base";
 import { grayColor, grayMenuText, primaryColor } from "../../theme/colors";
 import { Text } from "../Text/Text";
 import { useSelector } from "react-redux";
+import { HEIGHT, WIDTH } from "../../helpers/utlils";
 
 export const Dropdown = ({
   placeholder,
@@ -50,7 +52,6 @@ export const Dropdown = ({
           <Select
             variant={!styled && "unstyled"}
             selectedValue={selectedMenu}
-            // minWidth="150"
             placeholder={placeholder}
             onValueChange={(item) => {
               setMenu(item);
@@ -69,6 +70,9 @@ export const Dropdown = ({
         </View>
       ) : (
         <View
+          onResponderRelease={(evt) => {
+            console.log("Tapped outside");
+          }}
           style={{
             width: "100%",
             height: 70,
@@ -232,6 +236,36 @@ export const Dropdown = ({
             </View>
           )}
         </View>
+      )}
+      {isOpen && (
+        <TouchableWithoutFeedback
+          onPress={() => {
+            setIsOpen(false);
+          }}
+          style={{
+            position: "absolute",
+            top: 0,
+            right: 0,
+            bottom: 0,
+            left: 0,
+            width: WIDTH,
+            height: HEIGHT,
+            zIndex: 9,
+          }}
+        >
+          <View
+            style={{
+              position: "absolute",
+              top: 0,
+              right: 0,
+              bottom: 0,
+              left: 0,
+              width: WIDTH,
+              height: HEIGHT,
+              zIndex: 9,
+            }}
+          />
+        </TouchableWithoutFeedback>
       )}
     </>
   );

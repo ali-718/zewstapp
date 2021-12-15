@@ -5,7 +5,8 @@ import { grayTextColor, kitchenMenuColor } from "../../theme/colors";
 import { RegularButton } from "../Buttons/RegularButton";
 import { Text } from "../Text/Text";
 
-export const MainOrder = () => {
+export const MainOrder = ({ data }) => {
+  const { timestamp = "", ticketNo = "", price = "", stature = "" } = data;
   return (
     <View
       style={{
@@ -26,22 +27,30 @@ export const MainOrder = () => {
             borderRadius: 4,
           }}
         >
-          <Text style={{ color: "black", fontSize: 20 }}>Table 12</Text>
+          <Text style={{ color: "black", fontSize: 20 }}>
+            Ticket {ticketNo}
+          </Text>
         </View>
-        <Text style={{ color: "black", marginLeft: 15 }}>10:30:31</Text>
+        <Text style={{ color: "black", marginLeft: 15 }}>{timestamp}</Text>
       </View>
 
       <Progress
         size={"xs"}
         style={{ marginTop: 20 }}
-        colorScheme="green"
+        colorScheme={
+          stature === "CREATED" || stature === "PAID"
+            ? "green"
+            : stature === "DONE"
+            ? "red"
+            : "yellow"
+        }
         value={35}
       />
 
-      <Text style={{ color: grayTextColor, marginTop: 10 }}>Order by Sara</Text>
-      <Text style={{ color: grayTextColor }}>08:19 PM</Text>
+      <Text style={{ color: grayTextColor, marginTop: 10 }}>{price}$</Text>
+      {/* <Text style={{ color: grayTextColor, marginTop: 10 }}>Order by Sara</Text> */}
 
-      {[1, 2, 3].map((item, i) => (
+      {/* {[1, 2, 3].map((item, i) => (
         <View style={{ width: "100%", marginTop: 20 }}>
           <View style={{ flexDirection: "row" }}>
             <Checkbox
@@ -85,7 +94,7 @@ export const MainOrder = () => {
             </View>
           ))}
         </View>
-      ))}
+      ))} */}
 
       <View
         style={{
@@ -96,7 +105,7 @@ export const MainOrder = () => {
           justifyContent: "space-between",
         }}
       >
-        <RegularButton white text={"Done"} style={{ width: "45%" }} />
+        {/* <RegularButton white text={"Done"} style={{ width: "45%" }} /> */}
         <RegularButton text={"serve"} style={{ width: "45%" }} />
       </View>
     </View>

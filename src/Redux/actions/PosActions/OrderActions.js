@@ -1,6 +1,6 @@
 import { ToastError } from "../../../helpers/Toast";
 import { client } from "../client";
-import { CREATE_ORDER, FETCH_MEALS, FETCH_TABLES } from "./Types";
+import { CREATE_ORDER, FETCH_MEALS, FETCH_ORDERS, FETCH_TABLES } from "./Types";
 import moment from "moment";
 
 export const changeTableStatusAction = ({ locationId, tableId, stature }) =>
@@ -62,6 +62,27 @@ export const fetchMealsAction =
       });
   };
 
+export const fetchAllOrders =
+  ({ locationId }) =>
+  (dispatch) => {
+    dispatch({ type: FETCH_ORDERS.REQUESTED });
+
+    client
+      .get(`manual-orders/allManualOrder/${locationId}`)
+      .then(({ data }) => {
+        dispatch({
+          type: FETCH_ORDERS.SUCCEEDED,
+          payload: data?.createdOrders,
+        });
+
+        console.log(data);
+      })
+      .catch((e) => {
+        ToastError("Unable to fetch orders, please try again");
+        dispatch({ type: FETCH_ORDERS.FAILED });
+      });
+  };
+
 export const fetchTablesAction =
   ({ locationId, reload = true }) =>
   (dispatch) => {
@@ -79,6 +100,8 @@ export const fetchTablesAction =
         });
       })
       .catch((e) => {
+        console.log(e.response.data);
+        ToastError("Unable to fetch tables, please try again later");
         dispatch({ type: FETCH_TABLES.FAILED });
       });
   };

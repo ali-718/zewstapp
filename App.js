@@ -6,6 +6,8 @@ import { fontAssets } from "./src/theme/fonts";
 import { Routes } from "./src/routes";
 import {
   availableTableColor,
+  buttonRedColor,
+  menuYellowProgressColor,
   primaryShade1,
   progressDarkPurple,
   textColor,
@@ -13,6 +15,8 @@ import {
 import { Provider } from "react-redux";
 import store from "./store";
 import Toast from "react-native-toast-message";
+import * as eva from "@eva-design/eva";
+import { ApplicationProvider, Layout, Text } from "@ui-kitten/components";
 
 const theme = extendTheme({
   colors: {
@@ -27,6 +31,12 @@ const theme = extendTheme({
     },
     green: {
       600: availableTableColor,
+    },
+    yellow: {
+      600: menuYellowProgressColor,
+    },
+    red: {
+      600: buttonRedColor,
     },
   },
 });
@@ -58,7 +68,9 @@ const App = () => {
   return (
     <Provider store={store}>
       <NativeBaseProvider theme={theme}>
-        <Routes />
+        <ApplicationProvider {...eva} theme={eva.light}>
+          <Routes />
+        </ApplicationProvider>
         <Toast ref={(ref) => Toast.setRef(ref)} />
       </NativeBaseProvider>
     </Provider>

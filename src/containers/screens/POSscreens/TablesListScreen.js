@@ -394,97 +394,112 @@ export const TablesListScreen = () => {
     <MainScreenContainer>
       <HeadingBox heading={"Orders"} noBack />
 
-      <View style={{ width: "90%", height: "100%" }}>
-        <View style={{ width: "100%", marginTop: 10 }}>
-          <Text style={{ color: "black", fontSize: 20 }}>Tables</Text>
-        </View>
-
+      {isLoading ? (
         <View
           style={{
-            width: "100%",
+            flex: 1,
+            flexDirection: "row",
             alignItems: "center",
             justifyContent: "center",
-            flexDirection: "row",
+            padding: 10,
+            paddingVertical: 20,
           }}
         >
-          <TouchableOpacity
-            onPress={() => setTab(0)}
-            style={{
-              width: "50%",
-              alignItems: "center",
-              justifyContent: "center",
-              height: 40,
-              borderBottomWidth: tab === 0 ? 2 : 0,
-              borderColor: primaryColor,
-            }}
-          >
-            <Text>INSIDE</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => setTab(1)}
-            style={{
-              width: "50%",
-              alignItems: "center",
-              justifyContent: "center",
-              height: 40,
-              borderBottomWidth: tab === 1 ? 2 : 0,
-              borderColor: primaryColor,
-            }}
-          >
-            <Text>OUTSIDE</Text>
-          </TouchableOpacity>
+          <Spinner size={"large"} color={primaryColor} />
         </View>
+      ) : (
+        <View style={{ width: "90%", height: "100%" }}>
+          <View style={{ width: "100%", marginTop: 10 }}>
+            <Text style={{ color: "black", fontSize: 20 }}>Tables</Text>
+          </View>
 
-        <View style={{ width: "100%", marginTop: 20 }}>
-          <TouchableOpacity
-            onPress={() =>
-              addNewTable(
-                tab === 1 ? outsidetablesToShow : insidetablesToShow,
-                tab === 1 ? "OUTSIDE" : "INSIDE"
-              )
-            }
+          <View
+            style={{
+              width: "100%",
+              alignItems: "center",
+              justifyContent: "center",
+              flexDirection: "row",
+            }}
           >
-            <Text
+            <TouchableOpacity
+              onPress={() => setTab(0)}
               style={{
-                color: "black",
-                textDecorationLine: "underline",
+                width: "50%",
+                alignItems: "center",
+                justifyContent: "center",
+                height: 40,
+                borderBottomWidth: tab === 0 ? 2 : 0,
+                borderColor: primaryColor,
               }}
             >
-              + Add a table
-            </Text>
-          </TouchableOpacity>
+              <Text>INSIDE</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => setTab(1)}
+              style={{
+                width: "50%",
+                alignItems: "center",
+                justifyContent: "center",
+                height: 40,
+                borderBottomWidth: tab === 1 ? 2 : 0,
+                borderColor: primaryColor,
+              }}
+            >
+              <Text>OUTSIDE</Text>
+            </TouchableOpacity>
+          </View>
 
-          <FlatList
-            key={tab}
-            ref={tab === 1 ? outsideRef : insideRef}
-            data={tab === 1 ? outsidetablesToShow : insidetablesToShow}
-            numColumns={2}
-            style={{
-              marginTop: 20,
-              width: "100%",
-              marginBottom: 50,
-            }}
-            columnWrapperStyle={{
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "space-between",
-              marginTop: 20,
-            }}
-            renderItem={({ item }) => (
-              <TableComponent
-                width={"45%"}
-                key={item.name}
-                tableNo={item.name}
-                status={item.stature}
-                isLoading={item?.isLoading}
-                navigation={navigation}
-                tableId={item?.tableId}
-                table={item}
-              />
-            )}
-          />
+          <View style={{ width: "100%", marginTop: 20 }}>
+            <TouchableOpacity
+              onPress={() =>
+                addNewTable(
+                  tab === 1 ? outsidetablesToShow : insidetablesToShow,
+                  tab === 1 ? "OUTSIDE" : "INSIDE"
+                )
+              }
+            >
+              <Text
+                style={{
+                  color: "black",
+                  textDecorationLine: "underline",
+                }}
+              >
+                + Add a table
+              </Text>
+            </TouchableOpacity>
+
+            <FlatList
+              key={tab}
+              ref={tab === 1 ? outsideRef : insideRef}
+              data={tab === 1 ? outsidetablesToShow : insidetablesToShow}
+              numColumns={2}
+              style={{
+                marginTop: 20,
+                width: "100%",
+                marginBottom: 50,
+              }}
+              columnWrapperStyle={{
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "space-between",
+                marginTop: 20,
+              }}
+              renderItem={({ item }) => (
+                <TableComponent
+                  width={"45%"}
+                  key={item.name}
+                  tableNo={item.name}
+                  status={item.stature}
+                  isLoading={item?.isLoading}
+                  navigation={navigation}
+                  tableId={item?.tableId}
+                  table={item}
+                />
+              )}
+            />
+          </View>
         </View>
-      </View>
+      )}
     </MainScreenContainer>
   );
 };

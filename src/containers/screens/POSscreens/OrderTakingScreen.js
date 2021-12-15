@@ -17,6 +17,7 @@ import {
   grayMenuText,
   grayShade2,
   occupiedTableColor,
+  orderBillBackground,
   primaryColor,
   reservedTableColor,
 } from "../../../theme/colors";
@@ -215,6 +216,7 @@ export const OrderTakingScreen = (props) => {
         ...orderList.map((item) => ({
           quantity: item.selected,
           recipe: item.mealRecipes[0],
+          mealName: item.mealName,
         })),
       ],
       price: totalPrice,
@@ -377,7 +379,7 @@ export const OrderTakingScreen = (props) => {
                     height: "100%",
                   }}
                 >
-                  <View style={{ width: "65%" }}>
+                  <View style={{ width: "60%" }}>
                     <View style={{ width: "100%", marginTop: 20 }}>
                       <View
                         style={{
@@ -428,7 +430,16 @@ export const OrderTakingScreen = (props) => {
                   </View>
 
                   {selectedCategory.length > 0 ? (
-                    <View style={{ width: "30%" }}>
+                    <View
+                      style={{
+                        width: "40%",
+                        backgroundColor: orderBillBackground,
+                        padding: 10,
+                        borderRadius: 10,
+                        flexDirection: "column",
+                        justifyContent: "space-between",
+                      }}
+                    >
                       <View
                         style={{
                           width: "100%",

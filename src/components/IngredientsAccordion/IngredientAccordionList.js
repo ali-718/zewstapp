@@ -113,7 +113,7 @@ export const IngredientAccordionList = ({
                 i
               )
             }
-            placeholder={"Micro Ingredients"}
+            placeholder={"Ingredients"}
             menus={inventoryList
               .filter(
                 (item) =>

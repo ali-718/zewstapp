@@ -9,7 +9,7 @@ import {
 import { Text } from "../Text/Text";
 import forwardIcon from "../../assets/images/forwardIcon.png";
 import { useSelector } from "react-redux";
-import Icon from 'react-native-vector-icons/Feather';
+import Icon from "react-native-vector-icons/Feather";
 
 export const AdminOverviewBox = ({
   label,
@@ -25,7 +25,7 @@ export const AdminOverviewBox = ({
   onLongPress = () => null,
   noTint,
   noLeftMargin,
-  primary = null
+  primary = null,
 }) => {
   const device = useSelector((state) => state.system.device);
 
@@ -69,7 +69,7 @@ export const AdminOverviewBox = ({
           style={
             recipe || inventory
               ? {
-                  fontSize: device === "tablet" ? 30 : 20,
+                  fontSize: device === "tablet" ? 20 : 20,
                   fontFamily: "openSans_bold",
                   color: "black",
                 }
@@ -111,18 +111,12 @@ export const AdminOverviewBox = ({
           >
             {rightText}
           </Text>
-        ) : 
-        null
-        }
-        {
-          primary ?
+        ) : null}
+        {primary ? (
           <Icon name="check-circle" color={primaryColor} size={25} />
-          :
-          !rightText ?
+        ) : !rightText ? (
           <Icon name="check-circle" color={"black"} size={25} />
-          :
-          null
-        }
+        ) : null}
         <Image
           source={rightIcon ?? forwardIcon}
           style={{

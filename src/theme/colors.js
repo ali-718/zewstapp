@@ -42,3 +42,5 @@ export const reservedTableColor = "#294BFB";
 export const occupiedTableColor = "#A461D8";
 export const kitchenMenuColor = "#F2F2F2";
 export const menuHeadingColor = "#44444F";
+export const orderBillBackground = "#F1F1F1";
+export const menuYellowProgressColor = "#F6A000";

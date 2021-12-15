@@ -2,6 +2,7 @@ import produce from "immer";
 import {
   CREATE_ORDER,
   FETCH_MEALS,
+  FETCH_ORDERS,
   FETCH_TABLES,
 } from "../actions/PosActions/Types";
 
@@ -24,10 +25,32 @@ const initialState = {
     isSuccess: false,
     orderId: "",
   },
+  orders: {
+    orders: [],
+    isLoading: false,
+    isError: false,
+  },
 };
 
 export const posReducer = produce((state = initialState, { payload, type }) => {
   switch (type) {
+    case FETCH_ORDERS.REQUESTED: {
+      state.orders.isLoading = true;
+      state.orders.isError = false;
+      break;
+    }
+    case FETCH_ORDERS.SUCCEEDED: {
+      state.orders.isLoading = false;
+      state.orders.isError = false;
+      state.orders.orders = payload?.dineInOrdersCreated;
+      break;
+    }
+    case FETCH_ORDERS.FAILED: {
+      state.orders.isLoading = false;
+      state.orders.isError = true;
+      state.orders.orders = [];
+      break;
+    }
     case CREATE_ORDER.REQUESTED: {
       state.createOrder.isLoading = true;
       state.createOrder.isError = false;
