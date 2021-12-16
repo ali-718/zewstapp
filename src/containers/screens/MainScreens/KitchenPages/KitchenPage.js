@@ -15,6 +15,7 @@ import { useIsFocused } from "@react-navigation/native";
 import * as actions from "../../../../Redux/actions/PosActions/OrderActions";
 import { HEIGHT } from "../../../../helpers/utlils";
 import { Spinner } from "native-base";
+import { NoMealBox } from "../../../../components/NoMealBox/NoMealBox";
 
 export const KitchenPage = () => {
   const dispatch = useDispatch();
@@ -36,6 +37,14 @@ export const KitchenPage = () => {
       actions.fetchAllOrders({ locationId: defaultLocation.locationId })
     );
   }, [screenFocused]);
+
+  const updateOrder = (orderId) =>
+    dispatch(
+      actions.orderUpdateAction({
+        locationId: defaultLocation.locationId,
+        orderId,
+      })
+    );
 
   if (device === "tablet") {
     return (
@@ -111,6 +120,9 @@ export const KitchenPage = () => {
               <View style={{ marginTop: 20, zIndex: 0 }} />
 
               <FlatList
+                ListEmptyComponent={() => (
+                  <NoMealBox text={"There are no orders available"} />
+                )}
                 data={orders ?? []}
                 numColumns={3}
                 columnWrapperStyle={{ marginLeft: -10, marginTop: 10 }}
@@ -118,7 +130,9 @@ export const KitchenPage = () => {
                   selected === 3
                     ? ({ item, index }) => <SpikeOrder />
                     : selected === 0
-                    ? ({ item, index }) => <MainOrder data={item} />
+                    ? ({ item, index }) => (
+                        <MainOrder updateOrder={updateOrder} data={item} />
+                      )
                     : () => <View />
                 }
               />

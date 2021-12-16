@@ -1,6 +1,12 @@
-import { ToastError } from "../../../helpers/Toast";
+import { ToastError, ToastSuccess } from "../../../helpers/Toast";
 import { client } from "../client";
-import { CREATE_ORDER, FETCH_MEALS, FETCH_ORDERS, FETCH_TABLES } from "./Types";
+import {
+  CREATE_ORDER,
+  FETCH_MEALS,
+  FETCH_ORDERS,
+  FETCH_TABLES,
+  UPDATE_ORDER,
+} from "./Types";
 import moment from "moment";
 
 export const changeTableStatusAction = ({ locationId, tableId, stature }) =>
@@ -72,7 +78,7 @@ export const fetchAllOrders =
       .then(({ data }) => {
         dispatch({
           type: FETCH_ORDERS.SUCCEEDED,
-          payload: data?.createdOrders,
+          payload: data?.paidOrders,
         });
 
         console.log(data);
@@ -183,3 +189,31 @@ export const attachOrderToTableAction = ({ orderId, table }) =>
         );
       });
   });
+
+export const orderUpdateAction =
+  ({ locationId, orderId }) =>
+  (dispatch) => {
+    console.log({ locationId, orderId });
+    dispatch({ type: UPDATE_ORDER.REQUESTED, payload: orderId });
+
+    client
+      .post(`manual-orders/updateOrder`, {
+        locationId,
+        orderId,
+        stature: "DONE",
+      })
+      .then(({ data }) => {
+        dispatch({
+          type: UPDATE_ORDER.SUCCEEDED,
+          payload: orderId,
+        });
+        ToastSuccess("Order served successfully");
+      })
+      .catch((e) => {
+        console.log(e.response.data);
+        ToastError(
+          e.response.data.err || "Unable to complete order, please try again"
+        );
+        dispatch({ type: UPDATE_ORDER.FAILED });
+      });
+  };

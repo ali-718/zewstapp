@@ -5,8 +5,17 @@ import { grayTextColor, kitchenMenuColor } from "../../theme/colors";
 import { RegularButton } from "../Buttons/RegularButton";
 import { Text } from "../Text/Text";
 
-export const MainOrder = ({ data }) => {
-  const { timestamp = "", ticketNo = "", price = "", stature = "" } = data;
+export const MainOrder = ({ data, updateOrder }) => {
+  const {
+    timestamp = "",
+    ticketNo = "",
+    price = "",
+    stature = "",
+    tableInfo = {},
+    catalog = [],
+    loading = false,
+    orderId = "",
+  } = data;
   return (
     <View
       style={{
@@ -28,7 +37,7 @@ export const MainOrder = ({ data }) => {
           }}
         >
           <Text style={{ color: "black", fontSize: 20 }}>
-            Ticket {ticketNo}
+            {tableInfo?.orderId ? "Table" : "Ticket"} {ticketNo}
           </Text>
         </View>
         <Text style={{ color: "black", marginLeft: 15 }}>{timestamp}</Text>
@@ -49,8 +58,34 @@ export const MainOrder = ({ data }) => {
 
       <Text style={{ color: grayTextColor, marginTop: 10 }}>{price}$</Text>
       {/* <Text style={{ color: grayTextColor, marginTop: 10 }}>Order by Sara</Text> */}
+      <View style={{ marginTop: 10 }} />
 
-      {/* {[1, 2, 3].map((item, i) => (
+      <View style={{ width: "100%", flex: 1, justifyContent: "space-between" }}>
+        <View style={{ width: "100%" }}>
+          {catalog.map((item) => (
+            <View
+              style={{
+                width: "100%",
+                flexDirection: "row",
+                marginTop: 5,
+              }}
+            >
+              <Checkbox
+                isChecked={true}
+                value="info"
+                colorScheme="green"
+                defaultIsChecked
+                size="sm"
+              />
+              <Text
+                style={{ color: grayTextColor, marginLeft: 10, fontSize: 16 }}
+              >
+                {item.mealName}
+              </Text>
+            </View>
+          ))}
+        </View>
+        {/* {[1, 2, 3].map((item, i) => (
         <View style={{ width: "100%", marginTop: 20 }}>
           <View style={{ flexDirection: "row" }}>
             <Checkbox
@@ -96,17 +131,23 @@ export const MainOrder = ({ data }) => {
         </View>
       ))} */}
 
-      <View
-        style={{
-          width: "100%",
-          flexDirection: "row",
-          marginTop: 20,
-          alignItems: "center",
-          justifyContent: "space-between",
-        }}
-      >
-        {/* <RegularButton white text={"Done"} style={{ width: "45%" }} /> */}
-        <RegularButton text={"serve"} style={{ width: "45%" }} />
+        <View
+          style={{
+            width: "100%",
+            flexDirection: "row",
+            marginTop: 20,
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          {/* <RegularButton white text={"Done"} style={{ width: "45%" }} /> */}
+          <RegularButton
+            isLoading={loading}
+            onPress={() => updateOrder(orderId)}
+            text={"serve"}
+            style={{ width: "100%" }}
+          />
+        </View>
       </View>
     </View>
   );

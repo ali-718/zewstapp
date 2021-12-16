@@ -1,8 +1,11 @@
 import React from "react";
 import { View, Text, Image } from "react-native";
+import { useSelector } from "react-redux";
 import { grayShade2, grayTextColor } from "../../theme/colors";
 
 export const NoMealBox = ({ image, text }) => {
+  const device = useSelector((state) => state.system.device);
+
   return (
     <View
       style={{
@@ -23,7 +26,7 @@ export const NoMealBox = ({ image, text }) => {
           color: grayTextColor,
           marginTop: 10,
           fontFamily: "openSans_semiBold",
-          fontSize: 16,
+          fontSize: device === "tablet" ? 20 : 16,
         }}
       >
         {text}

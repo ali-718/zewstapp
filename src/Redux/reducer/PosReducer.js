@@ -4,6 +4,7 @@ import {
   FETCH_MEALS,
   FETCH_ORDERS,
   FETCH_TABLES,
+  UPDATE_ORDER,
 } from "../actions/PosActions/Types";
 
 const initialState = {
@@ -34,6 +35,45 @@ const initialState = {
 
 export const posReducer = produce((state = initialState, { payload, type }) => {
   switch (type) {
+    case UPDATE_ORDER.REQUESTED: {
+      const index = state.orders.orders.findIndex(
+        (item) => item.orderId === payload
+      );
+
+      console.log(index);
+      console.log(payload);
+
+      if (index > -1) {
+        const allOrders = [...state.orders.orders];
+
+        allOrders[index] = { ...allOrders[index], loading: true };
+
+        state.orders.orders = allOrders;
+      }
+      break;
+    }
+    case UPDATE_ORDER.SUCCEEDED: {
+      const allOrders = [...state.orders.orders];
+
+      state.orders.orders = allOrders.filter(
+        (item) => item.orderId !== payload
+      );
+      break;
+    }
+    case UPDATE_ORDER.FAILED: {
+      const index = state.orders.orders.findIndex(
+        (item) => item.orderId === payload
+      );
+
+      if (index > -1) {
+        const allOrders = [...state.orders.orders];
+
+        allOrders[index] = { ...allOrders[index], loading: false };
+
+        state.orders.orders = allOrders;
+      }
+      break;
+    }
     case FETCH_ORDERS.REQUESTED: {
       state.orders.isLoading = true;
       state.orders.isError = false;
@@ -42,7 +82,8 @@ export const posReducer = produce((state = initialState, { payload, type }) => {
     case FETCH_ORDERS.SUCCEEDED: {
       state.orders.isLoading = false;
       state.orders.isError = false;
-      state.orders.orders = payload?.dineInOrdersCreated;
+      state.orders.orders = payload?.dineInOrdersPaid;
+      // state.orders.orders = payload?.dineInOrdersCreated;
       break;
     }
     case FETCH_ORDERS.FAILED: {
