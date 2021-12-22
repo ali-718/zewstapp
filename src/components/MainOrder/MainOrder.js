@@ -1,11 +1,12 @@
 import { Progress, Checkbox } from "native-base";
 import React from "react";
 import { View } from "react-native";
+import { onChange } from "react-native-reanimated";
 import { grayTextColor, kitchenMenuColor } from "../../theme/colors";
 import { RegularButton } from "../Buttons/RegularButton";
 import { Text } from "../Text/Text";
 
-export const MainOrder = ({ data, updateOrder }) => {
+export const MainOrder = ({ data, updateOrder, onChange, meals }) => {
   const {
     timestamp = "",
     ticketNo = "",
@@ -16,6 +17,10 @@ export const MainOrder = ({ data, updateOrder }) => {
     loading = false,
     orderId = "",
   } = data;
+
+  let allCategories = catalog?.map((item) => item.recipe.recipeCategory);
+  allCategories = [...new Set(allCategories)];
+
   return (
     <View
       style={{
@@ -36,11 +41,13 @@ export const MainOrder = ({ data, updateOrder }) => {
             borderRadius: 4,
           }}
         >
-          <Text style={{ color: "black", fontSize: 20 }}>
+          <Text style={{ color: "black", fontSize: 16 }}>
             {tableInfo?.orderId ? "Table" : "Ticket"} {ticketNo}
           </Text>
         </View>
-        <Text style={{ color: "black", marginLeft: 15 }}>{timestamp}</Text>
+        <Text style={{ color: "black", marginLeft: 15, fontSize: 12 }}>
+          {timestamp}
+        </Text>
       </View>
 
       <Progress
@@ -56,34 +63,111 @@ export const MainOrder = ({ data, updateOrder }) => {
         value={35}
       />
 
-      <Text style={{ color: grayTextColor, marginTop: 10 }}>{price}$</Text>
+      <Text style={{ color: grayTextColor, marginTop: 10, fontSize: 12 }}>
+        {timestamp}
+      </Text>
       {/* <Text style={{ color: grayTextColor, marginTop: 10 }}>Order by Sara</Text> */}
       <View style={{ marginTop: 10 }} />
 
       <View style={{ width: "100%", flex: 1, justifyContent: "space-between" }}>
         <View style={{ width: "100%" }}>
-          {catalog.map((item) => (
-            <View
-              style={{
-                width: "100%",
-                flexDirection: "row",
-                marginTop: 5,
-              }}
-            >
-              <Checkbox
-                isChecked={true}
-                value="info"
-                colorScheme="green"
-                defaultIsChecked
-                size="sm"
-              />
-              <Text
-                style={{ color: grayTextColor, marginLeft: 10, fontSize: 16 }}
+          {allCategories
+            .filter((item) => {
+              return (
+                catalog.filter(
+                  (data) => !data.served && item === data.recipe.recipeCategory
+                ).length > 0
+              );
+            })
+            .map((category, i) => (
+              <View
+                key={i}
+                style={{
+                  width: "100%",
+                  marginTop: 5,
+                }}
               >
-                {item.mealName}
-              </Text>
-            </View>
-          ))}
+                <Text
+                  style={{
+                    fontSize: 16,
+                    fontFamily: "openSans_semiBold",
+                    marginVertical: 10,
+                  }}
+                >
+                  {category}
+                </Text>
+                {catalog
+                  .filter(
+                    (data) =>
+                      !data.served && category === data.recipe.recipeCategory
+                  )
+                  .map((item, index) => (
+                    <View
+                      key={index}
+                      style={{
+                        width: "100%",
+                        flexDirection: "row",
+                        marginTop: 5,
+                      }}
+                    >
+                      <Checkbox
+                        onChange={(val) => onChange(val, { ...item, ...data })}
+                        value="info"
+                        colorScheme="green"
+                        size="sm"
+                        isChecked={
+                          meals.filter((meal) => item.mealName === meal)
+                            .length > 0
+                        }
+                      />
+                      <Text
+                        style={{
+                          color: grayTextColor,
+                          marginLeft: 10,
+                          fontSize: 16,
+                        }}
+                      >
+                        {item.mealName}
+                      </Text>
+                    </View>
+                  ))}
+              </View>
+            ))}
+
+          {/* {catalog
+            .filter((item) => {
+              return (
+                !item.served &&
+                allCategories.filter(
+                  (data) => data === item.recipe.recipeCategory
+                ).length > 0
+              );
+            })
+
+            .map((item) => (
+              <View
+                style={{
+                  width: "100%",
+                  flexDirection: "row",
+                  marginTop: 5,
+                }}
+              >
+                <Checkbox
+                  onChange={(val) => onChange(val, { ...item, ...data })}
+                  value="info"
+                  colorScheme="green"
+                  size="sm"
+                  isChecked={
+                    meals.filter((meal) => item.mealName === meal).length > 0
+                  }
+                />
+                <Text
+                  style={{ color: grayTextColor, marginLeft: 10, fontSize: 16 }}
+                >
+                  {item.mealName}
+                </Text>
+              </View>
+            ))} */}
         </View>
         {/* {[1, 2, 3].map((item, i) => (
         <View style={{ width: "100%", marginTop: 20 }}>

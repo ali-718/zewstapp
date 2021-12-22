@@ -217,6 +217,7 @@ export const OrderTakingScreen = (props) => {
           quantity: item.selected,
           recipe: item.mealRecipes[0],
           mealName: item.mealName,
+          mealPrice: item.mealPrice,
         })),
       ],
       price: totalPrice,

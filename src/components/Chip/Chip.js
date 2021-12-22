@@ -10,21 +10,23 @@ export const Chip = ({ text, selected }) => {
   return (
     <View
       style={{
-        paddingHorizontal: 10,
+        paddingHorizontal: 12,
         borderColor: primaryShade1,
         borderWidth: 1,
         borderRadius: 50,
-        height: device === "tablet" ? 45 : 25,
         backgroundColor: selected ? primaryColor : "white",
         alignItems: "center",
         justifyContent: "center",
+        paddingVertical: 4,
       }}
     >
       <Text
         style={{
           color: selected ? "white" : primaryShade1,
-          fontSize: device === "tablet" ? 18 : 14,
+          fontSize: 18,
           fontWeight: "bold",
+          margin: 0,
+          padding: 0,
         }}
       >
         {text || "Free"}

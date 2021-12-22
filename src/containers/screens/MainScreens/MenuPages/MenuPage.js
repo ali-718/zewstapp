@@ -307,7 +307,7 @@ export const MenuPage = () => {
                                       color: menuHeadingColor,
                                     }}
                                   >
-                                    {item.mealPrice}
+                                    {item.orderedNumber}
                                   </Text>
                                 </View>
                                 <View style={{ width: 100 }}>

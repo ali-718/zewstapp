@@ -1,5 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { View, ImageBackground, Image, TouchableOpacity } from "react-native";
+import React, { useEffect, useRef, useState } from "react";
+import {
+  View,
+  ImageBackground,
+  Image,
+  TouchableOpacity,
+  TextInput,
+  TouchableWithoutFeedback,
+} from "react-native";
 import { MainScreenContainer } from "../../../MainScreenContainers";
 import leftImage from "../../../../assets/images/backIcon.png";
 import addMealRectangle from "../../../../assets/images/addMealRectangle.png";
@@ -25,6 +32,8 @@ import * as recipeActions from "../../../../Redux/actions/RecipeActions/RecipeAc
 import { useNavigation } from "@react-navigation/core";
 import { Dropdown } from "../../../../components/Inputs/DropDown";
 import { HeadingBox } from "../../../../components/HeadingBox/HeadingBox";
+import { primaryColor } from "../../../../theme/colors";
+import { Text } from "../../../../components/Text/Text";
 
 export const AddMeal = (props) => {
   const dispatch = useDispatch();
@@ -42,7 +51,6 @@ export const AddMeal = (props) => {
     (state) => state.locations.defaultLocation
   );
   const recipeList = useSelector((state) => state.recipe.recipe.list);
-
   const [name, setName] = useState("");
   const [desc, setdesc] = useState("");
   const [unitCost, setunitCost] = useState("");
@@ -61,6 +69,9 @@ export const AddMeal = (props) => {
   const [foodImage, setFoodImage] = useState("");
   const [foodImageBase64, setfoodImageBase64] = useState("");
   const [selectedRecipe, setSelectedRecipe] = useState({});
+  const [taxWithPrice, setTaxWithPrice] = useState("0.00");
+  const [Profit, setProfit] = useState("0.00");
+  const [menuPrice, setMenuPrice] = useState("");
 
   useEffect(() => {
     if (!deleteMealError) return;
@@ -265,6 +276,48 @@ export const AddMeal = (props) => {
     );
   };
 
+  const TextBoxInput = ({ label, disabled = false, value, onChange }) => {
+    const ref = useRef();
+    return (
+      <TouchableOpacity
+        style={{
+          borderWidth: 1,
+          borderColor: "#E0DFDF",
+          borderRadius: 8,
+          padding: 15,
+          backgroundColor: "white",
+          width: 140,
+          height: 89,
+          marginTop: 20,
+        }}
+        onPress={() => ref?.current?.focus()}
+        activeOpacity={1}
+      >
+        <Text style={{ fontSize: 16, color: "#1A1A1A" }}>{label}</Text>
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+          }}
+        >
+          <Text style={{ fontSize: 30, color: primaryColor }}>$</Text>
+          <TextInput
+            ref={ref}
+            editable={!disabled}
+            style={{
+              fontSize: 30,
+              color: primaryColor,
+              fontWeight: "bold",
+            }}
+            value={value}
+            onChangeText={(val) => onChange(val)}
+            keyboardType="numeric"
+          />
+        </View>
+      </TouchableOpacity>
+    );
+  };
+
   return (
     <MainScreenContainer
       leftImage={leftImage}
@@ -272,50 +325,99 @@ export const AddMeal = (props) => {
       rightImage={isEdit && deleteIconWhite}
       onPressRight={() => setdeleteModal(true)}
     >
-      <HeadingBox heading={isEdit ? "Edit Meal" : "Add Meal"} />
-      <TouchableOpacity
-        style={{
-          width: "100%",
-          height: WIDTH > 600 ? 400 : 250,
-          alignItems: "center",
-          justifyContent: "center",
-          marginTop: 20,
-        }}
-        onPress={() => setphotoModal(true)}
-      >
-        <ImageBackground
-          source={foodImage.length > 0 ? { uri: foodImage } : addMealRectangle}
+      <HeadingBox heading={isEdit ? "Edit menu item" : "Add menu item"} />
+
+      <View style={{ width: "90%", marginTop: 20, marginBottom: 40 }}>
+        <View
           style={{
             width: "100%",
-            height: WIDTH > 600 ? 400 : 250,
+            flexDirection: "row",
             alignItems: "center",
-            justifyContent: "center",
+            flexWrap: "wrap",
           }}
         >
-          {foodImage.length > 0 && (
+          <View style={{ marginLeft: 0 }}>
+            <TextBoxInput
+              value={`${selectedRecipe?.totalUnitCost ?? "0.00"}`}
+              label={"Cost"}
+              disabled
+            />
+          </View>
+
+          <View style={{ marginLeft: 20 }}>
             <View
               style={{
-                width: "100%",
-                height: WIDTH > 600 ? 400 : 250,
-                backgroundColor: "rgba(0,0,0,0.5)",
-                position: "absolute",
+                borderWidth: 1,
+                borderColor: "#E0DFDF",
+                borderRadius: 8,
+                padding: 15,
+                backgroundColor: "white",
+                width: 140,
+                height: 89,
+                marginTop: 20,
               }}
-            ></View>
-          )}
-          <Image
-            style={{ width: 50, height: 50, resizeMode: "contain" }}
-            source={cameraIcon}
-          />
-        </ImageBackground>
-      </TouchableOpacity>
+              activeOpacity={1}
+            >
+              <Text style={{ fontSize: 16, color: "#1A1A1A" }}>Menu Price</Text>
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                }}
+              >
+                <Text style={{ fontSize: 30, color: primaryColor }}>$</Text>
+                <TextInput
+                  style={{
+                    fontSize: 30,
+                    color: primaryColor,
+                    fontWeight: "bold",
+                    flex: 1,
+                  }}
+                  value={unitCost}
+                  onChangeText={(val) => setunitCost(val)}
+                  keyboardType="numeric"
+                />
+              </View>
+            </View>
+          </View>
+          <View style={{ marginLeft: 20 }}>
+            <TextBoxInput value={"0.00"} label={"Price with tax"} disabled />
+          </View>
+          {console.log(selectedRecipe?.totalUnitCost - unitCost)}
+          <View style={{ marginLeft: 20 }}>
+            <TextBoxInput
+              value={
+                selectedRecipe?.totalUnitCost > 0 && unitCost.length > 0
+                  ? `${unitCost - selectedRecipe?.totalUnitCost}`
+                  : "0.00"
+              }
+              label={"Profit"}
+              disabled
+            />
+          </View>
+        </View>
 
-      <View style={{ width: "90%", marginTop: 10, marginBottom: 40 }}>
-        <View style={{ width: "100%" }}>
+        <View style={{ width: "100%", marginTop: 30, zIndex: 1 }}>
+          <Dropdown
+            selectedMenu={selectedRecipe.recipeTitle}
+            setMenu={(val) =>
+              setSelectedRecipe(
+                recipeList.find((item) => item.recipeTitle === val)
+              )
+            }
+            errMsg={"Looks like you have not added any recipe yet 😀"}
+            placeholder={"Choose recipe"}
+            menus={recipeList.map((item) => item.recipeTitle)}
+            style={{ zIndex: 3 }}
+          />
+        </View>
+
+        <View style={{ width: "100%", marginTop: 10 }}>
           <Input
             isEdit={isEdit}
             value={name}
             setValue={(val) => setName(val)}
-            placeholder={"Title*"}
+            placeholder={"Name of menu item"}
           />
         </View>
 
@@ -324,7 +426,7 @@ export const AddMeal = (props) => {
             isEdit={isEdit}
             value={desc}
             setValue={(val) => setdesc(val)}
-            placeholder={"Description*"}
+            placeholder={"Description of menu item"}
             textarea
           />
         </View>
@@ -334,45 +436,30 @@ export const AddMeal = (props) => {
             isEdit={isEdit}
             value={unitCost}
             setValue={(val) => setunitCost(val)}
-            placeholder={"Unit Cost $*"}
-            keyboardType={"number-pad"}
+            placeholder={"Price in $"}
+            keyboardType={"numeric"}
           />
         </View>
 
-        <View style={{ width: "100%", marginTop: 10 }}>
+        {/* <View style={{ width: "100%", marginTop: 10 }}>
           <MealItem
             label={"Availability*"}
             text={available ? "Available" : "Hidden"}
             icon={available ? switchOn : switchOff}
             onIconClick={() => setavailable(!available)}
           />
-        </View>
+        </View> */}
 
-        <View style={{ width: "100%", marginTop: 10, zIndex: 1 }}>
-          <Dropdown
-            selectedMenu={selectedRecipe.recipeTitle}
-            setMenu={(val) =>
-              setSelectedRecipe(
-                recipeList.find((item) => item.recipeTitle === val)
-              )
-            }
-            errMsg={"Looks like you have not added any recipe yet 😀"}
-            placeholder={"Select Recipe*"}
-            menus={recipeList.map((item) => item.recipeTitle)}
-            style={{ zIndex: 3 }}
-          />
-        </View>
-
-        <View style={{ width: "100%", marginTop: 10 }}>
+        {/* <View style={{ width: "100%", marginTop: 10 }}>
           <Input
             editable={false}
             value={`${selectedRecipe?.totalUnitCost ?? ""}`}
             placeholder={"Meal Unit Cost"}
             style={{ opacity: 0.5 }}
           />
-        </View>
+        </View> */}
 
-        <View style={{ width: "100%", marginTop: 10, zIndex: 0 }}>
+        {/* <View style={{ width: "100%", marginTop: 10, zIndex: 0 }}>
           <MealItem
             label={"Days Available*"}
             text={JSON.stringify(selectedDays.map((item) => item.slice(0, 3)))
@@ -385,9 +472,9 @@ export const AddMeal = (props) => {
             onPress={() => setdaysModal(true)}
             iconStyle={{ width: 20, height: 20 }}
           />
-        </View>
+        </View> */}
 
-        <View style={{ width: "100%", marginTop: 10 }}>
+        {/* <View style={{ width: "100%", marginTop: 10 }}>
           <MealItem
             label={"Categories*"}
             text={selectedCategories}
@@ -396,9 +483,9 @@ export const AddMeal = (props) => {
             onPress={() => setcategoriesModal(true)}
             iconStyle={{ width: 20, height: 20 }}
           />
-        </View>
+        </View> */}
 
-        <View style={{ width: "100%", marginTop: 10 }}>
+        {/* <View style={{ width: "100%", marginTop: 10 }}>
           <MealItem
             label={"Allergens"}
             text={JSON.stringify(selectedAllergens)
@@ -411,9 +498,9 @@ export const AddMeal = (props) => {
             onPress={() => setallergensModal(true)}
             iconStyle={{ width: 20, height: 20 }}
           />
-        </View>
+        </View> */}
 
-        <View style={{ width: "100%", marginTop: 10 }}>
+        {/* <View style={{ width: "100%", marginTop: 10 }}>
           <MealItem
             label={"Add-ons"}
             text={JSON.stringify(selectedAddons)
@@ -426,11 +513,11 @@ export const AddMeal = (props) => {
             onPress={() => setaddonsModal(true)}
             iconStyle={{ width: 20, height: 20 }}
           />
-        </View>
+        </View> */}
 
         <View style={{ width: "100%", marginTop: 20 }}>
           <RegularButton
-            text={isEdit ? "SAVE" : "ADD"}
+            text={"SAVE"}
             onPress={onSaveMeal}
             isLoading={isLoading}
           />

@@ -71,6 +71,7 @@ export const updateLocation =
     default_location = false,
     navigation,
     locationId,
+    taxRate,
   }) =>
   (dispatch) => {
     dispatch({ type: EDIT_LOCATION.REQUESTED });
@@ -84,7 +85,8 @@ export const updateLocation =
         district,
         default_location,
         locationId,
-        mode: "Manual"
+        mode: "Manual",
+        taxRate,
       })
       .then((data) => {
         dispatch({
@@ -95,39 +97,40 @@ export const updateLocation =
         navigation.goBack();
       })
       .catch((e) => {
-
         dispatch({ type: EDIT_LOCATION.FAILED });
         ToastError("Some error occoured, please try again later");
       });
   };
 
-export const setPrimaryLocationAction =
-  (payload) =>
-  (dispatch) => {
-    client
-      .post(`/location/setDefaultLocation`, {
-        clientId: payload?.clientId,
-        locationId: payload?.locationId
-      })
-      .then((data) => {
-        dispatch({ type: PRIMARY_LOCATION, payload: { locationId: payload?.locationId} });
-        dispatch(getAllUserLocations({ userId: payload?.clientId }));
-        ToastSuccess("Success", "Location set to primary.");
-      })
-      .catch((e) => {
-        ToastError("Some error occoured, please try again later");
+export const setPrimaryLocationAction = (payload) => (dispatch) => {
+  client
+    .post(`/location/setDefaultLocation`, {
+      clientId: payload?.clientId,
+      locationId: payload?.locationId,
+    })
+    .then((data) => {
+      dispatch({
+        type: PRIMARY_LOCATION,
+        payload: { locationId: payload?.locationId },
       });
+      dispatch(getAllUserLocations({ userId: payload?.clientId }));
+      ToastSuccess("Success", "Location set to primary.");
+    })
+    .catch((e) => {
+      ToastError("Some error occoured, please try again later");
+    });
 };
 
-export const getPrimaryLocationAction =
-  (clientId) =>
-  (dispatch) => {
-    client
-      .get(`/location/getDefaultLocation/${clientId}`)
-      .then((data) => {
-        dispatch({ type: PRIMARY_LOCATION, payload: { locationId: data?.data?.default_location} });
-      })
-      .catch((e) => {
-        ToastError("Some error occoured, unable to fetch primary location");
+export const getPrimaryLocationAction = (clientId) => (dispatch) => {
+  client
+    .get(`/location/getDefaultLocation/${clientId}`)
+    .then((data) => {
+      dispatch({
+        type: PRIMARY_LOCATION,
+        payload: { locationId: data?.data?.default_location },
       });
+    })
+    .catch((e) => {
+      ToastError("Some error occoured, unable to fetch primary location");
+    });
 };

@@ -34,6 +34,7 @@ export const AddLocationsPage = (props) => {
   const [city, setCity] = useState("");
   const [district, setDistrict] = useState("");
   const [isEdit, setIsEdit] = useState(false);
+  const [taxRate, setTaxRate] = useState("");
 
   useEffect(() => {
     const isData = props?.route?.params?.data;
@@ -45,6 +46,7 @@ export const AddLocationsPage = (props) => {
         country = "",
         district = "",
         townCity = "",
+        taxRate = "",
       } = isData;
 
       setCity(townCity);
@@ -53,6 +55,7 @@ export const AddLocationsPage = (props) => {
       setStreetName(streetInfo);
       setPlz(name);
       setIsEdit(true);
+      setTaxRate(taxRate);
     }
   }, []);
 
@@ -62,7 +65,8 @@ export const AddLocationsPage = (props) => {
       validator.isEmpty(streetName, { ignore_whitespace: false }) ||
       validator.isEmpty(plz, { ignore_whitespace: false }) ||
       validator.isEmpty(city, { ignore_whitespace: false }) ||
-      validator.isEmpty(district, { ignore_whitespace: false })
+      validator.isEmpty(district, { ignore_whitespace: false }) ||
+      validator.isEmpty(taxRate, { ignore_whitespace: false })
     ) {
       ToastError("Fill all fields");
       return;
@@ -77,7 +81,8 @@ export const AddLocationsPage = (props) => {
         townCity: city,
         district: district,
         locationId: props?.route?.params?.data?.locationId,
-        navigation
+        navigation,
+        taxRate,
       };
 
       dispatch(actions.updateLocation(data));
@@ -93,6 +98,7 @@ export const AddLocationsPage = (props) => {
       townCity: city,
       district: district,
       navigation,
+      taxRate,
     };
 
     dispatch(actions.AddNewLocation(data));
@@ -151,6 +157,13 @@ export const AddLocationsPage = (props) => {
             value={district}
             setValue={(val) => setDistrict(val)}
             placeholder={"District"}
+          />
+        </View>
+        <View style={{ width: "100%", marginTop: 10 }}>
+          <Input
+            value={taxRate}
+            setValue={(val) => setTaxRate(val)}
+            placeholder={"Tax rate in %"}
           />
         </View>
         {/* <View style={{ width: "100%", marginTop: 10 }}>

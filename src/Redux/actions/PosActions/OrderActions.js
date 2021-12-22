@@ -5,6 +5,7 @@ import {
   FETCH_MEALS,
   FETCH_ORDERS,
   FETCH_TABLES,
+  UPDATE_MEALS,
   UPDATE_ORDER,
 } from "./Types";
 import moment from "moment";
@@ -78,12 +79,13 @@ export const fetchAllOrders =
       .then(({ data }) => {
         dispatch({
           type: FETCH_ORDERS.SUCCEEDED,
-          payload: data?.paidOrders,
+          payload: data,
         });
 
         console.log(data);
       })
       .catch((e) => {
+        console.log(e);
         ToastError("Unable to fetch orders, please try again");
         dispatch({ type: FETCH_ORDERS.FAILED });
       });
@@ -208,6 +210,35 @@ export const orderUpdateAction =
           payload: orderId,
         });
         ToastSuccess("Order served successfully");
+      })
+      .catch((e) => {
+        console.log(e.response.data);
+        ToastError(
+          e.response.data.err || "Unable to complete order, please try again"
+        );
+        dispatch({ type: UPDATE_ORDER.FAILED });
+      });
+  };
+
+export const orderMarkServedAction =
+  ({ locationId, orderId, ticketNo, meals }) =>
+  (dispatch) => {
+    console.log({ locationId, orderId, ticketNo, meals });
+    dispatch({ type: UPDATE_ORDER.REQUESTED, payload: orderId });
+
+    client
+      .post(`manual-orders/markServed`, {
+        locationId,
+        orderId,
+        ticketNo,
+        meals,
+      })
+      .then(({ data }) => {
+        ToastSuccess("Meals served successfully");
+        dispatch({
+          type: UPDATE_MEALS.SUCCEEDED,
+          payload: { orderId, meals },
+        });
       })
       .catch((e) => {
         console.log(e.response.data);

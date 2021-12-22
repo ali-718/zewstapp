@@ -28,6 +28,7 @@ export const Dropdown = ({
   styled,
   errMsg,
   innerStyle,
+  Background,
 }) => {
   const device = useSelector((state) => state.system.device);
   const [isFocused, setIsFocused] = useState(false);
@@ -70,9 +71,6 @@ export const Dropdown = ({
         </View>
       ) : (
         <View
-          onResponderRelease={(evt) => {
-            console.log("Tapped outside");
-          }}
           style={{
             width: "100%",
             height: 70,
@@ -237,7 +235,7 @@ export const Dropdown = ({
           )}
         </View>
       )}
-      {isOpen && (
+      {isOpen && Background && (
         <TouchableWithoutFeedback
           onPress={() => {
             setIsOpen(false);
@@ -251,6 +249,7 @@ export const Dropdown = ({
             width: WIDTH,
             height: HEIGHT,
             zIndex: 9,
+            backgroundColor: "red",
           }}
         >
           <View

@@ -3,7 +3,19 @@ import { View } from "react-native";
 import { kitchenMenuColor } from "../../theme/colors";
 import { Text } from "../Text/Text";
 
-export const SpikeOrder = () => {
+export const SpikeOrder = ({ data }) => {
+  const {
+    timestamp = "",
+    ticketNo = "",
+    price = "",
+    stature = "",
+    tableInfo = {},
+    catalog = [],
+    loading = false,
+    orderId = "",
+    orderType = "",
+  } = data;
+
   return (
     <View
       style={{
@@ -15,12 +27,11 @@ export const SpikeOrder = () => {
         padding: 15,
       }}
     >
-      <Text style={{ color: "black" }}>2021-04-13 01:49:23</Text>
-      <Text style={{ color: "black" }}>Served By: Sara</Text>
+      <Text style={{ color: "black" }}>{timestamp}</Text>
+      {/* <Text style={{ color: "black" }}>Served By: Sara</Text> */}
 
-      <Text style={{ color: "black", marginVertical: 20 }}>In House</Text>
-
-      {[1, 2, 3].map((item) => (
+      <Text style={{ color: "black", marginVertical: 20 }}>{orderType}</Text>
+      {catalog.map((item) => (
         <View
           style={{
             width: "100%",
@@ -28,29 +39,35 @@ export const SpikeOrder = () => {
             marginTop: 0,
           }}
         >
-          <Text style={{ color: "black", flex: 1 }}>Margarita</Text>
-          <Text style={{ color: "black" }}>8.63</Text>
+          <Text style={{ color: "black", flex: 1 }}>{item.mealName}</Text>
+          <Text style={{ color: "black" }}>{item?.mealPrice}</Text>
         </View>
       ))}
       <View
         style={{
           width: "100%",
-          flexDirection: "row",
         }}
       >
-        <Text style={{ color: "black", flex: 1 }}>
-          ........................
-        </Text>
-        <Text style={{ color: "black" }}>............</Text>
-      </View>
-      <View
-        style={{
-          width: "100%",
-          flexDirection: "row",
-        }}
-      >
-        <Text style={{ color: "black", flex: 1 }}>Cash:</Text>
-        <Text style={{ color: "black" }}>-72.48</Text>
+        <View
+          style={{
+            width: "100%",
+            flexDirection: "row",
+          }}
+        >
+          <Text style={{ color: "black", flex: 1 }}>
+            ........................
+          </Text>
+          <Text style={{ color: "black" }}>............</Text>
+        </View>
+        <View
+          style={{
+            width: "100%",
+            flexDirection: "row",
+          }}
+        >
+          <Text style={{ color: "black", flex: 1 }}>Cash:</Text>
+          <Text style={{ color: "black" }}>-{price}</Text>
+        </View>
       </View>
     </View>
   );

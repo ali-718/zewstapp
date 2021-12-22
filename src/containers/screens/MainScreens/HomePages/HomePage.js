@@ -648,7 +648,7 @@ export const HomePage = ({ setselected }) => {
                       zIndex: 3,
                       width: device === "tablet" ? 150 : 130,
                       borderBottomWidth: 0,
-                      marginTop: 0,
+                      // marginTop: device === "tablet" ? -15 : 0,
                       height: device === "tablet" ? 50 : 40,
                       backgroundColor: "rgba(0,0,0,0)",
                     }}
@@ -656,11 +656,11 @@ export const HomePage = ({ setselected }) => {
                       zIndex: 3,
                       width: device === "tablet" ? 150 : 130,
                       borderBottomWidth: 0,
-                      marginTop: 0,
+                      marginTop: device === "tablet" ? -5 : 0,
                       height: device === "tablet" ? 50 : 40,
                       backgroundColor: "rgba(0,0,0,0)",
                     }}
-                    iconStyle={{ marginTop: 10 }}
+                    iconStyle={{ marginTop: 20 }}
                     dropDownOffset={device === "tablet" ? 50 : 40}
                   />
                 </View>

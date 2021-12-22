@@ -4,6 +4,7 @@ import {
   FETCH_MEALS,
   FETCH_ORDERS,
   FETCH_TABLES,
+  UPDATE_MEALS,
   UPDATE_ORDER,
 } from "../actions/PosActions/Types";
 
@@ -30,6 +31,9 @@ const initialState = {
     orders: [],
     isLoading: false,
     isError: false,
+    isSuccess: false,
+    doneOrders: [],
+    createdOrders: [],
   },
 };
 
@@ -40,9 +44,6 @@ export const posReducer = produce((state = initialState, { payload, type }) => {
         (item) => item.orderId === payload
       );
 
-      console.log(index);
-      console.log(payload);
-
       if (index > -1) {
         const allOrders = [...state.orders.orders];
 
@@ -50,6 +51,7 @@ export const posReducer = produce((state = initialState, { payload, type }) => {
 
         state.orders.orders = allOrders;
       }
+      state.orders.isSuccess = false;
       break;
     }
     case UPDATE_ORDER.SUCCEEDED: {
@@ -58,6 +60,28 @@ export const posReducer = produce((state = initialState, { payload, type }) => {
       state.orders.orders = allOrders.filter(
         (item) => item.orderId !== payload
       );
+      break;
+    }
+    case UPDATE_MEALS.SUCCEEDED: {
+      const allOrders = [...state.orders.orders];
+      const index = allOrders.findIndex(
+        (item) => item.orderId === payload.orderId
+      );
+
+      allOrders[index] = {
+        ...allOrders[index],
+        catalog: allOrders[index].catalog.map((data) => ({
+          ...data,
+          served:
+            payload.meals?.filter((meal) => meal === data?.mealName).length > 0
+              ? true
+              : false,
+        })),
+        loading: false,
+      };
+
+      state.orders.orders = allOrders;
+      state.orders.isSuccess = true;
       break;
     }
     case UPDATE_ORDER.FAILED: {
@@ -72,6 +96,7 @@ export const posReducer = produce((state = initialState, { payload, type }) => {
 
         state.orders.orders = allOrders;
       }
+      state.orders.isSuccess = false;
       break;
     }
     case FETCH_ORDERS.REQUESTED: {
@@ -80,9 +105,27 @@ export const posReducer = produce((state = initialState, { payload, type }) => {
       break;
     }
     case FETCH_ORDERS.SUCCEEDED: {
+      const doneOrders = payload?.doneOrders;
+      const paidOrders = payload?.paidOrders;
+      const createdOrders = payload?.createdOrders;
+
       state.orders.isLoading = false;
       state.orders.isError = false;
-      state.orders.orders = payload?.dineInOrdersPaid;
+      state.orders.createdOrders = [
+        ...createdOrders?.dineInOrdersCreated,
+        ...createdOrders?.takeAwayOrdersCreated,
+        ...createdOrders?.deliveryOrdersCreated,
+      ];
+      state.orders.orders = [
+        ...paidOrders?.dineInOrdersPaid,
+        ...paidOrders?.takeAwayOrdersPaid,
+        ...paidOrders?.deliveryOrdersPaid,
+      ];
+      state.orders.doneOrders = [
+        ...doneOrders.dineInOrdersDone,
+        ...doneOrders.takeAwayOrdersDone,
+        ...doneOrders.deliveryOrdersDone,
+      ];
       // state.orders.orders = payload?.dineInOrdersCreated;
       break;
     }
