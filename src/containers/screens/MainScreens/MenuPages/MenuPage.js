@@ -341,7 +341,7 @@ export const MenuPage = () => {
                                       color: menuHeadingColor,
                                     }}
                                   >
-                                    Price with tax
+                                    {item?.taxPrice}
                                   </Text>
                                 </View>
                               </View>

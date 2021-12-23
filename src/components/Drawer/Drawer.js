@@ -32,7 +32,7 @@ import { useRoute } from "@react-navigation/native";
 import { RegularButton } from "../Buttons/RegularButton";
 import { LogoutAction } from "../../Redux/actions/AuthActions/authActions";
 
-export const Menu = ({ image, name, setselected, selected, style }) => (
+export const Menu = ({ image, name, setselected, selected, style, noName }) => (
   <TouchableOpacity
     style={{
       width: "100%",
@@ -49,24 +49,26 @@ export const Menu = ({ image, name, setselected, selected, style }) => (
     <Image
       source={image}
       style={{
-        width: 25,
-        height: 25,
+        width: 20,
+        height: 20,
         resizeMode: "contain",
         marginLeft: 20,
         tintColor: selected ? primaryColor : grayTextColor,
       }}
     />
-    <Text
-      style={{
-        fontSize: 18,
-        color: selected ? primaryColor : grayMenuText,
-        textAlign: "center",
-        marginLeft: 20,
-        fontFamily: "openSans_semiBold",
-      }}
-    >
-      {name}
-    </Text>
+    {!noName && (
+      <Text
+        style={{
+          fontSize: 16,
+          color: selected ? primaryColor : grayMenuText,
+          textAlign: "center",
+          marginLeft: 20,
+          fontFamily: "openSans_semiBold",
+        }}
+      >
+        {name}
+      </Text>
+    )}
   </TouchableOpacity>
 );
 
@@ -218,6 +220,154 @@ export const DrawerMenu = ({ state: { index } }) => {
               name={"Support"}
             />
           </View>
+        </View>
+      </ScrollView>
+    </SafeAreaView>
+  );
+};
+export const DrawerMenuWithoutNames = ({ state: { index } }) => {
+  const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const device = useSelector((state) => state.system.device);
+
+  const Logout = () => dispatch(LogoutAction(navigation));
+
+  return (
+    <SafeAreaView style={{ flex: 1, paddingTop: 30 }}>
+      <ScrollView
+        style={{ flex: 1, backgroundColor: "white" }}
+        showsVerticalScrollIndicator={false}
+      >
+        <View
+          style={{
+            flexDirection: "column",
+            flex: 1,
+            marginBottom: 20,
+          }}
+        >
+          <View style={{ width: "100%", marginTop: 30 }}>
+            <Text
+              style={{
+                textTransform: "uppercase",
+                color: drawerHeadingColor,
+                marginLeft: 10,
+                fontSize: 16,
+              }}
+            >
+              Main
+            </Text>
+            <Menu
+              selected={index === 0}
+              setselected={() => navigation.navigate("Home")}
+              image={overviewIcon}
+              name={"Overview"}
+              style={{ marginTop: 20 }}
+              noName
+            />
+            <Menu
+              selected={index === 1}
+              setselected={() => navigation.navigate("Menu")}
+              image={menuIcon}
+              name={"Menu"}
+              noName
+            />
+            <Menu
+              selected={index === 2}
+              setselected={() => navigation.navigate("Sales")}
+              image={salesIcon}
+              name={"Sales"}
+              noName
+            />
+            <Menu
+              selected={index === 3}
+              setselected={() => navigation.navigate("Recipe")}
+              image={recipeIcon}
+              name={"Recipe Engineering"}
+              noName
+            />
+            <Menu
+              selected={index === 4}
+              setselected={() => navigation.navigate("")}
+              image={wasteIcon}
+              name={"Waste Prediction"}
+              noName
+            />
+            <Menu
+              selected={index === 5}
+              setselected={() => navigation.navigate("Inventory")}
+              image={inventoryIcon}
+              name={"Inventory"}
+              noName
+            />
+            <Menu
+              selected={index === 6}
+              setselected={() => navigation.navigate("Admin")}
+              image={inventoryIcon}
+              name={"Admin"}
+              noName
+            />
+            <Menu
+              selected={index === 7}
+              setselected={() => navigation.navigate("Vendor")}
+              image={inventoryIcon}
+              name={"Vendor"}
+              noName
+            />
+            <Menu
+              selected={index === 8}
+              setselected={() => navigation.navigate("Pos")}
+              image={inventoryIcon}
+              name={"POS"}
+              noName
+            />
+            {device === "tablet" ? (
+              <Menu
+                selected={index === 9}
+                setselected={() => navigation.navigate("Kitchen")}
+                image={inventoryIcon}
+                name={"Kitchen"}
+                noName
+              />
+            ) : null}
+          </View>
+
+          {/* <View style={{ width: "100%", marginTop: 40 }}>
+            <Text
+              style={{
+                textTransform: "uppercase",
+                color: drawerHeadingColor,
+                marginLeft: 20,
+                fontSize: 16,
+              }}
+            >
+              Help
+            </Text>
+            <Menu
+              selected={index === 10}
+              setselected={() => navigation.navigate("")}
+              image={messageIcon}
+              name={"Messages"}
+              style={{ marginTop: 20 }}
+            />
+            <Menu
+              selected={index === 11}
+              setselected={() => navigation.navigate("")}
+              image={libraryIcon}
+              name={"Library"}
+            />
+            <Menu
+              selected={index === 12}
+              setselected={() => navigation.navigate("")}
+              image={settingsIcon}
+              name={"Settings"}
+            />
+            <Menu
+              selected={index === 13}
+              setselected={() => navigation.navigate("")}
+              image={supportIcon}
+              name={"Support"}
+            />
+          </View> */}
         </View>
       </ScrollView>
     </SafeAreaView>

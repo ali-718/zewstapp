@@ -17,6 +17,7 @@ import { MainOrder } from "../../../../components/MainOrder/MainOrder";
 import { Chip } from "../../../../components/Chip/Chip";
 import { useIsFocused } from "@react-navigation/native";
 import * as actions from "../../../../Redux/actions/PosActions/OrderActions";
+import * as systemAction from "../../../../Redux/actions/SystemActions/SystemActions";
 import { HEIGHT } from "../../../../helpers/utlils";
 import { Spinner } from "native-base";
 import { NoMealBox } from "../../../../components/NoMealBox/NoMealBox";
@@ -25,6 +26,7 @@ import { ToastError } from "../../../../helpers/Toast";
 export const KitchenPage = () => {
   const dispatch = useDispatch();
   const device = useSelector((state) => state.system.device);
+  const orientation = useSelector((state) => state.system.orientation);
   const { isLoading, isSuccess, orders, doneOrders, createdOrders } =
     useSelector((state) => state.pos.orders);
   const [selected, setSelected] = useState(0);
@@ -37,11 +39,20 @@ export const KitchenPage = () => {
 
   useEffect(() => {
     if (!screenFocused) return;
+    if (device === "tablet" && orientation === "landscape") {
+      dispatch(systemAction.setIsMenuSmall({ isSmall: true }));
+    } else {
+      dispatch(systemAction.setIsMenuSmall({ isSmall: false }));
+    }
 
     dispatch(
       actions.fetchAllOrders({ locationId: defaultLocation.locationId })
     );
-  }, [screenFocused]);
+
+    return () => {
+      dispatch(systemAction.setIsMenuSmall({ isSmall: false }));
+    };
+  }, [screenFocused, orientation]);
 
   const updateOrder = (orderId) => {
     const meal = orderstOserve.filter((item) => item.orderId === orderId);
@@ -338,7 +349,7 @@ export const KitchenPage = () => {
                                     <View style={{ width: 270 }}>
                                       <Text
                                         style={{
-                                          fontFamily: "openSans_bold",
+                                          fontFamily: "openSans_semiBold",
                                           fontSize: 16,
                                           color: "black",
                                           marginLeft: 10,
@@ -355,7 +366,7 @@ export const KitchenPage = () => {
                                     >
                                       <Text
                                         style={{
-                                          fontFamily: "openSans_bold",
+                                          fontFamily: "openSans_semiBold",
                                           fontSize: 16,
                                           color: "black",
                                         }}
@@ -366,7 +377,7 @@ export const KitchenPage = () => {
                                     <View style={{ width: 150 }}>
                                       <Text
                                         style={{
-                                          fontFamily: "openSans_bold",
+                                          fontFamily: "openSans_semiBold",
                                           fontSize: 16,
                                           color: "black",
                                         }}
@@ -377,7 +388,7 @@ export const KitchenPage = () => {
                                     <View style={{ width: 150 }}>
                                       <Text
                                         style={{
-                                          fontFamily: "openSans_bold",
+                                          fontFamily: "openSans_semiBold",
                                           fontSize: 16,
                                           color: "black",
                                         }}

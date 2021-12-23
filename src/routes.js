@@ -43,7 +43,7 @@ import { MenuPage } from "./containers/screens/MainScreens/MenuPages/MenuPage";
 import { AdminPage } from "./containers/screens/MainScreens/AdminsPages/AdminPage";
 import { RecipeListPage } from "./containers/screens/MainScreens/RecipePages/RecipeListPage";
 import { InventoryListPage } from "./containers/screens/MainScreens/InventoryPages/InventoryListPage";
-import { DrawerMenu } from "./components/Drawer/Drawer";
+import { DrawerMenu, DrawerMenuWithoutNames } from "./components/Drawer/Drawer";
 import { InsightsPage } from "./containers/screens/MainScreens/InsightsPages/InsightsPage";
 import BankPage from "./containers/screens/MainScreens/AdminsPages/BankPage";
 import { ResetPasswordVerification } from "./containers/screens/AuthScreens/ResetPasswordVerification";
@@ -53,6 +53,7 @@ import { TablesListScreen } from "./containers/screens/POSscreens/TablesListScre
 import { OrderTakingScreen } from "./containers/screens/POSscreens/OrderTakingScreen";
 import { StripePage } from "./containers/screens/MainScreens/AdminsPages/StripePage";
 import { KitchenPage } from "./containers/screens/MainScreens/KitchenPages/KitchenPage";
+import { Text } from "./components/Text/Text";
 
 const Stack = createNativeStackNavigator();
 
@@ -181,25 +182,33 @@ const Drawer = createDrawerNavigator();
 const MainRoutes = () => {
   const orientation = useSelector((state) => state.system.orientation);
   const device = useSelector((state) => state.system.device);
+  const isMenuSmall = useSelector((state) => state.system.isMenuSmall);
   return (
     <NavigationContainer>
       <Drawer.Navigator
-        // initialRouteName={"KitchenPage"}
         screenOptions={{
           headerShown: false,
           drawerType:
             device === "tablet"
-              ? orientation === "landscape"
+              ? isMenuSmall
+                ? "permanent"
+                : orientation === "landscape"
                 ? "permanent"
                 : "front"
               : "front",
           gestureEnabled: false,
           swipeEnabled: true,
           drawerStyle: {
-            width: 300,
+            width: isMenuSmall ? 70 : 250,
           },
         }}
-        drawerContent={(props) => <DrawerMenu {...props} />}
+        drawerContent={(props) =>
+          isMenuSmall ? (
+            <DrawerMenuWithoutNames {...props} />
+          ) : (
+            <DrawerMenu {...props} />
+          )
+        }
         backBehavior={"history"}
       >
         <Drawer.Screen name="Dashboard" component={DashboardRoutes} />

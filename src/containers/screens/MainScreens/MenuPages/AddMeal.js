@@ -51,6 +51,7 @@ export const AddMeal = (props) => {
     (state) => state.locations.defaultLocation
   );
   const recipeList = useSelector((state) => state.recipe.recipe.list);
+  const device = useSelector((state) => state.system.device);
   const [name, setName] = useState("");
   const [desc, setdesc] = useState("");
   const [unitCost, setunitCost] = useState("");
@@ -85,6 +86,7 @@ export const AddMeal = (props) => {
         locationId: defaultLocation.locationId,
       })
     );
+    dispatch(getMealCategories());
 
     if (!props.route?.params?.data) return;
 
@@ -217,12 +219,11 @@ export const AddMeal = (props) => {
     if (
       name.trim().length === 0 ||
       desc.trim().length === 0 ||
-      selectedDays.length === 0 ||
       selectedCategories.trim().length === 0 ||
       unitCost.length === 0 ||
       !selectedRecipe.recipeTitle
     ) {
-      ToastError("Fill all fields marked with (*)");
+      ToastError("Fill all fields marked");
       return;
     }
 
@@ -234,14 +235,23 @@ export const AddMeal = (props) => {
           mealDescription: desc,
           mealPrice: parseFloat(unitCost),
           mealAvailability: available,
-          mealDaysAvailable: selectedDays,
           mealCategory: selectedCategories,
-          mealAllergens: selectedAllergens,
-          mealAddons: selectedAddons,
-          mealMedia: foodImageBase64,
           navigation,
           mealId: props.route?.params?.data?.mealId,
           mealRecipes: [selectedRecipe],
+          unitCost: selectedRecipe?.totalUnitCost,
+          taxPrice: defaultLocation?.location?.taxRate
+            ? `${
+                parseFloat(unitCost).toFixed(2) *
+                  (parseFloat(defaultLocation?.location?.taxRate).toFixed(2) /
+                    100) +
+                  parseFloat(unitCost) || "0.00"
+              }`
+            : "0.00",
+          profitPrice:
+            selectedRecipe?.totalUnitCost > 0 && unitCost.length > 0
+              ? `${unitCost - selectedRecipe?.totalUnitCost}`
+              : "0.00",
         })
       );
       return;
@@ -254,14 +264,23 @@ export const AddMeal = (props) => {
         mealDescription: desc,
         mealPrice: parseFloat(unitCost),
         mealAvailability: available,
-        mealDaysAvailable: selectedDays,
         mealCategory: selectedCategories,
-        mealAllergens: selectedAllergens,
-        mealAddons: selectedAddons,
-        mealMedia: foodImageBase64,
         navigation,
         selectedRecipe,
         mealRecipes: [selectedRecipe],
+        unitCost: selectedRecipe?.totalUnitCost,
+        taxPrice: defaultLocation?.location?.taxRate
+          ? `${
+              parseFloat(unitCost).toFixed(2) *
+                (parseFloat(defaultLocation?.location?.taxRate).toFixed(2) /
+                  100) +
+                parseFloat(unitCost) || "0.00"
+            }`
+          : "0.00",
+        profitPrice:
+          selectedRecipe?.totalUnitCost > 0 && unitCost.length > 0
+            ? `${unitCost - selectedRecipe?.totalUnitCost}`
+            : "0.00",
       })
     );
   };
@@ -336,7 +355,7 @@ export const AddMeal = (props) => {
             flexWrap: "wrap",
           }}
         >
-          <View style={{ marginLeft: 0 }}>
+          <View style={{ marginLeft: device === "tablet" ? 0 : 20 }}>
             <TextBoxInput
               value={`${selectedRecipe?.totalUnitCost ?? "0.00"}`}
               label={"Cost"}
@@ -381,9 +400,23 @@ export const AddMeal = (props) => {
             </View>
           </View>
           <View style={{ marginLeft: 20 }}>
-            <TextBoxInput value={"0.00"} label={"Price with tax"} disabled />
+            <TextBoxInput
+              value={
+                defaultLocation?.location?.taxRate
+                  ? `${
+                      parseFloat(unitCost).toFixed(2) *
+                        (parseFloat(defaultLocation?.location?.taxRate).toFixed(
+                          2
+                        ) /
+                          100) +
+                        parseFloat(unitCost) || "0.00"
+                    }`
+                  : "0.00"
+              }
+              label={"Price with tax"}
+              disabled
+            />
           </View>
-          {console.log(selectedRecipe?.totalUnitCost - unitCost)}
           <View style={{ marginLeft: 20 }}>
             <TextBoxInput
               value={
@@ -412,7 +445,7 @@ export const AddMeal = (props) => {
           />
         </View>
 
-        <View style={{ width: "100%", marginTop: 10 }}>
+        <View style={{ width: "100%", marginTop: 12 }}>
           <Input
             isEdit={isEdit}
             value={name}
@@ -421,7 +454,7 @@ export const AddMeal = (props) => {
           />
         </View>
 
-        <View style={{ width: "100%", marginTop: 10 }}>
+        <View style={{ width: "100%", marginTop: 12 }}>
           <Input
             isEdit={isEdit}
             value={desc}
@@ -431,7 +464,7 @@ export const AddMeal = (props) => {
           />
         </View>
 
-        <View style={{ width: "100%", marginTop: 10 }}>
+        <View style={{ width: "100%", marginTop: 12 }}>
           <Input
             isEdit={isEdit}
             value={unitCost}
@@ -441,7 +474,25 @@ export const AddMeal = (props) => {
           />
         </View>
 
-        {/* <View style={{ width: "100%", marginTop: 10 }}>
+        <View style={{ width: "100%", marginTop: 12 }}>
+          <MealItem
+            label={"Availability*"}
+            text={available ? "Available" : "Hidden"}
+            icon={available ? switchOn : switchOff}
+            onIconClick={() => setavailable(!available)}
+          />
+        </View>
+
+        <View style={{ width: "100%", marginTop: 12, zIndex: 3 }}>
+          <Dropdown
+            selectedMenu={selectedCategories}
+            setMenu={setselectedCategories}
+            placeholder={"Categories"}
+            menus={categories}
+          />
+        </View>
+
+        {/* <View style={{ width: "100%", marginTop: 12 }}>
           <MealItem
             label={"Availability*"}
             text={available ? "Available" : "Hidden"}
@@ -450,7 +501,7 @@ export const AddMeal = (props) => {
           />
         </View> */}
 
-        {/* <View style={{ width: "100%", marginTop: 10 }}>
+        {/* <View style={{ width: "100%", marginTop: 12 }}>
           <Input
             editable={false}
             value={`${selectedRecipe?.totalUnitCost ?? ""}`}
@@ -459,7 +510,7 @@ export const AddMeal = (props) => {
           />
         </View> */}
 
-        {/* <View style={{ width: "100%", marginTop: 10, zIndex: 0 }}>
+        {/* <View style={{ width: "100%", marginTop: 12, zIndex: 0 }}>
           <MealItem
             label={"Days Available*"}
             text={JSON.stringify(selectedDays.map((item) => item.slice(0, 3)))
@@ -474,7 +525,7 @@ export const AddMeal = (props) => {
           />
         </View> */}
 
-        {/* <View style={{ width: "100%", marginTop: 10 }}>
+        {/* <View style={{ width: "100%", marginTop: 12 }}>
           <MealItem
             label={"Categories*"}
             text={selectedCategories}
@@ -485,7 +536,7 @@ export const AddMeal = (props) => {
           />
         </View> */}
 
-        {/* <View style={{ width: "100%", marginTop: 10 }}>
+        {/* <View style={{ width: "100%", marginTop: 12 }}>
           <MealItem
             label={"Allergens"}
             text={JSON.stringify(selectedAllergens)
@@ -500,7 +551,7 @@ export const AddMeal = (props) => {
           />
         </View> */}
 
-        {/* <View style={{ width: "100%", marginTop: 10 }}>
+        {/* <View style={{ width: "100%", marginTop: 12 }}>
           <MealItem
             label={"Add-ons"}
             text={JSON.stringify(selectedAddons)

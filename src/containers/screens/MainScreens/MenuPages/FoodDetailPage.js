@@ -191,7 +191,7 @@ export const FoodDetailPage = ({
               <PriceBox noPrice heading={"Rating"} price={mealPrice} />
             </View>
 
-            {mealCategory.length > 0 && (
+            {mealCategory?.length > 0 && (
               <View style={{ width: "100%", marginTop: 20 }}>
                 <Text
                   style={{
@@ -217,7 +217,7 @@ export const FoodDetailPage = ({
               </View>
             )}
 
-            {mealAllergens.length > 0 && (
+            {mealAllergens?.length > 0 && (
               <View style={{ width: "100%", marginTop: 20 }}>
                 <Text
                   style={{
@@ -250,7 +250,7 @@ export const FoodDetailPage = ({
               </View>
             )}
 
-            {mealAddons.length > 0 && (
+            {mealAddons?.length > 0 && (
               <View style={{ width: "100%", marginTop: 20 }}>
                 <Text
                   style={{
@@ -337,7 +337,7 @@ export const FoodDetailPage = ({
                 <View style={{ alignItems: "center" }}>
                   <Text style={{ color: "black" }}>M</Text>
 
-                  {mealDaysAvailable.find((item) => item === "Monday") ? (
+                  {mealDaysAvailable?.find((item) => item === "Monday") ? (
                     <Image
                       source={check}
                       style={{
@@ -363,7 +363,7 @@ export const FoodDetailPage = ({
                 <View style={{ alignItems: "center" }}>
                   <Text style={{ color: "black" }}>T</Text>
 
-                  {mealDaysAvailable.find((item) => item === "Tuesday") ? (
+                  {mealDaysAvailable?.find((item) => item === "Tuesday") ? (
                     <Image
                       source={check}
                       style={{
@@ -389,7 +389,7 @@ export const FoodDetailPage = ({
                 <View style={{ alignItems: "center" }}>
                   <Text style={{ color: "black" }}>W</Text>
 
-                  {mealDaysAvailable.find((item) => item === "Wednesday") ? (
+                  {mealDaysAvailable?.find((item) => item === "Wednesday") ? (
                     <Image
                       source={check}
                       style={{
@@ -415,7 +415,7 @@ export const FoodDetailPage = ({
                 <View style={{ alignItems: "center" }}>
                   <Text style={{ color: "black" }}>T</Text>
 
-                  {mealDaysAvailable.find((item) => item === "Thursday") ? (
+                  {mealDaysAvailable?.find((item) => item === "Thursday") ? (
                     <Image
                       source={check}
                       style={{
@@ -441,7 +441,7 @@ export const FoodDetailPage = ({
                 <View style={{ alignItems: "center" }}>
                   <Text style={{ color: "black" }}>F</Text>
 
-                  {mealDaysAvailable.find((item) => item === "Friday") ? (
+                  {mealDaysAvailable?.find((item) => item === "Friday") ? (
                     <Image
                       source={check}
                       style={{
@@ -467,7 +467,7 @@ export const FoodDetailPage = ({
                 <View style={{ alignItems: "center" }}>
                   <Text style={{ color: "black" }}>S</Text>
 
-                  {mealDaysAvailable.find((item) => item === "Saturday") ? (
+                  {mealDaysAvailable?.find((item) => item === "Saturday") ? (
                     <Image
                       source={check}
                       style={{
@@ -492,7 +492,7 @@ export const FoodDetailPage = ({
 
                 <View style={{ alignItems: "center" }}>
                   <Text style={{ color: "black" }}>S</Text>
-                  {mealDaysAvailable.find((item) => item === "Sunday") ? (
+                  {mealDaysAvailable?.find((item) => item === "Sunday") ? (
                     <Image
                       source={check}
                       style={{

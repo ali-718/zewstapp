@@ -127,7 +127,10 @@ export const getPrimaryLocationAction = (clientId) => (dispatch) => {
     .then((data) => {
       dispatch({
         type: PRIMARY_LOCATION,
-        payload: { locationId: data?.data?.default_location },
+        payload: {
+          locationId: data?.data?.default_location,
+          location: data?.data?.location,
+        },
       });
     })
     .catch((e) => {

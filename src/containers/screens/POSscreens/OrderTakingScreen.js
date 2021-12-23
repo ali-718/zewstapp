@@ -82,6 +82,7 @@ const MealComponent = ({ meal, onPress, width }) => {
         backgroundColor: color,
         minHeight: 100,
         marginLeft: "2%",
+        marginTop: 10,
       }}
       onPress={onPress}
     >
@@ -332,10 +333,7 @@ export const OrderTakingScreen = (props) => {
       }
 
       if (allIndex > -1) {
-        allList[allIndex] = {
-          ...allList[index],
-          selected: allList[allIndex].selected - 1,
-        };
+        allList[allIndex].selected = allList[allIndex].selected - 1;
 
         setMealsToShow(allList);
       }
@@ -530,7 +528,7 @@ export const OrderTakingScreen = (props) => {
                               fontFamily: "openSans_semiBold",
                             }}
                           >
-                            ${totalPrice}
+                            ${totalPrice.toFixed(2)}
                           </Text>
                         </View>
 

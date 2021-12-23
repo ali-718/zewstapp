@@ -132,13 +132,36 @@ export const addNewMeal =
     mealCategory,
     mealAllergens,
     mealAddons,
-    mealDiscount = "2",
+    mealDiscount = "",
     mealMedia = "",
     navigation,
     mealRecipes,
+    unitCost,
+    taxPrice,
+    profitPrice,
   }) =>
   (dispatch) => {
     dispatch({ type: ADD_MEAL.REQUESTED });
+
+    console.log({
+      locationId,
+      mealName,
+      mealDescription,
+      mealPrice,
+      mealCurrency,
+      mealAvailability,
+      mealDaysAvailable,
+      mealCategory,
+      mealAllergens,
+      mealAddons,
+      mealDiscount,
+      mealMedia,
+      navigation,
+      mealRecipes,
+      unitCost,
+      taxPrice,
+      profitPrice,
+    });
 
     client
       .post(
@@ -151,14 +174,13 @@ export const addNewMeal =
               mealPrice,
               mealCurrency,
               mealAvailability,
-              mealDaysAvailable,
               mealCategory,
-              mealAllergens,
-              mealAddons,
               mealDiscount,
-              mealMedia: [`data:image/jpeg;base64,${mealMedia}`],
               mealRecipes,
               createdAt: "12-10-2021",
+              unitCost,
+              taxPrice,
+              profitPrice,
             }
           : {
               locationId,
@@ -167,13 +189,13 @@ export const addNewMeal =
               mealPrice,
               mealCurrency,
               mealAvailability,
-              mealDaysAvailable,
               mealCategory,
-              mealAllergens,
-              mealAddons,
               mealDiscount,
               mealRecipes,
               createdAt: "12-10-2021",
+              unitCost,
+              taxPrice,
+              profitPrice,
             }
       )
       .then((data) => {

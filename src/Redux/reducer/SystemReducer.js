@@ -1,5 +1,7 @@
 import produce from "immer";
 import {
+  IS_MENU_SMALL,
+  IS_MENU_SMALL_CLOSED,
   LANDSCAPE,
   MOBILE,
   PORTRAIT,
@@ -9,11 +11,16 @@ import {
 const initialState = {
   orientation: "",
   device: "",
+  isMenuSmall: false,
 };
 
 export const systemReducer = produce(
   (state = initialState, { payload, type }) => {
     switch (type) {
+      case IS_MENU_SMALL: {
+        state.isMenuSmall = payload;
+        return;
+      }
       case MOBILE: {
         state.device = "mobile";
         break;
