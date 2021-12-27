@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { TouchableOpacity, View } from "react-native";
 import { Text } from "../../components/Text/Text";
 import {
+  grayBorderColor,
   grayShade1,
   grayTextColor,
   primaryColor,
@@ -193,6 +194,13 @@ export const ResturantName = ({
           {foodItems.length > 0 && (
             <View style={{ width: "100%", marginTop: 10 }}>
               <SearchInput
+                style={{
+                  borderWidth: 1,
+                  borderBottomWidth: 1,
+                  borderColor: grayBorderColor,
+                  borderRadius: 10,
+                  marginBottom: 20,
+                }}
                 search={search}
                 setSearch={setSearch}
                 searchKeyword={searchKeyword}

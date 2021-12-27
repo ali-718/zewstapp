@@ -29,6 +29,7 @@ export const Dropdown = ({
   errMsg,
   innerStyle,
   Background,
+  textStyle,
 }) => {
   const device = useSelector((state) => state.system.device);
   const [isFocused, setIsFocused] = useState(false);
@@ -65,7 +66,12 @@ export const Dropdown = ({
             width={"100%"}
           >
             {menus.map((item, i) => (
-              <Select.Item key={i} label={item} value={item} />
+              <Select.Item
+                style={textStyle}
+                key={i}
+                label={item}
+                value={item}
+              />
             ))}
           </Select>
         </View>
@@ -112,6 +118,7 @@ export const Dropdown = ({
                   style={{
                     fontSize: device === "tablet" ? 20 : 14,
                     color: "gray",
+                    ...textStyle,
                   }}
                 >
                   {placeholder}
@@ -122,6 +129,7 @@ export const Dropdown = ({
                   style={{
                     fontSize: device === "tablet" ? 20 : 14,
                     color: "black",
+                    ...textStyle,
                   }}
                 >
                   {selectedMenu}

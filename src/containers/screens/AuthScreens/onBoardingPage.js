@@ -67,7 +67,7 @@ export const OnBoardingPage = ({ inLogin = false }) => {
           <Text
             style={{
               color: "black",
-              fontSize: device === "tablet" ? 40 : 25,
+              fontSize: device === "tablet" ? 30 : 25,
               marginTop: 20,
               textAlign: "center",
               fontFamily: "openSans_bold",
@@ -79,7 +79,7 @@ export const OnBoardingPage = ({ inLogin = false }) => {
           <Text
             style={{
               color: "black",
-              fontSize: device === "tablet" ? 22 : 18,
+              fontSize: 18,
               marginTop: 10,
               textAlign: "center",
               fontFamily: "openSans_regular",

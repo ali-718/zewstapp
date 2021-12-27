@@ -16,6 +16,8 @@ import { RefetchDataError } from "../../../../components/ErrorPage/RefetchDataEr
 import { colors } from "../../../../helpers/utlils";
 import { InventoryDetailPage } from "./InventoryDetailPage";
 import { HeadingBox } from "../../../../components/HeadingBox/HeadingBox";
+import noRecipe from "../../../../assets/images/noRecipe.png";
+import { primaryColor } from "../../../../theme/colors";
 
 export const InventoryListPage = () => {
   const navigation = useNavigation();
@@ -27,6 +29,7 @@ export const InventoryListPage = () => {
   const device = useSelector((state) => state.system.device);
   const orientation = useSelector((state) => state.system.orientation);
   const list = useSelector((state) => state.inventory.inventory.list);
+  const category = useSelector((state) => state.inventory.inventory.category);
   const isLoading = useSelector((state) => state.inventory.inventory.isLoading);
   const isError = useSelector((state) => state.inventory.inventory.isError);
   const [search, setSearch] = useState("");
@@ -49,68 +52,122 @@ export const InventoryListPage = () => {
     setFiltereditem(list ?? []);
   }, [list]);
 
+  const fetchRecipes = () =>
+    dispatch(
+      actions.fetchRecipeActions({ locationId: defaultLocation.locationId })
+    );
+
   const searchKeyword = (text) => {
     const keyword = text?.toLowerCase();
     const realData = list;
-    const finalData = realData.filter(
-      (item) =>
-        item?.itemName?.toLowerCase()?.includes(keyword) ||
-        item?.brand?.toLowerCase()?.includes(keyword)
+    const finalData = realData.filter((item) =>
+      item.itemName?.toLowerCase()?.includes(keyword)
     );
 
     setFiltereditem(finalData);
   };
 
   return (
-    <MainScreenContainer>
+    <MainScreenContainer
+      onPressRight={() => null}
+      leftImage={""}
+      rightImage={""}
+      title={"Recipe Engineering"}
+    >
       <HeadingBox heading={"Inventory"} noBack />
-      <View
-        style={{
-          width: "90%",
-          marginBottom: 60,
-          alignItems: "center",
-          marginTop: 20,
-        }}
-      >
-        {isLoading ? (
-          <LoadingPage />
-        ) : (
+      {isLoading ? (
+        <LoadingPage />
+      ) : isError ? (
+        <RefetchDataError onPress={fetchRecipes} isLoading={isLoading} />
+      ) : (
+        <View
+          style={{
+            width: "90%",
+            marginBottom: 60,
+            alignItems: "center",
+            marginTop: 0,
+          }}
+        >
           <View style={{ width: "100%", flex: 1 }}>
-            {/* <SearchInput
+            <SearchInput
               search={search}
               setSearch={setSearch}
               searchKeyword={searchKeyword}
-            /> */}
+            />
+          </View>
 
-            {filteredItem?.length === 0 ? (
-              <NoMealBox image={InventoryIcon} text={"No item added. "} />
+          <View
+            style={{
+              width: "100%",
+            }}
+          >
+            {category?.length === 0 ? (
+              <NoMealBox image={noRecipe} text={"No recipe added. "} />
             ) : (
-              filteredItem.map((item, i) => (
-                <View key={i} style={{ width: "100%", marginTop: 10 }}>
-                  <AdminOverviewBox
-                    key={i}
-                    label={item?.itemName}
-                    name={item.brand}
-                    rightText={" "}
-                    image={InventoryIcon}
-                    inventory
-                    onPress={() =>
-                      navigation.navigate("inventoryAdd", {
-                        data: item,
-                      })
-                    }
-                  />
+              category.map((category) => (
+                <View
+                  style={{
+                    width: "100%",
+                    marginTop: 24,
+                  }}
+                >
+                  <Text
+                    style={{
+                      color: primaryColor,
+                      fontSize: 16,
+                      textTransform: "uppercase",
+                    }}
+                  >
+                    {category}
+                  </Text>
+                  <View
+                    style={{
+                      backgroundColor: "white",
+                      borderRadius: 10,
+                      width: "100%",
+                      marginTop: 10,
+                    }}
+                  >
+                    {filteredItem
+                      ?.filter((recipe) => recipe.category === category)
+                      .map((item, i) => (
+                        <View
+                          key={i}
+                          style={{
+                            width: "100%",
+                            marginTop: 10,
+                            backgroundColor: "white",
+                            borderRadius: 10,
+                            padding: 10,
+                          }}
+                        >
+                          <AdminOverviewBox
+                            key={i}
+                            label={item.itemName}
+                            name={item.brand}
+                            rightText={""}
+                            onPress={() =>
+                              navigation.navigate("inventoryAdd", {
+                                data: item,
+                              })
+                            }
+                            noLeftMargin
+                            primary={false}
+                          />
+                        </View>
+                      ))}
+                  </View>
                 </View>
               ))
             )}
-            <RegularButton
-              onPress={() => navigation.navigate("inventoryAdd")}
-              text={"+ Add An Item"}
-              style={{ marginTop: 20 }}
-            />
           </View>
-        )}
-      </View>
+          <RegularButton
+            onPress={() => navigation.navigate("recipeAdd")}
+            text={"Add Recipe"}
+            style={{ borderRadius: 10, marginTop: 20 }}
+          />
+        </View>
+      )}
     </MainScreenContainer>
   );
 };

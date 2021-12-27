@@ -32,6 +32,7 @@ export const Input = ({
   setHighOrderError,
   onPress,
   noInput,
+  noPlaceHolder,
   ...props
 }) => {
   const device = useSelector((state) => state.system.device);
@@ -118,7 +119,8 @@ export const Input = ({
                 )}
               </Text>
             ) : (
-              isFocused && (
+              isFocused &&
+              !noPlaceHolder && (
                 <Text style={{ marginBottom: 5, color: "gray" }}>
                   {placeholder}{" "}
                   {isError && showError && (
@@ -135,7 +137,7 @@ export const Input = ({
             <Text
               style={{
                 width: "100%",
-                fontSize: device === "tablet" ? 20 : 16,
+                fontSize: device === "tablet" ? 16 : 16,
                 ...inputStyle,
                 flex: 1,
               }}
@@ -157,7 +159,7 @@ export const Input = ({
               ref={ref}
               style={{
                 width: "100%",
-                fontSize: device === "tablet" ? 20 : 16,
+                fontSize: device === "tablet" ? 16 : 16,
                 ...inputStyle,
                 flex: 1,
               }}
@@ -192,7 +194,7 @@ export const Input = ({
               ref={ref}
               style={{
                 width: "100%",
-                fontSize: device === "tablet" ? 20 : 16,
+                fontSize: device === "tablet" ? 16 : 16,
                 ...inputStyle,
                 flex: 1,
               }}
@@ -228,7 +230,7 @@ export const Input = ({
               name={iconName}
               as={iconType || Ionicons}
               style={{
-                fontSize: device === "tablet" ? 40 : 20,
+                fontSize: device === "tablet" ? 30 : 20,
                 color: primaryColor,
                 ...iconStyle,
               }}

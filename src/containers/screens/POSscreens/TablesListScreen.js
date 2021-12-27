@@ -24,6 +24,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ToastError } from "../../../helpers/Toast";
 import { Spinner } from "native-base";
 import { useIsFocused, useNavigation } from "@react-navigation/core";
+import { setIsMenuSmall } from "../../../Redux/actions/SystemActions/SystemActions";
 
 const TableComponent = ({
   width,
@@ -63,7 +64,7 @@ const TableComponent = ({
     ) : (
       <Text
         style={{
-          fontSize: 16,
+          fontSize: 12,
           color:
             status === "AVAILABLE"
               ? availableTableColor
@@ -108,6 +109,16 @@ export const TablesListScreen = () => {
     if (!isScreenFocused) return;
     checkDefaultLocation();
     fetchAllTables();
+
+    if (device === "tablet") {
+      dispatch(setIsMenuSmall({ isSmall: true }));
+    } else {
+      dispatch(setIsMenuSmall({ isSmall: false }));
+    }
+
+    return () => {
+      dispatch(setIsMenuSmall({ isSmall: false }));
+    };
   }, [isScreenFocused]);
 
   const checkDefaultLocation = async () => {
@@ -210,7 +221,7 @@ export const TablesListScreen = () => {
         <HeadingBox heading={"Orders"} noBack />
 
         <View style={{ width: "90%", marginTop: 20 }}>
-          <Text style={{ color: "black", fontSize: 25 }}>Tables</Text>
+          <Text style={{ color: "black", fontSize: 18 }}>Tables</Text>
         </View>
 
         {isDefaultLocation ? (
@@ -257,6 +268,7 @@ export const TablesListScreen = () => {
                       style={{
                         color: grayMenuText,
                         textTransform: "uppercase",
+                        fontSize: 16,
                       }}
                     >
                       Inside
@@ -319,6 +331,7 @@ export const TablesListScreen = () => {
                       style={{
                         color: grayMenuText,
                         textTransform: "uppercase",
+                        fontSize: 16,
                       }}
                     >
                       Outside

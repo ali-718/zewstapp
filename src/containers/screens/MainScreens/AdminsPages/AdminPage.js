@@ -82,7 +82,6 @@ export const AdminPage = () => {
               <AdminOverviewBox
                 label={"Restaurant details"}
                 name={item.name}
-                rightText={"Open"}
                 image={storeIcon}
                 onPress={() =>
                   navigation.navigate("resturantDetail", { data: item })
@@ -94,7 +93,6 @@ export const AdminPage = () => {
               <AdminOverviewBox
                 label={"Profile"}
                 name={item.owner}
-                rightText={"Owner"}
                 image={personGrayIcon}
                 onPress={() => navigation.navigate("profile", { data: item })}
               />
@@ -104,7 +102,6 @@ export const AdminPage = () => {
               <AdminOverviewBox
                 label={"Locations"}
                 name={defaultLocation.locationName ?? ""}
-                rightText={`${locationsList.length} Location`}
                 image={locationIcon}
                 onPress={() => navigation.navigate("location", { data: item })}
               />
@@ -114,7 +111,6 @@ export const AdminPage = () => {
               <AdminOverviewBox
                 label={"Tax Invoices UBF"}
                 name={"2021 Available"}
-                rightText={"6 Available"}
                 image={taxIcon}
                 onPress={() => navigation.navigate("tax", { data: item })}
               />
@@ -124,7 +120,6 @@ export const AdminPage = () => {
               <AdminOverviewBox
                 label={"Employees"}
                 name={"Managers/Workers"}
-                rightText={`${employeeList.length} Users`}
                 image={multiplePeopleIcon}
                 onPress={() => navigation.navigate("employees", { data: item })}
               />
@@ -134,7 +129,6 @@ export const AdminPage = () => {
               <AdminOverviewBox
                 label={"Payment methods"}
                 name={"Stripe"}
-                rightText={"Active"}
                 image={bankIcon}
                 onPress={() => navigation.navigate("bankPage")}
               />

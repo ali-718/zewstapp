@@ -10,6 +10,7 @@ const initialState = {
     isLoading: false,
     isError: false,
     list: [],
+    category: [],
   },
   addInventory: {
     isLoading: false,
@@ -48,6 +49,16 @@ export const inventoryReducer = produce(
         state.inventory.isLoading = false;
         state.inventory.isError = false;
         state.inventory.list = payload;
+
+        payload.map((item) => {
+          state.inventory.category = [
+            ...state.inventory.category,
+            item.category,
+          ];
+        });
+
+        state.inventory.category = [...new Set(state.inventory.category)];
+
         break;
       }
       case FETCH_INVENTORY.FAILED: {

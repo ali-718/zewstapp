@@ -231,6 +231,7 @@ export const editMeal =
     mealMedia,
     navigation,
     mealRecipes,
+    taxPrice,
   }) =>
   (dispatch) => {
     dispatch({ type: EDIT_MEAL.REQUESTED });
@@ -249,6 +250,7 @@ export const editMeal =
       mealAddons,
       mealDiscount,
       mealRecipes,
+      taxPrice,
     };
 
     if (mealMedia) {

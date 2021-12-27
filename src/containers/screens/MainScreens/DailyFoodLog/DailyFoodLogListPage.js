@@ -14,7 +14,6 @@ import InventoryIcon from "../../../../assets/images/InventoryIcon.png";
 import { LoadingPage } from "../../../../components/LoadingPage/LoadingPage";
 import { RefetchDataError } from "../../../../components/ErrorPage/RefetchDataError";
 import { colors } from "../../../../helpers/utlils";
-import { FoodLogDetailPage } from "./FoodLogDetailPage";
 
 const data = [
   { itemName: "Milk", brand: "Dairy Milk" },
@@ -138,12 +137,6 @@ export const DailyFoodLogListPage = () => {
                 )}
               </View>
             </ScrollView>
-          </View>
-
-          <View style={{ width: "60%" }}>
-            {selectedInventoryItemForTab?.itemName && (
-              <FoodLogDetailPage isTab data={selectedInventoryItemForTab} />
-            )}
           </View>
         </View>
       </MainScreenContainer>

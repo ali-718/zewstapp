@@ -162,8 +162,8 @@ const PriceFluctuation = ({ heading, belowText, device, rightText, color }) => (
     >
       <Image
         style={{
-          width: device === "tablet" ? 30 : 20,
-          height: device === "tablet" ? 30 : 20,
+          width: 30,
+          height: 30,
           resizeMode: "contain",
         }}
         source={color ? greenArrow : redArrow}
@@ -172,8 +172,8 @@ const PriceFluctuation = ({ heading, belowText, device, rightText, color }) => (
         <Text
           numberOfLines={1}
           style={{
-            fontSize: device === "tablet" ? 20 : 16,
-            fontFamily: "openSans_bold",
+            fontSize: 16,
+            fontFamily: "openSans_semiBold",
             color: "black",
           }}
         >
@@ -209,7 +209,7 @@ const LossInKitchen = ({ heading, belowText, device, logDate }) => (
       <Text
         numberOfLines={1}
         style={{
-          fontSize: device === "tablet" ? 20 : 16,
+          fontSize: 16,
           fontFamily: "openSans_semiBold",
           color: "black",
         }}
@@ -218,7 +218,7 @@ const LossInKitchen = ({ heading, belowText, device, logDate }) => (
       </Text>
       <Text
         style={{
-          fontSize: 13,
+          fontSize: 12,
           fontFamily: "openSans_bold",
           color: "gray",
         }}
@@ -229,11 +229,11 @@ const LossInKitchen = ({ heading, belowText, device, logDate }) => (
 
     <Text
       style={{
-        fontSize: 13,
-        color: primaryColor,
+        fontSize: 12,
+        color: grayTextColor,
       }}
     >
-      {logDate}
+      {`${moment(logDate).format("D.M")} at ${moment(logDate).format("h:m a")}`}
     </Text>
   </View>
 );
@@ -267,7 +267,7 @@ const IamgeItemBox = ({ device, image, heading, value }) => (
       <Text
         style={{
           color: grayTextColor,
-          fontSize: 16,
+          fontSize: 12,
         }}
       >
         {heading}
@@ -275,7 +275,7 @@ const IamgeItemBox = ({ device, image, heading, value }) => (
       <Text
         style={{
           color: "black",
-          fontSize: 22,
+          fontSize: 16,
           fontFamily: "openSans_semiBold",
         }}
       >
@@ -613,7 +613,7 @@ export const HomePage = ({ setselected }) => {
                 <Text
                   style={{
                     color: "black",
-                    fontSize: device === "tablet" ? 30 : 24,
+                    fontSize: device === "tablet" ? 24 : 20,
                     fontFamily: "openSans_bold",
                   }}
                 >
@@ -631,7 +631,7 @@ export const HomePage = ({ setselected }) => {
                 >
                   <Text
                     style={{
-                      fontSize: device === "tablet" ? 20 : 16,
+                      fontSize: device === "tablet" ? 16 : 14,
                       color: drawerHeadingColor,
                     }}
                   >
@@ -644,23 +644,26 @@ export const HomePage = ({ setselected }) => {
                     setMenu={changeTime}
                     placeholder={""}
                     menus={["This month", "This year", "This day"]}
+                    textStyle={{ fontSize: device === "tablet" ? 16 : 14 }}
                     style={{
                       zIndex: 3,
-                      width: device === "tablet" ? 150 : 130,
+                      width: 100,
                       borderBottomWidth: 0,
-                      // marginTop: device === "tablet" ? -15 : 0,
+                      marginTop: device === "tablet" ? -5 : -15,
                       height: device === "tablet" ? 50 : 40,
                       backgroundColor: "rgba(0,0,0,0)",
                     }}
                     innerStyle={{
                       zIndex: 3,
-                      width: device === "tablet" ? 150 : 130,
+                      width: device === "tablet" ? 130 : 120,
                       borderBottomWidth: 0,
                       marginTop: device === "tablet" ? -5 : 0,
                       height: device === "tablet" ? 50 : 40,
                       backgroundColor: "rgba(0,0,0,0)",
                     }}
-                    iconStyle={{ marginTop: 20 }}
+                    iconStyle={{
+                      marginTop: device === "tablet" ? 30 : 40,
+                    }}
                     dropDownOffset={device === "tablet" ? 50 : 40}
                   />
                 </View>
@@ -669,8 +672,8 @@ export const HomePage = ({ setselected }) => {
               <RegularButton
                 iconLeft={downloadPDF}
                 iconStyle={{
-                  width: device === "tablet" ? 20 : 20,
-                  height: device === "tablet" ? 25 : 25,
+                  width: device === "tablet" ? 16 : 16,
+                  height: device === "tablet" ? 20 : 20,
                   resizeMode: "contain",
                 }}
                 text={device === "tablet" ? "GENERATE REPORT" : ""}
@@ -679,11 +682,11 @@ export const HomePage = ({ setselected }) => {
                 style={{
                   borderWidth: 1,
                   borderColor: primaryColor,
-                  width: device === "tablet" ? 270 : 50,
+                  width: device === "tablet" ? 220 : 50,
                   height: device === "tablet" ? 50 : 40,
                   borderRadius: 15,
                 }}
-                textStyle={{ color: primaryColor }}
+                textStyle={{ color: primaryColor, fontSize: 16 }}
               />
             </View>
 
@@ -799,15 +802,6 @@ export const HomePage = ({ setselected }) => {
                           >
                             Revenue
                           </Text>
-                          <Text
-                            style={{
-                              fontSize: 14,
-                              color: grayTextColor,
-                              marginLeft: 10,
-                            }}
-                          >
-                            This {forecastedInterval}
-                          </Text>
                         </View>
                         <Text
                           style={{
@@ -822,9 +816,10 @@ export const HomePage = ({ setselected }) => {
 
                       <View
                         style={{
-                          flex: 0.9,
-                          flexDirection: device === "tablet" ? "row" : "column",
+                          flex: device === "tablet" ? 0.7 : 1,
+                          flexDirection: device === "tablet" ? "row" : "row",
                           justifyContent: "space-between",
+                          marginLeft: device === "tablet" ? 0 : 10,
                         }}
                       >
                         <View>
@@ -844,7 +839,7 @@ export const HomePage = ({ setselected }) => {
                             />
                             <Text
                               style={{
-                                fontSize: 14,
+                                fontSize: 12,
                                 color: grayTextColor,
                                 marginLeft: 10,
                               }}
@@ -868,7 +863,7 @@ export const HomePage = ({ setselected }) => {
                             style={{
                               flexDirection: "row",
                               alignItems: "center",
-                              marginTop: device === "tablet" ? 0 : 10,
+                              marginTop: device === "tablet" ? 0 : 0,
                             }}
                           >
                             <View
@@ -881,7 +876,7 @@ export const HomePage = ({ setselected }) => {
                             />
                             <Text
                               style={{
-                                fontSize: 14,
+                                fontSize: 12,
                                 color: grayTextColor,
                                 marginLeft: 10,
                               }}
@@ -1001,15 +996,17 @@ export const HomePage = ({ setselected }) => {
                           <Spinner size={"large"} color={primaryColor} />
                         </View>
                       ) : (
-                        lossInKitchenList.map((item, i) => (
-                          <LossInKitchen
-                            key={i}
-                            heading={item.category}
-                            belowText={item.wastedQuantity}
-                            device={device}
-                            logDate={item.logDate}
-                          />
-                        ))
+                        lossInKitchenList
+                          .slice(0, 3)
+                          .map((item, i) => (
+                            <LossInKitchen
+                              key={i}
+                              heading={item.category}
+                              belowText={item.wastedQuantity}
+                              device={device}
+                              logDate={item.logDate}
+                            />
+                          ))
                       )}
                     </View>
                   </TouchableOpacity>
@@ -1072,8 +1069,8 @@ export const HomePage = ({ setselected }) => {
                   >
                     <View
                       style={{
-                        width: 50,
-                        height: 50,
+                        width: 36,
+                        height: 36,
                         backgroundColor: "rgba(61,213,152,0.1)",
                         alignItems: "center",
                         justifyContent: "center",
@@ -1083,7 +1080,7 @@ export const HomePage = ({ setselected }) => {
                     >
                       <Image
                         source={greenArrowUp}
-                        style={{ width: 20, height: 20, resizeMode: "contain" }}
+                        style={{ width: 10, height: 10, resizeMode: "contain" }}
                       />
                     </View>
 
@@ -1091,7 +1088,7 @@ export const HomePage = ({ setselected }) => {
                       style={{
                         color: chartGreenIndicator,
                         fontFamily: "openSans_bold",
-                        fontSize: 16,
+                        fontSize: 12,
                         marginLeft: 10,
                       }}
                     >
@@ -1104,8 +1101,8 @@ export const HomePage = ({ setselected }) => {
                       flexDirection: "row",
                       alignItems: "center",
                       marginTop: 20,
-                      justifyContent: "space-between",
-                      width: "80%",
+                      justifyContent: "flex-end",
+                      width: "100%",
                     }}
                   >
                     <View
@@ -1117,14 +1114,14 @@ export const HomePage = ({ setselected }) => {
                       <View
                         style={{
                           backgroundColor: MonthBlueColor,
-                          width: 12,
-                          height: 12,
+                          width: 8,
+                          height: 8,
                           borderRadius: 100,
                         }}
                       />
                       <Text
                         style={{
-                          fontSize: 14,
+                          fontSize: 12,
                           color: grayTextColor,
                           marginLeft: 10,
                         }}
@@ -1137,19 +1134,20 @@ export const HomePage = ({ setselected }) => {
                       style={{
                         flexDirection: "row",
                         alignItems: "center",
+                        marginLeft: 20,
                       }}
                     >
                       <View
                         style={{
                           backgroundColor: chartGreenIndicator,
-                          width: 12,
-                          height: 12,
+                          width: 8,
+                          height: 8,
                           borderRadius: 100,
                         }}
                       />
                       <Text
                         style={{
-                          fontSize: 14,
+                          fontSize: 12,
                           color: grayTextColor,
                           marginLeft: 10,
                         }}
@@ -1222,7 +1220,7 @@ export const HomePage = ({ setselected }) => {
                       <Image
                         source={downloadPDF}
                         style={{
-                          width: 20,
+                          width: 16,
                           resizeMode: "contain",
                           tintColor: primaryColor,
                         }}
@@ -1230,7 +1228,7 @@ export const HomePage = ({ setselected }) => {
                       <Image
                         source={menuDotGray}
                         style={{
-                          width: 20,
+                          width: 18,
                           resizeMode: "contain",
                           marginLeft: 20,
                           marginRight: 10,
@@ -1422,14 +1420,14 @@ export const HomePage = ({ setselected }) => {
                               <View
                                 style={{
                                   backgroundColor: item.svg.fill,
-                                  width: 12,
-                                  height: 12,
+                                  width: 10,
+                                  height: 10,
                                   borderRadius: 100,
                                 }}
                               />
                               <Text
                                 style={{
-                                  fontSize: 14,
+                                  fontSize: 12,
                                   color: grayTextColor,
                                   marginLeft: 10,
                                 }}
@@ -1440,12 +1438,12 @@ export const HomePage = ({ setselected }) => {
 
                             <Text
                               style={{
-                                fontSize: 14,
+                                fontSize: 12,
                                 color: chartGreenIndicator,
                                 marginLeft: 50,
                               }}
                             >
-                              ${item.value}
+                              {item.value}%
                             </Text>
                           </View>
                         )}

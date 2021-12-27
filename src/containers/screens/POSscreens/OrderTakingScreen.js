@@ -32,6 +32,7 @@ import { order } from "styled-system";
 import { RegularButton } from "../../../components/Buttons/RegularButton";
 import deleteIcon from "../../../assets/images/deleteIcon.png";
 import { Chip } from "../../../components/Chip/Chip";
+import moment from "moment";
 
 const CategoryComponent = ({ width, name, onPress }) => {
   const [color, setColor] = useState("");
@@ -219,6 +220,7 @@ export const OrderTakingScreen = (props) => {
           recipe: item.mealRecipes[0],
           mealName: item.mealName,
           mealPrice: item.mealPrice,
+          mealTime: moment().format("h:mm:ss a"),
         })),
       ],
       price: totalPrice,

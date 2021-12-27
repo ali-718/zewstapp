@@ -35,12 +35,11 @@ export const AdminOverviewBox = ({
         width: "100%",
         backgroundColor: "white",
         flexDirection: "row",
-        padding: device === "tablet" ? 20 : 10,
+        padding: 10,
         borderRadius: 10,
         alignItems: "center",
         borderBottomWidth: 1,
         borderBottomColor: borderColor2,
-        paddingBottom: 20,
       }}
       onPress={onPress}
       onLongPress={onLongPress}
@@ -50,8 +49,8 @@ export const AdminOverviewBox = ({
           source={image}
           style={[
             {
-              width: device === "tablet" ? 40 : 30,
-              height: device === "tablet" ? 40 : 30,
+              width: 24,
+              height: 24,
               resizeMode: "contain",
             },
             !noTint && { tintColor: primaryColor },
@@ -61,7 +60,7 @@ export const AdminOverviewBox = ({
       <View
         style={{
           flex: 1,
-          marginLeft: device === "tablet" ? 20 : noLeftMargin ? 0 : 15,
+          marginLeft: noLeftMargin ? 0 : 15,
           marginRight: 10,
         }}
       >
@@ -87,12 +86,12 @@ export const AdminOverviewBox = ({
           style={
             recipe || inventory
               ? {
-                  fontSize: device === "tablet" ? 20 : 16,
+                  fontSize: device === "tablet" ? 12 : 12,
                   fontFamily: "openSans_bold",
                   color: grayTextColor,
                 }
               : {
-                  fontSize: device === "tablet" ? 18 : 14,
+                  fontSize: device === "tablet" ? 12 : 12,
                   color: grayTextColor,
                 }
           }
@@ -105,7 +104,7 @@ export const AdminOverviewBox = ({
           <Text
             numberOfLines={1}
             style={{
-              fontSize: device === "tablet" ? 18 : 14,
+              fontSize: 14,
               color: grayTextColor,
             }}
           >
@@ -113,9 +112,9 @@ export const AdminOverviewBox = ({
           </Text>
         ) : null}
         {primary ? (
-          <Icon name="check-circle" color={primaryColor} size={25} />
-        ) : !rightText ? (
-          <Icon name="check-circle" color={"black"} size={25} />
+          !rightText ? (
+            <Icon name="check-circle" color={primaryColor} size={25} />
+          ) : null
         ) : null}
         <Image
           source={rightIcon ?? forwardIcon}

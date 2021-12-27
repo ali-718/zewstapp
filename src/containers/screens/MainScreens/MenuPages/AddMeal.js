@@ -32,7 +32,7 @@ import * as recipeActions from "../../../../Redux/actions/RecipeActions/RecipeAc
 import { useNavigation } from "@react-navigation/core";
 import { Dropdown } from "../../../../components/Inputs/DropDown";
 import { HeadingBox } from "../../../../components/HeadingBox/HeadingBox";
-import { primaryColor } from "../../../../theme/colors";
+import { primaryColor, redShade1, redShade2 } from "../../../../theme/colors";
 import { Text } from "../../../../components/Text/Text";
 
 export const AddMeal = (props) => {
@@ -103,15 +103,17 @@ export const AddMeal = (props) => {
       mealRecipes = "",
     } = props.route?.params?.data;
 
+    console.log(props.route?.params?.data);
+
     setIsEdit(true);
     setName(name);
     setdesc(desc);
     setunitCost(String(cost));
-    setselectedDays(days);
+    // setselectedDays(days);
     setselectedCategories(categories);
     setavailable(available);
-    setselectedAllergens(allergens);
-    setselectedAddons(addons);
+    // setselectedAllergens(allergens);
+    // setselectedAddons(addons);
     setFoodImage(image[0] ?? "");
     setSelectedRecipe(mealRecipes ? mealRecipes[0] : {});
   }, []);
@@ -259,7 +261,7 @@ export const AddMeal = (props) => {
 
     dispatch(
       actions.addNewMeal({
-        locationId: props.route?.params?.locationId,
+        locationId: defaultLocation?.locationId,
         mealName: name,
         mealDescription: desc,
         mealPrice: parseFloat(unitCost),
@@ -288,7 +290,7 @@ export const AddMeal = (props) => {
   const onDeleteMeal = () => {
     dispatch(
       actions.deleteSpecificMeal({
-        locationId: props.route?.params?.data?.locationId,
+        locationId: defaultLocation?.locationId,
         mealId: props.route?.params?.data?.mealId,
         navigation,
       })
@@ -338,12 +340,7 @@ export const AddMeal = (props) => {
   };
 
   return (
-    <MainScreenContainer
-      leftImage={leftImage}
-      title={isEdit ? "Edit Meal" : "Add Meal"}
-      rightImage={isEdit && deleteIconWhite}
-      onPressRight={() => setdeleteModal(true)}
-    >
+    <MainScreenContainer title={isEdit ? "Edit Meal" : "Add Meal"}>
       <HeadingBox heading={isEdit ? "Edit menu item" : "Add menu item"} />
 
       <View style={{ width: "90%", marginTop: 20, marginBottom: 40 }}>
@@ -573,6 +570,16 @@ export const AddMeal = (props) => {
             isLoading={isLoading}
           />
         </View>
+        {isEdit ? (
+          <View style={{ width: "100%", marginTop: 10 }}>
+            <RegularButton
+              red
+              textStyle={{ color: "white" }}
+              text={"Delete"}
+              onPress={() => setdeleteModal(true)}
+            />
+          </View>
+        ) : null}
       </View>
 
       <ListModal

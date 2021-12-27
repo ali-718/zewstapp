@@ -1,6 +1,8 @@
+import { ToastError, ToastSuccess } from "../../../helpers/Toast";
 import { client } from "../client";
 import {
   COST_BY_CATEGORY,
+  DAILY_FOOD_LOG_ADD,
   FETCH_FOOD_COUNT,
   FORECASTED_SALES,
   LOSS_IN_KITCHEN,
@@ -27,8 +29,9 @@ export const fetchFoodCountAction =
   };
 
 export const fetchLossInKitchenAction =
-  ({ locationId, interval, startDate, endDate }) =>
+  ({ locationId, interval, startDate, endDate, isError = false }) =>
   (dispatch) => {
+    console.log({ locationId, interval, startDate, endDate, isError });
     dispatch({ type: LOSS_IN_KITCHEN.REQUESTED });
     client
       .get(
@@ -43,6 +46,13 @@ export const fetchLossInKitchenAction =
       .catch((e) => {
         dispatch({ type: LOSS_IN_KITCHEN.FAILED });
         console.log(e.response.data);
+
+        if (isError) {
+          ToastError(
+            e.response.data.message ||
+              "Some error occoured, please try again later"
+          );
+        }
       });
   };
 
@@ -85,3 +95,27 @@ export const fetchForecastedSalesAction =
         console.log(e.response.data);
       });
   };
+
+export const dailyFoodLogAddAction = ({
+  item,
+  reason,
+  wastedQuantity,
+  costPerUnit,
+}) =>
+  new Promise((resolve, reject) => {
+    console.log({ item, reason, wastedQuantity, costPerUnit });
+    client
+      .post(`wastelogs/add`, { item, reason, wastedQuantity, costPerUnit })
+      .then((data) => {
+        resolve();
+        ToastSuccess("Success", "Food added successfully");
+      })
+      .catch((e) => {
+        console.log(e.response.data);
+        reject();
+        ToastError(
+          e.response.data?.message ||
+            "Some error occoured, please try again later"
+        );
+      });
+  });

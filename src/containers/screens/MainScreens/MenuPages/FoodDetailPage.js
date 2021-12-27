@@ -33,6 +33,7 @@ import {
 } from "../../../../helpers/utlils";
 import { HeadingBox } from "../../../../components/HeadingBox/HeadingBox";
 import { useSelector } from "react-redux";
+import { RegularButton } from "../../../../components/Buttons/RegularButton";
 
 export const FoodDetailPage = ({
   changeAvailability,
@@ -54,7 +55,12 @@ export const FoodDetailPage = ({
     mealAllergens,
     mealAddons,
     orderedNumber = "",
+    taxPrice: priceWithtax = "",
+    profitPrice = "",
+    ratings = "",
   } = isTab ? data : props.route.params.item;
+
+  console.log(props.route.params.item);
 
   const [available, setavailable] = useState(av);
 
@@ -95,7 +101,31 @@ export const FoodDetailPage = ({
 
   return (
     <MainScreenContainer>
-      <HeadingBox heading={name} />
+      <View style={{ width: "95%", alignItems: "center", marginTop: 10 }}>
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "center",
+            width: "100%",
+          }}
+        >
+          <View style={{ flex: 1 }}>
+            <HeadingBox heading={name} />
+          </View>
+
+          <RegularButton
+            onPress={() =>
+              navigation.navigate("addMeal", {
+                data: props.route.params.item,
+              })
+            }
+            style={{ width: 250, right: 0, marginTop: 10 }}
+            white
+            text={"Edit menu item"}
+          />
+        </View>
+      </View>
       <View
         style={{ width: "100%", flex: 1, alignItems: "center", marginTop: 20 }}
       >
@@ -170,8 +200,8 @@ export const FoodDetailPage = ({
                 marginTop: 10,
               }}
             >
-              <PriceBox heading={"Price with Tax"} price={mealPrice} />
-              <PriceBox heading={"Profit"} price={mealPrice} />
+              <PriceBox heading={"Price with Tax"} price={priceWithtax} />
+              <PriceBox heading={"Profit"} price={profitPrice} />
             </View>
 
             <View
@@ -188,7 +218,7 @@ export const FoodDetailPage = ({
                 heading={"Total orders"}
                 price={orderedNumber}
               />
-              <PriceBox noPrice heading={"Rating"} price={mealPrice} />
+              <PriceBox noPrice heading={"Rating"} price={ratings} />
             </View>
 
             {mealCategory?.length > 0 && (

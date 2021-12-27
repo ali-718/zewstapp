@@ -16,13 +16,10 @@ import { Text } from "../Text/Text";
 
 export const PredictionTableItem = ({
   item,
-  previousSales,
-  day1,
-  day2,
-  today,
-  predictedRequiredStaff,
-  predictedCost,
-  trendsInChange,
+  quantity,
+  date,
+  time,
+  costPerUnit,
   gray,
 }) => {
   const device = useSelector((state) => state.system.device);
@@ -38,7 +35,7 @@ export const PredictionTableItem = ({
           backgroundColor: gray ? chartHeaderColor : "white",
         }}
       >
-        <View style={{ width: 150 }}>
+        <View style={{ width: 250 }}>
           <Text
             style={{
               fontSize: device === "tablet" ? 18 : 16,
@@ -56,47 +53,7 @@ export const PredictionTableItem = ({
               color: "black",
             }}
           >
-            ${previousSales}
-          </Text>
-        </View>
-        <View style={{ width: 100 }}>
-          <Text
-            style={{
-              fontSize: device === "tablet" ? 18 : 16,
-              color: "black",
-            }}
-          >
-            {day1}Kg
-          </Text>
-        </View>
-        <View style={{ width: 100 }}>
-          <Text
-            style={{
-              fontSize: device === "tablet" ? 18 : 16,
-              color: "black",
-            }}
-          >
-            {day2}Kg
-          </Text>
-        </View>
-        <View style={{ width: 100 }}>
-          <Text
-            style={{
-              fontSize: device === "tablet" ? 18 : 16,
-              color: "black",
-            }}
-          >
-            {today}Kg
-          </Text>
-        </View>
-        <View style={{ width: 250 }}>
-          <Text
-            style={{
-              fontSize: device === "tablet" ? 18 : 16,
-              color: "black",
-            }}
-          >
-            {predictedRequiredStaff}Kg
+            {quantity}
           </Text>
         </View>
         <View style={{ width: 150 }}>
@@ -106,17 +63,28 @@ export const PredictionTableItem = ({
               color: "black",
             }}
           >
-            ${predictedCost}
+            {date}
           </Text>
         </View>
         <View style={{ width: 150 }}>
-          <AreaChart
-            style={{ height: 20 }}
-            data={trendsInChange}
-            //   contentInset={{ top: 30, bottom: 30 }}
-            // curve={shape.curveNatural}
-            svg={{ stroke: primaryColor }}
-          />
+          <Text
+            style={{
+              fontSize: device === "tablet" ? 18 : 16,
+              color: "black",
+            }}
+          >
+            {time}
+          </Text>
+        </View>
+        <View style={{ width: 150 }}>
+          <Text
+            style={{
+              fontSize: device === "tablet" ? 18 : 16,
+              color: "black",
+            }}
+          >
+            {costPerUnit}
+          </Text>
         </View>
       </View>
     );

@@ -38,7 +38,6 @@ import { InventoryDetailPage } from "./containers/screens/MainScreens/InventoryP
 import { LossInKitchen } from "./containers/screens/MainScreens/LossInKitchen/LossInKitchen";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { HomePage } from "./containers/screens/MainScreens/HomePages/HomePage";
-import { DailyFoodLogListPage } from "./containers/screens/MainScreens/DailyFoodLog/DailyFoodLogListPage";
 import { MenuPage } from "./containers/screens/MainScreens/MenuPages/MenuPage";
 import { AdminPage } from "./containers/screens/MainScreens/AdminsPages/AdminPage";
 import { RecipeListPage } from "./containers/screens/MainScreens/RecipePages/RecipeListPage";
@@ -54,6 +53,7 @@ import { OrderTakingScreen } from "./containers/screens/POSscreens/OrderTakingSc
 import { StripePage } from "./containers/screens/MainScreens/AdminsPages/StripePage";
 import { KitchenPage } from "./containers/screens/MainScreens/KitchenPages/KitchenPage";
 import { Text } from "./components/Text/Text";
+import { DailyFoodLogAdd } from "./containers/screens/MainScreens/DailyFoodLog/DailyFoodLogAdd";
 
 const Stack = createNativeStackNavigator();
 
@@ -183,15 +183,21 @@ const MainRoutes = () => {
   const orientation = useSelector((state) => state.system.orientation);
   const device = useSelector((state) => state.system.device);
   const isMenuSmall = useSelector((state) => state.system.isMenuSmall);
+  const dispatch = useDispatch();
+
   return (
-    <NavigationContainer>
+    <NavigationContainer
+      onStateChange={(val) =>
+        dispatch(actions.changeMenuIndex({ index: val.index }))
+      }
+    >
       <Drawer.Navigator
         screenOptions={{
           headerShown: false,
           drawerType:
             device === "tablet"
               ? isMenuSmall
-                ? "permanent"
+                ? "front"
                 : orientation === "landscape"
                 ? "permanent"
                 : "front"
@@ -199,16 +205,10 @@ const MainRoutes = () => {
           gestureEnabled: false,
           swipeEnabled: true,
           drawerStyle: {
-            width: isMenuSmall ? 70 : 250,
+            width: 250,
           },
         }}
-        drawerContent={(props) =>
-          isMenuSmall ? (
-            <DrawerMenuWithoutNames {...props} />
-          ) : (
-            <DrawerMenu {...props} />
-          )
-        }
+        drawerContent={(props) => <DrawerMenu {...props} />}
         backBehavior={"history"}
       >
         <Drawer.Screen name="Dashboard" component={DashboardRoutes} />
@@ -221,6 +221,7 @@ const MainRoutes = () => {
         <Drawer.Screen name="Vendor" component={VendorRoutes} />
         <Drawer.Screen name="Pos" component={OrderRoutes} />
         <Drawer.Screen name="Kitchen" component={KitchenPage} />
+        <Stack.Screen name="DailyFoodLog" component={DailyFoodLogAdd} />
 
         <Drawer.Screen name="Messages" component={AdminPage} />
         <Drawer.Screen name="Library" component={AdminPage} />

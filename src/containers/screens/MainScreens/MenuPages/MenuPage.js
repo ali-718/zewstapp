@@ -131,26 +131,24 @@ export const MenuPage = () => {
                 }}
               >
                 <HeadingBox heading={"Menu items"} />
-                {tabletMeals.length > 0 ? (
-                  <View
-                    style={{
-                      width: "100%",
-                      alignItems: "flex-end",
-                      justifyContent: "flex-end",
-                    }}
-                  >
-                    <RegularButton
-                      onPress={() =>
-                        navigation.navigate("addMeal", {
-                          locationId: defaultLocation.locationId,
-                        })
-                      }
-                      style={{ width: 250, right: 0, position: "absolute" }}
-                      white
-                      text={"+ Add a menu item"}
-                    />
-                  </View>
-                ) : null}
+                <View
+                  style={{
+                    width: "100%",
+                    alignItems: "flex-end",
+                    justifyContent: "flex-end",
+                  }}
+                >
+                  <RegularButton
+                    onPress={() =>
+                      navigation.navigate("addMeal", {
+                        locationId: defaultLocation.locationId,
+                      })
+                    }
+                    style={{ width: 250, right: 0, position: "absolute" }}
+                    white
+                    text={"+ Add a menu item"}
+                  />
+                </View>
                 {tabletMealsLoading ? (
                   <LoadingPage />
                 ) : tabletMealsError ? (
@@ -200,7 +198,7 @@ export const MenuPage = () => {
                             borderRadius: 10,
                             borderBottomLeftRadius: 0,
                             borderBottomRightRadius: 0,
-                            marginLeft: 20,
+                            paddingLeft: 20,
                           }}
                         >
                           <View style={{ width: 250 }}>
@@ -318,7 +316,7 @@ export const MenuPage = () => {
                                       color: menuHeadingColor,
                                     }}
                                   >
-                                    {item.mealTotalUnitCost}
+                                    ${item.mealTotalUnitCost}
                                   </Text>
                                 </View>
                                 <View style={{ width: 150 }}>
@@ -330,7 +328,7 @@ export const MenuPage = () => {
                                       textTansform: "uppercase",
                                     }}
                                   >
-                                    {item.mealPrice}
+                                    ${item.mealPrice}
                                   </Text>
                                 </View>
                                 <View style={{ width: 150 }}>
@@ -341,7 +339,7 @@ export const MenuPage = () => {
                                       color: menuHeadingColor,
                                     }}
                                   >
-                                    {item?.taxPrice}
+                                    ${item?.taxPrice}
                                   </Text>
                                 </View>
                               </View>

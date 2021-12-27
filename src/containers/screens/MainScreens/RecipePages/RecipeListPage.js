@@ -61,100 +61,6 @@ export const RecipeListPage = () => {
     setFiltereditem(finalData);
   };
 
-  // if (device === "tablet" && orientation === "landscape") {
-  //   return (
-  //     <MainScreenContainer
-  //       leftImage={""}
-  //       rightImage={""}
-  //       title={"Recipe Engineering"}
-  //       noScroll
-  //     >
-  //       <HeadingBox noBack heading={"Recipe Engineering"} />
-  //       <View
-  //         style={{
-  //           width: "100%",
-  //           flex: 1,
-  //           flexDirection: "row",
-  //           justifyContent: "space-between",
-  //         }}
-  //       >
-  //         <View style={{ width: "40%" }}>
-  //           <ScrollView style={{ width: "100%" }}>
-  //             <View
-  //               style={{
-  //                 width: "100%",
-  //                 flex: 1,
-  //                 alignItems: "center",
-  //               }}
-  //             >
-  //               {isLoading ? (
-  //                 <LoadingPage />
-  //               ) : isError ? (
-  //                 <RefetchDataError
-  //                   onPress={fetchRecipes}
-  //                   isLoading={isLoading}
-  //                 />
-  //               ) : (
-  //                 <View
-  //                   style={{
-  //                     width: "90%",
-  //                     marginBottom: 60,
-  //                     alignItems: "center",
-  //                     marginTop: 20,
-  //                   }}
-  //                 >
-  //                   <View style={{ width: "100%", flex: 1 }}>
-  //                     <SearchInput
-  //                       search={search}
-  //                       setSearch={setSearch}
-  //                       searchKeyword={searchKeyword}
-  //                     />
-  //                   </View>
-
-  //                   <View style={{ width: "100%", marginTop: 20 }}>
-  //                     {filteredItem.length === 0 ? (
-  //                       <NoMealBox
-  //                         image={noRecipe}
-  //                         text={"No recipe added. "}
-  //                       />
-  //                     ) : (
-  //                       filteredItem.map((item, i) => (
-  //                         <View
-  //                           key={i}
-  //                           style={{ width: "100%", marginTop: 10 }}
-  //                         >
-  //                           <AdminOverviewBox
-  //                             key={i}
-  //                             label={item.recipeTitle}
-  //                             name={`Macro: ${item.macroIngredient.itemName}`}
-  //                             rightText={""}
-  //                             onPress={() => setselectedRecipeItemForTab(item)}
-  //                           />
-  //                         </View>
-  //                       ))
-  //                     )}
-  //                   </View>
-  //                   <RegularButton
-  //                     onPress={() => navigation.navigate("recipeAdd")}
-  //                     text={"Add Recipe"}
-  //                     style={{ borderRadius: 10, marginTop: 20 }}
-  //                   />
-  //                 </View>
-  //               )}
-  //             </View>
-  //           </ScrollView>
-  //         </View>
-
-  //         <View style={{ width: "60%" }}>
-  //           {selectedRecipeItemForTab?.recipeTitle && (
-  //             <RecipeDetailPage isTab data={selectedRecipeItemForTab} />
-  //           )}
-  //         </View>
-  //       </View>
-  //     </MainScreenContainer>
-  //   );
-  // }
-
   return (
     <MainScreenContainer
       onPressRight={() => null}
@@ -196,7 +102,7 @@ export const RecipeListPage = () => {
                 <View
                   style={{
                     width: "100%",
-                    marginTop: 20,
+                    marginTop: 24,
                   }}
                 >
                   <Text
@@ -240,6 +146,7 @@ export const RecipeListPage = () => {
                               })
                             }
                             noLeftMargin
+                            primary={false}
                           />
                         </View>
                       ))}

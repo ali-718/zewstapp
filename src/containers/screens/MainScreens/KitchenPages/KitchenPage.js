@@ -39,7 +39,7 @@ export const KitchenPage = () => {
 
   useEffect(() => {
     if (!screenFocused) return;
-    if (device === "tablet" && orientation === "landscape") {
+    if (device === "tablet") {
       dispatch(systemAction.setIsMenuSmall({ isSmall: true }));
     } else {
       dispatch(systemAction.setIsMenuSmall({ isSmall: false }));
@@ -52,7 +52,7 @@ export const KitchenPage = () => {
     return () => {
       dispatch(systemAction.setIsMenuSmall({ isSmall: false }));
     };
-  }, [screenFocused, orientation]);
+  }, [screenFocused]);
 
   const updateOrder = (orderId) => {
     const meal = orderstOserve.filter((item) => item.orderId === orderId);
@@ -67,20 +67,6 @@ export const KitchenPage = () => {
       return;
     }
 
-    console.log(meal[0]);
-    console.log(
-      orders.filter((item) => item.orderId === orderId)[0].catalog.length
-    );
-
-    console.log(
-      `orders
-      .filter((item) => item.orderId === orderId)[0]
-      .catalog.filter((item) => !item.served).length`,
-      orders
-        .filter((item) => item.orderId === orderId)[0]
-        .catalog.filter((item) => !item.served).length,
-      meal[0].meals?.length
-    );
     console.log(
       meal[0].meals?.length ===
         orders
@@ -147,7 +133,7 @@ export const KitchenPage = () => {
 
   if (device === "tablet") {
     return (
-      <MainScreenContainer>
+      <MainScreenContainer isDrawer>
         {defaultLocation?.locationId ? (
           isLoading ? (
             <View
@@ -330,11 +316,19 @@ export const KitchenPage = () => {
                                   Time
                                 </Text>
                               </View>
+                              {console.log(
+                                ...orders.map((item) => item.catalog)
+                              )}
                             </View>
                             {/* headings ends */}
                             <View style={{ backgroundColor: "white" }}>
-                              {[...orders, ...doneOrders, ...createdOrders].map(
-                                (meal, i) => (
+                              {[
+                                ...orders.map((item) => item.catalog),
+                                ...doneOrders.map((item) => item.catalog),
+                                ...createdOrders.map((item) => item.catalog),
+                              ]
+                                .flat(Infinity)
+                                .map((meal, i) => (
                                   <View
                                     style={{
                                       width: "100%",
@@ -346,6 +340,7 @@ export const KitchenPage = () => {
                                       borderBottomRightRadius: 0,
                                     }}
                                   >
+                                    {/* {console.log(meal)} */}
                                     <View style={{ width: 270 }}>
                                       <Text
                                         style={{
@@ -355,7 +350,7 @@ export const KitchenPage = () => {
                                           marginLeft: 10,
                                         }}
                                       >
-                                        {meal.orderId}
+                                        {meal?.mealName}
                                       </Text>
                                     </View>
                                     <View
@@ -371,7 +366,7 @@ export const KitchenPage = () => {
                                           color: "black",
                                         }}
                                       >
-                                        {meal.catalog?.length}
+                                        {meal.quantity}
                                       </Text>
                                     </View>
                                     <View style={{ width: 150 }}>
@@ -382,7 +377,7 @@ export const KitchenPage = () => {
                                           color: "black",
                                         }}
                                       >
-                                        ${meal.price}
+                                        ${meal.mealPrice}
                                       </Text>
                                     </View>
                                     <View style={{ width: 150 }}>
@@ -393,12 +388,11 @@ export const KitchenPage = () => {
                                           color: "black",
                                         }}
                                       >
-                                        {meal.timestamp}
+                                        {meal.mealTime}
                                       </Text>
                                     </View>
                                   </View>
-                                )
-                              )}
+                                ))}
                             </View>
                           </View>
                         </ScrollView>

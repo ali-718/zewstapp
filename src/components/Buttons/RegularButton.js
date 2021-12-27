@@ -3,7 +3,11 @@ import { Spinner } from "native-base";
 import React from "react";
 import { Image, TouchableOpacity, View } from "react-native";
 import { useSelector } from "react-redux";
-import { primaryColor, primaryShade1 } from "../../theme/colors";
+import {
+  primaryColor,
+  primaryRedColor,
+  primaryShade1,
+} from "../../theme/colors";
 import { Text } from "../Text/Text";
 import { FullPageLoadingModall } from "../FullPageLoadingModall/FullPageLoadingModall";
 
@@ -16,6 +20,7 @@ export const RegularButton = ({
   iconStyle,
   isLoading,
   disabled,
+  red,
   noText,
   white,
   fullPageLoad,
@@ -45,7 +50,11 @@ export const RegularButton = ({
         <LinearGradient
           colors={
             colors ||
-            (white ? ["white", "white"] : [primaryColor, primaryColor])
+            (white
+              ? ["white", "white"]
+              : red
+              ? [primaryRedColor, primaryRedColor]
+              : [primaryColor, primaryColor])
           }
           style={{
             width: "100%",

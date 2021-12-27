@@ -47,31 +47,16 @@ export const Header = ({ leftImage, onPressLeft, onPressRight }) => {
             borderRadius: 10,
           }}
         >
-          {device === "tablet" ? (
-            orientation === "portrait" ? (
-              <TouchableOpacity onPress={onPressLeft}>
-                <Image
-                  source={leftImage}
-                  style={{
-                    width: 22,
-                    height: 18,
-                    resizeMode: "contain",
-                  }}
-                />
-              </TouchableOpacity>
-            ) : null
-          ) : (
-            <TouchableOpacity onPress={onPressLeft}>
-              <Image
-                source={leftImage}
-                style={{
-                  width: 22,
-                  height: 18,
-                  resizeMode: "contain",
-                }}
-              />
-            </TouchableOpacity>
-          )}
+          <TouchableOpacity onPress={onPressLeft}>
+            <Image
+              source={leftImage}
+              style={{
+                width: 22,
+                height: 18,
+                resizeMode: "contain",
+              }}
+            />
+          </TouchableOpacity>
 
           <TextInput
             placeholder={"Search"}
@@ -98,8 +83,8 @@ export const Header = ({ leftImage, onPressLeft, onPressRight }) => {
             >
               <Image
                 style={{
-                  width: 22,
-                  height: 22,
+                  width: 20,
+                  height: 20,
                   resizeMode: "contain",
                 }}
                 source={qrcodeIcon}
@@ -124,8 +109,8 @@ export const Header = ({ leftImage, onPressLeft, onPressRight }) => {
             <Image
               source={belliconGray}
               style={{
-                width: device === "tablet" ? 30 : 25,
-                height: device === "tablet" ? 30 : 25,
+                width: 20,
+                height: 20,
                 resizeMode: "contain",
               }}
             />
@@ -153,7 +138,7 @@ export const Header = ({ leftImage, onPressLeft, onPressRight }) => {
                 <Text
                   numberOfLines={1}
                   style={{
-                    fontSize: 20,
+                    fontSize: 14,
                     color: "black",
                     fontFamily: "openSans_semiBold",
                     marginLeft: 10,

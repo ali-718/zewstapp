@@ -25,6 +25,9 @@ import messageIcon from "../../assets/images/MenuIcons/message.png";
 import libraryIcon from "../../assets/images/MenuIcons/library.png";
 import settingsIcon from "../../assets/images/MenuIcons/settings.png";
 import supportIcon from "../../assets/images/MenuIcons/support.png";
+import adminIcon from "../../assets/images/MenuIcons/adminIcon.png";
+import kitchenIcon from "../../assets/images/MenuIcons/kitchenIcon.png";
+import posIcon from "../../assets/images/MenuIcons/posIcon.png";
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
 import { Text } from "../Text/Text";
@@ -144,7 +147,7 @@ export const DrawerMenu = ({ state: { index } }) => {
             <Menu
               selected={index === 6}
               setselected={() => navigation.navigate("Admin")}
-              image={inventoryIcon}
+              image={adminIcon}
               name={"Admin"}
             />
             <Menu
@@ -156,17 +159,24 @@ export const DrawerMenu = ({ state: { index } }) => {
             <Menu
               selected={index === 8}
               setselected={() => navigation.navigate("Pos")}
-              image={inventoryIcon}
+              image={posIcon}
               name={"POS"}
             />
             {device === "tablet" ? (
               <Menu
                 selected={index === 9}
                 setselected={() => navigation.navigate("Kitchen")}
-                image={inventoryIcon}
+                image={kitchenIcon}
                 name={"Kitchen"}
               />
             ) : null}
+
+            <Menu
+              selected={index === 10}
+              setselected={() => navigation.navigate("DailyFoodLog")}
+              image={kitchenIcon}
+              name={"Food Log"}
+            />
 
             <RegularButton
               text={"Logout"}
@@ -194,7 +204,7 @@ export const DrawerMenu = ({ state: { index } }) => {
             >
               Help
             </Text>
-            <Menu
+            {/* <Menu
               selected={index === 10}
               setselected={() => navigation.navigate("")}
               image={messageIcon}
@@ -212,7 +222,7 @@ export const DrawerMenu = ({ state: { index } }) => {
               setselected={() => navigation.navigate("")}
               image={settingsIcon}
               name={"Settings"}
-            />
+            /> */}
             <Menu
               selected={index === 13}
               setselected={() => navigation.navigate("")}
@@ -225,11 +235,13 @@ export const DrawerMenu = ({ state: { index } }) => {
     </SafeAreaView>
   );
 };
-export const DrawerMenuWithoutNames = ({ state: { index } }) => {
+export const DrawerMenuWithoutNames = ({
+  state: { index },
+  changeMenuIndex,
+}) => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const device = useSelector((state) => state.system.device);
-
   const Logout = () => dispatch(LogoutAction(navigation));
 
   return (
@@ -258,7 +270,10 @@ export const DrawerMenuWithoutNames = ({ state: { index } }) => {
             </Text>
             <Menu
               selected={index === 0}
-              setselected={() => navigation.navigate("Home")}
+              setselected={() => {
+                navigation.navigate("Home");
+                changeMenuIndex(0);
+              }}
               image={overviewIcon}
               name={"Overview"}
               style={{ marginTop: 20 }}
@@ -266,21 +281,30 @@ export const DrawerMenuWithoutNames = ({ state: { index } }) => {
             />
             <Menu
               selected={index === 1}
-              setselected={() => navigation.navigate("Menu")}
+              setselected={() => {
+                changeMenuIndex(1);
+                navigation.navigate("Menu");
+              }}
               image={menuIcon}
               name={"Menu"}
               noName
             />
             <Menu
               selected={index === 2}
-              setselected={() => navigation.navigate("Sales")}
+              setselected={() => {
+                navigation.navigate("Sales");
+                changeMenuIndex(2);
+              }}
               image={salesIcon}
               name={"Sales"}
               noName
             />
             <Menu
               selected={index === 3}
-              setselected={() => navigation.navigate("Recipe")}
+              setselected={() => {
+                navigation.navigate("Recipe");
+                changeMenuIndex(3);
+              }}
               image={recipeIcon}
               name={"Recipe Engineering"}
               noName
@@ -294,41 +318,68 @@ export const DrawerMenuWithoutNames = ({ state: { index } }) => {
             />
             <Menu
               selected={index === 5}
-              setselected={() => navigation.navigate("Inventory")}
+              setselected={() => {
+                navigation.navigate("Inventory");
+                changeMenuIndex(5);
+              }}
               image={inventoryIcon}
               name={"Inventory"}
               noName
             />
             <Menu
               selected={index === 6}
-              setselected={() => navigation.navigate("Admin")}
-              image={inventoryIcon}
+              setselected={() => {
+                navigation.navigate("Admin");
+                changeMenuIndex(6);
+              }}
+              image={adminIcon}
               name={"Admin"}
               noName
             />
             <Menu
               selected={index === 7}
-              setselected={() => navigation.navigate("Vendor")}
+              setselected={() => {
+                navigation.navigate("Vendor");
+                changeMenuIndex(7);
+              }}
               image={inventoryIcon}
               name={"Vendor"}
               noName
             />
             <Menu
               selected={index === 8}
-              setselected={() => navigation.navigate("Pos")}
-              image={inventoryIcon}
+              setselected={() => {
+                navigation.navigate("Pos");
+                changeMenuIndex(8);
+              }}
+              image={posIcon}
               name={"POS"}
               noName
             />
+
             {device === "tablet" ? (
               <Menu
                 selected={index === 9}
-                setselected={() => navigation.navigate("Kitchen")}
-                image={inventoryIcon}
+                setselected={() => {
+                  navigation.navigate("Kitchen");
+                  changeMenuIndex(9);
+                }}
+                image={kitchenIcon}
                 name={"Kitchen"}
                 noName
               />
             ) : null}
+
+            <Menu
+              selected={index === 10}
+              setselected={() => {
+                navigation.navigate("DailyFoodLog");
+                changeMenuIndex(10);
+              }}
+              image={kitchenIcon}
+              name={"Food Log"}
+              noName
+            />
           </View>
 
           {/* <View style={{ width: "100%", marginTop: 40 }}>

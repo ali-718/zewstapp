@@ -40,7 +40,9 @@ export const SpikeOrder = ({ data }) => {
           }}
         >
           <Text style={{ color: "black", flex: 1 }}>{item.mealName}</Text>
-          <Text style={{ color: "black" }}>{item?.mealPrice}</Text>
+          <Text style={{ color: "black", marginLeft: 10 }}>
+            {item?.mealPrice}
+          </Text>
         </View>
       ))}
       <View
