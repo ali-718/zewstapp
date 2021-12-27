@@ -116,7 +116,7 @@ export const Dropdown = ({
               ) : (
                 <Text
                   style={{
-                    fontSize: device === "tablet" ? 20 : 14,
+                    fontSize: device === "tablet" ? 16 : 14,
                     color: "gray",
                     ...textStyle,
                   }}
@@ -127,7 +127,7 @@ export const Dropdown = ({
               {selectedMenu ? (
                 <Text
                   style={{
-                    fontSize: device === "tablet" ? 20 : 14,
+                    fontSize: device === "tablet" ? 16 : 14,
                     color: "black",
                     ...textStyle,
                   }}

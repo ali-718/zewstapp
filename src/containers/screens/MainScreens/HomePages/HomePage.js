@@ -86,6 +86,7 @@ import {
   fetchFoodCountAction,
   fetchLossInKitchenAction,
   fetchForecastedSalesAction,
+  fetchPriceFluctuationAction,
 } from "../../../../Redux/actions/DashboardActions/DashboardActions";
 import moment from "moment";
 import { order } from "styled-system";
@@ -361,6 +362,10 @@ export const HomePage = ({ setselected }) => {
     totalPrice: costByCategoryPrice,
   } = useSelector((state) => state.dashboard.costByCategory);
   const {
+    isLoading: priceFluctuationLoading,
+    list: priceFluctuationList = [],
+  } = useSelector((state) => state.dashboard.priceFluctuation);
+  const {
     isLoading: foreCastedSalesLoading,
     revenue: forecastedRevenue,
     sales: forecastedSales,
@@ -429,6 +434,7 @@ export const HomePage = ({ setselected }) => {
       fetchLossInKitchenSection(),
       fetchCostByCategorySection(),
       fetchForecastedSalesSection(),
+      fetchPriceFluctuation(),
     ]);
   }, [selectedTime, isScreenFocused, defaultLocation]);
 
@@ -478,6 +484,32 @@ export const HomePage = ({ setselected }) => {
             ? moment().format("DD-M-yyy")
             : "",
         endDate: moment().format("DD-M-yyy"),
+      })
+    );
+  };
+
+  const fetchPriceFluctuation = async () => {
+    const location = defaultLocation.locationId;
+
+    if (!!location == false) return;
+
+    dispatch(
+      fetchPriceFluctuationAction({
+        locationId: location ?? "",
+        interval:
+          selectedTime === "This month"
+            ? "month"
+            : selectedTime === "This year"
+            ? "year"
+            : selectedTime === "This day"
+            ? "day"
+            : "",
+        month:
+          selectedTime === "This month"
+            ? "1"
+            : selectedTime === "This year"
+            ? "12"
+            : "1",
       })
     );
   };
@@ -1236,33 +1268,43 @@ export const HomePage = ({ setselected }) => {
                       />
                     </View>
                   </View>
-                  <View
-                    style={{
-                      width: "100%",
-                      borderBottomLeftRadius: 5,
-                      borderBottomRightRadius: 5,
-                      padding: 10,
-                    }}
-                  >
-                    <PriceFluctuation
-                      heading={"Beans"}
-                      belowText={"$38 in the last invoice"}
-                      device={device}
-                      color
-                    />
-                    <PriceFluctuation
-                      heading={"Honeywell Mustard"}
-                      belowText={"$38 in the last invoice"}
-                      device={device}
-                      color
-                    />
-                    <PriceFluctuation
-                      heading={"Honeywell Mustard asli asd asda"}
-                      belowText={"$38 in the last invoice"}
-                      device={device}
-                      color
-                    />
-                  </View>
+
+                  {priceFluctuationLoading ? (
+                    <View
+                      style={{
+                        flex: 1,
+                        flexDirection: "row",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        backgroundColor: "white",
+                        borderRadius: 10,
+                        padding: 10,
+                        paddingVertical: 20,
+                      }}
+                    >
+                      <Spinner size={"large"} color={primaryColor} />
+                    </View>
+                  ) : (
+                    <View
+                      style={{
+                        width: "100%",
+                        borderBottomLeftRadius: 5,
+                        borderBottomRightRadius: 5,
+                        padding: 10,
+                      }}
+                    >
+                      {priceFluctuationList?.slice(0, 3).map((item, i) => (
+                        <PriceFluctuation
+                          heading={item?.name}
+                          belowText={`$${item?.cost} in the last invoice`}
+                          device={device}
+                          color={
+                            item?.fluctuation === "positive" ? true : false
+                          }
+                        />
+                      ))}
+                    </View>
+                  )}
                 </View>
               </View>
             </View>

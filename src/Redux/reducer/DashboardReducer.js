@@ -4,6 +4,7 @@ import {
   FETCH_FOOD_COUNT,
   FORECASTED_SALES,
   LOSS_IN_KITCHEN,
+  PRICE_FLUCTATION,
 } from "../actions/DashboardActions/Types";
 
 const initialState = {
@@ -34,11 +35,32 @@ const initialState = {
     actualSale: 0,
     interval: "month",
   },
+  priceFluctuation: {
+    isLoading: false,
+    isError: false,
+    list: [],
+  },
 };
 
 export const dashboardReducer = produce(
   (state = initialState, { payload, type }) => {
     switch (type) {
+      case PRICE_FLUCTATION.REQUESTED: {
+        state.priceFluctuation.isLoading = true;
+        state.priceFluctuation.isError = false;
+        break;
+      }
+      case PRICE_FLUCTATION.SUCCEEDED: {
+        state.priceFluctuation.isLoading = false;
+        state.priceFluctuation.isError = false;
+        state.priceFluctuation.payload = payload;
+        break;
+      }
+      case PRICE_FLUCTATION.FAILED: {
+        state.priceFluctuation.isLoading = false;
+        state.priceFluctuation.isError = true;
+        break;
+      }
       case FORECASTED_SALES.REQUESTED: {
         state.forecastedSales.isLoading = true;
         state.forecastedSales.isError = false;

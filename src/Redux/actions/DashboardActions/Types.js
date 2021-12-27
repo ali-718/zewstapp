@@ -8,3 +8,4 @@ export const DAILY_FOOD_LOG_ADD = requestActions(
   "dashboard",
   "DAILY_FOOD_LOG_ADD"
 );
+export const PRICE_FLUCTATION = requestActions("dashboard", "PRICE_FLUCTATION");

@@ -316,9 +316,6 @@ export const KitchenPage = () => {
                                   Time
                                 </Text>
                               </View>
-                              {console.log(
-                                ...orders.map((item) => item.catalog)
-                              )}
                             </View>
                             {/* headings ends */}
                             <View style={{ backgroundColor: "white" }}>

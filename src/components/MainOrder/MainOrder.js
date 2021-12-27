@@ -5,7 +5,7 @@ import { onChange } from "react-native-reanimated";
 import { grayTextColor, kitchenMenuColor } from "../../theme/colors";
 import { RegularButton } from "../Buttons/RegularButton";
 import { Text } from "../Text/Text";
-
+import moment from "moment";
 export const MainOrder = ({ data, updateOrder, onChange, meals }) => {
   const {
     timestamp = "",
@@ -46,7 +46,7 @@ export const MainOrder = ({ data, updateOrder, onChange, meals }) => {
           </Text>
         </View>
         <Text style={{ color: "black", marginLeft: 15, fontSize: 12 }}>
-          {timestamp}
+          {moment(timestamp).format("h:m a")}
         </Text>
       </View>
 

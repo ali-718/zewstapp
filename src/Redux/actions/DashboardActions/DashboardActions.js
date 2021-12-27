@@ -6,6 +6,7 @@ import {
   FETCH_FOOD_COUNT,
   FORECASTED_SALES,
   LOSS_IN_KITCHEN,
+  PRICE_FLUCTATION,
 } from "./Types";
 
 export const fetchFoodCountAction =
@@ -72,6 +73,26 @@ export const fetchCostByCategoryAction =
       })
       .catch((e) => {
         dispatch({ type: COST_BY_CATEGORY.FAILED });
+        console.log(e.response.data);
+      });
+  };
+
+export const fetchPriceFluctuationAction =
+  ({ locationId, interval, month }) =>
+  (dispatch) => {
+    dispatch({ type: PRICE_FLUCTATION.REQUESTED });
+    client
+      .get(
+        `/dashboard/priceFluctuation/${locationId}?month=${month}&interval=${interval}`
+      )
+      .then((data) => {
+        dispatch({
+          type: PRICE_FLUCTATION.SUCCEEDED,
+          payload: data.data?.fluctuationData,
+        });
+      })
+      .catch((e) => {
+        dispatch({ type: PRICE_FLUCTATION.FAILED });
         console.log(e.response.data);
       });
   };

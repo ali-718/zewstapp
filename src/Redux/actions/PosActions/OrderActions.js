@@ -209,6 +209,7 @@ export const orderUpdateAction =
           type: UPDATE_ORDER.SUCCEEDED,
           payload: orderId,
         });
+        dispatch(fetchAllOrders({ locationId }));
         ToastSuccess("Order served successfully");
       })
       .catch((e) => {

@@ -86,7 +86,7 @@ export const RegularButton = ({
                   style={{
                     color: white ? primaryColor : "white",
                     fontWeight: "bold",
-                    fontSize: device === "tablet" ? 16 : 12,
+                    fontSize: device === "tablet" ? 14 : 12,
                     fontFamily: "openSans_bold",
                     marginLeft: iconLeft ? 10 : 0,
                     letterSpacing: 1,
