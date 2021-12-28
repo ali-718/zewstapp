@@ -4,6 +4,7 @@ import {
   FlatList,
   Image,
   ScrollView,
+  TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
@@ -115,6 +116,7 @@ const MealComponent = ({ meal, onPress, width }) => {
 
 export const OrderTakingScreen = (props) => {
   const dispatch = useDispatch();
+  const inputRef = useRef();
   const navigation = useNavigation();
   const isScreenFocused = useIsFocused();
   const device = useSelector((state) => state.system.device);
@@ -141,6 +143,23 @@ export const OrderTakingScreen = (props) => {
   const [createOrderLoading, setcreateOrderLoading] = useState(orderLoading);
   const [loadingLabel, setLoadingLabel] = useState("Loading");
   const [firstTime, setFirstTime] = useState(true);
+  const [mealSelectedForAdjustment, setmealSelectedForAdjustment] =
+    useState("");
+  const [showNoteTextBox, setShowNoteTextBox] = useState(false);
+  const [showAdjustPrice, setShowAdjustPrice] = useState(false);
+  const [notes, setNotes] = useState("");
+  const [adjustedPrice, setAdjustedPrice] = useState("");
+
+  const setMealIdForAdjustment = (id) => {
+    setNotes("");
+    setShowNoteTextBox(false);
+    setAdjustedPrice("");
+    if (id === mealSelectedForAdjustment) {
+      setmealSelectedForAdjustment(false);
+      return;
+    }
+    setmealSelectedForAdjustment(id);
+  };
 
   useEffect(() => {
     if (!orderError) return;
@@ -212,6 +231,8 @@ export const OrderTakingScreen = (props) => {
           mealName: item.mealName,
           mealPrice: item.mealPrice,
           mealTime: moment().format("h:mm:ss a"),
+          notes: item?.notes || "",
+          adjustedPrice: item?.adjustedPrice || "",
         })),
       ],
       price: totalPrice,
@@ -231,6 +252,18 @@ export const OrderTakingScreen = (props) => {
     checkDefaultLocation();
     fetchAllMeals();
   }, [isScreenFocused]);
+
+  useEffect(() => {
+    if (orderList.length === 0) return;
+
+    let price = 0;
+
+    orderList.map((item) => {
+      price += item.totalPrice;
+    });
+
+    setTotalPrice(price);
+  }, [orderList]);
 
   const checkDefaultLocation = async () => {
     const location = defaultLocation.locationId;
@@ -275,7 +308,7 @@ export const OrderTakingScreen = (props) => {
 
     const list = [...orderList];
 
-    setTotalPrice(totalPrice + meal.mealPrice);
+    // setTotalPrice(totalPrice + meal.mealPrice);
 
     if (check) {
       const index = list.findIndex((item) => item.mealId === meal.mealId);
@@ -303,7 +336,7 @@ export const OrderTakingScreen = (props) => {
     const list = [...orderList];
     const allList = [...mealsToShow];
 
-    setTotalPrice(totalPrice - meal.mealPrice);
+    // setTotalPrice(totalPrice - meal.mealPrice);
 
     if (check) {
       const index = list.findIndex((item) => item.mealId === meal.mealId);
@@ -330,6 +363,57 @@ export const OrderTakingScreen = (props) => {
 
         setMealsToShow(allList);
       }
+      return;
+    }
+  };
+
+  const updateNotesOnOrderMeal = (meal, notes) => {
+    const check =
+      orderList.filter((item) => item.mealId === meal.mealId).length > 0;
+
+    const list = [...orderList];
+
+    if (check) {
+      const index = list.findIndex((item) => item.mealId === meal.mealId);
+
+      if (index > -1) {
+        list[index].notes = notes;
+
+        setOrderList(list);
+      }
+
+      return;
+    }
+  };
+
+  const updateAdjustedPriceOnOrderMeal = (meal, price) => {
+    const check =
+      orderList.filter((item) => item.mealId === meal.mealId).length > 0;
+
+    const list = [...orderList];
+    if (check) {
+      const index = list.findIndex((item) => item.mealId === meal.mealId);
+
+      if (index > -1) {
+        list[index].adjustedPrice = price;
+
+        if (price?.includes("$")) {
+          list[index].totalPrice =
+            parseInt(list[index].totalPrice) - parseFloat(price.slice(1));
+        }
+
+        if (price?.includes("%")) {
+          list[index].totalPrice =
+            parseInt(list[index].totalPrice) -
+            (
+              parseFloat(`0.${price.slice(1)}`) *
+              parseInt(list[index].totalPrice)
+            ).toFixed(2);
+        }
+
+        setOrderList(list);
+      }
+
       return;
     }
   };
@@ -436,56 +520,292 @@ export const OrderTakingScreen = (props) => {
                         }}
                       >
                         <View style={{ width: "100%", marginVertical: 0 }}>
-                          {orderList.map((item) => (
-                            <View
-                              style={{
-                                flexDirection: "row",
-                                alignItems: "center",
-                                justifyContent: "space-between",
-                                marginTop: 20,
-                                width: "100%",
-                              }}
-                              key={item.mealId}
-                            >
-                              <Text style={{ flex: 0.9, fontSize: 16 }}>
-                                x{item.selected} {item.mealName}
-                              </Text>
-
-                              <View
+                          {orderList.map((item, i) => (
+                            <>
+                              <TouchableOpacity
                                 style={{
                                   flexDirection: "row",
                                   alignItems: "center",
-                                  justifyContent: "center",
+                                  justifyContent: "space-between",
+                                  marginTop: 0,
+                                  width: "100%",
+                                  backgroundColor:
+                                    mealSelectedForAdjustment === i
+                                      ? "#C4C4C4"
+                                      : "rgba(0,0,0,0)",
+                                  paddingVertical: 7,
                                 }}
+                                key={item.mealId}
+                                onPress={() => setMealIdForAdjustment(i)}
                               >
-                                <Text style={{ fontSize: 16 }}>
-                                  ${item.totalPrice?.toFixed(2)}
+                                <Text style={{ flex: 0.9, fontSize: 16 }}>
+                                  x{item.selected} {item.mealName}
                                 </Text>
-                                <TouchableOpacity
-                                  onPress={() => deleteOrderList(item)}
+
+                                <View
+                                  style={{
+                                    flexDirection: "row",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                  }}
                                 >
-                                  <Text
+                                  <Text style={{ fontSize: 16 }}>
+                                    ${item.totalPrice?.toFixed(2)}
+                                  </Text>
+                                  {mealSelectedForAdjustment !== i && (
+                                    <TouchableOpacity
+                                      onPress={() => deleteOrderList(item)}
+                                    >
+                                      <Text
+                                        style={{
+                                          color: "#868686",
+                                          fontSize: 20,
+                                          marginLeft: 10,
+                                          margin: 0,
+                                        }}
+                                      >
+                                        x
+                                      </Text>
+                                    </TouchableOpacity>
+                                  )}
+                                </View>
+                              </TouchableOpacity>
+
+                              {mealSelectedForAdjustment === i ? (
+                                showNoteTextBox ? (
+                                  <View
                                     style={{
-                                      color: "#868686",
-                                      fontSize: 20,
-                                      marginLeft: 10,
-                                      margin: 0,
+                                      width: "100%",
+                                      marginTop: 10,
                                     }}
                                   >
-                                    x
-                                  </Text>
-                                  {/* <Image
+                                    <TextInput
+                                      defaultValue={item.notes}
+                                      ref={inputRef}
+                                      style={{
+                                        width: "100%",
+                                        height: 39,
+                                        backgroundColor: "white",
+                                        borderBottomWidth: 0.5,
+                                        borderColor: "#000000",
+                                        paddingHorizontal: 10,
+                                      }}
+                                      onChangeText={(val) => setNotes(val)}
+                                    />
+
+                                    <TouchableOpacity
+                                      style={{
+                                        width: 95,
+                                        height: 36,
+                                        backgroundColor: "#FFFFFF",
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                        borderWidth: 0.8,
+                                        borderColor: "#868686",
+                                        borderRadius: 6,
+                                        marginTop: 15,
+                                      }}
+                                      onPress={() =>
+                                        updateNotesOnOrderMeal(item, notes)
+                                      }
+                                    >
+                                      <Text
+                                        style={{
+                                          fontSize: 12,
+                                          color: "black",
+                                          textTransform: "uppercase",
+                                        }}
+                                      >
+                                        add note
+                                      </Text>
+                                    </TouchableOpacity>
+                                  </View>
+                                ) : showAdjustPrice ? (
+                                  <View
                                     style={{
-                                      width: 15,
-                                      height: 15,
-                                      marginLeft: 10,
-                                      resizeMode: "contain",
+                                      width: "100%",
+                                      marginTop: 10,
                                     }}
-                                    source={deleteIcon}
-                                  /> */}
-                                </TouchableOpacity>
-                              </View>
-                            </View>
+                                  >
+                                    <TextInput
+                                      keyboardType="numeric"
+                                      defaultValue={item.adjustedPrice}
+                                      ref={inputRef}
+                                      style={{
+                                        width: "100%",
+                                        height: 39,
+                                        backgroundColor: "white",
+                                        borderBottomWidth: 0.5,
+                                        borderColor: "#000000",
+                                        paddingHorizontal: 10,
+                                      }}
+                                      value={adjustedPrice}
+                                      onChangeText={(val) =>
+                                        setAdjustedPrice(val)
+                                      }
+                                    />
+
+                                    <View
+                                      style={{
+                                        marginTop: 15,
+                                        width: "100%",
+                                        flexDirection: "row",
+                                      }}
+                                    >
+                                      <TouchableOpacity
+                                        style={{
+                                          width: 123,
+                                          height: 36,
+                                          backgroundColor: "#FFFFFF",
+                                          alignItems: "center",
+                                          justifyContent: "center",
+                                          borderWidth: 0.8,
+                                          borderColor: "#868686",
+                                          borderRadius: 6,
+                                        }}
+                                        onPress={() =>
+                                          updateAdjustedPriceOnOrderMeal(
+                                            item,
+                                            adjustedPrice
+                                          )
+                                        }
+                                      >
+                                        <Text
+                                          style={{
+                                            fontSize: 12,
+                                            color: "black",
+                                            textTransform: "uppercase",
+                                          }}
+                                        >
+                                          Adjust price
+                                        </Text>
+                                      </TouchableOpacity>
+
+                                      <TouchableOpacity
+                                        style={{
+                                          width: 34,
+                                          height: 36,
+                                          backgroundColor: "#FFFFFF",
+                                          alignItems: "center",
+                                          justifyContent: "center",
+                                          borderWidth: 0.8,
+                                          borderColor: "#868686",
+                                          borderRadius: 6,
+                                          marginLeft: 10,
+                                        }}
+                                        onPress={() => {
+                                          const price = adjustedPrice;
+
+                                          setAdjustedPrice(
+                                            `$${price
+                                              .replaceAll("$", "")
+                                              .replaceAll("%", "")}`
+                                          );
+                                        }}
+                                      >
+                                        <Text
+                                          style={{
+                                            fontSize: 12,
+                                            color: "black",
+                                            textTransform: "uppercase",
+                                          }}
+                                        >
+                                          $
+                                        </Text>
+                                      </TouchableOpacity>
+                                      <TouchableOpacity
+                                        style={{
+                                          width: 34,
+                                          height: 36,
+                                          backgroundColor: "#FFFFFF",
+                                          alignItems: "center",
+                                          justifyContent: "center",
+                                          borderWidth: 0.8,
+                                          borderColor: "#868686",
+                                          borderRadius: 6,
+                                          marginLeft: 10,
+                                        }}
+                                        onPress={() => {
+                                          const price = adjustedPrice;
+
+                                          setAdjustedPrice(
+                                            `%${price
+                                              .replaceAll("$", "")
+                                              .replaceAll("%", "")}`
+                                          );
+                                        }}
+                                      >
+                                        <Text
+                                          style={{
+                                            fontSize: 12,
+                                            color: "black",
+                                            textTransform: "uppercase",
+                                          }}
+                                        >
+                                          %
+                                        </Text>
+                                      </TouchableOpacity>
+                                    </View>
+                                  </View>
+                                ) : (
+                                  <View
+                                    style={{
+                                      width: "100%",
+                                      marginTop: 19,
+                                      flexDirection: "row",
+                                    }}
+                                  >
+                                    <TouchableOpacity
+                                      style={{
+                                        width: 123,
+                                        height: 36,
+                                        backgroundColor: "#FFFFFF",
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                        borderWidth: 0.8,
+                                        borderColor: "#868686",
+                                        borderRadius: 6,
+                                      }}
+                                      onPress={() => setShowAdjustPrice(true)}
+                                    >
+                                      <Text
+                                        style={{
+                                          fontSize: 12,
+                                          color: "black",
+                                          textTransform: "uppercase",
+                                        }}
+                                      >
+                                        Adjust price
+                                      </Text>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity
+                                      style={{
+                                        width: 70,
+                                        height: 36,
+                                        backgroundColor: "#FFFFFF",
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                        borderWidth: 0.8,
+                                        borderColor: "#868686",
+                                        borderRadius: 6,
+                                        marginLeft: 16,
+                                      }}
+                                      onPress={() => setShowNoteTextBox(true)}
+                                    >
+                                      <Text
+                                        style={{
+                                          fontSize: 12,
+                                          color: "black",
+                                          textTransform: "uppercase",
+                                        }}
+                                      >
+                                        Notes
+                                      </Text>
+                                    </TouchableOpacity>
+                                  </View>
+                                )
+                              ) : null}
+                            </>
                           ))}
 
                           <View
