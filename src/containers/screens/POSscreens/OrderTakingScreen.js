@@ -34,6 +34,7 @@ import { RegularButton } from "../../../components/Buttons/RegularButton";
 import deleteIcon from "../../../assets/images/deleteIcon.png";
 import { Chip } from "../../../components/Chip/Chip";
 import moment from "moment";
+import validator from "validator";
 
 const CategoryComponent = ({ width, name, onPress }) => {
   const [color, setColor] = useState("");
@@ -154,6 +155,7 @@ export const OrderTakingScreen = (props) => {
     setNotes("");
     setShowNoteTextBox(false);
     setAdjustedPrice("");
+    setShowAdjustPrice(false);
     if (id === mealSelectedForAdjustment) {
       setmealSelectedForAdjustment(false);
       return;
@@ -324,7 +326,12 @@ export const OrderTakingScreen = (props) => {
       return;
     }
 
-    list.push({ ...meal, selected: 1, totalPrice: meal.mealPrice });
+    list.push({
+      ...meal,
+      selected: 1,
+      totalPrice: meal.mealPrice,
+      originalPrice: meal.mealPrice,
+    });
 
     setOrderList(list);
   };
@@ -397,18 +404,29 @@ export const OrderTakingScreen = (props) => {
       if (index > -1) {
         list[index].adjustedPrice = price;
 
-        if (price?.includes("$")) {
+        if (price?.includes("$") && validator.isNumeric(price.slice(1))) {
           list[index].totalPrice =
-            parseInt(list[index].totalPrice) - parseFloat(price.slice(1));
+            parseInt(list[index].originalPrice) * list[index].selected -
+            parseFloat(price.slice(1));
+          setOrderList(list);
+          return;
         }
 
-        if (price?.includes("%")) {
+        if (price?.includes("%") && validator.isNumeric(price.slice(1))) {
           list[index].totalPrice =
-            parseInt(list[index].totalPrice) -
+            parseInt(list[index].originalPrice) * list[index].selected -
             (
               parseFloat(`0.${price.slice(1)}`) *
-              parseInt(list[index].totalPrice)
+              (parseInt(list[index].originalPrice) * list[index].selected)
             ).toFixed(2);
+
+          setOrderList(list);
+          return;
+        }
+
+        if (price.length === 0) {
+          list[index].totalPrice =
+            parseInt(list[index].originalPrice) * list[index].selected;
         }
 
         setOrderList(list);
@@ -868,7 +886,7 @@ export const OrderTakingScreen = (props) => {
                         ) : (
                           <RegularButton
                             onPress={() => setCharge(true)}
-                            text={`Charge $${totalPrice}`}
+                            text={`Charge $${totalPrice.toFixed(2)}`}
                           />
                         )}
                       </View>
