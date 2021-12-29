@@ -7,7 +7,7 @@ import {
   FETCH_TABLES,
   UPDATE_MEALS,
   UPDATE_ORDER,
-  GET_PAYMENT_INTENT_KEY
+  GET_PAYMENT_INTENT_KEY,
 } from "./Types";
 import moment from "moment";
 
@@ -154,7 +154,7 @@ export const payOrderAction = ({ orderId, locationId, paymentDetails }) =>
       .post(`/manual-orders/orderPaid`, {
         locationId,
         orderId,
-        paymentDetails
+        paymentDetails,
       })
       .then(() => {
         resolve();
@@ -251,12 +251,17 @@ export const orderMarkServedAction =
       });
   };
 
-export const getOrderPaymentIntentAction = ({ amount, clientId }) =>
+export const getOrderPaymentIntentAction =
+  ({ amount, clientId }) =>
   (dispatch) => {
+    dispatch({
+      type: GET_PAYMENT_INTENT_KEY.REQUESTED,
+    });
+
     client
       .post(`/manual-orders/order-payment`, {
         amount,
-        clientId
+        clientId,
       })
       .then((res) => {
         dispatch({
@@ -271,9 +276,8 @@ export const getOrderPaymentIntentAction = ({ amount, clientId }) =>
           e.response.data.err || "Some error occoured, while confirming order"
         );
       });
-}
+  };
 
-export const clearOrderPaymentIntentAction = () =>
-  (dispatch) => {
-    dispatch({ type: GET_PAYMENT_INTENT_KEY.FAILED });
-}
+export const clearOrderPaymentIntentAction = () => (dispatch) => {
+  dispatch({ type: GET_PAYMENT_INTENT_KEY.FAILED });
+};

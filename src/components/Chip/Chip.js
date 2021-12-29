@@ -23,7 +23,7 @@ export const Chip = ({ text, selected }) => {
       <Text
         style={{
           color: selected ? "white" : primaryShade1,
-          fontSize: 18,
+          fontSize: 14,
           fontWeight: "bold",
           margin: 0,
           padding: 0,

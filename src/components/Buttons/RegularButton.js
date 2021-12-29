@@ -50,7 +50,9 @@ export const RegularButton = ({
         <LinearGradient
           colors={
             colors ||
-            (white
+            (disabled
+              ? ["#CCCCCC", "#CCCCCC"]
+              : white
               ? ["white", "white"]
               : red
               ? [primaryRedColor, primaryRedColor]

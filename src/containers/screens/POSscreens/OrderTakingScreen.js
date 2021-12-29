@@ -29,13 +29,13 @@ import { ToastError } from "../../../helpers/Toast";
 import { Spinner } from "native-base";
 import { useIsFocused, useNavigation } from "@react-navigation/core";
 import { getRandomColor } from "../../../helpers/utlils";
-import { flex, order } from "styled-system";
+import { flex, marginTop, order } from "styled-system";
 import { RegularButton } from "../../../components/Buttons/RegularButton";
 import deleteIcon from "../../../assets/images/deleteIcon.png";
 import { Chip } from "../../../components/Chip/Chip";
 import moment from "moment";
 import validator from "validator";
-import { useStripe } from '@stripe/stripe-react-native';
+import { useStripe } from "@stripe/stripe-react-native";
 
 const CategoryComponent = ({ width, name, onPress }) => {
   const [color, setColor] = useState("");
@@ -143,7 +143,9 @@ export const OrderTakingScreen = (props) => {
   const [orderList, setOrderList] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
   const [charge, setCharge] = useState(false);
-  const [createOrderLoading, setcreateOrderLoading] = useState(orderLoading);
+  const [createOrderLoading, setcreateOrderLoading] = useState(false);
+  const [createOrderLoadingWithCard, setcreateOrderLoadingWithCard] =
+    useState(false);
   const [loadingLabel, setLoadingLabel] = useState("Loading");
   const [firstTime, setFirstTime] = useState(true);
   const [mealSelectedForAdjustment, setmealSelectedForAdjustment] =
@@ -152,6 +154,7 @@ export const OrderTakingScreen = (props) => {
   const [showAdjustPrice, setShowAdjustPrice] = useState(false);
   const [notes, setNotes] = useState("");
   const [adjustedPrice, setAdjustedPrice] = useState("");
+  const [paymentSuccessfull, setpaymentSuccessfull] = useState(false);
 
   const setMealIdForAdjustment = (id) => {
     setNotes("");
@@ -164,13 +167,10 @@ export const OrderTakingScreen = (props) => {
     }
     setmealSelectedForAdjustment(id);
   };
-  const [ cardOrderInfo, setCardOrderInfo ] = useState(null);
+  const [cardOrderInfo, setCardOrderInfo] = useState(null);
   const [paymentMethod, setPaymentMethod] = useState("");
 
-
-  const {
-    paymentIntent
-  } = useSelector((state) => state.pos);
+  const { paymentIntent } = useSelector((state) => state.pos);
 
   useEffect(() => {
     if (!orderError) return;
@@ -179,91 +179,77 @@ export const OrderTakingScreen = (props) => {
   }, [orderError]);
 
   useEffect(() => {
-
     if (!isSuccess) return;
     if (firstTime) return;
 
-    setcreateOrderLoading(true);
-    setLoadingLabel("Confirming payment");
-
-    if(paymentMethod !== "Card") {
-      actions
-      .payOrderAction({
+    actions
+      .attachOrderToTableAction({
+        table: props.route.params.table,
         orderId,
-        locationId: defaultLocation.locationId,
-        paymentDetails: "Cash"
       })
       .then((res) => {
-        setLoadingLabel("Attaching order to table");
+        setLoadingLabel("Reserving table for customer");
         actions
-          .attachOrderToTableAction({
-            table: props.route.params.table,
-            orderId,
+          .changeTableStatusAction({
+            locationId: defaultLocation.locationId,
+            tableId: props.route.params.tableId,
+            stature: "RESERVED",
           })
-          .then((res) => {
-            setLoadingLabel("Reserving table for customer");
-            actions
-              .changeTableStatusAction({
-                locationId: defaultLocation.locationId,
-                tableId: props.route.params.tableId,
-                stature: "RESERVED",
-              })
-              .then(() => {
-                navigation.goBack();
-                setcreateOrderLoading(false);
-              })
-              .catch((res) => {
-                setcreateOrderLoading(false);
-              });
+          .then(() => {
+            setcreateOrderLoading(false);
+            setcreateOrderLoadingWithCard(false);
           })
           .catch((res) => {
             setcreateOrderLoading(false);
+            setcreateOrderLoadingWithCard(false);
           });
       })
       .catch((res) => {
         setcreateOrderLoading(false);
+        setcreateOrderLoadingWithCard(false);
       });
-    }
-    else {
-      actions
-      .payOrderAction({
-        orderId,
-        locationId: defaultLocation.locationId,
-        paymentDetails: "Stripe"
-      })
-      .then((res) => {
-        setLoadingLabel("Attaching order to table");
-        actions
-          .attachOrderToTableAction({
-            table: props.route.params.table,
-            orderId,
-          })
-          .then((res) => {
-            setLoadingLabel("Reserving table for customer");
-            actions
-              .changeTableStatusAction({
-                locationId: defaultLocation.locationId,
-                tableId: props.route.params.tableId,
-                stature: "RESERVED",
-              })
-              .then(() => {
-                navigation.goBack();
-                setcreateOrderLoading(false);
-              })
-              .catch((res) => {
-                setcreateOrderLoading(false);
-              });
-          })
-          .catch((res) => {
-            setcreateOrderLoading(false);
-          });
-      })
-      .catch((res) => {
-        setcreateOrderLoading(false);
-      });
-    }
-
   }, [isSuccess]);
+
+  const ProcessPayment = () => {
+    if (paymentMethod !== "Card") {
+      setcreateOrderLoading(true);
+      actions
+        .payOrderAction({
+          orderId,
+          locationId: defaultLocation.locationId,
+          paymentDetails: "Cash",
+        })
+        .then((res) => {
+          setLoadingLabel("Attaching order to table");
+          setcreateOrderLoading(false);
+          setcreateOrderLoadingWithCard(false);
+          setpaymentSuccessfull(true);
+        })
+        .catch((res) => {
+          setcreateOrderLoading(false);
+          setcreateOrderLoadingWithCard(false);
+        });
+    } else {
+      console.log("yes paying through stripe");
+      setcreateOrderLoadingWithCard(true);
+      actions
+        .payOrderAction({
+          orderId,
+          locationId: defaultLocation.locationId,
+          paymentDetails: "Stripe",
+        })
+        .then((res) => {
+          setLoadingLabel("Attaching order to table");
+          setcreateOrderLoading(false);
+          setcreateOrderLoadingWithCard(false);
+          setpaymentSuccessfull(true);
+        })
+        .catch((res) => {
+          setcreateOrderLoading(false);
+          setcreateOrderLoadingWithCard(false);
+        });
+    }
+  };
 
   const createOrder = () => {
     if (orderList.length === 0) {
@@ -272,7 +258,6 @@ export const OrderTakingScreen = (props) => {
     }
 
     setFirstTime(false);
-    setcreateOrderLoading(true);
     setLoadingLabel("Confirming order");
 
     const data = {
@@ -304,8 +289,8 @@ export const OrderTakingScreen = (props) => {
     }
 
     setFirstTime(false);
-    setcreateOrderLoading(true);
-    setLoadingLabel("Confirming order");
+    // setcreateOrderLoading(true);
+    // setLoadingLabel("Confirming order");
 
     const data = {
       client_id: user.clientId,
@@ -326,33 +311,44 @@ export const OrderTakingScreen = (props) => {
     setCardOrderInfo(data);
     setPaymentMethod("Card");
 
-    dispatch(actions.getOrderPaymentIntentAction({ amount: data?.price, clientId: data?.client_id }));
+    dispatch(
+      actions.getOrderPaymentIntentAction({
+        amount: data?.price,
+        clientId: data?.client_id,
+      })
+    );
   };
 
   useEffect(() => {
-    if(paymentIntent?.intentKey?.paymentIntent) {
+    if (paymentIntent?.intentKey?.paymentIntent) {
       let intent = paymentIntent?.intentKey?.paymentIntent;
       initPaymentSheet({
         customerId: "12345",
-        paymentIntentClientSecret: intent
-      }).then(() => {
-        presentPaymentSheet({
-          clientSecret: intent
-        }).then((res) => {
-          if(res?.error?.code === "Canceled" || res?.error?.code === "Failed") {
-            dispatch(actions.clearOrderPaymentIntentAction())
-            setFirstTime(true);
-            setcreateOrderLoading(false);
-            return
-          }else {
-            dispatch(actions.createOrder(cardOrderInfo));
-          }
+        paymentIntentClientSecret: intent,
+      })
+        .then(() => {
+          presentPaymentSheet({
+            clientSecret: intent,
+          }).then((res) => {
+            console.log(res);
+            if (
+              res?.error?.code === "Canceled" ||
+              res?.error?.code === "Failed"
+            ) {
+              dispatch(actions.clearOrderPaymentIntentAction());
+              setFirstTime(true);
+              setcreateOrderLoading(false);
+              return;
+            } else {
+              ProcessPayment();
+            }
+          });
+        })
+        .catch((err) => {
+          console.log("STRIPE ERROR IS", err);
         });
-      }).catch(err => {
-        console.log("STRIPE ERROR IS", err)
-      });
     }
-  }, [paymentIntent?.intentKey?.paymentIntent])
+  }, [paymentIntent?.intentKey?.paymentIntent]);
 
   useEffect(() => {
     setMealsToShow(meals.map((item) => ({ ...item, selected: 0 })));
@@ -365,7 +361,10 @@ export const OrderTakingScreen = (props) => {
   }, [isScreenFocused]);
 
   useEffect(() => {
-    if (orderList.length === 0) return;
+    if (orderList.length === 0) {
+      setTotalPrice(0);
+      return;
+    }
 
     let price = 0;
 
@@ -419,8 +418,6 @@ export const OrderTakingScreen = (props) => {
 
     const list = [...orderList];
 
-    // setTotalPrice(totalPrice + meal.mealPrice);
-
     if (check) {
       const index = list.findIndex((item) => item.mealId === meal.mealId);
 
@@ -451,8 +448,6 @@ export const OrderTakingScreen = (props) => {
 
     const list = [...orderList];
     const allList = [...mealsToShow];
-
-    // setTotalPrice(totalPrice - meal.mealPrice);
 
     if (check) {
       const index = list.findIndex((item) => item.mealId === meal.mealId);
@@ -619,10 +614,14 @@ export const OrderTakingScreen = (props) => {
                             }}
                             renderItem={({ item }) => (
                               <MealComponent
-                                onPress={() => {
-                                  incrementMealItem(item.mealId);
-                                  createOrderList(item);
-                                }}
+                                onPress={
+                                  isSuccess
+                                    ? () => null
+                                    : () => {
+                                        incrementMealItem(item.mealId);
+                                        createOrderList(item);
+                                      }
+                                }
                                 meal={item}
                               />
                             )}
@@ -637,7 +636,9 @@ export const OrderTakingScreen = (props) => {
                       <View
                         style={{
                           width: "100%",
-                          backgroundColor: orderBillBackground,
+                          backgroundColor: isSuccess
+                            ? "#FFCCD5"
+                            : orderBillBackground,
                           padding: 10,
                           borderRadius: 10,
                           flexDirection: "column",
@@ -977,26 +978,86 @@ export const OrderTakingScreen = (props) => {
                           justifyContent: "space-between",
                         }}
                       >
-                        {charge ? (
-                          <RegularButton
-                            isLoading={orderLoading || createOrderLoading}
-                            colors={["white", "white"]}
+                        {paymentSuccessfull ? (
+                          <View
                             style={{
-                              borderWidth: 1,
-                              borderColor: primaryColor,
+                              display: "flex",
+                              width: "100%",
+                              marginTop: 45,
+                              alignItems: "center",
+                              justifyContent: "center",
                             }}
-                            white
-                            textStyle={{ color: primaryColor }}
-                            onPress={createOrder}
-                            text={`Cash`}
-                            fullPageLoad
-                            loadingLabel={loadingLabel}
-                          />
+                          >
+                            <Text
+                              style={{
+                                color: "#57C27B",
+                                textTransform: "uppercase",
+                                fontSize: 12,
+                              }}
+                            >
+                              Payment confirmed
+                            </Text>
+                          </View>
+                        ) : charge ? (
+                          <View style={{ display: "flex", width: "100%" }}>
+                            <RegularButton
+                              isLoading={createOrderLoading}
+                              colors={["white", "white"]}
+                              style={{
+                                borderWidth: 1,
+                                borderColor: primaryColor,
+                              }}
+                              textStyle={{ color: primaryColor }}
+                              onPress={ProcessPayment}
+                              text={`Cash`}
+                              white
+                            />
+                            <RegularButton
+                              isLoading={
+                                paymentIntent?.isLoading ||
+                                createOrderLoadingWithCard
+                              }
+                              colors={["white", "white"]}
+                              style={{
+                                borderWidth: 1,
+                                borderColor: primaryColor,
+                                marginTop: 10,
+                              }}
+                              textStyle={{ color: primaryColor }}
+                              onPress={createOrderByCard}
+                              text={`credit Card`}
+                              white
+                            />
+
+                            <TouchableOpacity onPress={() => setCharge(false)}>
+                              <Text
+                                style={{
+                                  color: "black",
+                                  textDecorationLine: "underline",
+                                  marginTop: 40,
+                                  fontSize: 12,
+                                  textTransform: "uppercase",
+                                }}
+                              >
+                                Back
+                              </Text>
+                            </TouchableOpacity>
+                          </View>
                         ) : (
-                          <RegularButton
-                            onPress={() => setCharge(true)}
-                            text={`Charge $${totalPrice.toFixed(2)}`}
-                          />
+                          <View style={{ display: "flex", width: "100%" }}>
+                            <RegularButton
+                              isLoading={orderLoading}
+                              onPress={createOrder}
+                              text={"Sent"}
+                              disabled={isSuccess}
+                            />
+                            <RegularButton
+                              style={{ marginTop: 10 }}
+                              white
+                              onPress={() => setCharge(true)}
+                              text={`Payment $${totalPrice.toFixed(2)}`}
+                            />
+                          </View>
                         )}
                       </View>
                     </View>
@@ -1242,12 +1303,13 @@ export const OrderTakingScreen = (props) => {
                         text={`Cash`}
                         white
                       />
-                        <RegularButton
+                      <RegularButton
+                        isLoading={paymentIntent?.isLoading}
                         colors={["white", "white"]}
                         style={{
                           borderWidth: 1,
                           borderColor: primaryColor,
-                          marginTop: 10
+                          marginTop: 10,
                         }}
                         textStyle={{ color: primaryColor }}
                         onPress={createOrderByCard}
