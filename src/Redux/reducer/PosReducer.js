@@ -6,6 +6,7 @@ import {
   FETCH_TABLES,
   UPDATE_MEALS,
   UPDATE_ORDER,
+  GET_PAYMENT_INTENT_KEY
 } from "../actions/PosActions/Types";
 
 const initialState = {
@@ -35,6 +36,9 @@ const initialState = {
     doneOrders: [],
     createdOrders: [],
   },
+  paymentIntent: {
+    intentKey: null
+  }
 };
 
 export const posReducer = produce((state = initialState, { payload, type }) => {
@@ -199,6 +203,14 @@ export const posReducer = produce((state = initialState, { payload, type }) => {
       state.tables.isError = true;
       state.tables.insideTables = [];
       state.tables.outsideTables = [];
+      break;
+    }
+    case GET_PAYMENT_INTENT_KEY.SUCCEEDED: {
+      state.paymentIntent.intentKey = payload;
+      break;
+    }
+    case GET_PAYMENT_INTENT_KEY.FAILED: {
+      state.paymentIntent.intentKey = null;
       break;
     }
     default:

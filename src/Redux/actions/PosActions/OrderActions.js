@@ -7,6 +7,7 @@ import {
   FETCH_TABLES,
   UPDATE_MEALS,
   UPDATE_ORDER,
+  GET_PAYMENT_INTENT_KEY
 } from "./Types";
 import moment from "moment";
 
@@ -146,14 +147,14 @@ export const createOrder =
       });
   };
 
-export const payOrderAction = ({ orderId, locationId }) =>
+export const payOrderAction = ({ orderId, locationId, paymentDetails }) =>
   new Promise((resolve, reject) => {
-    console.log({ locationId, orderId, paymentDetails: "Cash" });
+    console.log({ locationId, orderId, paymentDetails });
     client
       .post(`/manual-orders/orderPaid`, {
         locationId,
         orderId,
-        paymentDetails: "Cash",
+        paymentDetails
       })
       .then(() => {
         resolve();
@@ -249,3 +250,30 @@ export const orderMarkServedAction =
         dispatch({ type: UPDATE_ORDER.FAILED });
       });
   };
+
+export const getOrderPaymentIntentAction = ({ amount, clientId }) =>
+  (dispatch) => {
+    client
+      .post(`/manual-orders/order-payment`, {
+        amount,
+        clientId
+      })
+      .then((res) => {
+        dispatch({
+          type: GET_PAYMENT_INTENT_KEY.SUCCEEDED,
+          payload: res.data,
+        });
+      })
+      .catch((e) => {
+        dispatch({ type: GET_PAYMENT_INTENT_KEY.FAILED });
+        console.log(e.response.data);
+        ToastError(
+          e.response.data.err || "Some error occoured, while confirming order"
+        );
+      });
+}
+
+export const clearOrderPaymentIntentAction = () =>
+  (dispatch) => {
+    dispatch({ type: GET_PAYMENT_INTENT_KEY.FAILED });
+}

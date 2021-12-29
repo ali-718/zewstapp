@@ -17,6 +17,8 @@ import store from "./store";
 import Toast from "react-native-toast-message";
 import * as eva from "@eva-design/eva";
 import { ApplicationProvider, Layout, Text } from "@ui-kitten/components";
+import { initStripe } from '@stripe/stripe-react-native';
+import { STRIPE_PUBLISH_KEY } from './src/helpers/utlils';
 
 const theme = extendTheme({
   colors: {
@@ -56,6 +58,9 @@ const App = () => {
   useEffect(() => {
     handleLoadAssets();
     SplashScreen.preventAutoHideAsync();
+    initStripe({
+			publishableKey: STRIPE_PUBLISH_KEY
+		});
   }, []);
 
   useEffect(() => {

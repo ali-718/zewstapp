@@ -29,12 +29,13 @@ import { ToastError } from "../../../helpers/Toast";
 import { Spinner } from "native-base";
 import { useIsFocused, useNavigation } from "@react-navigation/core";
 import { getRandomColor } from "../../../helpers/utlils";
-import { order } from "styled-system";
+import { flex, order } from "styled-system";
 import { RegularButton } from "../../../components/Buttons/RegularButton";
 import deleteIcon from "../../../assets/images/deleteIcon.png";
 import { Chip } from "../../../components/Chip/Chip";
 import moment from "moment";
 import validator from "validator";
+import { useStripe } from '@stripe/stripe-react-native';
 
 const CategoryComponent = ({ width, name, onPress }) => {
   const [color, setColor] = useState("");
@@ -116,6 +117,7 @@ const MealComponent = ({ meal, onPress, width }) => {
 };
 
 export const OrderTakingScreen = (props) => {
+  const { initPaymentSheet, presentPaymentSheet } = useStripe();
   const dispatch = useDispatch();
   const inputRef = useRef();
   const navigation = useNavigation();
@@ -162,6 +164,13 @@ export const OrderTakingScreen = (props) => {
     }
     setmealSelectedForAdjustment(id);
   };
+  const [ cardOrderInfo, setCardOrderInfo ] = useState(null);
+  const [paymentMethod, setPaymentMethod] = useState("");
+
+
+  const {
+    paymentIntent
+  } = useSelector((state) => state.pos);
 
   useEffect(() => {
     if (!orderError) return;
@@ -170,16 +179,19 @@ export const OrderTakingScreen = (props) => {
   }, [orderError]);
 
   useEffect(() => {
+
     if (!isSuccess) return;
     if (firstTime) return;
 
     setcreateOrderLoading(true);
     setLoadingLabel("Confirming payment");
 
-    actions
+    if(paymentMethod !== "Card") {
+      actions
       .payOrderAction({
         orderId,
         locationId: defaultLocation.locationId,
+        paymentDetails: "Cash"
       })
       .then((res) => {
         setLoadingLabel("Attaching order to table");
@@ -211,6 +223,46 @@ export const OrderTakingScreen = (props) => {
       .catch((res) => {
         setcreateOrderLoading(false);
       });
+    }
+    else {
+      actions
+      .payOrderAction({
+        orderId,
+        locationId: defaultLocation.locationId,
+        paymentDetails: "Stripe"
+      })
+      .then((res) => {
+        setLoadingLabel("Attaching order to table");
+        actions
+          .attachOrderToTableAction({
+            table: props.route.params.table,
+            orderId,
+          })
+          .then((res) => {
+            setLoadingLabel("Reserving table for customer");
+            actions
+              .changeTableStatusAction({
+                locationId: defaultLocation.locationId,
+                tableId: props.route.params.tableId,
+                stature: "RESERVED",
+              })
+              .then(() => {
+                navigation.goBack();
+                setcreateOrderLoading(false);
+              })
+              .catch((res) => {
+                setcreateOrderLoading(false);
+              });
+          })
+          .catch((res) => {
+            setcreateOrderLoading(false);
+          });
+      })
+      .catch((res) => {
+        setcreateOrderLoading(false);
+      });
+    }
+
   }, [isSuccess]);
 
   const createOrder = () => {
@@ -244,6 +296,63 @@ export const OrderTakingScreen = (props) => {
 
     dispatch(actions.createOrder(data));
   };
+
+  const createOrderByCard = () => {
+    if (orderList.length === 0) {
+      ToastError("Select any menu item first!");
+      return;
+    }
+
+    setFirstTime(false);
+    setcreateOrderLoading(true);
+    setLoadingLabel("Confirming order");
+
+    const data = {
+      client_id: user.clientId,
+      locationId: defaultLocation.locationId,
+      catalog: [
+        ...orderList.map((item) => ({
+          quantity: item.selected,
+          recipe: item.mealRecipes[0],
+          mealName: item.mealName,
+          mealPrice: item.mealPrice,
+        })),
+      ],
+      price: totalPrice,
+      discount: 0,
+      customerId: "12345",
+    };
+
+    setCardOrderInfo(data);
+    setPaymentMethod("Card");
+
+    dispatch(actions.getOrderPaymentIntentAction({ amount: data?.price, clientId: data?.client_id }));
+  };
+
+  useEffect(() => {
+    if(paymentIntent?.intentKey?.paymentIntent) {
+      let intent = paymentIntent?.intentKey?.paymentIntent;
+      initPaymentSheet({
+        customerId: "12345",
+        paymentIntentClientSecret: intent
+      }).then(() => {
+        presentPaymentSheet({
+          clientSecret: intent
+        }).then((res) => {
+          if(res?.error?.code === "Canceled" || res?.error?.code === "Failed") {
+            dispatch(actions.clearOrderPaymentIntentAction())
+            setFirstTime(true);
+            setcreateOrderLoading(false);
+            return
+          }else {
+            dispatch(actions.createOrder(cardOrderInfo));
+          }
+        });
+      }).catch(err => {
+        console.log("STRIPE ERROR IS", err)
+      });
+    }
+  }, [paymentIntent?.intentKey?.paymentIntent])
 
   useEffect(() => {
     setMealsToShow(meals.map((item) => ({ ...item, selected: 0 })));
@@ -1120,18 +1229,32 @@ export const OrderTakingScreen = (props) => {
                   }}
                 >
                   {charge ? (
-                    <RegularButton
-                      isLoading={orderLoading || createOrderLoading}
-                      colors={["white", "white"]}
-                      style={{
-                        borderWidth: 1,
-                        borderColor: primaryColor,
-                      }}
-                      textStyle={{ color: primaryColor }}
-                      onPress={createOrder}
-                      text={`Cash`}
-                      white
-                    />
+                    <View style={{ display: "flex", width: "100%" }}>
+                      <RegularButton
+                        isLoading={orderLoading || createOrderLoading}
+                        colors={["white", "white"]}
+                        style={{
+                          borderWidth: 1,
+                          borderColor: primaryColor,
+                        }}
+                        textStyle={{ color: primaryColor }}
+                        onPress={createOrder}
+                        text={`Cash`}
+                        white
+                      />
+                        <RegularButton
+                        colors={["white", "white"]}
+                        style={{
+                          borderWidth: 1,
+                          borderColor: primaryColor,
+                          marginTop: 10
+                        }}
+                        textStyle={{ color: primaryColor }}
+                        onPress={createOrderByCard}
+                        text={`Card`}
+                        white
+                      />
+                    </View>
                   ) : (
                     <RegularButton
                       onPress={() => setCharge(true)}

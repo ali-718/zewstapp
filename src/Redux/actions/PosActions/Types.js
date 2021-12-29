@@ -6,3 +6,4 @@ export const CREATE_ORDER = requestActions("pos", "CREATE_ORDER");
 export const FETCH_ORDERS = requestActions("pos", "FETCH_ORDERS");
 export const UPDATE_ORDER = requestActions("pos", "UPDATE_ORDER");
 export const UPDATE_MEALS = requestActions("pos", "UPDATE_MEALS");
+export const GET_PAYMENT_INTENT_KEY = requestActions("pos", "GET_PAYMENT_INTENT_KEY");
