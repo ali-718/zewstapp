@@ -229,6 +229,11 @@ export const AddMeal = (props) => {
       return;
     }
 
+    if (unitCost - selectedRecipe?.totalUnitCost < 0) {
+      ToastError("Meal cost cannot be less than unit cost!");
+      return;
+    }
+
     if (isEdit) {
       dispatch(
         actions.editMeal({
