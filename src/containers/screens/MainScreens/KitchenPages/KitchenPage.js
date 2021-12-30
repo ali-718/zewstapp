@@ -69,20 +69,22 @@ export const KitchenPage = () => {
 
     console.log(
       meal[0].meals?.length ===
-        orders
+        createdOrders
           .filter((item) => item.orderId === orderId)[0]
-          .catalog.filter((item) => !item.served).length ||
+          ?.catalog.filter((item) => !item.served).length ||
         meal[0].meals?.length ===
-          orders.filter((item) => item.orderId === orderId)[0].catalog.length
+          createdOrders.filter((item) => item.orderId === orderId)[0].catalog
+            .length
     );
 
     if (
       meal[0].meals?.length ===
-        orders
+        createdOrders
           .filter((item) => item.orderId === orderId)[0]
           .catalog.filter((item) => !item.served).length ||
       meal[0].meals?.length ===
-        orders.filter((item) => item.orderId === orderId)[0].catalog.length
+        createdOrders.filter((item) => item.orderId === orderId)[0].catalog
+          .length
     ) {
       dispatch(
         actions.orderUpdateAction({
@@ -211,7 +213,7 @@ export const KitchenPage = () => {
                 )}
                 data={
                   selected === 0
-                    ? orders
+                    ? createdOrders
                     : selected === 1
                     ? doneOrders
                     : selected === 3

@@ -281,3 +281,51 @@ export const getOrderPaymentIntentAction =
 export const clearOrderPaymentIntentAction = () => (dispatch) => {
   dispatch({ type: GET_PAYMENT_INTENT_KEY.FAILED });
 };
+
+export const fetchOrderByTableId = ({ locationId, tableId }) =>
+  new Promise((resolve, reject) => {
+    console.log({ locationId, tableId });
+    client
+      .get(`/manual-orders/getOrderByTable/${locationId}/${tableId}`)
+      .then(({ data }) => {
+        console.log(data);
+        resolve(data?.order);
+      })
+      .catch((e) => {
+        reject();
+        ToastError(
+          e?.response?.data?.err ||
+            "Some error occoured, while confirming order"
+        );
+      });
+  });
+
+export const updateExistingOrderAction =
+  ({ locationId, orderId, catalog, price }) =>
+  (dispatch) => {
+    dispatch({ type: CREATE_ORDER.REQUESTED });
+
+    console.log({ locationId, orderId, catalog, price });
+
+    client
+      .post("manual-orders/updateExistingOrder", {
+        locationId,
+        orderId,
+        catalog,
+        price,
+      })
+      .then((res) => {
+        dispatch({
+          type: CREATE_ORDER.SUCCEEDED,
+          payload: orderId,
+        });
+        console.log(res.data);
+      })
+      .catch((e) => {
+        dispatch({ type: CREATE_ORDER.FAILED });
+        console.log(e.response.data);
+        ToastError(
+          e.response.data.err || "Some error occoured, while confirming order"
+        );
+      });
+  };

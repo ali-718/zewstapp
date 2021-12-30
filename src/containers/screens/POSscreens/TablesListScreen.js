@@ -39,6 +39,14 @@ const TableComponent = ({
     onPress={
       status === "AVAILABLE"
         ? () => navigation.navigate("orderTaking", { tableNo, tableId, table })
+        : status === "RESERVED"
+        ? () =>
+            navigation.navigate("orderTaking", {
+              tableNo,
+              tableId,
+              table,
+              isReserved: true,
+            })
         : () => null
     }
     style={{

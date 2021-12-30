@@ -26,7 +26,7 @@ import { categoriesList, HEIGHT } from "../../../helpers/utlils";
 import * as actions from "../../../Redux/actions/PosActions/OrderActions";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ToastError } from "../../../helpers/Toast";
-import { Spinner } from "native-base";
+import { Icon, Spinner } from "native-base";
 import { useIsFocused, useNavigation } from "@react-navigation/core";
 import { getRandomColor } from "../../../helpers/utlils";
 import { flex, marginTop, order } from "styled-system";
@@ -36,6 +36,7 @@ import { Chip } from "../../../components/Chip/Chip";
 import moment from "moment";
 import validator from "validator";
 import { useStripe } from "@stripe/stripe-react-native";
+import { MaterialIcons } from "@expo/vector-icons";
 
 const CategoryComponent = ({ width, name, onPress }) => {
   const [color, setColor] = useState("");
@@ -155,6 +156,43 @@ export const OrderTakingScreen = (props) => {
   const [notes, setNotes] = useState("");
   const [adjustedPrice, setAdjustedPrice] = useState("");
   const [paymentSuccessfull, setpaymentSuccessfull] = useState(false);
+  // for reserved order
+  const [isReserved, setIsReserved] = useState(false);
+  const [reservedOrder, setReservedOrder] = useState({});
+  const [reserveOrderError, setReserveOrderError] = useState(false);
+  const [fullDisplay, setFullDisplay] = useState(false);
+  const [reservedTotalPrice, setReservedTotalPrice] = useState(0);
+
+  useEffect(() => {
+    const isReserved = props.route.params.isReserved;
+
+    if (isReserved) {
+      setIsReserved(true);
+      getOrderByTableId();
+    }
+  }, []);
+
+  const getOrderByTableId = () => {
+    actions
+      .fetchOrderByTableId({
+        locationId: defaultLocation.locationId,
+        tableId: props.route.params?.tableId,
+      })
+      .then((res) => {
+        setReservedOrder(res);
+
+        if (res?.paymentDetails == null) {
+          res?.catalog?.map((item) => {
+            setReservedTotalPrice(
+              (price) => price + item?.mealPrice * item.quantity
+            );
+          });
+        }
+      })
+      .catch((e) => {
+        setReserveOrderError(true);
+      });
+  };
 
   const setMealIdForAdjustment = (id) => {
     setNotes("");
@@ -260,6 +298,30 @@ export const OrderTakingScreen = (props) => {
     setFirstTime(false);
     setLoadingLabel("Confirming order");
 
+    if (isReserved) {
+      const data = {
+        locationId: defaultLocation.locationId,
+        catalog: [
+          ...orderList.map((item) => ({
+            quantity: item.selected,
+            recipe: item.mealRecipes[0],
+            mealName: item.mealName,
+            mealPrice: item.mealPrice,
+            mealTime: moment().format("h:mm:ss a"),
+            notes: item?.notes || "",
+            adjustedPrice: item?.adjustedPrice || "",
+            new: true,
+          })),
+        ],
+        price: (totalPrice + reservedTotalPrice).toFixed(2),
+        customerId: "12345",
+        orderId: reservedOrder?.orderId,
+      };
+
+      dispatch(actions.updateExistingOrderAction(data));
+      return;
+    }
+
     const data = {
       client_id: user.clientId,
       locationId: defaultLocation.locationId,
@@ -272,6 +334,7 @@ export const OrderTakingScreen = (props) => {
           mealTime: moment().format("h:mm:ss a"),
           notes: item?.notes || "",
           adjustedPrice: item?.adjustedPrice || "",
+          ...(isReserved && { new: true }),
         })),
       ],
       price: totalPrice,
@@ -630,9 +693,86 @@ export const OrderTakingScreen = (props) => {
                       ) : null}
                     </View>
                   </View>
-
-                  {selectedCategory.length > 0 ? (
+                  {/* Billing */}
+                  {selectedCategory.length > 0 || isReserved ? (
                     <View style={{ width: "40%" }}>
+                      {isReserved ? (
+                        reservedOrder?.orderId ? (
+                          <View
+                            style={{
+                              width: "100%",
+                              backgroundColor: "#FFCCD5",
+                              padding: 10,
+                              borderRadius: 10,
+                              flexDirection: "column",
+                              justifyContent: "space-between",
+                              paddingHorizontal: 15,
+                              paddingBottom: 20,
+                            }}
+                          >
+                            <View
+                              style={{
+                                width: "100%",
+                                alignItems: "center",
+                                justifyContent: "flex-end",
+                                flexDirection: "row",
+                              }}
+                            >
+                              <TouchableOpacity
+                                onPress={() => setFullDisplay(!fullDisplay)}
+                              >
+                                <Icon
+                                  fontSize={15}
+                                  as={MaterialIcons}
+                                  name={
+                                    fullDisplay
+                                      ? "keyboard-arrow-up"
+                                      : "keyboard-arrow-down"
+                                  }
+                                />
+                              </TouchableOpacity>
+                            </View>
+                            <View style={{ width: "100%", marginVertical: 0 }}>
+                              {reservedOrder?.catalog
+                                ?.slice(0, fullDisplay ? 9999 : 2)
+                                ?.map((item, i) => (
+                                  <TouchableOpacity
+                                    style={{
+                                      flexDirection: "row",
+                                      alignItems: "center",
+                                      justifyContent: "space-between",
+                                      marginTop: 0,
+                                      width: "100%",
+
+                                      paddingVertical: 7,
+                                    }}
+                                    key={item.mealId}
+                                    activeOpacity={1}
+                                  >
+                                    <Text style={{ flex: 0.9, fontSize: 16 }}>
+                                      x{item.quantity} {item.mealName}
+                                    </Text>
+
+                                    <View
+                                      style={{
+                                        flexDirection: "row",
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                      }}
+                                    >
+                                      <Text style={{ fontSize: 16 }}>
+                                        $
+                                        {(
+                                          item.mealPrice * item.quantity
+                                        ).toFixed(2)}
+                                      </Text>
+                                    </View>
+                                  </TouchableOpacity>
+                                ))}
+                            </View>
+                          </View>
+                        ) : null
+                      ) : null}
                       <View
                         style={{
                           width: "100%",
@@ -645,6 +785,7 @@ export const OrderTakingScreen = (props) => {
                           justifyContent: "space-between",
                           paddingHorizontal: 15,
                           paddingBottom: 20,
+                          marginTop: isReserved ? 20 : 0,
                         }}
                       >
                         <View style={{ width: "100%", marginVertical: 0 }}>
@@ -963,7 +1104,10 @@ export const OrderTakingScreen = (props) => {
                                 fontFamily: "openSans_semiBold",
                               }}
                             >
-                              ${totalPrice.toFixed(2)}
+                              $
+                              {isReserved
+                                ? (totalPrice + reservedTotalPrice).toFixed(2)
+                                : totalPrice.toFixed(2)}
                             </Text>
                           </View>
                         </View>
@@ -1055,7 +1199,9 @@ export const OrderTakingScreen = (props) => {
                               style={{ marginTop: 10 }}
                               white
                               onPress={() => setCharge(true)}
-                              text={`Payment $${totalPrice.toFixed(2)}`}
+                              text={`Payment $${(
+                                totalPrice + reservedTotalPrice
+                              ).toFixed(2)}`}
                             />
                           </View>
                         )}

@@ -42,7 +42,8 @@ export const MainOrder = ({ data, updateOrder, onChange, meals }) => {
           }}
         >
           <Text style={{ color: "black", fontSize: 16 }}>
-            {tableInfo?.orderId ? "Table" : "Ticket"} {ticketNo}
+            {tableInfo?.orderId ? "Table" : "Ticket"}{" "}
+            {tableInfo?.orderId ? tableInfo?.name : ticketNo}
           </Text>
         </View>
         <Text style={{ color: "black", marginLeft: 15, fontSize: 12 }}>
@@ -128,6 +129,18 @@ export const MainOrder = ({ data, updateOrder, onChange, meals }) => {
                         }}
                       >
                         {item.mealName}
+
+                        {item?.new ? (
+                          <Text
+                            style={{
+                              color: "#F90000",
+                              fontSize: 12,
+                            }}
+                          >
+                            {" "}
+                            NEW
+                          </Text>
+                        ) : null}
                       </Text>
                     </View>
                   ))}
