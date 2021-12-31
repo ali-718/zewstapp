@@ -3,7 +3,7 @@ import { View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { RegularButton } from "../../../../components/Buttons/RegularButton";
 import { MainScreenContainer } from "../../../MainScreenContainers";
-import { useNavigation } from "@react-navigation/core";
+import { useNavigation, useIsFocused } from "@react-navigation/core";
 import * as actions from "../../../../Redux/actions/VendorActions/VendorActions";
 import { AdminOverviewBox } from "../../../../components/AdminComponents/AdminOverviewBox";
 import { NoMealBox } from "../../../../components/NoMealBox/NoMealBox";
@@ -25,6 +25,7 @@ export const VendorListPage = () => {
   const isError = useSelector((state) => state.vendor.vendors.isError);
   const [search, setSearch] = useState("");
   const [filteredItem, setFiltereditem] = useState([]);
+  const screenFocused = useIsFocused();
 
   const fetchVendors = () =>
     dispatch(
@@ -32,8 +33,9 @@ export const VendorListPage = () => {
     );
 
   useEffect(() => {
+    if (!screenFocused) return;
     fetchVendors();
-  }, []);
+  }, [screenFocused]);
 
   useEffect(() => {
     setFiltereditem(list);

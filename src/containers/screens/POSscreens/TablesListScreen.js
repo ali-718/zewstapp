@@ -154,8 +154,15 @@ export const TablesListScreen = () => {
 
   const addNewTable = async (type, location) => {
     const constlocation = defaultLocation.locationId;
+    const checkLoading =
+      [...insidetablesToShow, ...outsidetablesToShow].filter(
+        (item) => item.isLoading
+      ).length > 0;
 
-    console.log(constlocation);
+    if (checkLoading) {
+      console.log(checkLoading);
+      return;
+    }
 
     if (location === "INSIDE") {
       insideRef.current.scrollToEnd();

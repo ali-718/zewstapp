@@ -102,7 +102,7 @@ export const InventoryListPage = () => {
             }}
           >
             {category?.length === 0 ? (
-              <NoMealBox image={noRecipe} text={"No recipe added. "} />
+              <NoMealBox image={noRecipe} text={"No inventory added. "} />
             ) : (
               category.map((category) => (
                 <View
@@ -162,8 +162,8 @@ export const InventoryListPage = () => {
             )}
           </View>
           <RegularButton
-            onPress={() => navigation.navigate("recipeAdd")}
-            text={"Add Recipe"}
+            onPress={() => navigation.navigate("inventoryAdd")}
+            text={"Add Inventory"}
             style={{ borderRadius: 10, marginTop: 20 }}
           />
         </View>

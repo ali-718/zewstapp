@@ -9,7 +9,16 @@ import {
 } from "./Types";
 
 export const AddNewLocation =
-  ({ clientId, country, streetInfo, name, townCity, district, navigation }) =>
+  ({
+    clientId,
+    country,
+    streetInfo,
+    name,
+    townCity,
+    district,
+    navigation,
+    taxRate,
+  }) =>
   (dispatch) => {
     dispatch({ type: ADD_NEW_LOCATION.REQUESTED });
 
@@ -23,6 +32,7 @@ export const AddNewLocation =
         district,
         mode: "Manual",
         default_location: true,
+        taxRate,
       })
       .then((data) => {
         // dispatch(setPrimaryLocationAction({}));
@@ -103,15 +113,20 @@ export const updateLocation =
   };
 
 export const setPrimaryLocationAction = (payload) => (dispatch) => {
+  console.log("set primary location");
   client
     .post(`/location/setDefaultLocation`, {
       clientId: payload?.clientId,
       locationId: payload?.locationId,
     })
     .then((data) => {
+      console.log(data?.data);
       dispatch({
         type: PRIMARY_LOCATION,
-        payload: { locationId: payload?.locationId },
+        payload: {
+          locationId: payload?.locationId,
+          location: data?.data?.location,
+        },
       });
       dispatch(getAllUserLocations({ userId: payload?.clientId }));
       ToastSuccess("Success", "Location set to primary.");

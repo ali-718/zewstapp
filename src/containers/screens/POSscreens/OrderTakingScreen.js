@@ -156,6 +156,7 @@ export const OrderTakingScreen = (props) => {
   const [notes, setNotes] = useState("");
   const [adjustedPrice, setAdjustedPrice] = useState("");
   const [paymentSuccessfull, setpaymentSuccessfull] = useState(false);
+  const [paymentTime, setPaymentTime] = useState(false);
   // for reserved order
   const [isReserved, setIsReserved] = useState(false);
   const [reservedOrder, setReservedOrder] = useState({});
@@ -180,7 +181,7 @@ export const OrderTakingScreen = (props) => {
       })
       .then((res) => {
         setReservedOrder(res);
-
+        setPaymentTime(true);
         if (res?.paymentDetails == null) {
           res?.catalog?.map((item) => {
             setReservedTotalPrice(
@@ -219,6 +220,8 @@ export const OrderTakingScreen = (props) => {
   useEffect(() => {
     if (!isSuccess) return;
     if (firstTime) return;
+
+    setPaymentTime(true);
 
     actions
       .attachOrderToTableAction({
@@ -1217,6 +1220,7 @@ export const OrderTakingScreen = (props) => {
                               disabled={isSuccess}
                             />
                             <RegularButton
+                              disabled={!paymentTime}
                               style={{ marginTop: 10 }}
                               white
                               onPress={() => setCharge(true)}
