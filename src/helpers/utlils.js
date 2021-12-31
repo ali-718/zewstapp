@@ -421,5 +421,12 @@ export const numberWithCommas = (x) => {
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
 
+export const currencyDisplay = (number) => {
+  return new Intl.NumberFormat("en-US", {
+    notation: "compact",
+    compactDisplay: "short",
+  }).format(number);
+};
 
-export const STRIPE_PUBLISH_KEY = "pk_test_51Jk5lYHGLGO7qAwS0yREd2JCrAwLLT7Pnm2GgLqwRJGwdx2fFdDqmY0fBmUctZGmnN9CHjcCAkoatqJ6Ufr8dqCY00nUxiFs72"
+export const STRIPE_PUBLISH_KEY =
+  "pk_test_51Jk5lYHGLGO7qAwS0yREd2JCrAwLLT7Pnm2GgLqwRJGwdx2fFdDqmY0fBmUctZGmnN9CHjcCAkoatqJ6Ufr8dqCY00nUxiFs72";

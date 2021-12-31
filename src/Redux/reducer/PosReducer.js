@@ -46,16 +46,19 @@ const initialState = {
 export const posReducer = produce((state = initialState, { payload, type }) => {
   switch (type) {
     case UPDATE_ORDER.REQUESTED: {
-      const index = state.orders.orders.findIndex(
-        (item) => item.orderId === payload
+      const index = state.orders.createdOrders.findIndex(
+        (item) => item.orderId === payload.orderId
       );
 
       if (index > -1) {
-        const allOrders = [...state.orders.orders];
+        const allOrders = [...state.orders.createdOrders];
 
-        allOrders[index] = { ...allOrders[index], loading: true };
+        allOrders[index] = {
+          ...allOrders[index],
+          loading: payload?.isLoading ? true : false,
+        };
 
-        state.orders.orders = allOrders;
+        state.orders.createdOrders = allOrders;
       }
       state.orders.isSuccess = false;
       break;
@@ -69,14 +72,14 @@ export const posReducer = produce((state = initialState, { payload, type }) => {
       break;
     }
     case UPDATE_MEALS.SUCCEEDED: {
-      const allOrders = [...state.orders.orders];
+      const allOrders = [...state.orders.createdOrders];
       const index = allOrders.findIndex(
         (item) => item.orderId === payload.orderId
       );
 
       allOrders[index] = {
         ...allOrders[index],
-        catalog: allOrders[index].catalog.map((data) => ({
+        catalog: allOrders[index]?.catalog?.map((data) => ({
           ...data,
           served:
             payload.meals?.filter((meal) => meal === data?.mealName).length > 0
@@ -86,7 +89,7 @@ export const posReducer = produce((state = initialState, { payload, type }) => {
         loading: false,
       };
 
-      state.orders.orders = allOrders;
+      state.orders.createdOrders = allOrders;
       state.orders.isSuccess = true;
       break;
     }
@@ -106,7 +109,9 @@ export const posReducer = produce((state = initialState, { payload, type }) => {
       break;
     }
     case FETCH_ORDERS.REQUESTED: {
-      state.orders.isLoading = true;
+      if (payload) {
+        state.orders.isLoading = true;
+      }
       state.orders.isError = false;
       break;
     }

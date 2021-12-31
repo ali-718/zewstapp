@@ -71,9 +71,9 @@ export const fetchMealsAction =
   };
 
 export const fetchAllOrders =
-  ({ locationId }) =>
+  ({ locationId, isReload = true }) =>
   (dispatch) => {
-    dispatch({ type: FETCH_ORDERS.REQUESTED });
+    dispatch({ type: FETCH_ORDERS.REQUESTED, payload: isReload });
 
     client
       .get(`manual-orders/allManualOrder/${locationId}`)
@@ -194,10 +194,10 @@ export const attachOrderToTableAction = ({ orderId, table }) =>
   });
 
 export const orderUpdateAction =
-  ({ locationId, orderId }) =>
+  ({ locationId, orderId, isLoading = true }) =>
   (dispatch) => {
     console.log({ locationId, orderId });
-    dispatch({ type: UPDATE_ORDER.REQUESTED, payload: orderId });
+    dispatch({ type: UPDATE_ORDER.REQUESTED, payload: { orderId, isLoading } });
 
     client
       .post(`manual-orders/updateOrder`, {
@@ -210,7 +210,7 @@ export const orderUpdateAction =
           type: UPDATE_ORDER.SUCCEEDED,
           payload: orderId,
         });
-        dispatch(fetchAllOrders({ locationId }));
+        dispatch(fetchAllOrders({ locationId, isReload: false }));
         ToastSuccess("Order served successfully");
       })
       .catch((e) => {
@@ -226,7 +226,10 @@ export const orderMarkServedAction =
   ({ locationId, orderId, ticketNo, meals }) =>
   (dispatch) => {
     console.log({ locationId, orderId, ticketNo, meals });
-    dispatch({ type: UPDATE_ORDER.REQUESTED, payload: orderId });
+    dispatch({
+      type: UPDATE_ORDER.REQUESTED,
+      payload: { orderId, isLoading: true },
+    });
 
     client
       .post(`manual-orders/markServed`, {
@@ -235,17 +238,18 @@ export const orderMarkServedAction =
         ticketNo,
         meals,
       })
-      .then(({ data }) => {
+      .then(() => {
         ToastSuccess("Meals served successfully");
+        dispatch(fetchAllOrders({ locationId, isReload: false }));
         dispatch({
           type: UPDATE_MEALS.SUCCEEDED,
           payload: { orderId, meals },
         });
       })
       .catch((e) => {
-        console.log(e.response.data);
+        console.log(e);
         ToastError(
-          e.response.data.err || "Unable to complete order, please try again"
+          e?.response?.data?.err || "Unable to complete order, please try again"
         );
         dispatch({ type: UPDATE_ORDER.FAILED });
       });
@@ -323,7 +327,7 @@ export const updateExistingOrderAction =
       })
       .catch((e) => {
         dispatch({ type: CREATE_ORDER.FAILED });
-        console.log(e.response.data);
+        console.log(e?.response?.data);
         ToastError(
           e.response.data.err || "Some error occoured, while confirming order"
         );

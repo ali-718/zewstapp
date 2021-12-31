@@ -52,7 +52,12 @@ import {
   setPrimaryLocationAction,
 } from "../../../../Redux/actions/AdminActions/LocationActions";
 import { LinearGradient } from "expo-linear-gradient";
-import { colors, HEIGHT, numberWithCommas } from "../../../../helpers/utlils";
+import {
+  colors,
+  currencyDisplay,
+  HEIGHT,
+  numberWithCommas,
+} from "../../../../helpers/utlils";
 import purpleCalender from "../../../../assets/images/purpleCalender.png";
 import grayCalender from "../../../../assets/images/grayCalender.png";
 import purpleMenuItem from "../../../../assets/images/purpleMenuItem.png";
@@ -848,7 +853,7 @@ export const HomePage = ({ setselected }) => {
 
                       <View
                         style={{
-                          flex: device === "tablet" ? 0.7 : 1,
+                          flex: device === "tablet" ? 0.7 : 0.9,
                           flexDirection: device === "tablet" ? "row" : "row",
                           justifyContent: "space-between",
                           marginLeft: device === "tablet" ? 0 : 10,
@@ -886,7 +891,7 @@ export const HomePage = ({ setselected }) => {
                               fontFamily: "openSans_semiBold",
                             }}
                           >
-                            Total: ${numberWithCommas(forecastedSales)}
+                            Total: ${currencyDisplay(forecastedSales)}
                           </Text>
                         </View>
 
@@ -923,7 +928,11 @@ export const HomePage = ({ setselected }) => {
                               fontFamily: "openSans_semiBold",
                             }}
                           >
-                            Total: ${numberWithCommas(forecastedActualSales)}
+                            {console.log(
+                              `forecasted sales`,
+                              forecastedActualSales
+                            )}
+                            Total: ${currencyDisplay(forecastedActualSales)}
                           </Text>
                         </View>
                       </View>

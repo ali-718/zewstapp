@@ -36,6 +36,7 @@ export const KitchenPage = () => {
     (state) => state.locations.defaultLocation
   );
   const [orderstOserve, setOrderstOserve] = useState([]);
+  const [checkedMeals, setCheckedMeals] = useState([]);
 
   useEffect(() => {
     if (!screenFocused) return;
@@ -56,6 +57,7 @@ export const KitchenPage = () => {
 
   const updateOrder = (orderId) => {
     const meal = orderstOserve.filter((item) => item.orderId === orderId);
+    const mainOrder = createdOrders?.find((item) => item?.orderId === orderId);
 
     if (meal.length === 0) {
       ToastError("Kindly select a meal to serve!");
@@ -67,46 +69,48 @@ export const KitchenPage = () => {
       return;
     }
 
-    console.log(
-      meal[0].meals?.length ===
-        createdOrders
-          .filter((item) => item.orderId === orderId)[0]
-          ?.catalog.filter((item) => !item.served).length ||
-        meal[0].meals?.length ===
-          createdOrders.filter((item) => item.orderId === orderId)[0].catalog
-            .length
-    );
+    console.log(meal);
 
-    if (
-      meal[0].meals?.length ===
-        createdOrders
-          .filter((item) => item.orderId === orderId)[0]
-          .catalog.filter((item) => !item.served).length ||
-      meal[0].meals?.length ===
-        createdOrders.filter((item) => item.orderId === orderId)[0].catalog
-          .length
-    ) {
-      dispatch(
-        actions.orderUpdateAction({
-          locationId: defaultLocation.locationId,
-          orderId,
-        })
-      );
-      return;
-    }
+    // if (
+    //   meal[0].meals?.length ===
+    //     createdOrders
+    //       .filter((item) => item.orderId === orderId)[0]
+    //       .catalog.filter((item) => !item.served).length ||
+    //   meal[0].meals?.length ===
+    //     createdOrders.filter((item) => item.orderId === orderId)[0].catalog
+    //       .length
+    // ) {
+    //   dispatch(
+    //     actions.orderUpdateAction({
+    //       locationId: defaultLocation.locationId,
+    //       orderId,
+    //     })
+    //   );
+    //   return;
+    // }
 
     dispatch(
       actions.orderMarkServedAction({
         locationId: defaultLocation.locationId,
         orderId,
         ticketNo: meal[0]?.ticketNo,
-        meals: meal[0].meals,
+        meals: meal[0].meals?.map((item) => item?.mealName),
+      })
+    );
+  };
+
+  const completeOrder = (orderId) => {
+    dispatch(
+      actions.orderUpdateAction({
+        locationId: defaultLocation.locationId,
+        orderId,
+        isLoading: false,
       })
     );
   };
 
   const onClickCheckBox = (val, meal) => {
-    // console.log(meal);
+    console.log(meal);
     const mealPresent =
       orderstOserve.filter((item) => item.orderId === meal.orderId).length > 0;
     if (mealPresent) {
@@ -117,17 +121,21 @@ export const KitchenPage = () => {
       allOrders[index] = {
         ...allOrders[index],
         meals: val
-          ? [...allOrders[index].meals, meal.mealName]
-          : allOrders[index].meals?.filter((item) => item !== meal.mealName),
+          ? [
+              ...allOrders[index].meals,
+              { mealName: meal.mealName, index: meal?.index },
+            ]
+          : allOrders[index].meals?.filter((item) => item.index !== meal.index),
       };
-
+      setCheckedMeals([...checkedMeals.filter((item) => item !== meal.index)]);
       setOrderstOserve(allOrders);
       return;
     }
     const allOrders = [...orderstOserve];
+    setCheckedMeals([...checkedMeals, meal?.index]);
     allOrders.push({
       orderId: meal.orderId,
-      meals: [meal.mealName],
+      meals: [{ mealName: meal.mealName, index: meal?.index }],
       ticketNo: meal.ticketNo,
     });
     setOrderstOserve(allOrders);
@@ -248,6 +256,8 @@ export const KitchenPage = () => {
                           updateOrder={updateOrder}
                           data={item}
                           onChange={onClickCheckBox}
+                          completeOrder={completeOrder}
+                          checkedMeals={checkedMeals}
                         />
                       )
                     : selected === 3

@@ -1,12 +1,19 @@
 import { Progress, Checkbox } from "native-base";
-import React from "react";
+import React, { useState } from "react";
 import { View } from "react-native";
-import { onChange } from "react-native-reanimated";
 import { grayTextColor, kitchenMenuColor } from "../../theme/colors";
 import { RegularButton } from "../Buttons/RegularButton";
 import { Text } from "../Text/Text";
 import moment from "moment";
-export const MainOrder = ({ data, updateOrder, onChange, meals }) => {
+import uuid from "react-native-uuid";
+
+export const MainOrder = ({
+  data,
+  updateOrder,
+  onChange,
+  meals,
+  completeOrder,
+}) => {
   const {
     timestamp = "",
     ticketNo = "",
@@ -20,6 +27,8 @@ export const MainOrder = ({ data, updateOrder, onChange, meals }) => {
 
   let allCategories = catalog?.map((item) => item.recipe.recipeCategory);
   allCategories = [...new Set(allCategories)];
+
+  const [isDoneLoading, setisDoneLoading] = useState(false);
 
   return (
     <View
@@ -72,7 +81,51 @@ export const MainOrder = ({ data, updateOrder, onChange, meals }) => {
 
       <View style={{ width: "100%", flex: 1, justifyContent: "space-between" }}>
         <View style={{ width: "100%" }}>
-          {allCategories
+          {catalog
+            .filter((data) => !data.served)
+            .map((item, index) => (
+              <View
+                key={index}
+                style={{
+                  width: "100%",
+                  flexDirection: "row",
+                  marginTop: 5,
+                }}
+              >
+                {console.log(meals)}
+                <Checkbox
+                  onChange={(val) => onChange(val, { ...item, ...data, index })}
+                  value="info"
+                  colorScheme="green"
+                  size="sm"
+                  isChecked={
+                    meals.filter((meal) => meal.index === index).length > 0
+                  }
+                />
+                <Text
+                  style={{
+                    color: grayTextColor,
+                    marginLeft: 10,
+                    fontSize: 16,
+                  }}
+                >
+                  {item.mealName}
+
+                  {item?.new ? (
+                    <Text
+                      style={{
+                        color: "#F90000",
+                        fontSize: 12,
+                      }}
+                    >
+                      {" "}
+                      NEW
+                    </Text>
+                  ) : null}
+                </Text>
+              </View>
+            ))}
+          {/* {allCategories
             .filter((item) => {
               return (
                 catalog.filter(
@@ -111,14 +164,17 @@ export const MainOrder = ({ data, updateOrder, onChange, meals }) => {
                         marginTop: 5,
                       }}
                     >
+                      {console.log(meals)}
                       <Checkbox
-                        onChange={(val) => onChange(val, { ...item, ...data })}
+                        onChange={(val) =>
+                          onChange(val, { ...item, ...data, index })
+                        }
                         value="info"
                         colorScheme="green"
                         size="sm"
                         isChecked={
-                          meals.filter((meal) => item.mealName === meal)
-                            .length > 0
+                          meals.filter((meal) => meal.index === index).length >
+                          0
                         }
                       />
                       <Text
@@ -145,7 +201,7 @@ export const MainOrder = ({ data, updateOrder, onChange, meals }) => {
                     </View>
                   ))}
               </View>
-            ))}
+            ))} */}
 
           {/* {catalog
             .filter((item) => {
@@ -237,12 +293,21 @@ export const MainOrder = ({ data, updateOrder, onChange, meals }) => {
             justifyContent: "space-between",
           }}
         >
-          {/* <RegularButton white text={"Done"} style={{ width: "45%" }} /> */}
+          <RegularButton
+            onPress={() => {
+              completeOrder(orderId);
+              setisDoneLoading(true);
+            }}
+            white
+            text={"Done"}
+            style={{ width: "45%" }}
+            isLoading={isDoneLoading}
+          />
           <RegularButton
             isLoading={loading}
             onPress={() => updateOrder(orderId)}
             text={"serve"}
-            style={{ width: "100%" }}
+            style={{ width: "45%" }}
           />
         </View>
       </View>

@@ -249,11 +249,12 @@ export const OrderTakingScreen = (props) => {
   }, [isSuccess]);
 
   const ProcessPayment = () => {
+    console.log("runing process Payment");
     if (paymentMethod !== "Card") {
       setcreateOrderLoading(true);
       actions
         .payOrderAction({
-          orderId,
+          orderId: isReserved ? reservedOrder?.orderId : orderId,
           locationId: defaultLocation.locationId,
           paymentDetails: "Cash",
         })
@@ -262,6 +263,15 @@ export const OrderTakingScreen = (props) => {
           setcreateOrderLoading(false);
           setcreateOrderLoadingWithCard(false);
           setpaymentSuccessfull(true);
+          actions
+            .changeTableStatusAction({
+              locationId: defaultLocation.locationId,
+              tableId: props.route.params.tableId,
+              stature: "AVAILABLE",
+            })
+            .then(() => {
+              navigation.goBack();
+            });
         })
         .catch((res) => {
           setcreateOrderLoading(false);
@@ -272,7 +282,7 @@ export const OrderTakingScreen = (props) => {
       setcreateOrderLoadingWithCard(true);
       actions
         .payOrderAction({
-          orderId,
+          orderId: isReserved ? reservedOrder?.orderId : orderId,
           locationId: defaultLocation.locationId,
           paymentDetails: "Stripe",
         })
@@ -281,6 +291,15 @@ export const OrderTakingScreen = (props) => {
           setcreateOrderLoading(false);
           setcreateOrderLoadingWithCard(false);
           setpaymentSuccessfull(true);
+          actions
+            .changeTableStatusAction({
+              locationId: defaultLocation.locationId,
+              tableId: props.route.params.tableId,
+              stature: "AVAILABLE",
+            })
+            .then(() => {
+              navigation.goBack();
+            });
         })
         .catch((res) => {
           setcreateOrderLoading(false);
@@ -346,10 +365,10 @@ export const OrderTakingScreen = (props) => {
   };
 
   const createOrderByCard = () => {
-    if (orderList.length === 0) {
-      ToastError("Select any menu item first!");
-      return;
-    }
+    // if (orderList.length === 0) {
+    //   ToastError("Select any menu item first!");
+    //   return;
+    // }
 
     setFirstTime(false);
     // setcreateOrderLoading(true);
@@ -366,7 +385,9 @@ export const OrderTakingScreen = (props) => {
           mealPrice: item.mealPrice,
         })),
       ],
-      price: totalPrice,
+      price: isReserved
+        ? (totalPrice + reservedTotalPrice).toFixed(2)
+        : totalPrice,
       discount: 0,
       customerId: "12345",
     };
