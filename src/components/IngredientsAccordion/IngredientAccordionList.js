@@ -56,7 +56,7 @@ export const IngredientAccordionList = ({
             color: grayMenuText,
           }}
         >
-          {ingredients[i].quantity} {ingredients[i].unit}
+          {ingredients[i].quantity} {ingredients[i].units}
         </Text>
         <Image
           style={{
@@ -147,7 +147,7 @@ export const IngredientAccordionList = ({
             )}
 
             <Dropdown
-              selectedMenu={item.unit}
+              selectedMenu={item.units}
               setMenu={(val) => updateUnit(val, i)}
               placeholder={"Unit"}
               menus={allUnits}

@@ -75,7 +75,10 @@ export const Menu = ({ image, name, setselected, selected, style, noName }) => (
   </TouchableOpacity>
 );
 
-export const DrawerMenu = ({ state: { index } }) => {
+export const DrawerMenu = ({
+  state: { index },
+  changeMenuIndex = () => null,
+}) => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const device = useSelector((state) => state.system.device);
@@ -109,63 +112,93 @@ export const DrawerMenu = ({ state: { index } }) => {
             </Text>
             <Menu
               selected={index === 0}
-              setselected={() => navigation.navigate("Home")}
+              setselected={() => {
+                navigation.navigate("Home");
+                changeMenuIndex(0);
+              }}
               image={overviewIcon}
               name={"Overview"}
               style={{ marginTop: 20 }}
             />
             <Menu
               selected={index === 1}
-              setselected={() => navigation.navigate("Menu")}
+              setselected={() => {
+                navigation.navigate("Menu");
+                changeMenuIndex(1);
+              }}
               image={menuIcon}
               name={"Menu"}
             />
             <Menu
               selected={index === 2}
-              setselected={() => navigation.navigate("Sales")}
+              setselected={() => {
+                navigation.navigate("Sales");
+                changeMenuIndex(2);
+              }}
               image={salesIcon}
               name={"Sales"}
             />
             <Menu
               selected={index === 3}
-              setselected={() => navigation.navigate("Recipe")}
+              setselected={() => {
+                navigation.navigate("Recipe");
+                changeMenuIndex(3);
+              }}
               image={recipeIcon}
               name={"Recipe Engineering"}
             />
             <Menu
               selected={index === 4}
-              setselected={() => navigation.navigate("")}
+              setselected={() => {
+                navigation.navigate("");
+                changeMenuIndex(4);
+              }}
               image={wasteIcon}
               name={"Waste Prediction"}
             />
             <Menu
               selected={index === 5}
-              setselected={() => navigation.navigate("Inventory")}
+              setselected={() => {
+                navigation.navigate("Inventory");
+                changeMenuIndex(5);
+              }}
               image={inventoryIcon}
               name={"Inventory"}
             />
             <Menu
               selected={index === 6}
-              setselected={() => navigation.navigate("Admin")}
+              setselected={() => {
+                navigation.navigate("Admin");
+                changeMenuIndex(6);
+              }}
               image={adminIcon}
               name={"Admin"}
             />
             <Menu
               selected={index === 7}
-              setselected={() => navigation.navigate("Vendor")}
+              setselected={() => {
+                navigation.navigate("Vendor");
+                changeMenuIndex(7);
+              }}
               image={inventoryIcon}
               name={"Vendor"}
             />
             <Menu
               selected={index === 8}
-              setselected={() => navigation.navigate("Pos")}
+              setselected={() => {
+                navigation.navigate("Pos");
+                changeMenuIndex(8);
+              }}
               image={posIcon}
               name={"POS"}
             />
             {device === "tablet" ? (
               <Menu
                 selected={index === 9}
-                setselected={() => navigation.navigate("Kitchen")}
+                setselected={() => {
+                  navigation.navigate("Kitchen");
+                  changeMenuIndex(9);
+                }}
                 image={kitchenIcon}
                 name={"Kitchen"}
               />
@@ -173,7 +206,10 @@ export const DrawerMenu = ({ state: { index } }) => {
 
             <Menu
               selected={index === 10}
-              setselected={() => navigation.navigate("DailyFoodLog")}
+              setselected={() => {
+                navigation.navigate("DailyFoodLog");
+                changeMenuIndex(0);
+              }}
               image={kitchenIcon}
               name={"Food Log"}
             />
@@ -225,7 +261,7 @@ export const DrawerMenu = ({ state: { index } }) => {
             /> */}
             <Menu
               selected={index === 13}
-              setselected={() => navigation.navigate("")}
+              setselected={() => null}
               image={supportIcon}
               name={"Support"}
             />

@@ -198,9 +198,9 @@ const MainRoutes = () => {
             device === "tablet"
               ? isMenuSmall
                 ? "front"
-                : orientation === "landscape"
-                ? "permanent"
-                : "front"
+                : // : orientation === "landscape"
+                  // ? "permanent"
+                  "front"
               : "front",
           gestureEnabled: false,
           swipeEnabled: true,
