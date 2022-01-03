@@ -346,16 +346,18 @@ export const DrawerMenuWithoutNames = ({
               name={"Vendor"}
               noName
             />
-            <Menu
-              selected={index === 8}
-              setselected={() => {
-                navigation.navigate("Pos");
-                changeMenuIndex(8);
-              }}
-              image={posIcon}
-              name={"POS"}
-              noName
-            />
+            {device === "tablet" ? (
+              <Menu
+                selected={index === 8}
+                setselected={() => {
+                  navigation.navigate("Pos");
+                  changeMenuIndex(8);
+                }}
+                image={posIcon}
+                name={"POS"}
+                noName
+              />
+            ) : null}
 
             {device === "tablet" ? (
               <Menu
