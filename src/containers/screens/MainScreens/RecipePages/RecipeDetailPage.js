@@ -338,7 +338,7 @@ export const RecipeDetailPage = ({ isTab, data, ...props }) => {
 
         <View style={{ width: "100%", marginTop: 10 }}>
           <FlatList
-            numColumns={device === "tablet" ? 2 : 1}
+            numColumns={1}
             ListHeaderComponent={() => (
               <View
                 style={{

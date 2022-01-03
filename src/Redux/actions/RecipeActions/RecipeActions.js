@@ -50,6 +50,19 @@ export const addRecipeAction =
     recipeCategory,
   }) =>
   (dispatch) => {
+    console.log({
+      clientId,
+      locationId,
+      recipeTitle,
+      macroIngredient,
+      serving,
+      recipeType,
+      cookingTime,
+      ingredients,
+      recipeSteps,
+      navigation,
+      recipeCategory,
+    });
     dispatch({ type: ADD_RECIPE.REQUESTED });
     client
       .post("/recipe/add", {

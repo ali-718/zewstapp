@@ -200,7 +200,7 @@ export const SignUpPage = (props) => {
           </Text>
         </View>
 
-        <View style={{ width: "100%", marginTop: 20, alignItems: "center" }}>
+        {/* <View style={{ width: "100%", marginTop: 20, alignItems: "center" }}>
           <Text
             style={{
               fontSize: 16,
@@ -218,7 +218,7 @@ export const SignUpPage = (props) => {
             text={"CONNECT WITH GOOGLE"}
             style={{ borderRadius: 10, width: "100%" }}
           />
-        </View>
+        </View> */}
       </View>
       <FullPageLoadingModall
         visible={isLoading}

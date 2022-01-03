@@ -181,14 +181,14 @@ export const RecipeAdd = (props) => {
   const addIngredients = () => {
     setIngredients([
       ...ingredients,
-      { microIngredient: "", quantity: "", unit: "", type: "" },
+      { microIngredient: "", quantity: "", units: "", type: "" },
     ]);
   };
 
   const updateUnit = (value, index) => {
     const data = [...ingredients];
 
-    data[index] = { ...data[index], unit: value };
+    data[index] = { ...data[index], units: value };
 
     setIngredients(data);
   };
