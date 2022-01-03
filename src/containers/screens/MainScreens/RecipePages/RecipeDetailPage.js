@@ -233,108 +233,45 @@ export const RecipeDetailPage = ({ isTab, data, ...props }) => {
           paddingBottom: 20,
         }}
       >
-        {device === "tablet" ? (
-          <View
+        <View
+          style={{
+            width: "100%",
+            marginTop: 10,
+            padding: 10,
+            borderBottomWidth: 1,
+            borderColor: grayColor,
+          }}
+        >
+          <Text
             style={{
-              width: "100%",
-              marginTop: 10,
-              padding: 10,
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "space-between",
-              borderBottomWidth: 1,
-              borderColor: grayColor,
+              fontSize: 20,
+              color: "black",
+              fontFamily: "openSans_bold",
             }}
           >
-            <View style={{ flex: 0.98 }}>
-              <Text
-                style={{
-                  fontSize: 20,
-                  color: "black",
-                  fontFamily: "openSans_bold",
-                }}
-              >
-                Ingredients
-              </Text>
-              <Text
-                style={{
-                  fontSize: 16,
-                  color: grayMenuText,
-                  fontFamily: "openSans_semiBold",
-                  marginTop: 5,
-                }}
-              >
-                Macro ingredient: {macroIngredient.itemName}
-              </Text>
-            </View>
-
-            <View
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <IconBox
-                image={multiplePeopleIcon}
-                label={"Serving"}
-                value={serving}
-              />
-              <IconBox
-                style={{ marginLeft: 20 }}
-                image={noMealAdded}
-                label={"Type"}
-                value={recipeType}
-              />
-              <IconBox
-                style={{ marginLeft: 20 }}
-                image={clock}
-                label={"Cooking"}
-                value={cookingTime}
-              />
-            </View>
-          </View>
-        ) : (
-          <View
+            Ingredients
+          </Text>
+          <Text
             style={{
-              width: "100%",
-              marginTop: 10,
-              padding: 10,
-              borderBottomWidth: 1,
-              borderColor: grayColor,
+              fontSize: 16,
+              color: grayMenuText,
+              fontFamily: "openSans_semiBold",
+              marginTop: 5,
             }}
+            numberOfLines={1}
           >
-            <Text
-              style={{
-                fontSize: 20,
-                color: "black",
-                fontFamily: "openSans_bold",
-              }}
-            >
-              Ingredients
-            </Text>
-            <Text
-              style={{
-                fontSize: 16,
-                color: grayMenuText,
-                fontFamily: "openSans_semiBold",
-                marginTop: 5,
-              }}
-              numberOfLines={1}
-            >
-              Macro ingredient: {macroIngredient.itemName}
-            </Text>
-            <View style={{ width: "100%" }}>
-              <IconBox
-                image={multiplePeopleIcon}
-                label={"Serving"}
-                value={serving}
-              />
-              <IconBox image={noMealAdded} label={"Type"} value={recipeType} />
-              <IconBox image={clock} label={"Cooking"} value={cookingTime} />
-            </View>
+            Macro ingredient: {macroIngredient.itemName}
+          </Text>
+          <View style={{ width: "100%" }}>
+            <IconBox
+              image={multiplePeopleIcon}
+              label={"Serving"}
+              value={serving}
+            />
+            <IconBox image={noMealAdded} label={"Type"} value={recipeType} />
+            <IconBox image={clock} label={"Cooking"} value={cookingTime} />
           </View>
-        )}
+        </View>
 
         <View style={{ width: "100%", marginTop: 10 }}>
           <FlatList
@@ -384,7 +321,7 @@ export const RecipeDetailPage = ({ isTab, data, ...props }) => {
             data={ingredients}
             renderItem={({ item }) => (
               <IngredientBox
-                unit={item.unit}
+                unit={item.units}
                 name={item.itemName}
                 value={item.quantity}
               />

@@ -232,7 +232,7 @@ export const TablesListScreen = () => {
 
   if (device === "tablet") {
     return (
-      <MainScreenContainer noScroll>
+      <MainScreenContainer isDrawer shortDrawer noScroll>
         <HeadingBox heading={"Orders"} noBack />
 
         <View style={{ width: "90%", marginTop: 20 }}>

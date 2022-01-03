@@ -83,7 +83,7 @@ export const PredictionTableItem = ({
               color: "black",
             }}
           >
-            {costPerUnit}
+            ${costPerUnit}
           </Text>
         </View>
       </View>
@@ -124,19 +124,8 @@ export const PredictionTableItem = ({
                   fontFamily: "openSans_semiBold",
                   fontSize: 16,
                 }}
-                numberOfLines={1}
               >
-                Test food
-              </Text>
-              <Text
-                style={{
-                  flex: 0.9,
-                  color: grayMenuText,
-                  fontSize: 12,
-                }}
-                numberOfLines={1}
-              >
-                Test food
+                {item}
               </Text>
             </View>
             <View
@@ -156,7 +145,7 @@ export const PredictionTableItem = ({
                 }}
                 numberOfLines={1}
               >
-                $122
+                ${costPerUnit}
               </Text>
             </View>
           </View>
@@ -179,13 +168,13 @@ export const PredictionTableItem = ({
               }}
             >
               <Text style={{ color: grayTextColor, fontSize: 12 }}>
-                Q2: <Text style={{ color: "black" }}>2</Text>
+                Quantity: <Text style={{ color: "black" }}>{quantity}</Text>
               </Text>
               <Text style={{ color: grayTextColor, fontSize: 12 }}>
-                Date: <Text style={{ color: "black" }}>28.10.21</Text>
+                Date: <Text style={{ color: "black" }}>{date}</Text>
               </Text>
               <Text style={{ color: grayTextColor, fontSize: 12 }}>
-                Date: <Text style={{ color: "black" }}>28.10.21</Text>
+                Time: <Text style={{ color: "black" }}>{time}</Text>
               </Text>
             </View>
           </View>

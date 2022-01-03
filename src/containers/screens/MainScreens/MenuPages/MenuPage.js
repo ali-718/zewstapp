@@ -88,7 +88,7 @@ export const MenuPage = () => {
 
   if (device === "tablet") {
     return (
-      <MainScreenContainer>
+      <MainScreenContainer isDrawer shortDrawer>
         {!!defaultLocation.locationId == false ? (
           <View
             style={{
@@ -130,7 +130,7 @@ export const MenuPage = () => {
                   width: "100%",
                 }}
               >
-                <HeadingBox heading={"Menu items"} />
+                <HeadingBox noBack heading={"Menu items"} />
                 <View
                   style={{
                     width: "100%",

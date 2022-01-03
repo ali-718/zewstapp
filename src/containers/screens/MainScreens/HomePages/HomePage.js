@@ -611,7 +611,7 @@ export const HomePage = ({ setselected }) => {
   const changeTime = (val) => setSelectedTime(val);
 
   return (
-    <MainScreenContainer>
+    <MainScreenContainer shortDrawer isDrawer>
       {!!defaultLocation.locationId ? (
         <LinearGradient
           colors={[backgroundGrayColor, backgroundGrayColor]}

@@ -16,7 +16,7 @@ import { recipePacking, recipeUnit } from "../../../../helpers/utlils";
 import deleteIcon from "../../../../assets/images/deleteIcon.png";
 import { RegularButton } from "../../../../components/Buttons/RegularButton";
 import { ToastError } from "../../../../helpers/Toast";
-import { useNavigation } from "@react-navigation/core";
+import { useNavigation, useIsFocused } from "@react-navigation/core";
 import * as actions from "../../../../Redux/actions/RecipeActions/RecipeActions";
 import * as inventoryActions from "../../../../Redux/actions/InventoryAction/InventoryActions";
 import { HeadingBox } from "../../../../components/HeadingBox/HeadingBox";
@@ -47,8 +47,10 @@ export const RecipeAdd = (props) => {
   const defaultLocation = useSelector(
     (state) => state.locations.defaultLocation
   );
+  const screenFocused = useIsFocused();
 
   useEffect(() => {
+    if (!screenFocused) return;
     inventoryActions
       .getUnits()
       .then((res) => setallUnits(res))
@@ -92,7 +94,7 @@ export const RecipeAdd = (props) => {
     setrecipeList(recipeSteps);
     setquantity(macroIngredient?.quantity);
     setSelectedCategory(recipeCategory);
-  }, []);
+  }, [screenFocused]);
 
   const onAddData = () => {
     if (!defaultLocation.locationId) {

@@ -10,10 +10,14 @@ import { Header } from "../components/Headers/Header";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { DrawerActions } from "@react-navigation/routers";
 import menuIcon from "../assets/images/menuIcon.png";
-import { DrawerMenuWithoutNames } from "../components/Drawer/Drawer";
+import {
+  DrawerMenu,
+  DrawerMenuWithoutNames,
+} from "../components/Drawer/Drawer";
 import { changeMenuIndex } from "../Redux/actions/SystemActions/SystemActions";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
+import { HEIGHT } from "../helpers/utlils";
 
 export const MainScreenContainer = ({
   noScroll,
@@ -21,6 +25,7 @@ export const MainScreenContainer = ({
   noHeader,
   scrollRef = () => null,
   isDrawer,
+  shortDrawer,
   ...props
 }) => {
   const index = useSelector((state) => state.system.menuIndex);
@@ -46,16 +51,27 @@ export const MainScreenContainer = ({
       )}
       {noScroll ? (
         <View style={{ width: "100%", flexDirection: "row", flex: 1 }}>
-          {isDrawer && (
-            <View style={{ width: 70 }}>
-              <DrawerMenuWithoutNames
-                changeMenuIndex={(index) =>
-                  dispatch(changeMenuIndex({ index }))
-                }
-                {...{ state: { index } }}
-              />
-            </View>
-          )}
+          {isDrawer ? (
+            shortDrawer ? (
+              <View style={{ width: 70 }}>
+                <DrawerMenuWithoutNames
+                  changeMenuIndex={(index) =>
+                    dispatch(changeMenuIndex({ index }))
+                  }
+                  {...{ state: { index } }}
+                />
+              </View>
+            ) : (
+              <View style={{ width: 230, minHeight: HEIGHT }}>
+                <DrawerMenu
+                  changeMenuIndex={(index) =>
+                    dispatch(changeMenuIndex({ index }))
+                  }
+                  {...{ state: { index } }}
+                />
+              </View>
+            )
+          ) : null}
           <View style={{ flex: 1 }}>
             <View style={{ width: "100%", flex: 1, alignItems: "center" }}>
               {props.children}
@@ -65,16 +81,27 @@ export const MainScreenContainer = ({
       ) : (
         <KeyboardAwareScrollView style={{ width: "100%", flex: 1 }}>
           <View style={{ width: "100%", flexDirection: "row", flex: 1 }}>
-            {isDrawer && (
-              <View style={{ width: 70 }}>
-                <DrawerMenuWithoutNames
-                  changeMenuIndex={(index) =>
-                    dispatch(changeMenuIndex({ index }))
-                  }
-                  {...{ state: { index } }}
-                />
-              </View>
-            )}
+            {isDrawer ? (
+              shortDrawer ? (
+                <View style={{ width: 70 }}>
+                  <DrawerMenuWithoutNames
+                    changeMenuIndex={(index) =>
+                      dispatch(changeMenuIndex({ index }))
+                    }
+                    {...{ state: { index } }}
+                  />
+                </View>
+              ) : (
+                <View style={{ width: 230, minHeight: HEIGHT }}>
+                  <DrawerMenu
+                    changeMenuIndex={(index) =>
+                      dispatch(changeMenuIndex({ index }))
+                    }
+                    {...{ state: { index } }}
+                  />
+                </View>
+              )
+            ) : null}
             <View style={{ flex: 1 }}>
               <View style={{ width: "100%", flex: 1, alignItems: "center" }}>
                 {props.children}

@@ -106,8 +106,8 @@ export const AddInventoryPage = (props) => {
       setThreshold(`${threshold}`);
       setCostPerUnit(`${costPerUnit}`);
       setColor(colors.find((item) => item.title === color));
-      setDateOfPurchase(dateOfPurchase);
-      setDateOfExpiry(dateOfExpiry);
+      setDateOfPurchase(moment(dateOfPurchase).format("YYYY-MM-DD"));
+      setDateOfExpiry(moment(dateOfExpiry).format("YYYY-MM-DD"));
       setUnit(`${unit}`);
       setQuantity(`${quantity}`);
       setItemName(itemName);

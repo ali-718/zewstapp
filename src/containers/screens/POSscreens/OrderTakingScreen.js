@@ -307,6 +307,7 @@ export const OrderTakingScreen = (props) => {
         .catch((res) => {
           setcreateOrderLoading(false);
           setcreateOrderLoadingWithCard(false);
+          setPaymentMethod("cash");
         });
     }
   };
@@ -425,6 +426,7 @@ export const OrderTakingScreen = (props) => {
               dispatch(actions.clearOrderPaymentIntentAction());
               setFirstTime(true);
               setcreateOrderLoading(false);
+              setPaymentMethod("cash");
               return;
             } else {
               ProcessPayment();
@@ -433,6 +435,7 @@ export const OrderTakingScreen = (props) => {
         })
         .catch((err) => {
           console.log("STRIPE ERROR IS", err);
+          setPaymentMethod("cash");
         });
     }
   }, [paymentIntent?.intentKey?.paymentIntent]);
