@@ -178,7 +178,7 @@ const PriceFluctuation = ({ heading, belowText, device, rightText, color }) => (
         <Text
           numberOfLines={1}
           style={{
-            fontSize: 16,
+            fontSize: 14,
             fontFamily: "openSans_semiBold",
             color: "black",
           }}
@@ -215,7 +215,7 @@ const LossInKitchen = ({ heading, belowText, device, logDate }) => (
       <Text
         numberOfLines={1}
         style={{
-          fontSize: 16,
+          fontSize: 14,
           fontFamily: "openSans_semiBold",
           color: "black",
         }}
@@ -281,7 +281,7 @@ const IamgeItemBox = ({ device, image, heading, value }) => (
       <Text
         style={{
           color: "black",
-          fontSize: 16,
+          fontSize: 14,
           fontFamily: "openSans_semiBold",
         }}
       >
@@ -321,7 +321,7 @@ const ChartItemBox = ({ device, image, heading, value }) => (
         <Text
           style={{
             color: "white",
-            fontSize: 18,
+            fontSize: 16,
             fontFamily: "openSans_bold",
           }}
         >
@@ -723,7 +723,7 @@ export const HomePage = ({ setselected }) => {
                   height: device === "tablet" ? 50 : 40,
                   borderRadius: 15,
                 }}
-                textStyle={{ color: primaryColor, fontSize: 16 }}
+                textStyle={{ color: primaryColor, fontSize: 14 }}
               />
             </View>
 
@@ -832,7 +832,7 @@ export const HomePage = ({ setselected }) => {
                         >
                           <Text
                             style={{
-                              fontSize: 18,
+                              fontSize: 16,
                               color: "black",
                               fontFamily: "openSans_semiBold",
                             }}
@@ -842,7 +842,7 @@ export const HomePage = ({ setselected }) => {
                         </View>
                         <Text
                           style={{
-                            fontSize: 16,
+                            fontSize: 14,
                             color: grayTextColor,
                             fontFamily: "openSans_semiBold",
                           }}
@@ -886,7 +886,7 @@ export const HomePage = ({ setselected }) => {
                           </View>
                           <Text
                             style={{
-                              fontSize: 16,
+                              fontSize: 14,
                               color: "black",
                               fontFamily: "openSans_semiBold",
                             }}
@@ -923,7 +923,7 @@ export const HomePage = ({ setselected }) => {
                           </View>
                           <Text
                             style={{
-                              fontSize: 16,
+                              fontSize: 14,
                               color: "black",
                               fontFamily: "openSans_semiBold",
                             }}
@@ -932,6 +932,7 @@ export const HomePage = ({ setselected }) => {
                               `forecasted sales`,
                               forecastedActualSales
                             )}
+                            {console.log(`actual sales`, forecastedSales)}
                             Total: ${currencyDisplay(forecastedActualSales)}
                           </Text>
                         </View>
@@ -990,7 +991,7 @@ export const HomePage = ({ setselected }) => {
                         <Text
                           style={{
                             color: "black",
-                            fontSize: 18,
+                            fontSize: 16,
                             fontFamily: "openSans_semiBold",
                           }}
                         >
@@ -999,7 +1000,7 @@ export const HomePage = ({ setselected }) => {
                         <Text
                           style={{
                             color: grayTextColor,
-                            fontSize: 16,
+                            fontSize: 14,
                             fontFamily: "openSans_semiBold",
                           }}
                         >
@@ -1078,7 +1079,7 @@ export const HomePage = ({ setselected }) => {
                       <Text
                         style={{
                           color: "black",
-                          fontSize: 18,
+                          fontSize: 16,
                           fontFamily: "openSans_semiBold",
                         }}
                       >
@@ -1087,7 +1088,7 @@ export const HomePage = ({ setselected }) => {
                       <Text
                         style={{
                           color: grayTextColor,
-                          fontSize: 16,
+                          fontSize: 14,
                           fontFamily: "openSans_semiBold",
                         }}
                       >
@@ -1244,7 +1245,7 @@ export const HomePage = ({ setselected }) => {
                     <Text
                       style={{
                         color: "black",
-                        fontSize: 18,
+                        fontSize: 16,
                         fontFamily: "openSans_semiBold",
                       }}
                     >
@@ -1258,14 +1259,6 @@ export const HomePage = ({ setselected }) => {
                         justifyContent: "center",
                       }}
                     >
-                      <Image
-                        source={downloadPDF}
-                        style={{
-                          width: 16,
-                          resizeMode: "contain",
-                          tintColor: primaryColor,
-                        }}
-                      />
                       <Image
                         source={menuDotGray}
                         style={{
@@ -1357,7 +1350,7 @@ export const HomePage = ({ setselected }) => {
                     <Text
                       style={{
                         color: "black",
-                        fontSize: 18,
+                        fontSize: 16,
                         fontFamily: "openSans_semiBold",
                       }}
                     >
@@ -1366,7 +1359,7 @@ export const HomePage = ({ setselected }) => {
                     <Text
                       style={{
                         color: grayTextColor,
-                        fontSize: 16,
+                        fontSize: 14,
                         fontFamily: "openSans_semiBold",
                       }}
                     >
@@ -1408,7 +1401,7 @@ export const HomePage = ({ setselected }) => {
                         >
                           <Text
                             style={{
-                              fontSize: 18,
+                              fontSize: 16,
                               color: "black",
                               fontFamily: "openSans_bold",
                             }}
@@ -1546,7 +1539,7 @@ export const HomePage = ({ setselected }) => {
                     >
                       <Text
                         style={{
-                          fontSize: 18,
+                          fontSize: 16,
                           color: "black",
                           fontFamily: "openSans_bold",
                         }}
@@ -1616,7 +1609,7 @@ title={"Menu"}
       style={{ flexDirection: "row", alignItems: "center", flex: 0.9 }}
     >
       <View style={{ width: "85%", alignItems: "flex-end" }}>
-        <Text style={{ fontSize: 16, fontFamily: "openSans_semiBold" }}>
+        <Text style={{ fontSize: 14, fontFamily: "openSans_semiBold" }}>
           Ali Haider
         </Text>
         <Text style={{ fontSize: 13, marginTop: 5 }}>
@@ -1712,13 +1705,13 @@ title={"Menu"}
         paddingBottom: 10,
       }}
     >
-      <Text style={{ fontSize: 16, fontFamily: "openSans_bold" }}>
+      <Text style={{ fontSize: 14, fontFamily: "openSans_bold" }}>
         Pending pickups
       </Text>
 
       <Text
         style={{
-          fontSize: 16,
+          fontSize: 14,
           fontFamily: "openSans_bold",
           color: primaryShade1,
         }}

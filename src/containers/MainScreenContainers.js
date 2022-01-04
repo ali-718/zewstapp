@@ -31,6 +31,7 @@ export const MainScreenContainer = ({
   const index = useSelector((state) => state.system.menuIndex);
   const navigation = useNavigation();
   const dispatch = useDispatch();
+  const device = useSelector((state) => state.system.device);
 
   return (
     <SafeAreaView
@@ -52,36 +53,7 @@ export const MainScreenContainer = ({
       {noScroll ? (
         <View style={{ width: "100%", flexDirection: "row", flex: 1 }}>
           {isDrawer ? (
-            shortDrawer ? (
-              <View style={{ width: 70 }}>
-                <DrawerMenuWithoutNames
-                  changeMenuIndex={(index) =>
-                    dispatch(changeMenuIndex({ index }))
-                  }
-                  {...{ state: { index } }}
-                />
-              </View>
-            ) : (
-              <View style={{ width: 230, minHeight: HEIGHT }}>
-                <DrawerMenu
-                  changeMenuIndex={(index) =>
-                    dispatch(changeMenuIndex({ index }))
-                  }
-                  {...{ state: { index } }}
-                />
-              </View>
-            )
-          ) : null}
-          <View style={{ flex: 1 }}>
-            <View style={{ width: "100%", flex: 1, alignItems: "center" }}>
-              {props.children}
-            </View>
-          </View>
-        </View>
-      ) : (
-        <KeyboardAwareScrollView style={{ width: "100%", flex: 1 }}>
-          <View style={{ width: "100%", flexDirection: "row", flex: 1 }}>
-            {isDrawer ? (
+            device === "tablet" ? (
               shortDrawer ? (
                 <View style={{ width: 70 }}>
                   <DrawerMenuWithoutNames
@@ -101,6 +73,39 @@ export const MainScreenContainer = ({
                   />
                 </View>
               )
+            ) : null
+          ) : null}
+          <View style={{ flex: 1 }}>
+            <View style={{ width: "100%", flex: 1, alignItems: "center" }}>
+              {props.children}
+            </View>
+          </View>
+        </View>
+      ) : (
+        <KeyboardAwareScrollView style={{ width: "100%", flex: 1 }}>
+          <View style={{ width: "100%", flexDirection: "row", flex: 1 }}>
+            {isDrawer ? (
+              device === "tablet" ? (
+                shortDrawer ? (
+                  <View style={{ width: 70 }}>
+                    <DrawerMenuWithoutNames
+                      changeMenuIndex={(index) =>
+                        dispatch(changeMenuIndex({ index }))
+                      }
+                      {...{ state: { index } }}
+                    />
+                  </View>
+                ) : (
+                  <View style={{ width: 230, minHeight: HEIGHT }}>
+                    <DrawerMenu
+                      changeMenuIndex={(index) =>
+                        dispatch(changeMenuIndex({ index }))
+                      }
+                      {...{ state: { index } }}
+                    />
+                  </View>
+                )
+              ) : null
             ) : null}
             <View style={{ flex: 1 }}>
               <View style={{ width: "100%", flex: 1, alignItems: "center" }}>

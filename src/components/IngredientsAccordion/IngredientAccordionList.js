@@ -7,7 +7,12 @@ import { Dropdown } from "../Inputs/DropDown";
 import { Text } from "../Text/Text";
 import { Icon } from "native-base";
 import { Entypo } from "@expo/vector-icons";
-import { inventoryCategory, recipePacking } from "../../helpers/utlils";
+import {
+  getUpdatedQuantitynUnit,
+  inventoryCategory,
+  recipePacking,
+  validConversionUnits,
+} from "../../helpers/utlils";
 
 export const IngredientAccordionList = ({
   ingredients,
@@ -108,6 +113,7 @@ export const IngredientAccordionList = ({
                     ...item,
                     totalQuantity: item.quantity,
                     quantity: undefined,
+                    originalUnit: item.units,
                   }))
                   .find((item) => item.itemName === val),
                 i
@@ -123,7 +129,6 @@ export const IngredientAccordionList = ({
               .map((item) => item.itemName)}
             style={{ zIndex: i + 3 }}
           />
-
           <View
             style={{
               width: "100%",
@@ -133,29 +138,44 @@ export const IngredientAccordionList = ({
               zIndex: 1,
             }}
           >
+            {console.log(
+              getUpdatedQuantitynUnit(
+                ingredients[i]?.originalUnit,
+                item.units,
+                parseInt(ingredients[i].totalQuantity)
+              )
+            )}
             {ingredients[i].itemName && (
               <Dropdown
                 selectedMenu={ingredients[i].quantity}
                 setMenu={(val) => updateQuantity(val, i)}
                 placeholder={"Quantity"}
                 menus={Array.from(
-                  { length: ingredients[i].totalQuantity },
+                  {
+                    length: getUpdatedQuantitynUnit(
+                      ingredients[i]?.originalUnit,
+                      item.units,
+                      parseInt(ingredients[i].totalQuantity)
+                    )?.quantity,
+                  },
                   (_, i) => i + 1
                 )}
                 style={{ zIndex: i + 2, flex: 1 }}
               />
             )}
 
-            <Dropdown
-              selectedMenu={item.units}
-              setMenu={(val) => updateUnit(val, i)}
-              placeholder={"Unit"}
-              menus={allUnits}
-              style={{
-                zIndex: i + 1,
-                flex: 1,
-              }}
-            />
+            {ingredients[i].itemName && (
+              <Dropdown
+                selectedMenu={item.units}
+                setMenu={(val) => updateUnit(val, i)}
+                placeholder={"Unit"}
+                menus={validConversionUnits(ingredients[i]?.originalUnit)}
+                style={{
+                  zIndex: i + 1,
+                  flex: 1,
+                }}
+              />
+            )}
           </View>
 
           <Dropdown

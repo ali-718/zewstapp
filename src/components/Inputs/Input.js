@@ -194,7 +194,7 @@ export const Input = ({
               ref={ref}
               style={{
                 width: "100%",
-                fontSize: device === "tablet" ? 16 : 16,
+                fontSize: device === "tablet" ? 16 : 14,
                 ...inputStyle,
                 flex: 1,
               }}

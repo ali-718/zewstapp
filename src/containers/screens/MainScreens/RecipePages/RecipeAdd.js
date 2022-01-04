@@ -190,7 +190,7 @@ export const RecipeAdd = (props) => {
   const updateUnit = (value, index) => {
     const data = [...ingredients];
 
-    data[index] = { ...data[index], units: value };
+    data[index] = { ...data[index], units: value, quantity: "" };
 
     setIngredients(data);
   };
