@@ -63,7 +63,7 @@ export const AdminPage = () => {
   const item = hotels[0];
 
   return (
-    <MainScreenContainer>
+    <MainScreenContainer isDrawer>
       <HeadingBox noBack heading={"Admin panel"} />
 
       <View

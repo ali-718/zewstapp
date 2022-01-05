@@ -54,7 +54,7 @@ export const VendorListPage = () => {
   };
 
   return (
-    <MainScreenContainer>
+    <MainScreenContainer isDrawer>
       <HeadingBox heading={"Vendor"} noBack />
       <View
         style={{

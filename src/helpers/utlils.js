@@ -430,3 +430,327 @@ export const currencyDisplay = (number) => {
 
 export const STRIPE_PUBLISH_KEY =
   "pk_test_51Jk5lYHGLGO7qAwS0yREd2JCrAwLLT7Pnm2GgLqwRJGwdx2fFdDqmY0fBmUctZGmnN9CHjcCAkoatqJ6Ufr8dqCY00nUxiFs72";
+
+export const getUpdatedQuantitynUnit = (
+  originalUnit,
+  newUnit,
+  originalQuantity
+) => {
+  let obj = {};
+
+  // Getting conversions for kg to other units
+  if (originalUnit === "kg") {
+    if (newUnit === "grams") {
+      obj = { quantity: Math.floor(originalQuantity * 1000), unit: "grams" };
+    }
+    if (newUnit === "pounds") {
+      obj = { quantity: Math.floor(originalQuantity * 2.2), unit: "pounds" };
+    }
+    if (newUnit === "ounces") {
+      obj = { quantity: Math.floor(originalQuantity * 35.274), unit: "ounces" };
+    }
+    if (newUnit === "liters") {
+      obj = { quantity: Math.floor(originalQuantity), unit: "liters" };
+    }
+    if (newUnit === "teaspoon") {
+      obj = {
+        quantity: Math.floor(originalQuantity * 202.88),
+        unit: "teaspoon",
+      };
+    }
+    if (newUnit === "tablespoon") {
+      obj = {
+        quantity: Math.floor(originalQuantity * 67.62),
+        unit: "tablespoon",
+      };
+    }
+    if (newUnit === "kg") {
+      obj = { quantity: Math.floor(originalQuantity), unit: "kg" };
+    }
+  }
+
+  // Getting conversions for pounds to other units
+  if (originalUnit === "pounds") {
+    if (newUnit === "grams") {
+      obj = { quantity: Math.floor(originalQuantity * 453.592), unit: "grams" };
+    }
+    if (newUnit === "kg") {
+      obj = { quantity: Math.floor(originalQuantity * 0.453592), unit: "kg" };
+    }
+    if (newUnit === "ounces") {
+      obj = { quantity: Math.floor(originalQuantity * 16), unit: "ounces" };
+    }
+    if (newUnit === "liters") {
+      obj = { quantity: Math.floor(originalQuantity * 0.4535), unit: "liters" };
+    }
+    if (newUnit === "teaspoon") {
+      obj = {
+        quantity: Math.floor(originalQuantity * 92.02),
+        unit: "teaspoon",
+      };
+    }
+    if (newUnit === "tablespoon") {
+      obj = {
+        quantity: Math.floor(originalQuantity * 30.675),
+        unit: "tablespoon",
+      };
+    }
+    if (newUnit === "pounds") {
+      obj = { quantity: Math.floor(originalQuantity), unit: "pounds" };
+    }
+  }
+
+  // Getting conversions for ounces to other units
+  if (originalUnit === "ounces") {
+    if (newUnit === "grams") {
+      obj = { quantity: Math.floor(originalQuantity * 28.3495), unit: "grams" };
+    }
+    if (newUnit === "kg") {
+      obj = { quantity: Math.floor(originalQuantity * 0.0283495), unit: "kg" };
+    }
+    if (newUnit === "pounds") {
+      obj = { quantity: Math.floor(originalQuantity * 0.0625), unit: "pounds" };
+    }
+    if (newUnit === "liters") {
+      obj = {
+        quantity: Math.floor(originalQuantity * 0.0295735),
+        unit: "liters",
+      };
+    }
+    if (newUnit === "teaspoon") {
+      obj = { quantity: Math.floor(originalQuantity * 6), unit: "teaspoon" };
+    }
+    if (newUnit === "tablespoon") {
+      obj = { quantity: Math.floor(originalQuantity * 2), unit: "tablespoon" };
+    }
+    if (newUnit === "ounces") {
+      obj = { quantity: Math.floor(originalQuantity), unit: "ounces" };
+    }
+  }
+
+  // Getting conversions for liters to other units
+  if (originalUnit === "liters") {
+    if (newUnit === "grams") {
+      obj = { quantity: Math.floor(originalQuantity * 1000), unit: "grams" };
+    }
+    if (newUnit === "kg") {
+      obj = { quantity: Math.floor(originalQuantity), unit: "kg" };
+    }
+    if (newUnit === "pounds") {
+      obj = { quantity: Math.floor(originalQuantity * 2.2), unit: "pounds" };
+    }
+    if (newUnit === "ounces") {
+      obj = { quantity: Math.floor(originalQuantity * 33.814), unit: "ounces" };
+    }
+    if (newUnit === "teaspoon") {
+      obj = {
+        quantity: Math.floor(originalQuantity * 202.884),
+        unit: "teaspoon",
+      };
+    }
+    if (newUnit === "tablespoon") {
+      obj = {
+        quantity: Math.floor(originalQuantity * 67.628),
+        unit: "tablespoon",
+      };
+    }
+    if (newUnit === "liters") {
+      obj = { quantity: Math.floor(originalQuantity), unit: "liters" };
+    }
+  }
+
+  // Getting conversions for grans to other units
+  if (originalUnit === "grams") {
+    if (newUnit === "liters") {
+      obj = { quantity: Math.floor(originalQuantity * 0.001), unit: "liters" };
+    }
+    if (newUnit === "kg") {
+      obj = { quantity: Math.floor(originalQuantity * 0.001), unit: "kg" };
+    }
+    if (newUnit === "pounds") {
+      obj = {
+        quantity: Math.floor(originalQuantity * 0.00220462),
+        unit: "pounds",
+      };
+    }
+    if (newUnit === "ounces") {
+      obj = {
+        quantity: Math.floor(originalQuantity * 0.035274),
+        unit: "ounces",
+      };
+    }
+    if (newUnit === "teaspoon") {
+      obj = {
+        quantity: Math.floor(originalQuantity * 0.20288),
+        unit: "teaspoon",
+      };
+    }
+    if (newUnit === "tablespoon") {
+      obj = {
+        quantity: Math.floor(originalQuantity * 0.06666),
+        unit: "tablespoon",
+      };
+    }
+    if (newUnit === "grams") {
+      obj = { quantity: Math.floor(originalQuantity), unit: "grams" };
+    }
+  }
+
+  // Getting conversions for teaspoon to other units
+  if (originalUnit === "teaspoon") {
+    if (newUnit === "liters") {
+      obj = {
+        quantity: Math.floor(originalQuantity * 0.00492892),
+        unit: "liters",
+      };
+    }
+    if (newUnit === "kg") {
+      obj = { quantity: Math.floor(originalQuantity * 0.005), unit: "kg" };
+    }
+    if (newUnit === "pounds") {
+      obj = { quantity: Math.floor(originalQuantity * 0.0109), unit: "pounds" };
+    }
+    if (newUnit === "ounces") {
+      obj = {
+        quantity: Math.floor(originalQuantity * 0.166667),
+        unit: "ounces",
+      };
+    }
+    if (newUnit === "grams") {
+      obj = { quantity: Math.floor(originalQuantity * 4.2), unit: "grams" };
+    }
+    if (newUnit === "tablespoon") {
+      obj = {
+        quantity: Math.floor(originalQuantity * 0.333333),
+        unit: "tablespoon",
+      };
+    }
+    if (newUnit === "teaspoon") {
+      obj = { quantity: Math.floor(originalQuantity), unit: "teaspoon" };
+    }
+  }
+
+  // Getting conversions for tablespoon to other units
+  if (originalUnit === "tablespoon") {
+    if (newUnit === "liters") {
+      obj = {
+        quantity: Math.floor(originalQuantity * 0.0147868),
+        unit: "liters",
+      };
+    }
+    if (newUnit === "kg") {
+      obj = { quantity: Math.floor(originalQuantity * 0.0148), unit: "kg" };
+    }
+    if (newUnit === "pounds") {
+      obj = { quantity: Math.floor(originalQuantity * 0.0326), unit: "pounds" };
+    }
+    if (newUnit === "ounces") {
+      obj = { quantity: Math.floor(originalQuantity * 0.5), unit: "ounces" };
+    }
+    if (newUnit === "grams") {
+      obj = { quantity: Math.floor(originalQuantity * 14.8), unit: "grams" };
+    }
+    if (newUnit === "teaspoon") {
+      obj = { quantity: Math.floor(originalQuantity * 3), unit: "teaspoon" };
+    }
+    if (newUnit === "tablespoon") {
+      obj = { quantity: Math.floor(originalQuantity), unit: "tablespoon" };
+    }
+  }
+
+  // Getting conversions for number/pieces to other units
+  if (originalUnit === "number/pieces") {
+    if (newUnit === "number/pieces") {
+      obj = { quantity: Math.floor(originalQuantity), unit: "number/pieces" };
+    }
+  }
+
+  return obj;
+};
+
+export const validConversionUnits = (originalUnit) => {
+  let units = [];
+
+  if (originalUnit === "number/pieces") {
+    units = ["number/pieces"];
+  }
+  if (originalUnit === "kg") {
+    units = [
+      "kg",
+      "pounds",
+      "grams",
+      "ounces",
+      "liters",
+      "teaspoon",
+      "tablespoon",
+    ];
+  }
+  if (originalUnit === "pounds") {
+    units = [
+      "kg",
+      "pounds",
+      "grams",
+      "ounces",
+      "liters",
+      "teaspoon",
+      "tablespoon",
+    ];
+  }
+  if (originalUnit === "grams") {
+    units = [
+      "kg",
+      "pounds",
+      "grams",
+      "ounces",
+      "liters",
+      "teaspoon",
+      "tablespoon",
+    ];
+  }
+  if (originalUnit === "ounces") {
+    units = [
+      "kg",
+      "pounds",
+      "grams",
+      "ounces",
+      "liters",
+      "teaspoon",
+      "tablespoon",
+    ];
+  }
+  if (originalUnit === "liters") {
+    units = [
+      "kg",
+      "pounds",
+      "grams",
+      "ounces",
+      "liters",
+      "teaspoon",
+      "tablespoon",
+    ];
+  }
+  if (originalUnit === "teaspoon") {
+    units = [
+      "kg",
+      "pounds",
+      "grams",
+      "ounces",
+      "liters",
+      "teaspoon",
+      "tablespoon",
+    ];
+  }
+  if (originalUnit === "tablespoon") {
+    units = [
+      "kg",
+      "pounds",
+      "grams",
+      "ounces",
+      "liters",
+      "teaspoon",
+      "tablespoon",
+    ];
+  }
+
+  return units;
+};

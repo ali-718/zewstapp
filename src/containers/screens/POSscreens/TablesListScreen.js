@@ -232,8 +232,8 @@ export const TablesListScreen = () => {
 
   if (device === "tablet") {
     return (
-      <MainScreenContainer noScroll>
-        <HeadingBox heading={"Orders"} noBack />
+      <MainScreenContainer isDrawer shortDrawer noScroll>
+        <HeadingBox heading={"Overview"} noBack />
 
         <View style={{ width: "90%", marginTop: 20 }}>
           <Text style={{ color: "black", fontSize: 18 }}>Tables</Text>
@@ -370,7 +370,7 @@ export const TablesListScreen = () => {
                     data={outsidetablesToShow}
                     numColumns={2}
                     style={{
-                      marginTop: 20,
+                      marginTop: 10,
                       width: "100%",
                       marginBottom: 50,
                     }}

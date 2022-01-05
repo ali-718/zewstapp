@@ -77,8 +77,8 @@ export const DailyFoodLogAdd = () => {
   };
 
   return (
-    <MainScreenContainer>
-      <HeadingBox heading={"Log in food"} />
+    <MainScreenContainer isDrawer>
+      <HeadingBox noBack heading={"Log in food"} />
       <View
         style={{
           width: "95%",
