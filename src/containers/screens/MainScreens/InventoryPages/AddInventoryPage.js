@@ -25,6 +25,7 @@ import { RegularButton } from "../../../../components/Buttons/RegularButton";
 import { inventoryCategory } from "../../../../helpers/utlils";
 import { DateTimeSelector } from "../../../../components/DateTimeSelector/DateTimeSelector";
 import moment from "moment";
+import { FontAwesome  } from "@expo/vector-icons";
 
 export const AddInventoryPage = (props) => {
   const navigation = useNavigation();
@@ -48,8 +49,8 @@ export const AddInventoryPage = (props) => {
   const [brand, setBrand] = useState("");
   const [quantity, setQuantity] = useState("");
   const [unit, setUnit] = useState("");
-  const [dateOfPurchase, setDateOfPurchase] = useState("");
-  const [dateOfExpiry, setDateOfExpiry] = useState("");
+  const [dateOfPurchase, setDateOfPurchase] = useState(moment(new Date()).format("YYYY-MM-DD"));
+  const [dateOfExpiry, setDateOfExpiry] = useState(moment(new Date()).format("YYYY-MM-DD"));
   const [color, setColor] = useState({});
   const [notes, setNotes] = useState("");
   const [imageUri, setImageUri] = useState([]);
@@ -358,7 +359,7 @@ export const AddInventoryPage = (props) => {
           >
             <Input
               placeholder={"Date of Purchase"}
-              value={dateOfPurchase}
+              value={moment(dateOfPurchase).format("YYYY-MM-DD")}
               style={{
                 marginTop: 10,
                 borderRadius: 0,
@@ -385,7 +386,7 @@ export const AddInventoryPage = (props) => {
             <Input
               noInput
               placeholder={"Date of Expiry"}
-              value={dateOfExpiry}
+              value={moment(dateOfExpiry).format("YYYY-MM-DD")}
               setValue={(val) => setDateOfExpiry(val)}
               style={{
                 marginTop: 10,
@@ -438,6 +439,8 @@ export const AddInventoryPage = (props) => {
                 width: device === "tablet" ? "32%" : "100%",
                 zIndex: 12,
               }}
+              iconName={"dollar"}
+              iconType={FontAwesome}
             />
 
             <Dropdown
@@ -451,7 +454,7 @@ export const AddInventoryPage = (props) => {
                 marginTop: 10,
                 borderRadius: 0,
                 width: device === "tablet" ? "32%" : "100%",
-                zIndex: 12,
+                zIndex: 14,
               }}
               errMsg={"Looks like there is no vendor present!"}
             />
@@ -478,6 +481,7 @@ export const AddInventoryPage = (props) => {
                 marginTop: 10,
                 borderRadius: 0,
               }}
+              textarea={true}
             />
             <View style={{ width: "100%", marginTop: 10 }}>
               <Dropdown

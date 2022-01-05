@@ -90,8 +90,10 @@ export const Input = ({
           flexDirection: "row",
           borderBottomWidth: isError && showError ? 1 : 0,
           borderColor: inputBorderColor,
+          borderWidth: 0.5,
           zIndex: 1,
           ...style,
+          borderRadius: 10,
         }}
         activeOpacity={1}
         onPress={onPress ? onPress : () => ref.current?.focus()}
@@ -231,7 +233,7 @@ export const Input = ({
               as={iconType || Ionicons}
               style={{
                 fontSize: device === "tablet" ? 30 : 20,
-                color: primaryColor,
+                color: "#92929D",
                 ...iconStyle,
               }}
             />
