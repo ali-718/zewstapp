@@ -18,7 +18,7 @@ import { InventoryDetailPage } from "./InventoryDetailPage";
 import { HeadingBox } from "../../../../components/HeadingBox/HeadingBox";
 import noRecipe from "../../../../assets/images/noRecipe.png";
 import { primaryColor } from "../../../../theme/colors";
-import { boxWithShadow } from '../../../../theme/styles';
+import { boxWithShadow } from "../../../../theme/styles";
 
 export const InventoryListPage = () => {
   const navigation = useNavigation();
@@ -89,11 +89,21 @@ export const InventoryListPage = () => {
             marginTop: 0,
           }}
         >
-          <View style={{ width: "100%", flex: 1, padding: 5, backgroundColor: "white", borderRadius: 10, marginTop: 10 }}>
+          <View
+            style={{
+              width: "100%",
+              flex: 1,
+              padding: 5,
+              backgroundColor: "white",
+              borderRadius: 10,
+              marginTop: 10,
+            }}
+          >
             <SearchInput
               search={search}
               setSearch={setSearch}
               searchKeyword={searchKeyword}
+              style={{ marginTop: 0, marginBottom: 0 }}
             />
           </View>
 
@@ -128,7 +138,7 @@ export const InventoryListPage = () => {
                       backgroundColor: "white",
                       borderRadius: 10,
                       width: "100%",
-                      marginTop: 10
+                      marginTop: 10,
                     }}
                   >
                     {filteredItem
