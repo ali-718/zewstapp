@@ -18,6 +18,7 @@ import { InventoryDetailPage } from "./InventoryDetailPage";
 import { HeadingBox } from "../../../../components/HeadingBox/HeadingBox";
 import noRecipe from "../../../../assets/images/noRecipe.png";
 import { primaryColor } from "../../../../theme/colors";
+import { boxWithShadow } from '../../../../theme/styles';
 
 export const InventoryListPage = () => {
   const navigation = useNavigation();
@@ -72,7 +73,7 @@ export const InventoryListPage = () => {
       onPressRight={() => null}
       leftImage={""}
       rightImage={""}
-      title={"Recipe Engineering"}
+      title={""}
     >
       <HeadingBox heading={"Inventory"} noBack />
       {isLoading ? (
@@ -88,7 +89,7 @@ export const InventoryListPage = () => {
             marginTop: 0,
           }}
         >
-          <View style={{ width: "100%", flex: 1 }}>
+          <View style={{ width: "100%", flex: 1, padding: 5, backgroundColor: "white", borderRadius: 10, marginTop: 10 }}>
             <SearchInput
               search={search}
               setSearch={setSearch}
@@ -104,8 +105,9 @@ export const InventoryListPage = () => {
             {category?.length === 0 ? (
               <NoMealBox image={noRecipe} text={"No inventory added. "} />
             ) : (
-              category.map((category) => (
+              category.map((category, index) => (
                 <View
+                  key={index}
                   style={{
                     width: "100%",
                     marginTop: 24,
@@ -115,6 +117,7 @@ export const InventoryListPage = () => {
                     style={{
                       color: primaryColor,
                       fontSize: 16,
+                      fontWeight: "600",
                       textTransform: "uppercase",
                     }}
                   >
@@ -125,7 +128,7 @@ export const InventoryListPage = () => {
                       backgroundColor: "white",
                       borderRadius: 10,
                       width: "100%",
-                      marginTop: 10,
+                      marginTop: 10
                     }}
                   >
                     {filteredItem
