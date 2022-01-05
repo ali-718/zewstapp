@@ -8,6 +8,7 @@ import {
   UPDATE_MEALS,
   UPDATE_ORDER,
   GET_PAYMENT_INTENT_KEY,
+  RESET_SUCCESS,
 } from "./Types";
 import moment from "moment";
 
@@ -333,3 +334,6 @@ export const updateExistingOrderAction =
         );
       });
   };
+
+export const resetOrderState = () => (dispatch) =>
+  dispatch({ type: RESET_SUCCESS });

@@ -30,6 +30,7 @@ export const Dropdown = ({
   innerStyle,
   Background,
   textStyle,
+  dropdDownStyle,
 }) => {
   const device = useSelector((state) => state.system.device);
   const [isFocused, setIsFocused] = useState(false);
@@ -176,6 +177,7 @@ export const Dropdown = ({
                 elevation: 6,
                 borderRadius: 10,
                 maxHeight: 200,
+                ...dropdDownStyle,
               }}
             >
               <ScrollView nestedScrollEnabled style={{ flex: 1 }}>

@@ -7,6 +7,7 @@ import {
   UPDATE_MEALS,
   UPDATE_ORDER,
   GET_PAYMENT_INTENT_KEY,
+  RESET_SUCCESS,
 } from "../actions/PosActions/Types";
 
 const initialState = {
@@ -167,10 +168,13 @@ export const posReducer = produce((state = initialState, { payload, type }) => {
       state.createOrder.orderId = "";
       break;
     }
+    case RESET_SUCCESS: {
+      state.createOrder.isSuccess = false;
+      break;
+    }
     case FETCH_MEALS.REQUESTED: {
       state.meal.isLoading = true;
       state.meal.isError = false;
-      state.createOrder.isSuccess = false;
       state.meal.meals = [];
       break;
     }

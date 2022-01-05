@@ -34,19 +34,26 @@ const TableComponent = ({
   navigation,
   tableId,
   table,
+  dispatch,
 }) => (
   <TouchableOpacity
     onPress={
       status === "AVAILABLE"
-        ? () => navigation.navigate("orderTaking", { tableNo, tableId, table })
+        ? () => {
+            navigation.navigate("orderTaking", { tableNo, tableId, table });
+            dispatch(actions.resetOrderState());
+          }
         : status === "RESERVED"
-        ? () =>
+        ? () => {
             navigation.navigate("orderTaking", {
               tableNo,
               tableId,
               table,
               isReserved: true,
-            })
+            });
+
+            dispatch(actions.resetOrderState());
+          }
         : () => null
     }
     style={{
@@ -328,6 +335,7 @@ export const TablesListScreen = () => {
                           navigation={navigation}
                           tableId={item?.tableId}
                           table={item}
+                          dispatch={dispatch}
                         />
                       )}
                     />
@@ -390,6 +398,7 @@ export const TablesListScreen = () => {
                         navigation={navigation}
                         tableId={item?.tableId}
                         table={item}
+                        dispatch={dispatch}
                       />
                     )}
                   />
@@ -522,6 +531,7 @@ export const TablesListScreen = () => {
                   navigation={navigation}
                   tableId={item?.tableId}
                   table={item}
+                  dispatch={dispatch}
                 />
               )}
             />

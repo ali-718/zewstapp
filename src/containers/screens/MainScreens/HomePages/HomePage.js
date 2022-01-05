@@ -507,7 +507,7 @@ export const HomePage = ({ setselected }) => {
             : selectedTime === "This year"
             ? "year"
             : selectedTime === "This day"
-            ? "day"
+            ? "lastTwoDays"
             : "",
         month:
           selectedTime === "This month"
@@ -676,6 +676,7 @@ export const HomePage = ({ setselected }) => {
                   </Text>
 
                   <Dropdown
+                    dropdDownStyle={{ width: 200 }}
                     noPlaceholder
                     selectedMenu={selectedTime}
                     setMenu={changeTime}
