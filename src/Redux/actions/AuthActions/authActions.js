@@ -124,3 +124,34 @@ export const confirmResetPasswordCode = ({ email, code, newpass }) =>
         reject(e.response.data);
       });
   });
+
+export const addBankDetailsAction = ({
+  clientId,
+  bankName,
+  bankBranch,
+  iban,
+  accountTitle,
+}) =>
+  new Promise((resolve, reject) => {
+    console.log({
+      clientId,
+      bankName,
+      bankBranch,
+      iban,
+      accountTitle,
+    });
+    client
+      .post("/client/addBankDetails", {
+        clientId,
+        bankName,
+        bankBranch,
+        iban,
+        accountTitle,
+      })
+      .then(() => {
+        resolve();
+      })
+      .catch((e) => {
+        reject();
+      });
+  });

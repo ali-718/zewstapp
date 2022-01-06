@@ -40,9 +40,9 @@ export const ProfilePage = () => {
 
   const saveDetails = () => {
     if (
-      validator.isEmpty(name, { ignore_whitespace: false }) ||
-      validator.isEmpty(email, { ignore_whitespace: false }) ||
-      validator.isEmpty(phone, { ignore_whitespace: false })
+      validator.isEmpty(name, { ignore_whitespace: true }) ||
+      validator.isEmpty(email, { ignore_whitespace: true }) ||
+      validator.isEmpty(phone, { ignore_whitespace: true })
     ) {
       ToastError("kindly fill all fields");
       return;

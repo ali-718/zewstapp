@@ -100,7 +100,7 @@ export const ResetPasswordVerification = (props) => {
   const onVerification = () => {
     setShowError(true);
 
-    if (validator.isEmpty(password, { ignore_whitespace: false })) {
+    if (validator.isEmpty(password, { ignore_whitespace: true })) {
       ToastError("please fill all fields");
       return;
     }

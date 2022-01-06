@@ -9,83 +9,87 @@ import { Dropdown } from "../../../../components/Inputs/DropDown";
 import { MealItem } from "../../../../components/Meals/MealItem";
 import switchOn from "../../../../assets/images/switchOn.png";
 import switchOff from "../../../../assets/images/switchOff.png";
+import validator from "validator";
+import { ToastError, ToastSuccess } from "../../../../helpers/Toast";
+import { addBankDetailsAction } from "../../../../Redux/actions/AuthActions/authActions";
+import { useSelector } from "react-redux";
 
 export const BankDetailsPage = () => {
-  const [selectedType, setSelectedType] = useState("");
-  const [firstName, setfirstName] = useState("");
-  const [lastName, setlastName] = useState("");
-  const [contact, setContact] = useState("");
-  const [email, setEmail] = useState("");
-  const [available, setavailable] = useState(true);
-  const [cardNumber, setCardNumber] = useState("");
+  const [bankName, setBankName] = useState("");
+  const [bankBranch, setbankBranch] = useState("");
+  const [iban, setIban] = useState("");
+  const [accountTitle, setAccountTitle] = useState("");
+  const [isLoading, setIsLoading] = useState("");
+  const user = useSelector((state) => state.auth.user.user);
+
+  const addBankDetails = () => {
+    if (
+      validator.isEmpty(bankName, { ignore_whitespace: true }) ||
+      validator.isEmpty(bankBranch, { ignore_whitespace: true }) ||
+      validator.isEmpty(iban, { ignore_whitespace: true }) ||
+      validator.isEmpty(accountTitle, { ignore_whitespace: true })
+    ) {
+      ToastError("Kindly fill all fields!");
+      return;
+    }
+
+    setIsLoading(true);
+    addBankDetailsAction({
+      clientId: user?.clientId,
+      bankName,
+      bankBranch,
+      iban,
+      accountTitle,
+    })
+      .then(() => {
+        ToastSuccess("Success!", "Bank detail added successfully");
+        setIsLoading(false);
+      })
+      .catch(() => {
+        ToastError("Some error occoured, please try again later");
+        setIsLoading(false);
+      });
+  };
 
   return (
     <MainScreenContainer title={"Bank Details"}>
-      <HeadingBox heading={"Add a payment method"} />
+      <HeadingBox heading={"Add Bank Details"} />
       <View style={{ width: "90%", marginVertical: 20, marginBottom: 80 }}>
         <View style={{ width: "100%" }}>
           <Input
-            value={cardNumber}
-            setValue={(val) => setCardNumber(val)}
-            placeholder={"Number"}
+            value={bankName}
+            setValue={(val) => setBankName(val)}
+            placeholder={"Bank Name"}
           />
         </View>
-
         <View style={{ width: "100%", marginTop: 10 }}>
           <Input
-            value={firstName}
-            setValue={(val) => setfirstName(val)}
-            placeholder={"First name"}
+            value={bankBranch}
+            setValue={(val) => setbankBranch(val)}
+            placeholder={"Bank Branch"}
           />
         </View>
-
         <View style={{ width: "100%", marginTop: 10 }}>
           <Input
-            placeholder={"Last Name"}
-            value={lastName}
-            setValue={(val) => setlastName(val)}
+            value={iban}
+            setValue={(val) => setIban(val)}
+            placeholder={"IBAN"}
           />
         </View>
-
         <View style={{ width: "100%", marginTop: 10 }}>
           <Input
-            value={contact}
-            setValue={(val) => setContact(val)}
-            keyboardType={"number-pad"}
-            placeholder={"Phone"}
+            value={accountTitle}
+            setValue={(val) => setAccountTitle(val)}
+            placeholder={"Account Title"}
           />
         </View>
 
         <View style={{ width: "100%", marginTop: 10 }}>
-          <Input
-            keyboardType={"email-address"}
-            placeholder={"Email"}
-            value={email}
-            setValue={(val) => setEmail(val)}
+          <RegularButton
+            onPress={addBankDetails}
+            isLoading={isLoading}
+            text={"Save"}
           />
-        </View>
-
-        <View style={{ width: "100%", marginTop: 10, zIndex: 1 }}>
-          <Dropdown
-            selectedMenu={selectedType}
-            setMenu={setSelectedType}
-            placeholder={"Type"}
-            menus={["Manager", "Cashier", "kitchen Staff", "Order Taker"]}
-            style={{ zIndex: 3 }}
-          />
-        </View>
-
-        <View style={{ width: "100%", marginTop: 10 }}>
-          <MealItem
-            label={"Availability"}
-            text={available ? "Available" : "Hidden"}
-            icon={available ? switchOn : switchOff}
-            onIconClick={() => setavailable(!available)}
-          />
-        </View>
-
-        <View style={{ width: "100%", marginTop: 10 }}>
-          <RegularButton text={"Save"} />
         </View>
       </View>
     </MainScreenContainer>

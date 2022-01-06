@@ -7,6 +7,7 @@ import { MainScreenContainer } from "../../../MainScreenContainers";
 import visaLogo from "../../../../assets/images/visaLogo.png";
 import mastercardLogo from "../../../../assets/images/mastercardLogo.png";
 import stripeLogo from "../../../../assets/images/stripeLogo.png";
+import bankIcon from "../../../../assets/images/bankIcon.png";
 
 const BankPage = () => {
   const navigation = useNavigation();
@@ -52,6 +53,15 @@ const BankPage = () => {
                 name={""}
                 image={stripeLogo}
                 onPress={() => navigation.navigate("stripe")}
+              />
+            </View>
+            <View style={{ width: "100%", marginTop: 10 }}>
+              <AdminOverviewBox
+                noTint
+                label={"Bank"}
+                name={""}
+                image={bankIcon}
+                onPress={() => navigation.navigate("bankDetails")}
               />
             </View>
           </View>

@@ -51,11 +51,11 @@ export const SignUpPage = (props) => {
     setshowError(true);
 
     if (
-      validator.isEmpty(name, { ignore_whitespace: false }) ||
-      validator.isEmpty(contact, { ignore_whitespace: false }) ||
-      validator.isEmpty(email, { ignore_whitespace: false }) ||
-      validator.isEmpty(password, { ignore_whitespace: false }) ||
-      validator.isEmpty(confirmPassword, { ignore_whitespace: false })
+      validator.isEmpty(name, { ignore_whitespace: true }) ||
+      validator.isEmpty(contact, { ignore_whitespace: true }) ||
+      validator.isEmpty(email, { ignore_whitespace: true }) ||
+      validator.isEmpty(password, { ignore_whitespace: true }) ||
+      validator.isEmpty(confirmPassword, { ignore_whitespace: true })
     ) {
       ToastError("please fill all fields");
       return;

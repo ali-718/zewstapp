@@ -61,12 +61,12 @@ export const AddLocationsPage = (props) => {
 
   const onAddLocation = () => {
     if (
-      validator.isEmpty(country, { ignore_whitespace: false }) ||
-      validator.isEmpty(streetName, { ignore_whitespace: false }) ||
-      validator.isEmpty(plz, { ignore_whitespace: false }) ||
-      validator.isEmpty(city, { ignore_whitespace: false }) ||
-      validator.isEmpty(district, { ignore_whitespace: false }) ||
-      validator.isEmpty(taxRate, { ignore_whitespace: false })
+      validator.isEmpty(country, { ignore_whitespace: true }) ||
+      validator.isEmpty(streetName, { ignore_whitespace: true }) ||
+      validator.isEmpty(plz, { ignore_whitespace: true }) ||
+      validator.isEmpty(city, { ignore_whitespace: true }) ||
+      validator.isEmpty(district, { ignore_whitespace: true }) ||
+      validator.isEmpty(taxRate, { ignore_whitespace: true })
     ) {
       ToastError("Fill all fields");
       return;

@@ -50,8 +50,8 @@ export const LoginPage = (props) => {
   const onLogin = () => {
     setshowError(true);
     if (
-      validator.isEmpty(email, { ignore_whitespace: false }) ||
-      validator.isEmpty(password, { ignore_whitespace: false })
+      validator.isEmpty(email, { ignore_whitespace: true }) ||
+      validator.isEmpty(password, { ignore_whitespace: true })
     ) {
       ToastError("please fill all fields");
       return;

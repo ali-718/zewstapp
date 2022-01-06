@@ -32,7 +32,7 @@ export const ForgotPassword = (props) => {
 
   const forgotPasswordClick = () => {
     setshowError(true);
-    if (validator.isEmpty(email, { ignore_whitespace: false })) {
+    if (validator.isEmpty(email, { ignore_whitespace: true })) {
       ToastError("Kindly enter your email");
       return;
     }
