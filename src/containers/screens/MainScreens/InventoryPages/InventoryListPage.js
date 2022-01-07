@@ -89,23 +89,12 @@ export const InventoryListPage = () => {
             marginTop: 0,
           }}
         >
-          <View
-            style={{
-              width: "100%",
-              flex: 1,
-              padding: 5,
-              backgroundColor: "white",
-              borderRadius: 10,
-              marginTop: 10,
-            }}
-          >
-            <SearchInput
-              search={search}
-              setSearch={setSearch}
-              searchKeyword={searchKeyword}
-              style={{ marginTop: 0, marginBottom: 0 }}
-            />
-          </View>
+          <SearchInput
+            search={search}
+            setSearch={setSearch}
+            searchKeyword={searchKeyword}
+            style={{ marginTop: 20, marginBottom: 0 }}
+          />
 
           <View
             style={{
