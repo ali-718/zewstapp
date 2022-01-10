@@ -28,133 +28,10 @@ import moment from "moment";
 import { fetchLossInKitchenAction } from "../../../../Redux/actions/DashboardActions/DashboardActions";
 import { LoadingPage } from "../../../../components/LoadingPage/LoadingPage";
 
-const data = [
-  {
-    item: "Chicken",
-    previousSales: "1020",
-    day1: "10",
-    day2: "20",
-    today: "35",
-    predictedRequiredStaff: "60",
-    predictedCost: "3000",
-    trendsInChange: [1, 2, 3, 4, 4, 4, 5, 6, 7, 8],
-  },
-  {
-    item: "Cheese",
-    previousSales: "1020",
-    day1: "10",
-    day2: "20",
-    today: "35",
-    predictedRequiredStaff: "60",
-    predictedCost: "3000",
-    trendsInChange: [1, 2, 3, 4, 5, 2, 1, 5],
-  },
-  {
-    item: "Beef",
-    previousSales: "1020",
-    day1: "10",
-    day2: "20",
-    today: "35",
-    predictedRequiredStaff: "60",
-    predictedCost: "3000",
-    trendsInChange: [1, 2, 3, 2, 1, 5, 10, 15],
-  },
-  {
-    item: "Jalapenos",
-    previousSales: "1020",
-    day1: "10",
-    day2: "20",
-    today: "35",
-    predictedRequiredStaff: "60",
-    predictedCost: "3000",
-    trendsInChange: [10, 4, 2, 1, 5, 10, 15],
-  },
-  {
-    item: "Jalapenos",
-    previousSales: "1020",
-    day1: "10",
-    day2: "20",
-    today: "35",
-    predictedRequiredStaff: "60",
-    predictedCost: "3000",
-    trendsInChange: [10, 4, 2, 1, 5, 10, 15],
-  },
-  {
-    item: "Jalapenos",
-    previousSales: "1020",
-    day1: "10",
-    day2: "20",
-    today: "35",
-    predictedRequiredStaff: "60",
-    predictedCost: "3000",
-    trendsInChange: [10, 4, 2, 1, 5, 10, 15],
-  },
-  {
-    item: "Jalapenos",
-    previousSales: "1020",
-    day1: "10",
-    day2: "20",
-    today: "35",
-    predictedRequiredStaff: "60",
-    predictedCost: "3000",
-    trendsInChange: [10, 4, 2, 1, 5, 10, 15],
-  },
-  {
-    item: "Jalapenos",
-    previousSales: "1020",
-    day1: "10",
-    day2: "20",
-    today: "35",
-    predictedRequiredStaff: "60",
-    predictedCost: "3000",
-    trendsInChange: [10, 4, 2, 1, 5, 10, 15],
-  },
-  {
-    item: "Jalapenos",
-    previousSales: "1020",
-    day1: "10",
-    day2: "20",
-    today: "35",
-    predictedRequiredStaff: "60",
-    predictedCost: "3000",
-    trendsInChange: [10, 4, 2, 1, 5, 10, 15],
-  },
-  {
-    item: "Jalapenos",
-    previousSales: "1020",
-    day1: "10",
-    day2: "20",
-    today: "35",
-    predictedRequiredStaff: "60",
-    predictedCost: "3000",
-    trendsInChange: [10, 4, 2, 1, 5, 10, 15],
-  },
-  {
-    item: "Jalapenos",
-    previousSales: "1020",
-    day1: "10",
-    day2: "20",
-    today: "35",
-    predictedRequiredStaff: "60",
-    predictedCost: "3000",
-    trendsInChange: [10, 4, 2, 1, 5, 10, 15],
-  },
-  {
-    item: "Jalapenos",
-    previousSales: "1020",
-    day1: "10",
-    day2: "20",
-    today: "35",
-    predictedRequiredStaff: "60",
-    predictedCost: "3000",
-    trendsInChange: [10, 4, 2, 1, 5, 10, 15],
-  },
-];
-
 export const LossInKitchen = () => {
   const [selectedAnnual, setselectedAnnual] = useState(0);
   const [search, setSearch] = useState("");
-  const [lossInKitchen, setlossInKitchen] = useState(data);
+  const [lossInKitchen, setlossInKitchen] = useState([]);
   const device = useSelector((state) => state.system.device);
   const defaultLocation = useSelector(
     (state) => state.locations.defaultLocation
@@ -190,7 +67,6 @@ export const LossInKitchen = () => {
 
   const searchKeyword = (text) => {
     const keyword = text?.toLowerCase();
-    const realData = data;
 
     const finalData = lossInKitchenList.filter((item) =>
       item?.itemName?.toLowerCase()?.includes(keyword)

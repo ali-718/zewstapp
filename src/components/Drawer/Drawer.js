@@ -150,7 +150,7 @@ export const DrawerMenu = ({
             <Menu
               selected={index === 4}
               setselected={() => {
-                navigation.navigate("");
+                navigation.navigate("WastePrediction");
                 changeMenuIndex(4);
               }}
               image={wasteIcon}
@@ -347,7 +347,10 @@ export const DrawerMenuWithoutNames = ({
             />
             <Menu
               selected={index === 4}
-              setselected={() => navigation.navigate("")}
+              setselected={() => {
+                navigation.navigate("WastePrediction");
+                changeMenuIndex(4);
+              }}
               image={wasteIcon}
               name={"Waste Prediction"}
               noName

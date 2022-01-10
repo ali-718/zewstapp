@@ -54,6 +54,8 @@ import { StripePage } from "./containers/screens/MainScreens/AdminsPages/StripeP
 import { KitchenPage } from "./containers/screens/MainScreens/KitchenPages/KitchenPage";
 import { Text } from "./components/Text/Text";
 import { DailyFoodLogAdd } from "./containers/screens/MainScreens/DailyFoodLog/DailyFoodLogAdd";
+import { WasteItemList } from "./containers/screens/MainScreens/WasteScreens/WasteItemList";
+import { WasteItemDetail } from "./containers/screens/MainScreens/WasteScreens/WasteItemDetail";
 
 const Stack = createNativeStackNavigator();
 
@@ -177,6 +179,17 @@ const OrderRoutes = () => {
   );
 };
 
+const WasteRoutes = () => {
+  return (
+    <Stack.Navigator
+      screenOptions={{ headerShown: false, gestureEnabled: false }}
+    >
+      <Stack.Screen name="WasteList" component={WasteItemList} />
+      <Stack.Screen name="WasteItemDetail" component={WasteItemDetail} />
+    </Stack.Navigator>
+  );
+};
+
 const Drawer = createDrawerNavigator();
 
 const MainRoutes = () => {
@@ -215,7 +228,7 @@ const MainRoutes = () => {
         <Drawer.Screen name="Menu" component={MenuRoutes} />
         <Drawer.Screen name="Sales" component={InsightsPage} />
         <Drawer.Screen name="Recipe" component={RecipeRoutes} />
-        <Drawer.Screen name="Waste" component={RecipeListPage} />
+        <Drawer.Screen name="WastePrediction" component={WasteRoutes} />
         <Drawer.Screen name="Inventory" component={InventoryRoutes} />
         <Drawer.Screen name="Admin" component={AdminRoutes} />
         <Drawer.Screen name="Vendor" component={VendorRoutes} />

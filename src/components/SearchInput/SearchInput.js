@@ -1,11 +1,11 @@
 import React from "react";
 import { Input } from "../Inputs/Input";
-import { Feather  } from "@expo/vector-icons";
+import { Feather } from "@expo/vector-icons";
 import { useSelector } from "react-redux";
 import { grayBorderColor } from "../../theme/colors";
 
 export const SearchInput = ({ search, setSearch, searchKeyword, style }) => {
-  // const device = useSelector((state) => state.system.device);
+  const device = useSelector((state) => state.system.device);
   return (
     <Input
       placeholder={"Search..."}
@@ -27,8 +27,8 @@ export const SearchInput = ({ search, setSearch, searchKeyword, style }) => {
         marginBottom: 20,
         ...style,
       }}
-      iconStyle={{ fontSize: 26, marginTop: 10 }}
-      inputStyle={{ fontSize: 22 }}
+      iconStyle={{ fontSize: device === "tablet" ? 26 : 20, marginTop: 10 }}
+      inputStyle={{ fontSize: device === "tablet" ? 22 : 16 }}
     />
   );
 };

@@ -26,6 +26,8 @@ export const AdminOverviewBox = ({
   noTint,
   noLeftMargin,
   primary = null,
+  boxStyle,
+  rightTextStyle,
 }) => {
   const device = useSelector((state) => state.system.device);
 
@@ -40,6 +42,7 @@ export const AdminOverviewBox = ({
         alignItems: "center",
         borderBottomWidth: 1,
         borderBottomColor: borderColor2,
+        ...boxStyle,
       }}
       onPress={onPress}
       onLongPress={onLongPress}
@@ -68,12 +71,12 @@ export const AdminOverviewBox = ({
           style={
             recipe || inventory
               ? {
-                  fontSize: device === "tablet" ? 20 : 20,
+                  fontSize: 16,
                   fontFamily: "openSans_bold",
                   color: "black",
                 }
               : {
-                  fontSize: device === "tablet" ? 20 : 18,
+                  fontSize: 16,
                   fontFamily: "openSans_semiBold",
                   color: "black",
                 }
@@ -89,10 +92,12 @@ export const AdminOverviewBox = ({
                   fontSize: device === "tablet" ? 12 : 12,
                   fontFamily: "openSans_bold",
                   color: grayTextColor,
+                  marginTop: 5,
                 }
               : {
                   fontSize: device === "tablet" ? 12 : 12,
                   color: grayTextColor,
+                  marginTop: 5,
                 }
           }
         >
@@ -106,6 +111,7 @@ export const AdminOverviewBox = ({
             style={{
               fontSize: 14,
               color: grayTextColor,
+              ...rightTextStyle,
             }}
           >
             {rightText}
@@ -119,8 +125,8 @@ export const AdminOverviewBox = ({
         <Image
           source={rightIcon ?? forwardIcon}
           style={{
-            width: 15,
-            height: 15,
+            width: 10,
+            height: 10,
             resizeMode: "contain",
             marginLeft: 5,
             ...iconStyle,
