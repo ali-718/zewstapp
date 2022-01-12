@@ -33,6 +33,7 @@ export const Input = ({
   onPress,
   noInput,
   noPlaceHolder,
+  prefix,
   ...props
 }) => {
   const device = useSelector((state) => state.system.device);
@@ -183,39 +184,48 @@ export const Input = ({
               {...props}
             />
           ) : (
-            <TextInput
-              autoCorrect={false}
-              autoCapitalize={"words"}
-              selectionColor={primaryColor}
-              onBlur={() => {
-                if (value.length > 0) {
-                  return;
-                }
-                setIsFocused(false);
-              }}
-              ref={ref}
+            <View
               style={{
                 width: "100%",
-                fontSize: device === "tablet" ? 16 : 14,
-                ...inputStyle,
-                flex: 1,
+                flexDirection: "row",
+                alignItems: "center",
               }}
-              placeholder={isFocused ? "" : placeholder}
-              placeholderTextColor={"gray"}
-              onFocus={() => setIsFocused(true)}
-              value={value}
-              multiline={textarea}
-              onChangeText={(val) => {
-                OnTextChange(val);
-                if (val.length === 0) {
+            >
+              {prefix ? prefix : null}
+              <TextInput
+                autoCorrect={false}
+                autoCapitalize={"words"}
+                selectionColor={primaryColor}
+                onBlur={() => {
+                  if (value.length > 0) {
+                    return;
+                  }
                   setIsFocused(false);
-                  return;
-                }
-                setIsFocused(true);
-              }}
-              autoCapitalize={"none"}
-              {...props}
-            />
+                }}
+                ref={ref}
+                style={{
+                  width: "100%",
+                  fontSize: device === "tablet" ? 16 : 14,
+                  ...inputStyle,
+                  flex: 1,
+                }}
+                placeholder={isFocused ? "" : placeholder}
+                placeholderTextColor={"gray"}
+                onFocus={() => setIsFocused(true)}
+                value={value}
+                multiline={textarea}
+                onChangeText={(val) => {
+                  OnTextChange(val);
+                  if (val.length === 0) {
+                    setIsFocused(false);
+                    return;
+                  }
+                  setIsFocused(true);
+                }}
+                autoCapitalize={"none"}
+                {...props}
+              />
+            </View>
           )}
         </View>
         <TouchableOpacity

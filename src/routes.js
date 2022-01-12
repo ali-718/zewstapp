@@ -55,7 +55,8 @@ import { KitchenPage } from "./containers/screens/MainScreens/KitchenPages/Kitch
 import { Text } from "./components/Text/Text";
 import { DailyFoodLogAdd } from "./containers/screens/MainScreens/DailyFoodLog/DailyFoodLogAdd";
 import { WasteItemList } from "./containers/screens/MainScreens/WasteScreens/WasteItemList";
-import { WasteItemDetail } from "./containers/screens/MainScreens/WasteScreens/WasteItemDetail";
+import { WasteDetailPage } from "./containers/screens/MainScreens/WasteScreens/WasteItemDetail";
+import { WasteItemAddForUbf } from "./containers/screens/MainScreens/WasteScreens/WasteItemAddForUbf";
 
 const Stack = createNativeStackNavigator();
 
@@ -185,7 +186,8 @@ const WasteRoutes = () => {
       screenOptions={{ headerShown: false, gestureEnabled: false }}
     >
       <Stack.Screen name="WasteList" component={WasteItemList} />
-      <Stack.Screen name="WasteItemDetail" component={WasteItemDetail} />
+      <Stack.Screen name="WasteItemDetail" component={WasteDetailPage} />
+      <Stack.Screen name="WasteItemAddForUbf" component={WasteItemAddForUbf} />
     </Stack.Navigator>
   );
 };

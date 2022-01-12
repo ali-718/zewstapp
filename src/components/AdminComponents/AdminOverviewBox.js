@@ -74,35 +74,39 @@ export const AdminOverviewBox = ({
                   fontSize: 16,
                   fontFamily: "openSans_bold",
                   color: "black",
+                  marginBottom: name ? 0 : 10,
                 }
               : {
                   fontSize: 16,
                   fontFamily: "openSans_semiBold",
                   color: "black",
+                  marginBottom: name ? 0 : 10,
                 }
           }
         >
           {label}
         </Text>
-        <Text
-          numberOfLines={1}
-          style={
-            recipe || inventory
-              ? {
-                  fontSize: device === "tablet" ? 12 : 12,
-                  fontFamily: "openSans_bold",
-                  color: grayTextColor,
-                  marginTop: 5,
-                }
-              : {
-                  fontSize: device === "tablet" ? 12 : 12,
-                  color: grayTextColor,
-                  marginTop: 5,
-                }
-          }
-        >
-          {name}
-        </Text>
+        {name ? (
+          <Text
+            numberOfLines={1}
+            style={
+              recipe || inventory
+                ? {
+                    fontSize: device === "tablet" ? 12 : 12,
+                    fontFamily: "openSans_bold",
+                    color: grayTextColor,
+                    marginTop: 5,
+                  }
+                : {
+                    fontSize: device === "tablet" ? 12 : 12,
+                    color: grayTextColor,
+                    marginTop: 5,
+                  }
+            }
+          >
+            {name}
+          </Text>
+        ) : null}
       </View>
       <View style={{ flexDirection: "row", alignItems: "center" }}>
         {rightText ? (

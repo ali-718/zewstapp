@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { primaryColor, primaryShade1 } from "../../theme/colors";
 import { Text } from "../Text/Text";
 
-export const Chip = ({ text, selected }) => {
+export const Chip = ({ text, selected, style }) => {
   const device = useSelector((state) => state.system.device);
 
   return (
@@ -18,6 +18,8 @@ export const Chip = ({ text, selected }) => {
         alignItems: "center",
         justifyContent: "center",
         paddingVertical: 4,
+        alignSelf: "flex-start",
+        ...style,
       }}
     >
       <Text
