@@ -21,6 +21,9 @@ import { initStripe } from "@stripe/stripe-react-native";
 import { STRIPE_PUBLISH_KEY } from "./src/helpers/utlils";
 import "intl";
 import "intl/locale-data/jsonp/en";
+import { QueryClient, QueryClientProvider, useQuery } from "react-query";
+
+const queryClient = new QueryClient();
 
 const theme = extendTheme({
   colors: {
@@ -74,12 +77,14 @@ const App = () => {
   if (!didLoad) return <View />;
   return (
     <Provider store={store}>
-      <NativeBaseProvider theme={theme}>
-        <ApplicationProvider {...eva} theme={eva.light}>
-          <Routes />
-        </ApplicationProvider>
-        <Toast ref={(ref) => Toast.setRef(ref)} />
-      </NativeBaseProvider>
+      <QueryClientProvider client={queryClient}>
+        <NativeBaseProvider theme={theme}>
+          <ApplicationProvider {...eva} theme={eva.light}>
+            <Routes />
+          </ApplicationProvider>
+          <Toast ref={(ref) => Toast.setRef(ref)} />
+        </NativeBaseProvider>
+      </QueryClientProvider>
     </Provider>
   );
 };
