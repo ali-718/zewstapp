@@ -14,7 +14,7 @@ import { RegularButton } from "../../../../components/Buttons/RegularButton";
 import { DonateToUbfAction } from "../../../../Redux/actions/WasteActions/WasteActions";
 import { useNavigation } from "@react-navigation/native";
 
-export const WasteItemAddForUbf = ({ ...props }) => {
+export const WasteItemAddForDiscount = ({ ...props }) => {
   const {
     recipeTitle: name,
     recipeCategory,
@@ -51,7 +51,7 @@ export const WasteItemAddForUbf = ({ ...props }) => {
 
   return (
     <MainScreenContainer onPressRight={() => setdeleteModal(true)}>
-      <HeadingBox heading={"Sell leftover to UBF"} />
+      <HeadingBox heading={"Sell leftover food with discount"} />
 
       <View
         style={{
@@ -122,18 +122,7 @@ export const WasteItemAddForUbf = ({ ...props }) => {
                 fontFamily: "openSans_semiBold",
               }}
             >
-              Price
-            </Text>
-
-            <Text
-              style={{
-                fontSize: device === "tablet" ? 16 : 12,
-                fontFamily: "openSans_semiBold",
-                marginTop: 15,
-                color: "#4D4D4D",
-              }}
-            >
-              Set a price to sell to UBF
+              Discount
             </Text>
 
             <View
@@ -154,7 +143,7 @@ export const WasteItemAddForUbf = ({ ...props }) => {
                   />
                 }
                 editable={false}
-                placeholder={"Meal Price"}
+                placeholder={"Initial Price"}
                 value={`${totalUnitCost}`}
                 setValue={(val) => null}
                 style={{
@@ -174,7 +163,7 @@ export const WasteItemAddForUbf = ({ ...props }) => {
                 }
                 keyboardType={"numeric"}
                 editable={true}
-                placeholder={"Sell Price"}
+                placeholder={"Discount Price"}
                 value={sellPrice}
                 setValue={(val) => setsellPrice(val)}
                 style={{
@@ -198,17 +187,6 @@ export const WasteItemAddForUbf = ({ ...props }) => {
               }}
             >
               When
-            </Text>
-
-            <Text
-              style={{
-                fontSize: device === "tablet" ? 16 : 12,
-                fontFamily: "openSans_semiBold",
-                marginTop: 15,
-                color: "#4D4D4D",
-              }}
-            >
-              Choose when the meal will be ready for pick-up
             </Text>
 
             <View
@@ -241,17 +219,6 @@ export const WasteItemAddForUbf = ({ ...props }) => {
               }}
             >
               Time Availability
-            </Text>
-
-            <Text
-              style={{
-                fontSize: device === "tablet" ? 16 : 12,
-                fontFamily: "openSans_semiBold",
-                marginTop: 15,
-                color: "#4D4D4D",
-              }}
-            >
-              Choose the time when the meal would be ready for pick-up
             </Text>
 
             <View
@@ -298,7 +265,7 @@ export const WasteItemAddForUbf = ({ ...props }) => {
           <RegularButton
             isLoading={isLoading}
             onPress={donate}
-            text={"Save"}
+            text={"Sell with discount"}
             style={{ marginTop: 30 }}
           />
         </View>

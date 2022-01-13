@@ -57,6 +57,7 @@ import { DailyFoodLogAdd } from "./containers/screens/MainScreens/DailyFoodLog/D
 import { WasteItemList } from "./containers/screens/MainScreens/WasteScreens/WasteItemList";
 import { WasteDetailPage } from "./containers/screens/MainScreens/WasteScreens/WasteItemDetail";
 import { WasteItemAddForUbf } from "./containers/screens/MainScreens/WasteScreens/WasteItemAddForUbf";
+import { WasteItemAddForDiscount } from "./containers/screens/MainScreens/WasteScreens/WasteItemAddForDiscount";
 
 const Stack = createNativeStackNavigator();
 
@@ -188,6 +189,10 @@ const WasteRoutes = () => {
       <Stack.Screen name="WasteList" component={WasteItemList} />
       <Stack.Screen name="WasteItemDetail" component={WasteDetailPage} />
       <Stack.Screen name="WasteItemAddForUbf" component={WasteItemAddForUbf} />
+      <Stack.Screen
+        name="WasteItemAddForDiscount"
+        component={WasteItemAddForDiscount}
+      />
     </Stack.Navigator>
   );
 };

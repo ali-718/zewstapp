@@ -69,8 +69,6 @@ export const WasteItemList = () => {
             />
           </View>
 
-          {console.log(filteredItem)}
-
           {filteredItem.map((item, i) => (
             <AdminOverviewBox
               boxStyle={{ marginTop: 10 }}
@@ -83,7 +81,7 @@ export const WasteItemList = () => {
               }}
               onPress={() =>
                 navigation.navigate("WasteItemDetail", {
-                  data: item?.mealRecipes[0],
+                  data: { ...item?.mealRecipes[0], mealId: item?.mealId },
                 })
               }
             />

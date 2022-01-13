@@ -368,7 +368,11 @@ export const WasteDetailPage = ({ isTab, data, ...props }) => {
           />
           <RegularButton
             text={"Sell with discount"}
-            onPress={() => setdeleteModal(true)}
+            onPress={() =>
+              navigation.navigate("WasteItemAddForDiscount", {
+                data: props?.route?.params?.data,
+              })
+            }
             textStyle={{ color: primaryColor }}
             colors={["white", "white"]}
             style={{
