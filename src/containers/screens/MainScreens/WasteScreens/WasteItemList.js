@@ -23,10 +23,10 @@ export const WasteItemList = () => {
 
   useEffect(() => {
     if (!isScreenFocused) return;
-    // defaultLocation?.locationId
+    //       locationId: "8985da3c-2077-4b3b-8470-c4d3271c9a51",
     setIsLoading(true);
     fetchExpiredMeals({
-      locationId: "8985da3c-2077-4b3b-8470-c4d3271c9a51",
+      locationId: defaultLocation?.locationId,
     }).then((res) => {
       setIsLoading(false);
       setFiltereditem(res);

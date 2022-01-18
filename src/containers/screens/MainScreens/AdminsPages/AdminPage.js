@@ -7,6 +7,7 @@ import locationIcon from "../../../../assets/images/locationIcon.png";
 import taxIcon from "../../../../assets/images/taxIcon.png";
 import multiplePeopleIcon from "../../../../assets/images/multiplePeopleIcon.png";
 import bankIcon from "../../../../assets/images/bankIcon.png";
+import readerIcon from "../../../../assets/images/reader-image-small.png";
 import { AdminOverviewBox } from "../../../../components/AdminComponents/AdminOverviewBox";
 import { useNavigation } from "@react-navigation/native";
 import { useSelector } from "react-redux";
@@ -131,6 +132,15 @@ export const AdminPage = () => {
                 name={"Stripe"}
                 image={bankIcon}
                 onPress={() => navigation.navigate("bankPage")}
+              />
+            </View>
+            <View style={{ width: "100%", marginTop: 10 }}>
+              <AdminOverviewBox
+                noTint
+                label={"Stripe Reader"}
+                name={"Stripe"}
+                image={readerIcon}
+                onPress={() => navigation.navigate("stripeReaders")}
               />
             </View>
 
