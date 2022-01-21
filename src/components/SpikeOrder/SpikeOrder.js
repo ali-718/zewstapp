@@ -1,7 +1,10 @@
-import React from "react";
-import { View } from "react-native";
+import React, { useRef, useState } from "react";
+import { View, TouchableOpacity } from "react-native";
 import { kitchenMenuColor } from "../../theme/colors";
 import { Text } from "../Text/Text";
+import { captureRef } from "react-native-view-shot";
+import { RegularButton } from "../Buttons/RegularButton";
+import * as Sharing from "expo-sharing";
 
 export const SpikeOrder = ({ data }) => {
   const {
@@ -16,8 +19,18 @@ export const SpikeOrder = ({ data }) => {
     orderType = "",
   } = data;
 
+  const ref = useRef();
+  const [isPrint, setIsPrint] = useState(false);
+
+  const print = () => {
+    captureRef(ref, { quality: 1 }).then((res) => {
+      Sharing.shareAsync(res);
+    });
+  };
+
   return (
-    <View
+    <TouchableOpacity
+      ref={ref}
       style={{
         backgroundColor: kitchenMenuColor,
         borderColor: "#D8D8D8",
@@ -26,6 +39,7 @@ export const SpikeOrder = ({ data }) => {
         width: "32%",
         padding: 15,
       }}
+      onPress={() => setIsPrint(!isPrint)}
     >
       <Text style={{ color: "black" }}>{timestamp}</Text>
       {/* <Text style={{ color: "black" }}>Served By: Sara</Text> */}
@@ -71,6 +85,16 @@ export const SpikeOrder = ({ data }) => {
           <Text style={{ color: "black" }}>-{price}</Text>
         </View>
       </View>
-    </View>
+
+      {isPrint ? (
+        <RegularButton
+          onPress={print}
+          white
+          text={"Print"}
+          style={{ borderColor: "black", marginTop: 20 }}
+          textStyle={{ color: "black" }}
+        />
+      ) : null}
+    </TouchableOpacity>
   );
 };

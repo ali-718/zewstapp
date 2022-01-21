@@ -134,7 +134,7 @@ export const AdminPage = () => {
                 onPress={() => navigation.navigate("bankPage")}
               />
             </View>
-            <View style={{ width: "100%", marginTop: 10 }}>
+            {/* <View style={{ width: "100%", marginTop: 10 }}>
               <AdminOverviewBox
                 noTint
                 label={"Stripe Reader"}
@@ -142,7 +142,7 @@ export const AdminPage = () => {
                 image={readerIcon}
                 onPress={() => navigation.navigate("stripeReaders")}
               />
-            </View>
+            </View> */}
 
             {/* <View
                   style={{ width: "100%", marginTop: 20, marginBottom: 20 }}
