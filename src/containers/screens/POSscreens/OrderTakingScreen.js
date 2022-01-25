@@ -37,6 +37,7 @@ import moment from "moment";
 import validator from "validator";
 import { useStripe } from "@stripe/stripe-react-native";
 import { MaterialIcons } from "@expo/vector-icons";
+import { StripeModal } from "../../../components/StripeModal/StripeModal";
 
 const CategoryComponent = ({ width, name, onPress }) => {
   const [color, setColor] = useState("");
@@ -123,6 +124,7 @@ export const OrderTakingScreen = (props) => {
   const inputRef = useRef();
   const navigation = useNavigation();
   const isScreenFocused = useIsFocused();
+  const [showTerminal, setShowTerminal] = useState(false);
   const device = useSelector((state) => state.system.device);
   const user = useSelector((state) => state.auth.user.user);
   const defaultLocation = useSelector(
@@ -1172,11 +1174,20 @@ export const OrderTakingScreen = (props) => {
                         ) : charge ? (
                           <View style={{ display: "flex", width: "100%" }}>
                             <RegularButton
+                              style={{
+                                borderWidth: 1,
+                                borderColor: primaryColor,
+                              }}
+                              onPress={() => setShowTerminal(true)}
+                              text={`Send to terminal`}
+                            />
+                            <RegularButton
                               isLoading={createOrderLoading}
                               colors={["white", "white"]}
                               style={{
                                 borderWidth: 1,
                                 borderColor: primaryColor,
+                                marginTop: 10,
                               }}
                               textStyle={{ color: primaryColor }}
                               onPress={ProcessPayment}
@@ -1271,6 +1282,35 @@ export const OrderTakingScreen = (props) => {
             </Text>
           </View>
         )}
+        {console.log(reservedOrder?.catalog)}
+        <StripeModal
+          list={
+            reservedOrder?.catalog
+              ? [
+                  // ...orderList.map((item) => ({
+                  //   quantity: item.selected,
+                  //   description: item.mealName,
+                  //   amount: item.totalPrice?.toFixed(2),
+                  // })),
+                  ...reservedOrder?.catalog?.map((item) => ({
+                    quantity: item.quantity,
+                    description: item.mealName,
+                    amount: (item.mealPrice * item.quantity).toFixed(2),
+                  })),
+                ]
+              : []
+          }
+          visible={showTerminal}
+          handleClose={() => setShowTerminal(false)}
+          amount={
+            isReserved
+              ? (totalPrice + reservedTotalPrice).toFixed(2)
+              : totalPrice.toFixed(2)
+          }
+          orderId={isReserved ? reservedOrder?.orderId : orderId}
+          clientId={user?.clientId}
+          locationId={defaultLocation.locationId}
+        />
       </MainScreenContainer>
     );
   }

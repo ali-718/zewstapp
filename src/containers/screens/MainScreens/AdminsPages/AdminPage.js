@@ -17,6 +17,7 @@ import { ConnectSquareModal } from "../../../../components/ConnectSquareModal/Co
 import { ToastError, ToastSuccess } from "../../../../helpers/Toast";
 import { connectWithSquare } from "../../../../Redux/actions/AuthActions/authActions";
 import { HeadingBox } from "../../../../components/HeadingBox/HeadingBox";
+import { StripeModal } from "../../../../components/StripeModal/StripeModal";
 
 export const AdminPage = () => {
   const navigation = useNavigation();
