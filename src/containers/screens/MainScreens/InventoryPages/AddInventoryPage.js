@@ -25,7 +25,7 @@ import { RegularButton } from "../../../../components/Buttons/RegularButton";
 import { inventoryCategory } from "../../../../helpers/utlils";
 import { DateTimeSelector } from "../../../../components/DateTimeSelector/DateTimeSelector";
 import moment from "moment";
-import { FontAwesome  } from "@expo/vector-icons";
+import { FontAwesome } from "@expo/vector-icons";
 
 export const AddInventoryPage = (props) => {
   const navigation = useNavigation();
@@ -47,17 +47,21 @@ export const AddInventoryPage = (props) => {
 
   const [itemName, setItemName] = useState("");
   const [brand, setBrand] = useState("");
+  const [threshold, setThreshold] = useState("");
   const [quantity, setQuantity] = useState("");
   const [unit, setUnit] = useState("");
-  const [dateOfPurchase, setDateOfPurchase] = useState(moment(new Date()).format("YYYY-MM-DD"));
-  const [dateOfExpiry, setDateOfExpiry] = useState(moment(new Date()).format("YYYY-MM-DD"));
+  const [dateOfPurchase, setDateOfPurchase] = useState(
+    moment(new Date()).format("YYYY-MM-DD")
+  );
+  const [dateOfExpiry, setDateOfExpiry] = useState(
+    moment(new Date()).format("YYYY-MM-DD")
+  );
   const [color, setColor] = useState({});
   const [notes, setNotes] = useState("");
   const [imageUri, setImageUri] = useState([]);
   const [image64, setImage64] = useState([]);
   const [photoModal, setPhotoModal] = useState(false);
   const [costPerUnit, setCostPerUnit] = useState("");
-  const [threshold, setThreshold] = useState("");
   const [category, setcategory] = useState("");
   const [availablity, setAvailablity] = useState({});
   const [isEdit, setIsEdit] = useState(false);
@@ -87,19 +91,19 @@ export const AddInventoryPage = (props) => {
     if (data) {
       const {
         itemName = "",
-        brand,
-        quantity,
-        units: unit,
-        purchaseDate: dateOfPurchase,
-        expiryDate: dateOfExpiry,
-        color,
-        costPerUnit,
-        threshold,
-        category,
-        photos,
-        notes,
-        availability,
-        vendor,
+        brand = "",
+        quantity = "",
+        units: unit = "",
+        purchaseDate: dateOfPurchase = "",
+        expiryDate: dateOfExpiry = "",
+        color = "",
+        costPerUnit = "",
+        threshold = "",
+        category = "",
+        photos = "",
+        notes = "",
+        availability = "",
+        vendor = "",
       } = props?.route?.params?.data;
 
       setImageUri(photos);
@@ -141,6 +145,7 @@ export const AddInventoryPage = (props) => {
       dateOfPurchase.trim().length === 0 ||
       costPerUnit.trim().length === 0 ||
       category.trim().length === 0 ||
+      threshold.trim().length === 0 ||
       !availablity.value ||
       !selectedVendor.name
     ) {
@@ -170,6 +175,7 @@ export const AddInventoryPage = (props) => {
         availability: availablity.value,
         vendor: selectedVendor,
         inventoryId: props?.route?.params?.data?.inventoryId,
+        threshold,
       };
 
       dispatch(actions.updateInventoryAction(data));
@@ -192,6 +198,7 @@ export const AddInventoryPage = (props) => {
       navigation,
       availability: availablity.value,
       vendor: selectedVendor,
+      threshold,
     };
     dispatch(actions.addInventoryAction(data));
   };
@@ -494,6 +501,19 @@ export const AddInventoryPage = (props) => {
                 placeholder={"Availibility"}
                 menus={inventoryAvailibility.map((item) => item.name)}
                 style={{ zIndex: 10 }}
+              />
+            </View>
+            <View style={{ width: "100%", marginTop: 10 }}>
+              <Input
+                placeholder={"Minimum quantity threshold"}
+                value={threshold}
+                setValue={(val) => setThreshold(val)}
+                style={{
+                  marginTop: 10,
+                  borderRadius: 0,
+                  width: "100%",
+                }}
+                keyboardType={"number-pad"}
               />
             </View>
           </View>

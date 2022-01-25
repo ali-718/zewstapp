@@ -1287,11 +1287,11 @@ export const OrderTakingScreen = (props) => {
           list={
             reservedOrder?.catalog
               ? [
-                  // ...orderList.map((item) => ({
-                  //   quantity: item.selected,
-                  //   description: item.mealName,
-                  //   amount: item.totalPrice?.toFixed(2),
-                  // })),
+                  ...orderList?.map((item) => ({
+                    quantity: item.selected,
+                    description: item.mealName,
+                    amount: item.totalPrice?.toFixed(2),
+                  })),
                   ...reservedOrder?.catalog?.map((item) => ({
                     quantity: item.quantity,
                     description: item.mealName,

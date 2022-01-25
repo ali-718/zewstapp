@@ -58,6 +58,7 @@ export const addInventoryAction =
     navigation,
     availability,
     vendor,
+    threshold,
   }) =>
   (dispatch) => {
     dispatch({ type: ADD_INVENTORY.REQUESTED });
@@ -78,6 +79,7 @@ export const addInventoryAction =
         itemName,
         availability,
         vendor,
+        threshold,
       })
       .then(() => {
         dispatch({ type: ADD_INVENTORY.SUCCEEDED });
@@ -108,6 +110,7 @@ export const updateInventoryAction =
     availability,
     vendor,
     inventoryId,
+    threshold,
   }) =>
   (dispatch) => {
     dispatch({ type: ADD_INVENTORY.REQUESTED });
@@ -129,6 +132,7 @@ export const updateInventoryAction =
         itemName,
         availability,
         vendor,
+        threshold,
       })
       .then(() => {
         dispatch({ type: ADD_INVENTORY.SUCCEEDED });
