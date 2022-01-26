@@ -126,7 +126,7 @@ export const mealReducer = produce(
           state.hotel.hotels[0].locations[index] = {
             ...state.hotel.hotels[0].locations[index],
             meal: {
-              ...state.hotel.hotels[0].locations[index].meal,
+              ...state.hotel.hotels[0].locations[index]?.meal,
               isLoading: true,
               isError: false,
             },
@@ -149,7 +149,7 @@ export const mealReducer = produce(
           state.hotel.hotels[0].locations[index] = {
             ...state.hotel.hotels[0].locations[index],
             meal: {
-              ...state.hotel.hotels[0].locations[index].meal,
+              ...state.hotel.hotels[0].locations[index]?.meal,
               isLoading: false,
               isError: false,
               meals: payload.meals,

@@ -1230,7 +1230,7 @@ export const OrderTakingScreen = (props) => {
                             <RegularButton
                               isLoading={orderLoading}
                               onPress={createOrder}
-                              text={"Sent"}
+                              text={"Sent to kitchen"}
                               disabled={isSuccess}
                             />
                             <RegularButton

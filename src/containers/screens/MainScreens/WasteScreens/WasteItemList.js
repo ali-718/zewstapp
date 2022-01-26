@@ -8,6 +8,7 @@ import { SearchInput } from "../../../../components/SearchInput/SearchInput";
 import { MainScreenContainer } from "../../../MainScreenContainers";
 import { LoadingPage } from "../../../../components/LoadingPage/LoadingPage";
 import { fetchExpiredMeals } from "../../../../Redux/actions/WasteActions/WasteActions";
+import moment from "moment";
 
 export const WasteItemList = () => {
   const navigation = useNavigation();
@@ -31,6 +32,7 @@ export const WasteItemList = () => {
       setIsLoading(false);
       setFiltereditem(res);
       setAllData(res);
+      console.log(res);
     });
   }, [isScreenFocused]);
 
@@ -45,7 +47,7 @@ export const WasteItemList = () => {
   };
 
   return (
-    <MainScreenContainer isDrawer>
+    <MainScreenContainer shortDrawer isDrawer>
       <HeadingBox noBack heading={"Waste Prediction"} />
 
       {isLoading ? (
@@ -71,6 +73,9 @@ export const WasteItemList = () => {
 
           {filteredItem.map((item, i) => (
             <AdminOverviewBox
+              name={`Expire date: ${moment(
+                item?.expiredIngredients[0]?.expiryDate
+              ).format("DD.M.yyy")}`}
               boxStyle={{ marginTop: 10 }}
               label={item?.mealName}
               rightText={device === "tablet" ? "Reccomended recipes" : ""}

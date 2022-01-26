@@ -54,10 +54,10 @@ export const FoodDetailPage = ({
     mealCategory,
     mealAllergens,
     mealAddons,
-    orderedNumber = "",
+    orderedNumber = "0",
     taxPrice: priceWithtax = "",
     profitPrice = "",
-    ratings = "",
+    ratings = "0",
   } = isTab ? data : props.route.params.item;
 
   console.log(props.route.params.item);
@@ -312,7 +312,7 @@ export const FoodDetailPage = ({
                 </View>
               </View>
             )}
-            <View
+            {/* <View
               style={{
                 width: "100%",
                 flexDirection: device === "tablet" ? "row" : "column",
@@ -545,7 +545,7 @@ export const FoodDetailPage = ({
                   )}
                 </View>
               </View>
-            </View>
+            </View> */}
           </View>
         </View>
       </View>

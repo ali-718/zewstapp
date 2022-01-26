@@ -82,6 +82,7 @@ import {
   YAxis,
   BarChart,
   PieChart,
+  XAxis,
 } from "react-native-svg-charts";
 import { Icon, Progress, Select, ArrowDownIcon, Spinner } from "native-base";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -376,6 +377,8 @@ export const HomePage = ({ setselected }) => {
     sales: forecastedSales,
     actualSale: forecastedActualSales,
     interval: forecastedInterval,
+    startDate: forecastedStartDate,
+    endDate: forecastedEndDate,
   } = useSelector((state) => state.dashboard.forecastedSales);
 
   const defaultLocation = useSelector(
@@ -384,10 +387,14 @@ export const HomePage = ({ setselected }) => {
   const [costByCategoryListData, setCostByCategoryListData] = useState([]);
   const [data1, setData1] = useState([0]);
   const [data2, setData2] = useState([0]);
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
 
   useEffect(() => {
     setData1([0, forecastedSales]);
     setData2([0, forecastedActualSales]);
+    setStartDate(forecastedStartDate);
+    setEndDate(forecastedEndDate);
   }, [forecastedSales, forecastedActualSales]);
 
   const barData = [
@@ -958,10 +965,33 @@ export const HomePage = ({ setselected }) => {
                         data={barData}
                         yAccessor={({ item }) => item.value}
                         xAccessor={({ item }) => item.value}
-                        spacingInner={0.8}
+                        spacingInner={0.9}
                         contentInset={{ top: 20, bottom: 20 }}
                       ></BarChart>
                     </View>
+
+                    {forecastedActualSales > 0 || forecastedSales > 0 ? (
+                      <View
+                        style={{
+                          width: "100%",
+                          alignItems: "flex-end",
+                          justifyContent: "flex-end",
+                          marginTop: -10,
+                        }}
+                      >
+                        <Text style={{ color: "#92929D", fontSize: 12 }}>
+                          {startDate}
+                        </Text>
+                      </View>
+                    ) : null}
+                    {/* <XAxis
+                      data={[...startDate, ...endDate]}
+                      style={{ margin: 20 }}
+                      formatLabel={(value, index) => value}
+                      contentInset={{ left: 10, right: 10 }}
+                      // contentInset={{ top: 20, bottom: 20 }}
+                      svg={{ fontSize: 10, fill: "grey" }}
+                    /> */}
                   </View>
                 )}
 
@@ -1093,7 +1123,7 @@ export const HomePage = ({ setselected }) => {
                           fontFamily: "openSans_semiBold",
                         }}
                       >
-                        Total this month: $6.540
+                        Total this month: $0
                       </Text>
                     </View>
 
@@ -1103,7 +1133,7 @@ export const HomePage = ({ setselected }) => {
                     />
                   </View>
 
-                  <View
+                  {/* <View
                     style={{
                       flexDirection: "row",
                       alignItems: "center",
@@ -1137,7 +1167,7 @@ export const HomePage = ({ setselected }) => {
                     >
                       +2.5%
                     </Text>
-                  </View>
+                  </View> */}
 
                   <View
                     style={{
@@ -1215,7 +1245,8 @@ export const HomePage = ({ setselected }) => {
                       />
                       <LineChart
                         style={{ height: 200, flex: 1 }}
-                        data={lineChartData}
+                        data={[]}
+                        // data={lineChartData}
                         svg={{
                           strokeWidth: 5,
                         }}
@@ -1488,7 +1519,7 @@ export const HomePage = ({ setselected }) => {
                                 marginLeft: 50,
                               }}
                             >
-                              {item.value}%
+                              {item.value}$
                             </Text>
                           </View>
                         )}

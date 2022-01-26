@@ -69,12 +69,7 @@ export const InventoryListPage = () => {
   };
 
   return (
-    <MainScreenContainer
-      onPressRight={() => null}
-      leftImage={""}
-      rightImage={""}
-      title={""}
-    >
+    <MainScreenContainer isDrawer shortDrawer>
       <HeadingBox heading={"Inventory"} noBack />
       {isLoading ? (
         <LoadingPage />

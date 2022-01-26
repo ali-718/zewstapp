@@ -34,6 +34,8 @@ const initialState = {
     sales: 0,
     actualSale: 0,
     interval: "month",
+    startDate: "",
+    endDate: "",
   },
   priceFluctuation: {
     isLoading: false,
@@ -73,6 +75,8 @@ export const dashboardReducer = produce(
         state.forecastedSales.revenue = payload.forecast?.revenue;
         state.forecastedSales.sales = payload.forecast?.sales;
         state.forecastedSales.interval = payload.interval;
+        state.forecastedSales.startDate = payload.startDate;
+        state.forecastedSales.endDate = payload.endDate;
         break;
       }
       case FORECASTED_SALES.FAILED: {

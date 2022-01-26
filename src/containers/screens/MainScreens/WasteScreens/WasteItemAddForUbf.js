@@ -264,6 +264,7 @@ export const WasteItemAddForUbf = ({ ...props }) => {
               }}
             >
               <Input
+                noInput
                 onPress={() => setShowFromTime(true)}
                 editable={false}
                 placeholder={"From"}
@@ -277,6 +278,7 @@ export const WasteItemAddForUbf = ({ ...props }) => {
                 }}
               />
               <Input
+                noInput
                 onPress={() => setShowToTime(true)}
                 editable={false}
                 keyboardType={"numeric"}

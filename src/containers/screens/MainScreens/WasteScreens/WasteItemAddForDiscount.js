@@ -231,11 +231,11 @@ export const WasteItemAddForDiscount = ({ ...props }) => {
               }}
             >
               <Input
+                noInput
                 onPress={() => setShowFromTime(true)}
                 editable={false}
                 placeholder={"From"}
                 value={`${moment(from).format("hh:mm")}`}
-                setValue={(val) => null}
                 style={{
                   width: device === "tablet" ? "45%" : "100%",
                   borderColor: "#ECECF2",
@@ -244,13 +244,12 @@ export const WasteItemAddForDiscount = ({ ...props }) => {
                 }}
               />
               <Input
+                noInput
+                editable={false}
                 onPress={() => setShowToTime(true)}
                 editable={false}
-                keyboardType={"numeric"}
-                editable={true}
                 placeholder={"To"}
                 value={`${moment(to).format("hh:mm")}`}
-                setValue={(val) => null}
                 style={{
                   width: device === "tablet" ? "45%" : "100%",
                   borderColor: "#ECECF2",

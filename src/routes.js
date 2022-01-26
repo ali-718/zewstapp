@@ -58,7 +58,6 @@ import { WasteItemList } from "./containers/screens/MainScreens/WasteScreens/Was
 import { WasteDetailPage } from "./containers/screens/MainScreens/WasteScreens/WasteItemDetail";
 import { WasteItemAddForUbf } from "./containers/screens/MainScreens/WasteScreens/WasteItemAddForUbf";
 import { WasteItemAddForDiscount } from "./containers/screens/MainScreens/WasteScreens/WasteItemAddForDiscount";
-import { StripeReaders } from "./containers/screens/MainScreens/AdminsPages/StripeReaders";
 
 const Stack = createNativeStackNavigator();
 
@@ -163,7 +162,6 @@ const AdminRoutes = () => {
       <Stack.Screen name="bankDetails" component={BankDetailsPage} />
       <Stack.Screen name="changePass" component={ChangePasswordPage} />
       <Stack.Screen name="stripe" component={StripePage} />
-      <Stack.Screen name="stripeReaders" component={StripeReaders} />
       <Stack.Screen
         name="ResetPasswordVerification"
         component={ResetPasswordVerification}

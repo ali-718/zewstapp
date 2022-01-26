@@ -277,7 +277,9 @@ export const MenuPage = () => {
                                 borderRadius: 10,
                                 borderBottomLeftRadius: 0,
                                 borderBottomRightRadius: 0,
-                                marginLeft: 20,
+                                paddingLeft: 20,
+                                backgroundColor:
+                                  i % 2 === 1 ? chartHeaderColor : "white",
                               }}
                             >
                               <View

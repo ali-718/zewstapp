@@ -62,12 +62,7 @@ export const RecipeListPage = () => {
   };
 
   return (
-    <MainScreenContainer
-      onPressRight={() => null}
-      leftImage={""}
-      rightImage={""}
-      title={"Recipe Engineering"}
-    >
+    <MainScreenContainer isDrawer shortDrawer>
       <HeadingBox noBack heading={"Recipe Engineering"} />
       {isLoading ? (
         <LoadingPage />

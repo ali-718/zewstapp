@@ -49,15 +49,20 @@ export const getAllMeals =
   (dispatch) => {
     dispatch({ type: GET_MEALS.REQUESTED, payload: { id } });
 
+    console.log("id", id);
     client
+      // .get(`/meal/manual/findAll/2682c0fd-ae47-461c-b022-2c02452fb548`)
       .get(`/meal/manual/findAll/${id}`)
       .then((data) => {
+        console.log(data?.data);
         dispatch({
           type: GET_MEALS.SUCCEEDED,
           payload: { meals: data.data?.meals?.Items, id },
         });
       })
       .catch((e) => {
+        ToastError(e.response.data.message);
+        console.log(e.response);
         dispatch({ type: GET_MEALS.FAILED, payload: { id } });
       });
   };

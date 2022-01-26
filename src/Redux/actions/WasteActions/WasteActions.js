@@ -3,12 +3,15 @@ import { client } from "../client";
 
 export const fetchExpiredMeals = ({ locationId }) =>
   new Promise((resolve, reject) => {
+    console.log(locationId);
     client
       .get(`/waste-prediction/findAll/${locationId}`)
       .then((data) => {
-        resolve(data.data?.meals);
+        resolve(data.data.meals);
+        console.log(data.data);
       })
       .catch((e) => {
+        console.log(e.response.data);
         reject(e.response.data);
         ToastError("Unable to fetch data please try again later");
       });
