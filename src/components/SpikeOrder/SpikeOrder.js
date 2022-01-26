@@ -1,10 +1,28 @@
-import React, { useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { View, TouchableOpacity } from "react-native";
 import { kitchenMenuColor } from "../../theme/colors";
 import { Text } from "../Text/Text";
 import { captureRef } from "react-native-view-shot";
 import { RegularButton } from "../Buttons/RegularButton";
 import * as Sharing from "expo-sharing";
+import forwardIcon from "../../assets/images/forwardIcon.png";
+import * as Print from "expo-print";
+
+const html = `
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+  </head>
+  <body style="text-align: center;">
+    <h1 style="font-size: 50px; font-family: Helvetica Neue; font-weight: normal;">
+      Hello Expo!
+    </h1>
+    <img
+      src="https://d30j33t1r58ioz.cloudfront.net/static/guides/sdk.png"
+      style="width: 90vw;" />
+  </body>
+</html>
+`;
 
 export const SpikeOrder = ({ data }) => {
   const {
@@ -20,12 +38,44 @@ export const SpikeOrder = ({ data }) => {
   } = data;
 
   const ref = useRef();
-  const [isPrint, setIsPrint] = useState(false);
+  const [isPrint, setIsPrint] = useStateCallback(false);
+
+  function useStateCallback(initialState) {
+    const [state, setState] = useState(initialState);
+    const cbRef = useRef(null); // init mutable ref container for callbacks
+
+    const setStateCallback = useCallback((state, cb) => {
+      cbRef.current = cb; // store current, passed callback in ref
+      setState(state);
+    }, []); // keep object reference stable, exactly like `useState`
+
+    useEffect(() => {
+      // cb.current is `null` on initial render,
+      // so we only invoke callback on state *updates*
+      if (cbRef.current) {
+        cbRef.current(state);
+        cbRef.current = null; // reset callback after execution
+      }
+    }, [state]);
+
+    return [state, setStateCallback];
+  }
 
   const print = () => {
-    captureRef(ref, { quality: 1 }).then((res) => {
-      Sharing.shareAsync(res);
-    });
+    setIsPrint(
+      () => false,
+      () => {
+        captureRef(ref, { quality: 1, format: "png", result: "base64" }).then(
+          (res) => {
+            Print.printAsync({
+              html: `<img
+            src="data:image/jpeg;base64,${res}"
+              style="width:100%;height:100%" />`,
+            });
+          }
+        );
+      }
+    );
   };
 
   return (
