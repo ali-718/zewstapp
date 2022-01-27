@@ -94,7 +94,7 @@ export const AdminPage = () => {
             <View style={{ width: "100%", marginTop: 10 }}>
               <AdminOverviewBox
                 label={"Profile"}
-                name={item.owner}
+                name={user.owner_name}
                 image={personGrayIcon}
                 onPress={() => navigation.navigate("profile", { data: item })}
               />

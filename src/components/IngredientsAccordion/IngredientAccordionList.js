@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, TouchableOpacity, Image } from "react-native";
+import { View, TouchableOpacity, Image, FlatList } from "react-native";
 import { borderColor2, grayMenuText, primaryColor } from "../../theme/colors";
 import deleteIcon from "../../assets/images/deleteIcon.png";
 import arrowDownIcon from "../../assets/images/arrowDownIcon.png";
@@ -161,6 +161,7 @@ export const IngredientAccordionList = ({
                   (_, i) => i + 1
                 )}
                 style={{ zIndex: i + 2, flex: 1 }}
+                invetoryItems
               />
             )}
 

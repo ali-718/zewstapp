@@ -352,9 +352,7 @@ export const MenuPage = () => {
                                     color: grayTextColor,
                                   }}
                                 >
-                                  Crisp fried eggplant rolled with ricotta
-                                  cheese and baked with tomato-basil sauce, and
-                                  shredded cheese blend.
+                                  {item?.mealDescription}
                                 </Text>
                               </View>
                             </TouchableOpacity>

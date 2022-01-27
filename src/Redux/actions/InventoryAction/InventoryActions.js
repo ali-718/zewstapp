@@ -3,10 +3,10 @@ import { client } from "../client";
 import { ToastError, ToastSuccess } from "../../../helpers/Toast";
 
 export const deleteInventoryAction =
-  ({ locationId, itemId, navigation }) =>
+  ({ locationId, itemId, navigation, noBacK = false }) =>
   (dispatch) => {
     dispatch({ type: DELETE_INVENTORY.REQUESTED });
-
+    console.log({ locationId, itemId, navigation, noBacK });
     client
       .post(`/inventory/delete/${locationId}/${itemId}`)
       .then(() => {
@@ -15,6 +15,8 @@ export const deleteInventoryAction =
           type: DELETE_INVENTORY.SUCCEEDED,
         });
         dispatch(fetchInventoryAction({ locationId }));
+
+        if (noBacK) return;
         navigation.pop(2);
       })
       .catch((e) => {

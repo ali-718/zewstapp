@@ -6,6 +6,7 @@ import {
   ScrollView,
   Platform,
   TouchableWithoutFeedback,
+  FlatList,
 } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { ArrowDownIcon, Icon, Select } from "native-base";
@@ -31,6 +32,7 @@ export const Dropdown = ({
   Background,
   textStyle,
   dropdDownStyle,
+  invetoryItems,
 }) => {
   const device = useSelector((state) => state.system.device);
   const [isFocused, setIsFocused] = useState(false);
@@ -180,9 +182,13 @@ export const Dropdown = ({
                 ...dropdDownStyle,
               }}
             >
-              <ScrollView nestedScrollEnabled style={{ flex: 1 }}>
-                {menus?.length > 0 ? (
-                  menus.map((item, i) => (
+              {invetoryItems ? (
+                <FlatList
+                  maxToRenderPerBatch={20}
+                  initialNumToRender={20}
+                  data={menus}
+                  keyExtractor={(item, i) => i.toString()}
+                  renderItem={({ item }, i) => (
                     <TouchableOpacity
                       key={i}
                       style={{
@@ -218,29 +224,71 @@ export const Dropdown = ({
                         {item}
                       </Text>
                     </TouchableOpacity>
-                  ))
-                ) : (
-                  <View
-                    style={{
-                      width: "100%",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      backgroundColor: "white",
-                      padding: 20,
-                    }}
-                  >
-                    <Text
+                  )}
+                />
+              ) : (
+                <ScrollView nestedScrollEnabled style={{ flex: 1 }}>
+                  {menus?.length > 0 ? (
+                    menus.map((item, i) => (
+                      <TouchableOpacity
+                        key={i}
+                        style={{
+                          backgroundColor: "white",
+                          padding: 10,
+                          paddingVertical: 15,
+                          flexDirection: "row",
+                        }}
+                        onPress={() => {
+                          setMenu(item);
+                          setIsOpen(false);
+                        }}
+                      >
+                        {colors && (
+                          <View
+                            style={{
+                              width: 30,
+                              height: 30,
+                              backgroundColor: colors.find(
+                                (val) => val.title === item
+                              ).color,
+                              marginRight: 10,
+                              borderRadius: 100,
+                            }}
+                          />
+                        )}
+                        <Text
+                          style={{
+                            fontSize: device === "tablet" ? 20 : 16,
+                            color: "black",
+                          }}
+                        >
+                          {item}
+                        </Text>
+                      </TouchableOpacity>
+                    ))
+                  ) : (
+                    <View
                       style={{
-                        fontSize: device === "tablet" ? 20 : 16,
-                        color: "black",
-                        textAlign: "center",
+                        width: "100%",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        backgroundColor: "white",
+                        padding: 20,
                       }}
                     >
-                      {errMsg}
-                    </Text>
-                  </View>
-                )}
-              </ScrollView>
+                      <Text
+                        style={{
+                          fontSize: device === "tablet" ? 20 : 16,
+                          color: "black",
+                          textAlign: "center",
+                        }}
+                      >
+                        {errMsg}
+                      </Text>
+                    </View>
+                  )}
+                </ScrollView>
+              )}
             </View>
           )}
         </View>

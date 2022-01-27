@@ -417,10 +417,21 @@ export const HomePage = ({ setselected }) => {
 
     setCostByCategoryListData(
       costByCategoryList.map((item) => ({
-        name: item.name,
-        value: item.cost,
+        category: item.category,
+        value: ((item.cost / costByCategoryPrice) * 100).toFixed(0),
         svg: {
-          fill: chartPurpleColor,
+          fill:
+            item.category === "Other"
+              ? "#CC99F3"
+              : item.category === "Meats"
+              ? "#E74A69"
+              : item.category === "Grains"
+              ? "#0062FF"
+              : item.category === "Fruits"
+              ? "#FF974A"
+              : item.category === "Vegetables"
+              ? "#3DD598"
+              : chartPurpleColor,
           onPress: () => null,
         },
         key: item.inventoryId,
@@ -1035,7 +1046,7 @@ export const HomePage = ({ setselected }) => {
                             fontFamily: "openSans_semiBold",
                           }}
                         >
-                          Total: ${lossInKitchenTotalLoss}
+                          Total: ${currencyDisplay(lossInKitchenTotalLoss)}
                         </Text>
                       </View>
 
@@ -1074,7 +1085,7 @@ export const HomePage = ({ setselected }) => {
                           .map((item, i) => (
                             <LossInKitchen
                               key={i}
-                              heading={item.category}
+                              heading={item.itemName}
                               belowText={item.wastedQuantity}
                               device={device}
                               logDate={item.logDate}
@@ -1395,7 +1406,7 @@ export const HomePage = ({ setselected }) => {
                         fontFamily: "openSans_semiBold",
                       }}
                     >
-                      Total: ${costByCategoryPrice}
+                      Total: ${currencyDisplay(costByCategoryPrice)}
                     </Text>
                   </View>
 
@@ -1438,7 +1449,7 @@ export const HomePage = ({ setselected }) => {
                               fontFamily: "openSans_bold",
                             }}
                           >
-                            ${costByCategoryPrice}
+                            ${currencyDisplay(costByCategoryPrice)}
                           </Text>
                           <Text
                             style={{
@@ -1508,7 +1519,7 @@ export const HomePage = ({ setselected }) => {
                                   marginLeft: 10,
                                 }}
                               >
-                                {item.name}
+                                {item.category}
                               </Text>
                             </View>
 
@@ -1519,7 +1530,7 @@ export const HomePage = ({ setselected }) => {
                                 marginLeft: 50,
                               }}
                             >
-                              {item.value}$
+                              {item.value}%
                             </Text>
                           </View>
                         )}
@@ -1576,7 +1587,7 @@ export const HomePage = ({ setselected }) => {
                           fontFamily: "openSans_bold",
                         }}
                       >
-                        ${costByCategoryPrice}
+                        ${currencyDisplay(costByCategoryPrice)}
                       </Text>
                       <Text
                         style={{

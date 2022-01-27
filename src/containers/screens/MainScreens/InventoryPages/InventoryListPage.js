@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, ScrollView } from "react-native";
+import { View, ScrollView, TouchableOpacity } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { RegularButton } from "../../../../components/Buttons/RegularButton";
 import { MainScreenContainer } from "../../../MainScreenContainers";
@@ -19,6 +19,9 @@ import { HeadingBox } from "../../../../components/HeadingBox/HeadingBox";
 import noRecipe from "../../../../assets/images/noRecipe.png";
 import { primaryColor } from "../../../../theme/colors";
 import { boxWithShadow } from "../../../../theme/styles";
+import { SwipeListView } from "react-native-swipe-list-view";
+import { Text } from "../../../../components/Text/Text";
+import { Spinner } from "native-base";
 
 export const InventoryListPage = () => {
   const navigation = useNavigation();
@@ -26,6 +29,9 @@ export const InventoryListPage = () => {
   const user = useSelector((state) => state.auth.user.user);
   const defaultLocation = useSelector(
     (state) => state.locations.defaultLocation
+  );
+  const deleteLoading = useSelector(
+    (state) => state.inventory.deleteInventory.isLoading
   );
   const device = useSelector((state) => state.system.device);
   const orientation = useSelector((state) => state.system.orientation);
@@ -42,6 +48,16 @@ export const InventoryListPage = () => {
   const fetchInventoryItems = () =>
     dispatch(
       actions.fetchInventoryAction({ locationId: defaultLocation.locationId })
+    );
+
+  const deleteInventory = (id) =>
+    dispatch(
+      actions.deleteInventoryAction({
+        locationId: defaultLocation.locationId,
+        itemId: id,
+        navigation: () => null,
+        noBacK: true,
+      })
     );
 
   useEffect(() => {
@@ -125,11 +141,13 @@ export const InventoryListPage = () => {
                       marginTop: 10,
                     }}
                   >
-                    {filteredItem
-                      ?.filter((recipe) => recipe.category === category)
-                      .map((item, i) => (
+                    <SwipeListView
+                      data={filteredItem?.filter(
+                        (recipe) => recipe.category === category
+                      )}
+                      renderItem={({ item, index }, i) => (
                         <View
-                          key={i}
+                          key={index}
                           style={{
                             width: "100%",
                             marginTop: 10,
@@ -152,7 +170,39 @@ export const InventoryListPage = () => {
                             primary={false}
                           />
                         </View>
-                      ))}
+                      )}
+                      renderHiddenItem={({ item }, rowMap) => (
+                        <TouchableOpacity
+                          onPress={() => deleteInventory(item?.inventoryId)}
+                          style={{
+                            marginTop: 20,
+                            backgroundColor: "tomato",
+                            marginBottom: 10,
+                            justifyContent: "center",
+                            width: 100,
+                            height: 50,
+                          }}
+                          disabled={deleteLoading}
+                        >
+                          {deleteLoading ? (
+                            <Spinner size="sm" color={"white"} />
+                          ) : (
+                            <Text
+                              style={{
+                                color: "white",
+                                fontSize: 16,
+                                marginLeft: 15,
+                                fontWeight: "bold",
+                              }}
+                            >
+                              Delete
+                            </Text>
+                          )}
+                        </TouchableOpacity>
+                      )}
+                      leftOpenValue={75}
+                      rightOpenValue={-75}
+                    />
                   </View>
                 </View>
               ))

@@ -490,7 +490,7 @@ export const AddInventoryPage = (props) => {
               }}
               textarea={true}
             />
-            <View style={{ width: "100%", marginTop: 10 }}>
+            <View style={{ width: "100%", marginTop: 10, zIndex: 2 }}>
               <Dropdown
                 selectedMenu={availablity?.name}
                 setMenu={(val) =>
@@ -503,7 +503,7 @@ export const AddInventoryPage = (props) => {
                 style={{ zIndex: 10 }}
               />
             </View>
-            <View style={{ width: "100%", marginTop: 10 }}>
+            <View style={{ width: "100%", marginTop: 10, zIndex: 0 }}>
               <Input
                 placeholder={"Minimum quantity threshold"}
                 value={threshold}
