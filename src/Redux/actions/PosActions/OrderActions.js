@@ -198,7 +198,10 @@ export const orderUpdateAction =
   ({ locationId, orderId, isLoading = true }) =>
   (dispatch) => {
     console.log({ locationId, orderId });
-    dispatch({ type: UPDATE_ORDER.REQUESTED, payload: { orderId, isLoading } });
+    dispatch({
+      type: UPDATE_ORDER.REQUESTED,
+      payload: { orderId, isLoading, isDone: true },
+    });
 
     client
       .post(`manual-orders/updateOrder`, {

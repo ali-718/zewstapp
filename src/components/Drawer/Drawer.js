@@ -18,15 +18,17 @@ import {
 import overviewIcon from "../../assets/images/MenuIcons/overview.png";
 import menuIcon from "../../assets/images/MenuIcons/menu.png";
 import salesIcon from "../../assets/images/MenuIcons/sales.png";
-import recipeIcon from "../../assets/images/MenuIcons/recipe.png";
-import wasteIcon from "../../assets/images/MenuIcons/waste.png";
-import inventoryIcon from "../../assets/images/MenuIcons/inventory.png";
+import recipeIcon from "../../assets/images/MenuIcons/recipeIcon.png";
+import wasteIcon from "../../assets/images/MenuIcons/WastePredictionIco.png";
+import inventoryIcon from "../../assets/images/MenuIcons/inventoryIcon.png";
+import VendorIcon from "../../assets/images/MenuIcons/VendorIcon.png";
 import messageIcon from "../../assets/images/MenuIcons/message.png";
 import libraryIcon from "../../assets/images/MenuIcons/library.png";
 import settingsIcon from "../../assets/images/MenuIcons/settings.png";
 import supportIcon from "../../assets/images/MenuIcons/support.png";
 import adminIcon from "../../assets/images/MenuIcons/adminIcon.png";
 import kitchenIcon from "../../assets/images/MenuIcons/kitchenIcon.png";
+import foodLogIcon from "../../assets/images/MenuIcons/foodLogIcon.png";
 import posIcon from "../../assets/images/MenuIcons/posIcon.png";
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
@@ -180,7 +182,7 @@ export const DrawerMenu = ({
                 navigation.navigate("Vendor");
                 changeMenuIndex(7);
               }}
-              image={inventoryIcon}
+              image={VendorIcon}
               name={"Vendor"}
             />
             <Menu
@@ -210,7 +212,7 @@ export const DrawerMenu = ({
                 navigation.navigate("DailyFoodLog");
                 changeMenuIndex(0);
               }}
-              image={kitchenIcon}
+              image={foodLogIcon}
               name={"Food Log"}
             />
 
@@ -381,7 +383,7 @@ export const DrawerMenuWithoutNames = ({
                 navigation.navigate("Vendor");
                 changeMenuIndex(7);
               }}
-              image={inventoryIcon}
+              image={VendorIcon}
               name={"Vendor"}
               noName
             />
@@ -417,7 +419,7 @@ export const DrawerMenuWithoutNames = ({
                 navigation.navigate("DailyFoodLog");
                 changeMenuIndex(10);
               }}
-              image={kitchenIcon}
+              image={foodLogIcon}
               name={"Food Log"}
               noName
             />

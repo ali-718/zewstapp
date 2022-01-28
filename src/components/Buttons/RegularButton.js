@@ -68,7 +68,7 @@ export const RegularButton = ({
         >
           {isLoading ? (
             <>
-              <Spinner size="large" color={white ? primaryColor : "white"} />
+              <Spinner size="sm" color={white ? primaryColor : "white"} />
             </>
           ) : (
             <View

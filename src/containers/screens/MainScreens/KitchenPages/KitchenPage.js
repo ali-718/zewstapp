@@ -104,7 +104,6 @@ export const KitchenPage = () => {
       actions.orderUpdateAction({
         locationId: defaultLocation.locationId,
         orderId,
-        isLoading: false,
       })
     );
   };
@@ -258,6 +257,7 @@ export const KitchenPage = () => {
                           onChange={onClickCheckBox}
                           completeOrder={completeOrder}
                           checkedMeals={checkedMeals}
+                          isSuccess={isSuccess}
                         />
                       )
                     : selected === 3

@@ -189,7 +189,6 @@ const PriceFluctuation = ({ heading, belowText, device, rightText, color }) => (
         <Text
           style={{
             fontSize: 12,
-            fontFamily: "openSans_bold",
             color: "gray",
           }}
         >
@@ -226,7 +225,6 @@ const LossInKitchen = ({ heading, belowText, device, logDate }) => (
       <Text
         style={{
           fontSize: 12,
-          fontFamily: "openSans_bold",
           color: "gray",
         }}
       >
@@ -422,15 +420,17 @@ export const HomePage = ({ setselected }) => {
         svg: {
           fill:
             item.category === "Other"
-              ? "#CC99F3"
+              ? "#7063CB"
               : item.category === "Meats"
-              ? "#E74A69"
+              ? "#3DD598"
               : item.category === "Grains"
               ? "#0062FF"
               : item.category === "Fruits"
               ? "#FF974A"
               : item.category === "Vegetables"
-              ? "#3DD598"
+              ? "#CC99F3"
+              : item.category === "Canned"
+              ? "#E74A69"
               : chartPurpleColor,
           onPress: () => null,
         },
@@ -856,7 +856,7 @@ export const HomePage = ({ setselected }) => {
                               fontFamily: "openSans_semiBold",
                             }}
                           >
-                            Revenue
+                            Profit
                           </Text>
                         </View>
                         <Text
@@ -1015,6 +1015,7 @@ export const HomePage = ({ setselected }) => {
                     padding: 10,
                     paddingVertical: 20,
                     marginTop: 20,
+                    height: 250,
                   }}
                 >
                   <TouchableOpacity
@@ -1097,7 +1098,11 @@ export const HomePage = ({ setselected }) => {
                 </View>
               </View>
 
-              <View style={{ width: device === "tablet" ? "38%" : "100%" }}>
+              <View
+                style={{
+                  width: device === "tablet" ? "38%" : "100%",
+                }}
+              >
                 <View
                   style={{
                     flexDirection: "column",
@@ -1107,6 +1112,7 @@ export const HomePage = ({ setselected }) => {
                     paddingVertical: 20,
                     paddingBottom: 30,
                     width: "100%",
+                    height: 405,
                   }}
                 >
                   <View
@@ -1275,6 +1281,7 @@ export const HomePage = ({ setselected }) => {
                     padding: 10,
                     width: "100%",
                     marginTop: 20,
+                    height: 250,
                   }}
                 >
                   <View

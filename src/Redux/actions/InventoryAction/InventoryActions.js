@@ -149,6 +149,44 @@ export const updateInventoryAction =
       });
   };
 
+export const updateInventoryItemAction =
+  ({ locationId, inventoryId, quantity, units, vendor, costPerUnit }) =>
+  (dispatch) => {
+    dispatch({ type: ADD_INVENTORY.REQUESTED });
+
+    console.log({
+      locationId,
+      inventoryId,
+      quantity,
+      units,
+      vendor,
+      costPerUnit,
+    });
+
+    client
+      .post("/inventory/updateInventoryQuantity", {
+        locationId,
+        inventoryId,
+        quantity: parseInt(quantity),
+        units,
+        vendor,
+        costPerUnit: parseInt(costPerUnit),
+      })
+      .then(() => {
+        dispatch({ type: ADD_INVENTORY.SUCCEEDED });
+        dispatch(fetchInventoryAction({ locationId }));
+
+        ToastSuccess("Success", "Inventory item updated successfully!");
+      })
+      .catch((e) => {
+        dispatch({ type: ADD_INVENTORY.FAILED });
+        console.log(e.response.data);
+        ToastError(
+          e.response.data.err || "Some error occoured, please try again later"
+        );
+      });
+  };
+
 export const getUnits = () =>
   new Promise((resolve, reject) => {
     client

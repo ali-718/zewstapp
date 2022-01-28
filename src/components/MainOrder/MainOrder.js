@@ -1,5 +1,5 @@
 import { Progress, Checkbox } from "native-base";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View } from "react-native";
 import { grayTextColor, kitchenMenuColor } from "../../theme/colors";
 import { RegularButton } from "../Buttons/RegularButton";
@@ -13,6 +13,7 @@ export const MainOrder = ({
   onChange,
   meals,
   completeOrder,
+  isSuccess,
 }) => {
   const {
     timestamp = "",
@@ -23,12 +24,11 @@ export const MainOrder = ({
     catalog = [],
     loading = false,
     orderId = "",
+    isdoneLoading = false,
   } = data;
 
   let allCategories = catalog?.map((item) => item.recipe.recipeCategory);
   allCategories = [...new Set(allCategories)];
-
-  const [isDoneLoading, setisDoneLoading] = useState(false);
 
   return (
     <View
@@ -296,18 +296,17 @@ export const MainOrder = ({
           <RegularButton
             onPress={() => {
               completeOrder(orderId);
-              setisDoneLoading(true);
             }}
             white
             text={"Done"}
-            style={{ width: "45%" }}
-            isLoading={isDoneLoading}
+            style={{ width: "45%", height: 40 }}
+            isLoading={isdoneLoading}
           />
           <RegularButton
             isLoading={loading}
             onPress={() => updateOrder(orderId)}
             text={"serve"}
-            style={{ width: "45%" }}
+            style={{ width: "45%", height: 40 }}
           />
         </View>
       </View>

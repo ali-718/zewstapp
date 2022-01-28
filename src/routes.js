@@ -58,6 +58,7 @@ import { WasteItemList } from "./containers/screens/MainScreens/WasteScreens/Was
 import { WasteDetailPage } from "./containers/screens/MainScreens/WasteScreens/WasteItemDetail";
 import { WasteItemAddForUbf } from "./containers/screens/MainScreens/WasteScreens/WasteItemAddForUbf";
 import { WasteItemAddForDiscount } from "./containers/screens/MainScreens/WasteScreens/WasteItemAddForDiscount";
+import { UpdateInventoryPage } from "./containers/screens/MainScreens/InventoryPages/UpdateInventory";
 
 const Stack = createNativeStackNavigator();
 
@@ -102,6 +103,7 @@ const InventoryRoutes = () => {
     >
       <Stack.Screen name="inventoryList" component={InventoryListPage} />
       <Stack.Screen name="inventoryAdd" component={AddInventoryPage} />
+      <Stack.Screen name="inventoryUpdate" component={UpdateInventoryPage} />
       <Stack.Screen name="inventoryDetail" component={InventoryDetailPage} />
     </Stack.Navigator>
   );

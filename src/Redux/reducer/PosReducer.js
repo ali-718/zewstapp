@@ -54,10 +54,17 @@ export const posReducer = produce((state = initialState, { payload, type }) => {
       if (index > -1) {
         const allOrders = [...state.orders.createdOrders];
 
-        allOrders[index] = {
-          ...allOrders[index],
-          loading: payload?.isLoading ? true : false,
-        };
+        if (payload?.isDone) {
+          allOrders[index] = {
+            ...allOrders[index],
+            isdoneLoading: payload?.isLoading ? true : false,
+          };
+        } else {
+          allOrders[index] = {
+            ...allOrders[index],
+            loading: payload?.isLoading ? true : false,
+          };
+        }
 
         state.orders.createdOrders = allOrders;
       }
@@ -88,6 +95,7 @@ export const posReducer = produce((state = initialState, { payload, type }) => {
               : false,
         })),
         loading: false,
+        isdoneLoading: false,
       };
 
       state.orders.createdOrders = allOrders;
@@ -102,7 +110,11 @@ export const posReducer = produce((state = initialState, { payload, type }) => {
       if (index > -1) {
         const allOrders = [...state.orders.orders];
 
-        allOrders[index] = { ...allOrders[index], loading: false };
+        allOrders[index] = {
+          ...allOrders[index],
+          loading: false,
+          isdoneLoading: false,
+        };
 
         state.orders.orders = allOrders;
       }

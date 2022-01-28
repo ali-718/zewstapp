@@ -172,33 +172,74 @@ export const InventoryListPage = () => {
                         </View>
                       )}
                       renderHiddenItem={({ item }, rowMap) => (
-                        <TouchableOpacity
-                          onPress={() => deleteInventory(item?.inventoryId)}
+                        <View
                           style={{
-                            marginTop: 20,
-                            backgroundColor: "tomato",
-                            marginBottom: 10,
-                            justifyContent: "center",
-                            width: 100,
-                            height: 50,
+                            width: "100%",
+                            flexDirection: "row",
+                            alignItems: "center",
+                            justifyContent: "space-between",
                           }}
-                          disabled={deleteLoading}
                         >
-                          {deleteLoading ? (
-                            <Spinner size="sm" color={"white"} />
-                          ) : (
-                            <Text
-                              style={{
-                                color: "white",
-                                fontSize: 16,
-                                marginLeft: 15,
-                                fontWeight: "bold",
-                              }}
-                            >
-                              Delete
-                            </Text>
-                          )}
-                        </TouchableOpacity>
+                          <TouchableOpacity
+                            onPress={() => deleteInventory(item?.inventoryId)}
+                            style={{
+                              marginTop: 20,
+                              backgroundColor: "tomato",
+                              marginBottom: 10,
+                              justifyContent: "center",
+                              width: 100,
+                              height: 50,
+                            }}
+                            disabled={deleteLoading}
+                          >
+                            {deleteLoading ? (
+                              <Spinner size="sm" color={"white"} />
+                            ) : (
+                              <Text
+                                style={{
+                                  color: "white",
+                                  fontSize: 16,
+                                  marginLeft: 15,
+                                  fontWeight: "bold",
+                                }}
+                              >
+                                Delete
+                              </Text>
+                            )}
+                          </TouchableOpacity>
+                          <TouchableOpacity
+                            onPress={() =>
+                              navigation.navigate("inventoryUpdate", {
+                                data: item,
+                              })
+                            }
+                            style={{
+                              marginTop: 20,
+                              backgroundColor: "#32CD32",
+                              marginBottom: 10,
+                              justifyContent: "center",
+                              width: 100,
+                              height: 50,
+                              alignItems: "flex-end",
+                            }}
+                            disabled={deleteLoading}
+                          >
+                            {deleteLoading ? (
+                              <Spinner size="sm" color={"white"} />
+                            ) : (
+                              <Text
+                                style={{
+                                  color: "white",
+                                  fontSize: 16,
+                                  marginRight: 10,
+                                  fontWeight: "bold",
+                                }}
+                              >
+                                Update
+                              </Text>
+                            )}
+                          </TouchableOpacity>
+                        </View>
                       )}
                       leftOpenValue={75}
                       rightOpenValue={-75}

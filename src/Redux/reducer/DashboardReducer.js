@@ -55,7 +55,7 @@ export const dashboardReducer = produce(
       case PRICE_FLUCTATION.SUCCEEDED: {
         state.priceFluctuation.isLoading = false;
         state.priceFluctuation.isError = false;
-        state.priceFluctuation.payload = payload;
+        state.priceFluctuation.list = payload;
         break;
       }
       case PRICE_FLUCTATION.FAILED: {
