@@ -83,6 +83,7 @@ import {
   BarChart,
   PieChart,
   XAxis,
+  G, Path,Rect,
 } from "react-native-svg-charts";
 import { Icon, Progress, Select, ArrowDownIcon, Spinner } from "native-base";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -96,6 +97,18 @@ import {
 } from "../../../../Redux/actions/DashboardActions/DashboardActions";
 import moment from "moment";
 import { order } from "styled-system";
+
+/* var roundedRectData = function (w, h, tlr, trr, brr, blr) {
+  return 'M 0 ' + tlr
+    + ' A ' + tlr + ' ' + tlr + ' 0 0 1 ' + tlr + ' 0'
+    + ' L ' + (w - trr) + ' 0'
+    + ' A ' + trr + ' ' + trr + ' 0 0 1 ' + w + ' ' + trr
+    + ' L ' + w + ' ' + (h - brr)
+    + ' A ' + brr + ' ' + brr + ' 0 0 1 ' + (w - brr) + ' ' + h
+    + ' L ' + blr + ' ' + h
+    + ' A ' + blr + ' ' + blr + ' 0 0 1 0 ' + (h - blr)
+    + ' Z';
+}; */
 
 const chartData = [50, 10, 40, 95, 4, 24, 85, 91, 35, 53, 53, 24, 50, 20, 80];
 
@@ -399,7 +412,7 @@ export const HomePage = ({ setselected }) => {
     {
       data: data1.map((value) => ({ value })),
       svg: {
-        fill: chartColor1,
+        fill: chartColor1
       },
     },
     {
@@ -409,6 +422,23 @@ export const HomePage = ({ setselected }) => {
       },
     },
   ];
+
+  /* const RoundedBars = ({ x, y, bandwidth, data, height, contentInset }) => {
+    console.log(x,y)
+    return data.map((item, index) => (
+      <G x={x(index)} y={y(item.value)}>
+        <Path
+          d={roundedRectData(
+            bandwidth,
+            height - y(item.value) - (contentInset?.bottom || 0),
+            bandwidth / 2,
+            bandwidth / 2
+          )}
+          fill={item.svg.fill}
+        />
+      </G>
+    ));
+  }; */
 
   useEffect(() => {
     if (costByCategoryList.length === 0) return;
@@ -966,9 +996,10 @@ export const HomePage = ({ setselected }) => {
                     >
                       <YAxis
                         data={[...data1, ...data2]}
-                        style={{ marginBottom: 10 }}
+                        style={{ marginBottom: 10, marginLeft: 10 }}
                         contentInset={{ top: 20, bottom: 20 }}
                         svg={{ fontSize: 10, fill: "grey" }}
+                        formatLabel={(value) => `$${value}`}
                       />
                       <BarChart
                         animate={true}
@@ -978,7 +1009,9 @@ export const HomePage = ({ setselected }) => {
                         xAccessor={({ item }) => item.value}
                         spacingInner={0.9}
                         contentInset={{ top: 20, bottom: 20 }}
-                      ></BarChart>
+                      >
+                        {/* <RoundedBars /> */}
+                      </BarChart>
                     </View>
 
                     {forecastedActualSales > 0 || forecastedSales > 0 ? (
@@ -1438,8 +1471,9 @@ export const HomePage = ({ setselected }) => {
                             flex: 1,
                           }}
                           data={costByCategoryListData}
-                          innerRadius={"80%"}
-                          // padAngle={0}
+                          innerRadius={"90%"}
+                          padAngle={0}
+
                         />
                         <View
                           style={{
@@ -1576,8 +1610,8 @@ export const HomePage = ({ setselected }) => {
                         flex: 1,
                       }}
                       data={costByCategoryListData}
-                      innerRadius={"80%"}
-                      // padAngle={0}
+                      innerRadius={"90%"}
+                      padAngle={0}
                     />
                     <View
                       style={{
