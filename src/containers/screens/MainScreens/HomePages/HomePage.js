@@ -2,7 +2,9 @@ import React, { useEffect, useState } from "react";
 import {
   FlatList,
   Image,
+  Modal,
   Platform,
+  ScrollView,
   TouchableOpacity,
   View,
 } from "react-native";
@@ -18,6 +20,7 @@ import {
   chartColor1,
   chartColor2,
   chartGreenIndicator,
+  chartHeaderColor,
   chartPinkColor,
   chartPurpleColor,
   chartYellowColor,
@@ -83,7 +86,9 @@ import {
   BarChart,
   PieChart,
   XAxis,
-  G, Path,Rect,
+  G,
+  Path,
+  Rect,
 } from "react-native-svg-charts";
 import { Icon, Progress, Select, ArrowDownIcon, Spinner } from "native-base";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -94,9 +99,10 @@ import {
   fetchLossInKitchenAction,
   fetchForecastedSalesAction,
   fetchPriceFluctuationAction,
+  fetchTotalOrders,
 } from "../../../../Redux/actions/DashboardActions/DashboardActions";
 import moment from "moment";
-import { order } from "styled-system";
+import { HeadingBox } from "../../../../components/HeadingBox/HeadingBox";
 
 /* var roundedRectData = function (w, h, tlr, trr, brr, blr) {
   return 'M 0 ' + tlr
@@ -256,14 +262,22 @@ const LossInKitchen = ({ heading, belowText, device, logDate }) => (
   </View>
 );
 
-const IamgeItemBox = ({ device, image, heading, value }) => (
-  <View
+const IamgeItemBox = ({
+  device,
+  image,
+  heading,
+  value,
+  onPress = () => null,
+}) => (
+  <TouchableOpacity
+    activeOpacity={1}
     style={{
       flexDirection: device === "tablet" ? "row" : "column",
       width: "30%",
       alignItems: "center",
       justifyContent: "center",
     }}
+    onPress={onPress}
   >
     <Image
       source={image}
@@ -300,7 +314,7 @@ const IamgeItemBox = ({ device, image, heading, value }) => (
         {value}
       </Text>
     </View>
-  </View>
+  </TouchableOpacity>
 );
 
 const ChartItemBox = ({ device, image, heading, value }) => (
@@ -361,6 +375,7 @@ export const HomePage = ({ setselected }) => {
   const [qrModal, setQrModal] = useState(false);
   const [selectedTime, setSelectedTime] = useState("This month");
   const [isDefaultLocation, setIsDefaultLocation] = useState(true);
+  const [allOrdersModal, setAllOrdersModal] = useState(false);
   const isScreenFocused = useIsFocused();
   const {
     isLoading: firstSectionLoading,
@@ -382,6 +397,8 @@ export const HomePage = ({ setselected }) => {
     isLoading: priceFluctuationLoading,
     list: priceFluctuationList = [],
   } = useSelector((state) => state.dashboard.priceFluctuation);
+  const { isLoading: totalOrdersLoading, list: totalOrdersList = [] } =
+    useSelector((state) => state.dashboard.totalOrders);
   const {
     isLoading: foreCastedSalesLoading,
     revenue: forecastedRevenue,
@@ -412,7 +429,7 @@ export const HomePage = ({ setselected }) => {
     {
       data: data1.map((value) => ({ value })),
       svg: {
-        fill: chartColor1
+        fill: chartColor1,
       },
     },
     {
@@ -488,6 +505,7 @@ export const HomePage = ({ setselected }) => {
       fetchCostByCategorySection(),
       fetchForecastedSalesSection(),
       fetchPriceFluctuation(),
+      fetchAllOrdersForaModal(),
     ]);
   }, [selectedTime, isScreenFocused, defaultLocation]);
 
@@ -563,6 +581,18 @@ export const HomePage = ({ setselected }) => {
             : selectedTime === "This year"
             ? "12"
             : "1",
+      })
+    );
+  };
+
+  const fetchAllOrdersForaModal = async () => {
+    const location = defaultLocation.locationId;
+
+    if (!!location == false) return;
+
+    dispatch(
+      fetchTotalOrders({
+        locationId: location ?? "",
       })
     );
   };
@@ -825,6 +855,7 @@ export const HomePage = ({ setselected }) => {
                       heading={"Orders"}
                       value={orderItems}
                       device={device}
+                      onPress={() => setAllOrdersModal(true)}
                     />
 
                     <IamgeItemBox
@@ -896,13 +927,13 @@ export const HomePage = ({ setselected }) => {
                             fontFamily: "openSans_semiBold",
                           }}
                         >
-                          Total: ${numberWithCommas(forecastedRevenue)}
+                          Total: ${currencyDisplay(forecastedRevenue)}
                         </Text>
                       </View>
 
                       <View
                         style={{
-                          flex: device === "tablet" ? 0.7 : 0.9,
+                          flex: device === "tablet" ? 0.8 : 0.9,
                           flexDirection: device === "tablet" ? "row" : "row",
                           justifyContent: "space-between",
                           marginLeft: device === "tablet" ? 0 : 10,
@@ -1473,7 +1504,6 @@ export const HomePage = ({ setselected }) => {
                           data={costByCategoryListData}
                           innerRadius={"90%"}
                           padAngle={0}
-
                         />
                         <View
                           style={{
@@ -1661,6 +1691,215 @@ export const HomePage = ({ setselected }) => {
           </Text>
         </View>
       )}
+
+      {/* modal for orders */}
+
+      <Modal
+        visible={allOrdersModal}
+        onRequestClose={() => setAllOrdersModal(false)}
+        transparent
+        animationType="slide"
+      >
+        <View
+          style={{
+            width: "100%",
+            flex: 1,
+            alignItems: "center",
+            justifyContent: "center",
+            backgroundColor: "rgba(0,0,0,0.8)",
+          }}
+        >
+          <View
+            style={{
+              width: "90%",
+              flex: 0.8,
+              backgroundColor: "white",
+              padding: 30,
+            }}
+          >
+            <HeadingBox
+              onGoBack={() => setAllOrdersModal(false)}
+              heading={"Total Orders"}
+            />
+
+            {totalOrdersLoading ? (
+              <View
+                style={{
+                  flex: 1,
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <Spinner color={primaryColor} size={"large"} />
+              </View>
+            ) : (
+              <ScrollView style={{ flex: 1, marginTop: 40 }}>
+                <View
+                  style={{
+                    width: "100%",
+                  }}
+                >
+                  {/* headings start */}
+                  <View
+                    style={{
+                      width: "100%",
+                      flexDirection: "row",
+                      paddingVertical: 15,
+                      backgroundColor: chartHeaderColor,
+                      borderRadius: 10,
+                      borderBottomLeftRadius: 0,
+                      borderBottomRightRadius: 0,
+                    }}
+                  >
+                    <View style={{ width: 170 }}>
+                      <Text
+                        style={{
+                          fontSize: 11,
+                          color: "black",
+                          marginLeft: 10,
+                        }}
+                      >
+                        Items
+                      </Text>
+                    </View>
+                    <View style={{ width: 110, alignItems: "center" }}>
+                      <Text
+                        style={{
+                          fontSize: 11,
+                          color: "black",
+                        }}
+                      >
+                        Quantity
+                      </Text>
+                    </View>
+                    <View style={{ width: 120 }}>
+                      <Text
+                        style={{
+                          fontSize: 11,
+                          color: "black",
+                        }}
+                      >
+                        Date
+                      </Text>
+                    </View>
+                    <View style={{ width: 110 }}>
+                      <Text
+                        style={{
+                          fontSize: 11,
+                          color: "black",
+                        }}
+                      >
+                        Time
+                      </Text>
+                    </View>
+                    <View style={{ width: 110 }}>
+                      <Text
+                        style={{
+                          fontSize: 11,
+                          color: "black",
+                        }}
+                      >
+                        Total Cost
+                      </Text>
+                    </View>
+                  </View>
+                  {/* headings ends */}
+                  <View style={{ backgroundColor: "white" }}>
+                    {totalOrdersList.map((meal, i) => (
+                      <View
+                        style={{
+                          width: "100%",
+                          flexDirection: "row",
+                          paddingVertical: 15,
+                          backgroundColor:
+                            i % 2 === 1 ? chartHeaderColor : "white",
+                          borderRadius: 10,
+                          borderBottomLeftRadius: 0,
+                          borderBottomRightRadius: 0,
+                        }}
+                      >
+                        {/* {console.log(meal)} */}
+                        <View style={{ width: 170 }}>
+                          <Text
+                            style={{
+                              fontFamily: "openSans_semiBold",
+                              fontSize: 16,
+                              color: "black",
+                              marginLeft: 10,
+                            }}
+                          >
+                            {meal?.mealName}
+                          </Text>
+                        </View>
+                        <View
+                          style={{
+                            width: 110,
+                            alignItems: "center",
+                          }}
+                        >
+                          <Text
+                            style={{
+                              fontFamily: "openSans_semiBold",
+                              fontSize: 16,
+                              color: "black",
+                            }}
+                          >
+                            {meal.quantity}
+                          </Text>
+                        </View>
+
+                        <View style={{ width: 120 }}>
+                          <Text
+                            style={{
+                              fontFamily: "openSans_semiBold",
+                              fontSize: 16,
+                              color: "black",
+                            }}
+                          >
+                            {meal.timestamp
+                              ? moment(meal.timestamp).format("DD.MM.Y")
+                              : ""}
+                          </Text>
+                        </View>
+                        <View style={{ width: 110 }}>
+                          <Text
+                            style={{
+                              fontFamily: "openSans_semiBold",
+                              fontSize: 16,
+                              color: "black",
+                            }}
+                          >
+                            {meal.mealTime
+                              ? `${meal.mealTime.slice(
+                                  0,
+                                  4
+                                )} ${meal.mealTime.slice(-2)}`
+                              : ""}
+                          </Text>
+                        </View>
+                        <View style={{ width: 110 }}>
+                          <Text
+                            style={{
+                              fontFamily: "openSans_semiBold",
+                              fontSize: 16,
+                              color: "black",
+                            }}
+                          >
+                            $
+                            {meal.mealPrice
+                              ? currencyDisplay(parseInt(meal.mealPrice))
+                              : 0}
+                          </Text>
+                        </View>
+                      </View>
+                    ))}
+                  </View>
+                </View>
+              </ScrollView>
+            )}
+          </View>
+        </View>
+      </Modal>
     </MainScreenContainer>
   );
 };

@@ -7,6 +7,7 @@ import {
   FORECASTED_SALES,
   LOSS_IN_KITCHEN,
   PRICE_FLUCTATION,
+  TOTAL_ORDERS,
 } from "./Types";
 
 export const fetchFoodCountAction =
@@ -94,6 +95,28 @@ export const fetchPriceFluctuationAction =
       .catch((e) => {
         dispatch({ type: PRICE_FLUCTATION.FAILED });
         console.log(e.response.data);
+      });
+  };
+
+export const fetchTotalOrders =
+  ({ locationId }) =>
+  (dispatch) => {
+    dispatch({ type: TOTAL_ORDERS.REQUESTED });
+
+    client
+      .get(`manual-orders/allManualOrder/${locationId}`)
+      .then(({ data }) => {
+        dispatch({
+          type: TOTAL_ORDERS.SUCCEEDED,
+          payload: data,
+        });
+
+        console.log(data);
+      })
+      .catch((e) => {
+        console.log(e);
+        // ToastError("Unable to fetch orders, please try again");
+        dispatch({ type: TOTAL_ORDERS.FAILED });
       });
   };
 

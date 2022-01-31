@@ -59,7 +59,8 @@ export const Header = ({ leftImage, onPressLeft, onPressRight }) => {
           </TouchableOpacity>
 
           <TextInput
-            placeholder={"Search"}
+            editable={false}
+            placeholder={""}
             placeholderTextColor={drawerHeadingColor}
             selectionColor={primaryColor}
             style={{
@@ -71,6 +72,7 @@ export const Header = ({ leftImage, onPressLeft, onPressRight }) => {
 
           {device === "tablet" && (
             <TouchableOpacity
+              disabled
               style={{
                 padding: 10,
                 paddingHorizontal: 15,
@@ -79,6 +81,7 @@ export const Header = ({ leftImage, onPressLeft, onPressRight }) => {
                 alignItems: "center",
                 justifyContent: "center",
                 borderRadius: 100,
+                opacity: 0.5,
               }}
             >
               <Image

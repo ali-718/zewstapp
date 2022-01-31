@@ -5,6 +5,7 @@ import {
   FORECASTED_SALES,
   LOSS_IN_KITCHEN,
   PRICE_FLUCTATION,
+  TOTAL_ORDERS,
 } from "../actions/DashboardActions/Types";
 
 const initialState = {
@@ -42,6 +43,11 @@ const initialState = {
     isError: false,
     list: [],
   },
+  totalOrders: {
+    isLoading: false,
+    isError: false,
+    list: [],
+  },
 };
 
 export const dashboardReducer = produce(
@@ -72,7 +78,7 @@ export const dashboardReducer = produce(
         state.forecastedSales.isLoading = false;
         state.forecastedSales.isError = false;
         state.forecastedSales.actualSale = payload.actualSale;
-        state.forecastedSales.revenue = payload.forecast?.revenue;
+        state.forecastedSales.revenue = payload.netProfit;
         state.forecastedSales.sales = payload.forecast?.sales;
         state.forecastedSales.interval = payload.interval;
         state.forecastedSales.startDate = payload.startDate;
@@ -137,6 +143,49 @@ export const dashboardReducer = produce(
         state.firstSection.menuItems = 0;
         state.firstSection.orderItems = 0;
         state.firstSection.customerItems = 0;
+        break;
+      }
+
+      case TOTAL_ORDERS.REQUESTED: {
+        if (payload) {
+          state.totalOrders.isLoading = true;
+        }
+        state.totalOrders.isError = false;
+        break;
+      }
+      case TOTAL_ORDERS.SUCCEEDED: {
+        const doneOrders = payload?.doneOrders;
+        const paidOrders = payload?.paidOrders;
+        const createdOrders = payload?.createdOrders;
+        const all = [
+          ...doneOrders?.dineInOrdersDone,
+          ...doneOrders?.takeAwayOrdersDone,
+          ...doneOrders?.deliveryOrdersDone,
+
+          ...paidOrders?.dineInOrdersPaid,
+          ...paidOrders?.takeAwayOrdersPaid,
+          ...paidOrders?.deliveryOrdersPaid,
+
+          ...createdOrders?.dineInOrdersCreated,
+          ...createdOrders?.takeAwayOrdersCreated,
+          ...createdOrders?.deliveryOrdersCreated,
+        ];
+
+        console.log(all);
+
+        state.totalOrders.isLoading = false;
+        state.totalOrders.isError = false;
+        state.totalOrders.list = [
+          ...all.map((item) =>
+            item.catalog.map((data) => ({ ...data, timestamp: item.timestamp }))
+          ),
+        ].flat(Infinity);
+        break;
+      }
+      case TOTAL_ORDERS.FAILED: {
+        state.totalOrders.isLoading = false;
+        state.totalOrders.isError = true;
+        state.totalOrders.list = [];
         break;
       }
       default:

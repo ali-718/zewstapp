@@ -150,7 +150,6 @@ export const posReducer = produce((state = initialState, { payload, type }) => {
         ...doneOrders.takeAwayOrdersDone,
         ...doneOrders.deliveryOrdersDone,
       ];
-      // state.orders.orders = payload?.dineInOrdersCreated;
       break;
     }
     case FETCH_ORDERS.FAILED: {

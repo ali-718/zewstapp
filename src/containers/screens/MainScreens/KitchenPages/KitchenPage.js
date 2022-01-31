@@ -386,7 +386,7 @@ export const KitchenPage = () => {
                                           color: "black",
                                         }}
                                       >
-                                        ${meal.mealPrice}
+                                        ${meal.mealPrice ?? 0}
                                       </Text>
                                     </View>
                                     <View style={{ width: 150 }}>
