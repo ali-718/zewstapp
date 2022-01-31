@@ -85,10 +85,6 @@ import {
   YAxis,
   BarChart,
   PieChart,
-  XAxis,
-  G,
-  Path,
-  Rect,
 } from "react-native-svg-charts";
 import { Icon, Progress, Select, ArrowDownIcon, Spinner } from "native-base";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -427,18 +423,22 @@ export const HomePage = ({ setselected }) => {
 
   const barData = [
     {
-      data: data1.map((value) => ({ value })),
+      data: data1.map((value) => (value )),
       svg: {
-        fill: chartColor1,
+        stroke: chartColor1,
+        strokeWidth: 5
       },
     },
     {
-      data: data2.map((value) => ({ value })),
+      data: data2.map((value) => ( value )),
       svg: {
-        fill: chartColor2,
+        stroke: chartColor2,
+        strokeWidth: 5
       },
     },
   ];
+
+  console.log(data1, "BAR DATA")
 
   /* const RoundedBars = ({ x, y, bandwidth, data, height, contentInset }) => {
     console.log(x,y)
@@ -1032,17 +1032,17 @@ export const HomePage = ({ setselected }) => {
                         svg={{ fontSize: 10, fill: "grey" }}
                         formatLabel={(value) => `$${value}`}
                       />
-                      <BarChart
+                      <LineChart
                         animate={true}
                         style={{ height: 200, marginLeft: 10, flex: 1 }}
                         data={barData}
-                        yAccessor={({ item }) => item.value}
-                        xAccessor={({ item }) => item.value}
-                        spacingInner={0.9}
+                        //yAccessor={({ item }) => item}
+                        //xAccessor={({ item }) => item}
+                        //spacingInner={0.9}
                         contentInset={{ top: 20, bottom: 20 }}
                       >
                         {/* <RoundedBars /> */}
-                      </BarChart>
+                      </LineChart>
                     </View>
 
                     {forecastedActualSales > 0 || forecastedSales > 0 ? (
@@ -1326,8 +1326,8 @@ export const HomePage = ({ setselected }) => {
                       />
                       <LineChart
                         style={{ height: 200, flex: 1 }}
-                        data={[]}
-                        // data={lineChartData}
+                        //data={[]}
+                        data={lineChartData}
                         svg={{
                           strokeWidth: 5,
                         }}
