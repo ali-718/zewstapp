@@ -47,6 +47,8 @@ const initialState = {
     isLoading: false,
     isError: false,
     list: [],
+    count: "",
+    totalCost: "",
   },
 };
 
@@ -171,10 +173,16 @@ export const dashboardReducer = produce(
           ...createdOrders?.deliveryOrdersCreated,
         ];
 
-        console.log(all);
+        let cost = 0;
+
+        all.map((a) => {
+          cost += a.orderUnitCost;
+        });
 
         state.totalOrders.isLoading = false;
         state.totalOrders.isError = false;
+        state.totalOrders.count = payload?.totalCount;
+        state.totalOrders.totalCost = cost;
         state.totalOrders.list = [
           ...all.map((item) =>
             item.catalog.map((data) => ({ ...data, timestamp: item.timestamp }))

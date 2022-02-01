@@ -393,8 +393,12 @@ export const HomePage = ({ setselected }) => {
     isLoading: priceFluctuationLoading,
     list: priceFluctuationList = [],
   } = useSelector((state) => state.dashboard.priceFluctuation);
-  const { isLoading: totalOrdersLoading, list: totalOrdersList = [] } =
-    useSelector((state) => state.dashboard.totalOrders);
+  const {
+    isLoading: totalOrdersLoading,
+    list: totalOrdersList = [],
+    count: totalOrderCount,
+    totalCost: totalOrdersCost,
+  } = useSelector((state) => state.dashboard.totalOrders);
   const {
     isLoading: foreCastedSalesLoading,
     revenue: forecastedRevenue,
@@ -423,22 +427,22 @@ export const HomePage = ({ setselected }) => {
 
   const barData = [
     {
-      data: data1.map((value) => (value )),
+      data: data1.map((value) => value),
       svg: {
         stroke: chartColor1,
-        strokeWidth: 5
+        strokeWidth: 5,
       },
     },
     {
-      data: data2.map((value) => ( value )),
+      data: data2.map((value) => value),
       svg: {
         stroke: chartColor2,
-        strokeWidth: 5
+        strokeWidth: 5,
       },
     },
   ];
 
-  console.log(data1, "BAR DATA")
+  console.log(data1, "BAR DATA");
 
   /* const RoundedBars = ({ x, y, bandwidth, data, height, contentInset }) => {
     console.log(x,y)
@@ -1374,7 +1378,7 @@ export const HomePage = ({ setselected }) => {
                       }}
                     >
                       <Image
-                        source={menuDotGray}
+                        source={downloadPDF}
                         style={{
                           width: 18,
                           resizeMode: "contain",
@@ -1897,6 +1901,44 @@ export const HomePage = ({ setselected }) => {
                 </View>
               </ScrollView>
             )}
+
+            <View
+              style={{
+                width: "100%",
+                marginTop: 20,
+                borderTopWidth: 1,
+                borderColor: "#F1F1F5",
+              }}
+            />
+
+            <View
+              style={{
+                width: "100%",
+                alignItems: "center",
+                justifyContent: "space-between",
+                marginTop: 18,
+                flexDirection: "row",
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: 14,
+                  color: "#44444F",
+                }}
+              >
+                {totalOrderCount} items
+              </Text>
+              <Text
+                style={{
+                  fontSize: 16,
+                  color: "#0B0410",
+                  fontFamily: "openSans_semiBold",
+                  marginRight: 100,
+                }}
+              >
+                Total: ${currencyDisplay(totalOrdersCost)}
+              </Text>
+            </View>
           </View>
         </View>
       </Modal>
