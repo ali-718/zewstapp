@@ -426,7 +426,8 @@ export const HomePage = ({ setselected }) => {
       data: data1.map((value) => (value )),
       svg: {
         stroke: chartColor1,
-        strokeWidth: 5
+        strokeWidth: 5,
+        clipPath: 'url(#clip-path-1)',
       },
     },
     {
@@ -1031,6 +1032,7 @@ export const HomePage = ({ setselected }) => {
                         contentInset={{ top: 20, bottom: 20 }}
                         svg={{ fontSize: 10, fill: "grey" }}
                         formatLabel={(value) => `$${value}`}
+                        numberOfTicks={5}
                       />
                       <LineChart
                         animate={true}
@@ -1042,6 +1044,9 @@ export const HomePage = ({ setselected }) => {
                         contentInset={{ top: 20, bottom: 20 }}
                       >
                         {/* <RoundedBars /> */}
+                        <Grid ticks={5} svg={{
+                          stroke: "#F1F1F5",
+                        }} direction={Grid.Direction.HORIZONTAL}/>
                       </LineChart>
                     </View>
 
