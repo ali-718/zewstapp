@@ -13,7 +13,7 @@ import {
   menuHeadingColor,
 } from "../../../../theme/colors";
 import { Text } from "../../../../components/Text/Text";
-import { HEIGHT } from "../../../../helpers/utlils";
+import { HEIGHT, WIDTH } from "../../../../helpers/utlils";
 import { useNavigation, useIsFocused } from "@react-navigation/core";
 import { LoadingPage } from "../../../../components/LoadingPage/LoadingPage";
 import { RefetchDataError } from "../../../../components/ErrorPage/RefetchDataError";
@@ -180,7 +180,7 @@ export const MenuPage = () => {
                       setSearch={setSearch}
                       searchKeyword={searchKeyword}
                     />
-                    <ScrollView horizontal style={{ flex: 1 }}>
+                    <ScrollView horizontal style={{ flex: 1, minWidth: WIDTH }}>
                       <View
                         style={{
                           width: "100%",
@@ -291,9 +291,9 @@ export const MenuPage = () => {
                                 <View style={{ width: 250 }}>
                                   <Text
                                     style={{
-                                      fontFamily: "openSans_bold",
+                                      fontFamily: "openSans_semiBold",
                                       fontSize: 16,
-                                      color: menuHeadingColor,
+                                      color: "#000000",
                                     }}
                                   >
                                     {item.mealName}
@@ -302,9 +302,9 @@ export const MenuPage = () => {
                                 <View style={{ width: 150 }}>
                                   <Text
                                     style={{
-                                      fontFamily: "openSans_bold",
                                       fontSize: 16,
-                                      color: menuHeadingColor,
+                                      color: "#000000",
+                                      fontFamily: "openSans_semiBold",
                                     }}
                                   >
                                     {item.orderedNumber}
@@ -313,9 +313,9 @@ export const MenuPage = () => {
                                 <View style={{ width: 100 }}>
                                   <Text
                                     style={{
-                                      fontFamily: "openSans_bold",
                                       fontSize: 16,
-                                      color: menuHeadingColor,
+                                      color: "#000000",
+                                      fontFamily: "openSans_semiBold",
                                     }}
                                   >
                                     ${item.mealTotalUnitCost}
@@ -324,10 +324,10 @@ export const MenuPage = () => {
                                 <View style={{ width: 150 }}>
                                   <Text
                                     style={{
-                                      fontFamily: "openSans_bold",
                                       fontSize: 16,
-                                      color: menuHeadingColor,
+                                      color: "#000000",
                                       textTansform: "uppercase",
+                                      fontFamily: "openSans_semiBold",
                                     }}
                                   >
                                     ${item.mealPrice}
@@ -336,16 +336,16 @@ export const MenuPage = () => {
                                 <View style={{ width: 150 }}>
                                   <Text
                                     style={{
-                                      fontFamily: "openSans_bold",
+                                      fontFamily: "openSans_semiBold",
                                       fontSize: 16,
-                                      color: menuHeadingColor,
+                                      color: "#000000",
                                     }}
                                   >
                                     ${item?.taxPrice}
                                   </Text>
                                 </View>
                               </View>
-                              <View style={{ width: "100%", marginTop: 5 }}>
+                              <View style={{ width: "70%", marginTop: 5 }}>
                                 <Text
                                   style={{
                                     fontSize: 14,

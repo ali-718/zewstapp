@@ -96,6 +96,7 @@ import {
   fetchForecastedSalesAction,
   fetchPriceFluctuationAction,
   fetchTotalOrders,
+  fluctuationReportGenerator,
 } from "../../../../Redux/actions/DashboardActions/DashboardActions";
 import moment from "moment";
 import { HeadingBox } from "../../../../components/HeadingBox/HeadingBox";
@@ -431,6 +432,7 @@ export const HomePage = ({ setselected }) => {
       svg: {
         stroke: chartColor1,
         strokeWidth: 5,
+        clipPath: "url(#clip-path-1)",
       },
     },
     {
@@ -1035,6 +1037,7 @@ export const HomePage = ({ setselected }) => {
                         contentInset={{ top: 20, bottom: 20 }}
                         svg={{ fontSize: 10, fill: "grey" }}
                         formatLabel={(value) => `$${value}`}
+                        numberOfTicks={5}
                       />
                       <LineChart
                         animate={true}
@@ -1046,6 +1049,13 @@ export const HomePage = ({ setselected }) => {
                         contentInset={{ top: 20, bottom: 20 }}
                       >
                         {/* <RoundedBars /> */}
+                        <Grid
+                          ticks={5}
+                          svg={{
+                            stroke: "#F1F1F5",
+                          }}
+                          direction={Grid.Direction.HORIZONTAL}
+                        />
                       </LineChart>
                     </View>
 
@@ -1377,15 +1387,23 @@ export const HomePage = ({ setselected }) => {
                         justifyContent: "center",
                       }}
                     >
-                      <Image
-                        source={downloadPDF}
-                        style={{
-                          width: 18,
-                          resizeMode: "contain",
-                          marginLeft: 20,
-                          marginRight: 10,
-                        }}
-                      />
+                      <TouchableOpacity
+                        onPress={() =>
+                          fluctuationReportGenerator({
+                            locationId: defaultLocation.locationId,
+                          })
+                        }
+                      >
+                        <Image
+                          source={downloadPDF}
+                          style={{
+                            width: 18,
+                            resizeMode: "contain",
+                            marginLeft: 20,
+                            marginRight: 10,
+                          }}
+                        />
+                      </TouchableOpacity>
                     </View>
                   </View>
 

@@ -1,3 +1,5 @@
+import axios from "axios";
+import { Linking } from "react-native";
 import { ToastError, ToastSuccess } from "../../../helpers/Toast";
 import { client } from "../client";
 import {
@@ -9,6 +11,7 @@ import {
   PRICE_FLUCTATION,
   TOTAL_ORDERS,
 } from "./Types";
+import * as FileSystem from "expo-file-system";
 
 export const fetchFoodCountAction =
   ({ locationId, interval, startDate, endDate }) =>
@@ -163,3 +166,29 @@ export const dailyFoodLogAddAction = ({
         );
       });
   });
+
+export const fluctuationReportGenerator = ({ locationId }) => {
+  axios
+    .get(
+      `https://pdf-generator-zewst.herokuapp.com/printPriceFluctuation/${locationId}`
+    )
+    .then((res) => {
+      // fetch(res.data.url);
+
+      FileSystem.downloadAsync(
+        res.data.url,
+        FileSystem.documentDirectory + "report.pdf"
+      ).then((res) => {
+        console.log(res);
+
+        FileSystem.getContentUriAsync(res.uri).then((data) => {
+          console.log("data");
+          console.log(data);
+
+          Linking.openURL(data);
+        });
+      });
+
+      console.log(res.data);
+    });
+};
