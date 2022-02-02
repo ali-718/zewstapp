@@ -6,6 +6,7 @@ import {
   Platform,
   ScrollView,
   TouchableOpacity,
+  TouchableWithoutFeedback,
   View,
 } from "react-native";
 import { MainScreenContainer } from "../../../MainScreenContainers";
@@ -97,6 +98,7 @@ import {
   fetchPriceFluctuationAction,
   fetchTotalOrders,
   fluctuationReportGenerator,
+  sendTokenToDb,
 } from "../../../../Redux/actions/DashboardActions/DashboardActions";
 import moment from "moment";
 import { HeadingBox } from "../../../../components/HeadingBox/HeadingBox";
@@ -428,6 +430,33 @@ export const HomePage = ({ setselected }) => {
   }
 
   useEffect(() => {
+    if (!!defaultLocation.locationId == false) return;
+
+    console.log("defaultLocation");
+    console.log(defaultLocation);
+
+    registerForPushNotificationsAsync().then((token) => {
+      console.log(token);
+      sendTokenToDb({
+        deviceId: Platform.OS,
+        locationId: defaultLocation.locationId,
+        fcmToken: token,
+      });
+
+      // console.log(token);
+      // Notifications.scheduleNotificationAsync({
+      //   content: {
+      //     title: "Time's up!",
+      //     body: "Change sides!",
+      //   },
+      //   trigger: {
+      //     seconds: 5,
+      //   },
+      // });
+    });
+  }, [defaultLocation]);
+
+  useEffect(() => {
     Notifications.setNotificationHandler({
       handleNotification: async () => ({
         shouldShowAlert: true,
@@ -444,19 +473,6 @@ export const HomePage = ({ setselected }) => {
     Notifications.addNotificationResponseReceivedListener((response) => {
       console.log("response");
       console.log(response);
-    });
-
-    registerForPushNotificationsAsync().then((token) => {
-      console.log(token);
-      // Notifications.scheduleNotificationAsync({
-      //   content: {
-      //     title: "Time's up!",
-      //     body: "Change sides!",
-      //   },
-      //   trigger: {
-      //     seconds: 5,
-      //   },
-      // });
     });
   }, []);
 
@@ -484,8 +500,6 @@ export const HomePage = ({ setselected }) => {
       },
     },
   ];
-
-  console.log(data1, "BAR DATA");
 
   /* const RoundedBars = ({ x, y, bandwidth, data, height, contentInset }) => {
     console.log(x,y)
@@ -1776,9 +1790,22 @@ export const HomePage = ({ setselected }) => {
             flex: 1,
             alignItems: "center",
             justifyContent: "center",
-            backgroundColor: "rgba(0,0,0,0.8)",
+            // backgroundColor: "red",
           }}
         >
+          <TouchableOpacity
+            style={{
+              position: "absolute",
+              top: 0,
+              bottom: 0,
+              left: 0,
+              right: 0,
+              backgroundColor: "rgba(0,0,0,0.8)",
+              flex: 1,
+            }}
+            activeOpacity={1}
+            onPress={() => setAllOrdersModal(false)}
+          ></TouchableOpacity>
           <View
             style={{
               width: "90%",

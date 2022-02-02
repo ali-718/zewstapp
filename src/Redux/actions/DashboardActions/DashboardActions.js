@@ -168,6 +168,25 @@ export const dailyFoodLogAddAction = ({
       });
   });
 
+export const sendTokenToDb = ({ deviceId, locationId, fcmToken }) => {
+  console.log({ deviceId, locationId, fcmToken });
+  client
+    .post("notification/upsertFcmToken", {
+      deviceId,
+      locationId,
+      fcmToken,
+    })
+    .then((res) => {
+      console.log("notification");
+      console.log(res.data);
+    })
+    .catch((e) => {
+      console.log("notification error");
+      console.log(e);
+      console.log(e.response.data);
+    });
+};
+
 export const fluctuationReportGenerator = ({ locationId }) =>
   new Promise((resolve, reject) => {
     axios
