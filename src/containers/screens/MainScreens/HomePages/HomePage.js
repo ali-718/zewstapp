@@ -100,20 +100,7 @@ import {
 } from "../../../../Redux/actions/DashboardActions/DashboardActions";
 import moment from "moment";
 import { HeadingBox } from "../../../../components/HeadingBox/HeadingBox";
-
-/* var roundedRectData = function (w, h, tlr, trr, brr, blr) {
-  return 'M 0 ' + tlr
-    + ' A ' + tlr + ' ' + tlr + ' 0 0 1 ' + tlr + ' 0'
-    + ' L ' + (w - trr) + ' 0'
-    + ' A ' + trr + ' ' + trr + ' 0 0 1 ' + w + ' ' + trr
-    + ' L ' + w + ' ' + (h - brr)
-    + ' A ' + brr + ' ' + brr + ' 0 0 1 ' + (w - brr) + ' ' + h
-    + ' L ' + blr + ' ' + h
-    + ' A ' + blr + ' ' + blr + ' 0 0 1 0 ' + (h - blr)
-    + ' Z';
-}; */
-
-const chartData = [50, 10, 40, 95, 4, 24, 85, 91, 35, 53, 53, 24, 50, 20, 80];
+import * as Notifications from "expo-notifications";
 
 const data1 = [72, 96, 33, 66];
 const data2 = [89, 70, 86, 84];
@@ -373,6 +360,8 @@ export const HomePage = ({ setselected }) => {
   const [selectedTime, setSelectedTime] = useState("This month");
   const [isDefaultLocation, setIsDefaultLocation] = useState(true);
   const [allOrdersModal, setAllOrdersModal] = useState(false);
+  const [fluctuationReportLoading, setFluctuationReportLoading] =
+    useState(false);
   const isScreenFocused = useIsFocused();
   const {
     isLoading: firstSectionLoading,
@@ -418,6 +407,58 @@ export const HomePage = ({ setselected }) => {
   const [data2, setData2] = useState([0]);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+
+  async function registerForPushNotificationsAsync() {
+    let token;
+
+    const { status: existingStatus } =
+      await Notifications.getPermissionsAsync();
+    let finalStatus = existingStatus;
+    if (existingStatus !== "granted") {
+      const { status } = await Notifications.requestPermissionsAsync();
+      finalStatus = status;
+    }
+    if (finalStatus !== "granted") {
+      alert("Failed to get push token for push notification!");
+      return;
+    }
+    token = (await Notifications.getExpoPushTokenAsync()).data;
+
+    return token;
+  }
+
+  useEffect(() => {
+    Notifications.setNotificationHandler({
+      handleNotification: async () => ({
+        shouldShowAlert: true,
+        shouldPlaySound: true,
+        shouldSetBadge: false,
+      }),
+    });
+
+    Notifications.addNotificationReceivedListener((notification) => {
+      console.log("notification");
+      console.log(notification);
+    });
+
+    Notifications.addNotificationResponseReceivedListener((response) => {
+      console.log("response");
+      console.log(response);
+    });
+
+    registerForPushNotificationsAsync().then((token) => {
+      console.log(token);
+      // Notifications.scheduleNotificationAsync({
+      //   content: {
+      //     title: "Time's up!",
+      //     body: "Change sides!",
+      //   },
+      //   trigger: {
+      //     seconds: 5,
+      //   },
+      // });
+    });
+  }, []);
 
   useEffect(() => {
     setData1([0, forecastedSales]);
@@ -1387,23 +1428,30 @@ export const HomePage = ({ setselected }) => {
                         justifyContent: "center",
                       }}
                     >
-                      <TouchableOpacity
-                        onPress={() =>
-                          fluctuationReportGenerator({
-                            locationId: defaultLocation.locationId,
-                          })
-                        }
-                      >
-                        <Image
-                          source={downloadPDF}
-                          style={{
-                            width: 18,
-                            resizeMode: "contain",
-                            marginLeft: 20,
-                            marginRight: 10,
+                      {fluctuationReportLoading ? (
+                        <Spinner size={"sm"} color={primaryColor} />
+                      ) : (
+                        <TouchableOpacity
+                          onPress={() => {
+                            setFluctuationReportLoading(true);
+                            fluctuationReportGenerator({
+                              locationId: defaultLocation.locationId,
+                            })
+                              .then(() => setFluctuationReportLoading(false))
+                              .catch(() => setFluctuationReportLoading(false));
                           }}
-                        />
-                      </TouchableOpacity>
+                        >
+                          <Image
+                            source={downloadPDF}
+                            style={{
+                              width: 18,
+                              resizeMode: "contain",
+                              marginLeft: 20,
+                              marginRight: 10,
+                            }}
+                          />
+                        </TouchableOpacity>
+                      )}
                     </View>
                   </View>
 

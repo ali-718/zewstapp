@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Linking } from "react-native";
+import { Alert, Linking } from "react-native";
 import { ToastError, ToastSuccess } from "../../../helpers/Toast";
 import { client } from "../client";
 import {
@@ -12,6 +12,7 @@ import {
   TOTAL_ORDERS,
 } from "./Types";
 import * as FileSystem from "expo-file-system";
+import * as Sharing from "expo-sharing";
 
 export const fetchFoodCountAction =
   ({ locationId, interval, startDate, endDate }) =>
@@ -167,28 +168,55 @@ export const dailyFoodLogAddAction = ({
       });
   });
 
-export const fluctuationReportGenerator = ({ locationId }) => {
-  axios
-    .get(
-      `https://pdf-generator-zewst.herokuapp.com/printPriceFluctuation/${locationId}`
-    )
-    .then((res) => {
-      // fetch(res.data.url);
+export const fluctuationReportGenerator = ({ locationId }) =>
+  new Promise((resolve, reject) => {
+    axios
+      .get(
+        `https://pdf-generator-zewst.herokuapp.com/printPriceFluctuation/${locationId}`
+      )
+      .then((res) => {
+        FileSystem.downloadAsync(
+          res.data.url,
+          FileSystem.documentDirectory + "fluctuation-report.pdf"
+        )
+          .then((data) => {
+            resolve();
+            Sharing.shareAsync(data.uri, { UTI: "public.item" })
+              .then(() => {
+                Alert.alert(
+                  "fluctuation-report.pdf",
+                  "press open to view file",
+                  [
+                    {
+                      text: "Cancel",
+                      onPress: () => null,
+                      style: "cancel",
+                      cancelable: true,
+                    },
+                    {
+                      text: "Open",
+                      onPress: () => Linking.openURL(res.data.url),
+                    },
+                  ]
+                );
+              })
+              .catch((e) => {
+                console.log(e);
+                reject();
+              });
+          })
+          .catch(() => {
+            reject();
 
-      FileSystem.downloadAsync(
-        res.data.url,
-        FileSystem.documentDirectory + "report.pdf"
-      ).then((res) => {
-        console.log(res);
-
-        FileSystem.getContentUriAsync(res.uri).then((data) => {
-          console.log("data");
-          console.log(data);
-
-          Linking.openURL(data);
-        });
+            ToastError("Some error occoured while downloading file");
+          });
+      })
+      .catch((e) => {
+        reject();
+        console.log(e.response.data);
+        ToastError(
+          e.response.data?.message ||
+            "Some error occoured, please try again later"
+        );
       });
-
-      console.log(res.data);
-    });
-};
+  });

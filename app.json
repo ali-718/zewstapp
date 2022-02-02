@@ -32,11 +32,21 @@
         "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#A461D8"
       },
-      "package": "com.hauraki.zewst"
+      "package": "com.hauraki.zewst",
+      "useNextNotificationsApi": true
     },
     "web": {
       "favicon": "./assets/icon.png"
     },
     "userInterfaceStyle": "automatic"
-  }
+  },
+  "plugins": [
+    [
+      "expo-notifications",
+      {
+        "icon": "./assets/icon.png",
+        "sounds": ["./assets/notification.wav"]
+      }
+    ]
+  ]
 }
