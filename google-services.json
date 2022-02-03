@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "634728053125",
+    "firebase_url": "https://playback-97f5b.firebaseio.com",
+    "project_id": "playback-97f5b",
+    "storage_bucket": "playback-97f5b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:634728053125:android:c904579570987b7430ecec",
+        "android_client_info": {
+          "package_name": "com.hauraki.zewst"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "634728053125-3fhia3itep6mbamuf9j12ihc24j5af3u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA3PKpdKolecRYMFjiqs1KIw1UA0HmH5l4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "634728053125-3fhia3itep6mbamuf9j12ihc24j5af3u.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

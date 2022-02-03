@@ -296,7 +296,7 @@ export const Routes = () => {
     }
 
     if (width > 768) {
-      dispatch(actions.deviceType({ type: MOBILE }));
+      dispatch(actions.deviceType({ type: TABLET }));
       return;
     }
 

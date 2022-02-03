@@ -2,7 +2,7 @@
   "expo": {
     "name": "zewst",
     "slug": "zewstapp",
-    "version": "1.0.34",
+    "version": "1.0.35",
     "icon": "./assets/icon.png",
     "splash": {
       "image": "./assets/splash.png",
@@ -33,7 +33,8 @@
         "backgroundColor": "#A461D8"
       },
       "package": "com.hauraki.zewst",
-      "useNextNotificationsApi": true
+      "useNextNotificationsApi": true,
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "favicon": "./assets/icon.png"

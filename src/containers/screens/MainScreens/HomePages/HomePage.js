@@ -103,6 +103,7 @@ import {
 import moment from "moment";
 import { HeadingBox } from "../../../../components/HeadingBox/HeadingBox";
 import * as Notifications from "expo-notifications";
+import * as OS from "expo-device";
 
 const data1 = [72, 96, 33, 66];
 const data2 = [89, 70, 86, 84];
@@ -425,35 +426,37 @@ export const HomePage = ({ setselected }) => {
       return;
     }
     token = (await Notifications.getExpoPushTokenAsync()).data;
-
     return token;
   }
 
   useEffect(() => {
     if (!!defaultLocation.locationId == false) return;
 
-    console.log("defaultLocation");
-    console.log(defaultLocation);
+    console.log("OS.osBuildId");
+    console.log(OS.osBuildId);
 
-    registerForPushNotificationsAsync().then((token) => {
-      console.log(token);
-      sendTokenToDb({
-        deviceId: Platform.OS,
-        locationId: defaultLocation.locationId,
-        fcmToken: token,
+    registerForPushNotificationsAsync()
+      .then((token) => {
+        sendTokenToDb({
+          deviceId: OS.osBuildId,
+          locationId: defaultLocation.locationId,
+          fcmToken: token,
+        });
+
+        // console.log(token);
+        // Notifications.scheduleNotificationAsync({
+        //   content: {
+        //     title: "Time's up!",
+        //     body: "Change sides!",
+        //   },
+        //   trigger: {
+        //     seconds: 5,
+        //   },
+        // });
+      })
+      .catch((e) => {
+        console.log(e);
       });
-
-      // console.log(token);
-      // Notifications.scheduleNotificationAsync({
-      //   content: {
-      //     title: "Time's up!",
-      //     body: "Change sides!",
-      //   },
-      //   trigger: {
-      //     seconds: 5,
-      //   },
-      // });
-    });
   }, [defaultLocation]);
 
   useEffect(() => {
