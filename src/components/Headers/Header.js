@@ -13,7 +13,7 @@ import personGrayIcon from "../../assets/images/personGrayIcon.png";
 import qrcodeIcon from "../../assets/images/qrcodeIcon.png";
 import { Text } from "../Text/Text";
 
-export const Header = ({ leftImage, onPressLeft, onPressRight }) => {
+export const Header = ({ leftImage, onPressLeft, mainHeading }) => {
   const orientation = useSelector((state) => state.system.orientation);
   const device = useSelector((state) => state.system.device);
   const user = useSelector((state) => state.auth.user.user);
@@ -40,7 +40,7 @@ export const Header = ({ leftImage, onPressLeft, onPressRight }) => {
           style={{
             flex: 1,
             padding: 10,
-            backgroundColor: backgroundGrayColor,
+            backgroundColor: "white",
             flexDirection: "row",
             alignItems: "center",
             justifyContent: "center",
@@ -58,17 +58,22 @@ export const Header = ({ leftImage, onPressLeft, onPressRight }) => {
             />
           </TouchableOpacity>
 
-          <TextInput
-            editable={false}
-            placeholder={""}
-            placeholderTextColor={drawerHeadingColor}
-            selectionColor={primaryColor}
+          <View
             style={{
-              marginLeft: 15,
+              marginLeft: 35,
               flex: 1,
-              fontSize: device === "tablet" ? 25 : 20,
             }}
-          />
+          >
+            <Text
+              style={{
+                fontSize: 23,
+                color: "black",
+                fontFamily: "openSans_semiBold",
+              }}
+            >
+              {mainHeading}
+            </Text>
+          </View>
 
           {device === "tablet" && (
             <TouchableOpacity

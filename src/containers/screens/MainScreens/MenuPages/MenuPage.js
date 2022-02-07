@@ -180,7 +180,14 @@ export const MenuPage = () => {
                       setSearch={setSearch}
                       searchKeyword={searchKeyword}
                     />
-                    <ScrollView horizontal style={{ flex: 1, minWidth: WIDTH }}>
+                    <ScrollView
+                      horizontal
+                      style={[
+                        {
+                          flex: 1,
+                        },
+                      ]}
+                    >
                       <View
                         style={{
                           width: "100%",
@@ -199,6 +206,7 @@ export const MenuPage = () => {
                             borderBottomLeftRadius: 0,
                             borderBottomRightRadius: 0,
                             paddingLeft: 20,
+                            minWidth: WIDTH,
                           }}
                         >
                           <View style={{ width: 250 }}>

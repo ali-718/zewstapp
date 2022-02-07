@@ -41,6 +41,7 @@ export const MainScreenContainer = ({
   scrollRef = () => null,
   isDrawer,
   shortDrawer,
+  mainHeading,
   ...props
 }) => {
   const index = useSelector((state) => state.system.menuIndex);
@@ -72,6 +73,7 @@ export const MainScreenContainer = ({
           leftImage={menuIcon}
           onPressLeft={() => navigation.dispatch(DrawerActions.openDrawer())}
           onPressRight={onPressRight}
+          mainHeading={mainHeading}
         />
       )}
       {noScroll ? (

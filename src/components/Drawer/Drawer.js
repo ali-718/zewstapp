@@ -36,6 +36,7 @@ import { Text } from "../Text/Text";
 import { useRoute } from "@react-navigation/native";
 import { RegularButton } from "../Buttons/RegularButton";
 import { LogoutAction } from "../../Redux/actions/AuthActions/authActions";
+import logoutIcon from "../../assets/images/logoutIcon.png";
 
 export const Menu = ({ image, name, setselected, selected, style, noName }) => (
   <TouchableOpacity
@@ -215,20 +216,6 @@ export const DrawerMenu = ({
               image={foodLogIcon}
               name={"Food Log"}
             />
-
-            <RegularButton
-              text={"Logout"}
-              onPress={Logout}
-              textStyle={{ color: "red" }}
-              colors={["white", "white"]}
-              style={{
-                borderColor: "red",
-                borderWidth: 1,
-                marginTop: 20,
-                width: "90%",
-                alignSelf: "center",
-              }}
-            />
           </View>
 
           <View style={{ width: "100%", marginTop: 40 }}>
@@ -266,6 +253,13 @@ export const DrawerMenu = ({
               setselected={() => null}
               image={supportIcon}
               name={"Support"}
+            />
+
+            <Menu
+              setselected={() => null}
+              image={logoutIcon}
+              setselected={Logout}
+              name={"Logout"}
             />
           </View>
         </View>

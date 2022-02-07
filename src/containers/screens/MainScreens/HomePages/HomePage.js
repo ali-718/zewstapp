@@ -86,6 +86,7 @@ import {
   YAxis,
   BarChart,
   PieChart,
+  XAxis,
 } from "react-native-svg-charts";
 import { Icon, Progress, Select, ArrowDownIcon, Spinner } from "native-base";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -401,6 +402,7 @@ export const HomePage = ({ setselected }) => {
     interval: forecastedInterval,
     startDate: forecastedStartDate,
     endDate: forecastedEndDate,
+    graphData,
   } = useSelector((state) => state.dashboard.forecastedSales);
 
   const defaultLocation = useSelector(
@@ -512,15 +514,15 @@ export const HomePage = ({ setselected }) => {
   }, []);
 
   useEffect(() => {
-    setData1([0, forecastedSales]);
-    setData2([0, forecastedActualSales]);
+    setData1(graphData.map((item) => item.actualSale));
+    setData2(graphData.map((item) => item.forecast));
     setStartDate(forecastedStartDate);
     setEndDate(forecastedEndDate);
   }, [forecastedSales, forecastedActualSales]);
 
   const barData = [
     {
-      data: data1.map((value) => value),
+      data: data2.map((value) => value),
       svg: {
         stroke: chartColor1,
         strokeWidth: 5,
@@ -528,7 +530,7 @@ export const HomePage = ({ setselected }) => {
       },
     },
     {
-      data: data2.map((value) => value),
+      data: data1.map((value) => value),
       svg: {
         stroke: chartColor2,
         strokeWidth: 5,
@@ -785,7 +787,7 @@ export const HomePage = ({ setselected }) => {
   const changeTime = (val) => setSelectedTime(val);
 
   return (
-    <MainScreenContainer shortDrawer isDrawer>
+    <MainScreenContainer mainHeading={"Overview"} shortDrawer isDrawer>
       {!!defaultLocation.locationId ? (
         <LinearGradient
           colors={[backgroundGrayColor, backgroundGrayColor]}
@@ -821,22 +823,11 @@ export const HomePage = ({ setselected }) => {
                   zIndex: 1,
                 }}
               >
-                <Text
-                  style={{
-                    color: "black",
-                    fontSize: device === "tablet" ? 24 : 20,
-                    fontFamily: "openSans_bold",
-                  }}
-                >
-                  Overview
-                </Text>
-
                 <View
                   style={{
                     flexDirection: "row",
                     alignItems: "center",
                     justifyContent: "center",
-                    marginLeft: device === "tablet" ? 20 : 0,
                     zIndex: 4,
                   }}
                 >
@@ -1126,43 +1117,44 @@ export const HomePage = ({ setselected }) => {
                         style={{ marginBottom: 10, marginLeft: 10 }}
                         contentInset={{ top: 20, bottom: 20 }}
                         svg={{ fontSize: 10, fill: "grey" }}
-                        formatLabel={(value) => `$${value}`}
+                        formatLabel={(value) => `$${currencyDisplay(value)}`}
                         numberOfTicks={5}
                       />
-                      <LineChart
-                        animate={true}
-                        style={{ height: 200, marginLeft: 10, flex: 1 }}
-                        data={barData}
-                        //yAccessor={({ item }) => item}
-                        //xAccessor={({ item }) => item}
-                        //spacingInner={0.9}
-                        contentInset={{ top: 20, bottom: 20 }}
-                      >
-                        {/* <RoundedBars /> */}
-                        <Grid
-                          ticks={5}
-                          svg={{
-                            stroke: "#F1F1F5",
-                          }}
-                          direction={Grid.Direction.HORIZONTAL}
+
+                      <View style={{ flex: 1 }}>
+                        <LineChart
+                          animate={true}
+                          style={{ height: 200, marginLeft: 10, flex: 1 }}
+                          data={barData}
+                          //yAccessor={({ item }) => item}
+                          //xAccessor={({ item }) => item}
+                          //spacingInner={0.9}
+                          contentInset={{ top: 20, bottom: 20 }}
+                        >
+                          {/* <RoundedBars /> */}
+                          <Grid
+                            ticks={5}
+                            svg={{
+                              stroke: "#F1F1F5",
+                            }}
+                            direction={Grid.Direction.HORIZONTAL}
+                          />
+                        </LineChart>
+                        <XAxis
+                          data={[...data1, ...data2]}
+                          contentInset={{ left: 20, right: 0 }}
+                          svg={{ fontSize: 10, fill: "grey" }}
+                          numberOfTicks={6}
+                          formatLabel={(value, index) =>
+                            graphData.map((item) =>
+                              moment(item.date).format("DD-MM")
+                            )[index]
+                          }
+                          xAccessor={(item) => item.item}
                         />
-                      </LineChart>
+                      </View>
                     </View>
 
-                    {forecastedActualSales > 0 || forecastedSales > 0 ? (
-                      <View
-                        style={{
-                          width: "100%",
-                          alignItems: "flex-end",
-                          justifyContent: "flex-end",
-                          marginTop: -10,
-                        }}
-                      >
-                        <Text style={{ color: "#92929D", fontSize: 12 }}>
-                          {startDate}
-                        </Text>
-                      </View>
-                    ) : null}
                     {/* <XAxis
                       data={[...startDate, ...endDate]}
                       style={{ margin: 20 }}
