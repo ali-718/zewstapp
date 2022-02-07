@@ -850,22 +850,24 @@ export const OrderTakingScreen = (props) => {
                                   <Text style={{ fontSize: 16 }}>
                                     ${item.totalPrice?.toFixed(2)}
                                   </Text>
-                                  {mealSelectedForAdjustment !== i && (
-                                    <TouchableOpacity
-                                      onPress={() => deleteOrderList(item)}
-                                    >
-                                      <Text
-                                        style={{
-                                          color: "#868686",
-                                          fontSize: 20,
-                                          marginLeft: 10,
-                                          margin: 0,
-                                        }}
-                                      >
-                                        x
-                                      </Text>
-                                    </TouchableOpacity>
-                                  )}
+                                  {isReserved
+                                    ? null
+                                    : mealSelectedForAdjustment !== i && (
+                                        <TouchableOpacity
+                                          onPress={() => deleteOrderList(item)}
+                                        >
+                                          <Text
+                                            style={{
+                                              color: "#868686",
+                                              fontSize: 20,
+                                              marginLeft: 10,
+                                              margin: 0,
+                                            }}
+                                          >
+                                            x
+                                          </Text>
+                                        </TouchableOpacity>
+                                      )}
                                 </View>
                               </TouchableOpacity>
 

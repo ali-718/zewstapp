@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   FlatList,
   Image,
@@ -104,6 +104,7 @@ import moment from "moment";
 import { HeadingBox } from "../../../../components/HeadingBox/HeadingBox";
 import * as Notifications from "expo-notifications";
 import * as OS from "expo-device";
+import { notificationData } from "../../../../Redux/actions/AuthActions/authActions";
 
 const data1 = [72, 96, 33, 66];
 const data2 = [89, 70, 86, 84];
@@ -410,6 +411,8 @@ export const HomePage = ({ setselected }) => {
   const [data2, setData2] = useState([0]);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+  const notificationListener = useRef();
+  const responseListener = useRef();
 
   async function registerForPushNotificationsAsync() {
     let token;
@@ -432,9 +435,6 @@ export const HomePage = ({ setselected }) => {
   useEffect(() => {
     if (!!defaultLocation.locationId == false) return;
 
-    console.log("OS.osBuildId");
-    console.log(OS.osBuildId);
-
     registerForPushNotificationsAsync()
       .then((token) => {
         sendTokenToDb({
@@ -442,7 +442,6 @@ export const HomePage = ({ setselected }) => {
           locationId: defaultLocation.locationId,
           fcmToken: token,
         });
-
         // console.log(token);
         // Notifications.scheduleNotificationAsync({
         //   content: {
@@ -468,15 +467,48 @@ export const HomePage = ({ setselected }) => {
       }),
     });
 
-    Notifications.addNotificationReceivedListener((notification) => {
-      console.log("notification");
-      console.log(notification);
-    });
+    notificationListener.current =
+      Notifications.addNotificationReceivedListener((notification) => {
+        console.log("notification");
+        console.log(notification.request.content);
 
-    Notifications.addNotificationResponseReceivedListener((response) => {
-      console.log("response");
-      console.log(response);
-    });
+        dispatch(
+          notificationData({
+            data: {
+              itemNames: notification.request.content.data?.itemNames,
+              body: notification.request.content.body,
+              createdAt: moment(notification.request.content.createdAt).format(
+                "h:mm a"
+              ),
+            },
+          })
+        );
+      });
+
+    responseListener.current =
+      Notifications.addNotificationResponseReceivedListener((response) => {
+        console.log("response");
+        console.log(response.notification.request.content.data?.itemNames);
+
+        dispatch(
+          notificationData({
+            data: {
+              itemNames: response.notification.request.content.data?.itemNames,
+              body: response.notification.request.content?.body,
+              createdAt: moment(
+                response.notification.request.content.createdAt
+              ).format("h:mm a"),
+            },
+          })
+        );
+      });
+
+    return () => {
+      Notifications.removeNotificationSubscription(
+        notificationListener.current
+      );
+      Notifications.removeNotificationSubscription(responseListener.current);
+    };
   }, []);
 
   useEffect(() => {
@@ -1793,7 +1825,6 @@ export const HomePage = ({ setselected }) => {
             flex: 1,
             alignItems: "center",
             justifyContent: "center",
-            // backgroundColor: "red",
           }}
         >
           <TouchableOpacity

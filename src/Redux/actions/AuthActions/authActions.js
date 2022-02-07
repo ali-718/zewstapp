@@ -1,7 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ToastError, ToastSuccess } from "../../../helpers/Toast";
 import { client } from "../client";
-import { LOGOUT } from "./Types";
+import { LOGOUT, NOTIFICATION_DATA } from "./Types";
 
 export const signupAction = ({ owner_name, contact_no, email, password }) =>
   new Promise((resolve, reject) => {
@@ -155,3 +155,9 @@ export const addBankDetailsAction = ({
         reject();
       });
   });
+
+export const notificationData =
+  ({ data }) =>
+  (dispatch) => {
+    dispatch({ type: NOTIFICATION_DATA, payload: data });
+  };
