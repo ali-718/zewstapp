@@ -10,13 +10,9 @@ export const StripeModal = ({
   orderId,
   clientId,
   locationId,
+  ProcessPayment,
   list,
 }) => {
-  console.log(
-    `http://localhost:3000/?amount=${amount}&orderId=${orderId}&clientId=${clientId}&locationId=${locationId}&items=${JSON.stringify(
-      list
-    )}`
-  );
   return (
     <Modal visible={visible} onRequestClose={() => handleClose}>
       <View
@@ -28,7 +24,7 @@ export const StripeModal = ({
           backgroundColor: "rgba(0,0,0,0.5)",
         }}
       >
-        <View style={{ width: "100%", flex: 0.85, backgroundColor: "white" }}>
+        <View style={{ width: "100%", flex: 0.9, backgroundColor: "white" }}>
           <View
             style={{
               width: "100%",
@@ -46,9 +42,13 @@ export const StripeModal = ({
           <WebView
             onNavigationStateChange={(e) => {
               console.log(e);
+              if (e.url.includes("successfullyPaid=true")) {
+                console.log("payment successfull");
+                ProcessPayment();
+              }
             }}
             source={{
-              uri: `http://localhost:3000/?amount=${amount}&orderId=${orderId}&clientId=${clientId}&locationId=${locationId}&items=${JSON.stringify(
+              uri: `https://master.do3nd3vjel0um.amplifyapp.com/?amount=${amount}&orderId=${orderId}&clientId=${clientId}&locationId=${locationId}&items=${JSON.stringify(
                 list
               )}`,
             }}

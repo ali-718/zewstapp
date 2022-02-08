@@ -255,6 +255,8 @@ export const OrderTakingScreen = (props) => {
 
   const ProcessPayment = () => {
     console.log("runing process Payment");
+
+    setShowTerminal(false);
     if (paymentMethod !== "Card") {
       setcreateOrderLoading(true);
       actions
@@ -1284,7 +1286,8 @@ export const OrderTakingScreen = (props) => {
             </Text>
           </View>
         )}
-        {console.log(reservedOrder?.catalog)}
+        {console.log(orderList)}
+        {console.log(reservedOrder)}
         <StripeModal
           list={
             reservedOrder?.catalog
@@ -1300,7 +1303,13 @@ export const OrderTakingScreen = (props) => {
                     amount: (item.mealPrice * item.quantity).toFixed(2),
                   })),
                 ]
-              : []
+              : [
+                  ...orderList?.map((item) => ({
+                    quantity: item.selected,
+                    description: item.mealName,
+                    amount: item.totalPrice?.toFixed(2),
+                  })),
+                ]
           }
           visible={showTerminal}
           handleClose={() => setShowTerminal(false)}
@@ -1312,6 +1321,7 @@ export const OrderTakingScreen = (props) => {
           orderId={isReserved ? reservedOrder?.orderId : orderId}
           clientId={user?.clientId}
           locationId={defaultLocation.locationId}
+          ProcessPayment={ProcessPayment}
         />
       </MainScreenContainer>
     );
