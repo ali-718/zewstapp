@@ -11,9 +11,7 @@ import {
 } from "react-native";
 import { MainScreenContainer } from "../../../MainScreenContainers";
 import { Text } from "../../../../components/Text/Text";
-import forwardIcon from "../../../../assets/images/forwardIcon.png";
-import qrcodeIcon from "../../../../assets/images/qrcodeIcon.png";
-import plusBorderIcon from "../../../../assets/images/plusBorderIcon.png";
+import comingsoon from "../../../../assets/images/comingsoon.png";
 import { RegularButton } from "../../../../components/Buttons/RegularButton";
 import {
   backgroundGrayColor,
@@ -1277,6 +1275,54 @@ export const HomePage = ({ setselected }) => {
                 >
                   <View
                     style={{
+                      flexDirection: "column",
+                      backgroundColor: "rgba(255,255,255,0.8)",
+                      borderRadius: 10,
+                      padding: 10,
+                      paddingVertical: 20,
+                      paddingBottom: 30,
+                      width: "110%",
+                      height: 405,
+                      position: "absolute",
+                      zIndex: 1,
+                    }}
+                  >
+                    <View style={{ width: "100%" }}>
+                      <Text style={{ color: "black", fontSize: 18 }}>
+                        Food waste profit
+                      </Text>
+
+                      <View
+                        style={{
+                          alignItems: "center",
+                          justifyContent: "center",
+                          marginTop: 60,
+                        }}
+                      >
+                        <Image
+                          source={comingsoon}
+                          style={{
+                            width: 150,
+                            height: 150,
+                            resizeMode: "contain",
+                          }}
+                        />
+
+                        <Text
+                          style={{
+                            color: "#A461D8",
+                            fontSize: 18,
+                            fontFamily: "openSans_bold",
+                            marginTop: 60,
+                          }}
+                        >
+                          Coming Soon
+                        </Text>
+                      </View>
+                    </View>
+                  </View>
+                  <View
+                    style={{
                       width: "100%",
                       flexDirection: "row",
                       alignItems: "center",
@@ -1284,7 +1330,7 @@ export const HomePage = ({ setselected }) => {
                     }}
                   >
                     <View>
-                      <Text
+                      {/* <Text
                         style={{
                           color: "black",
                           fontSize: 16,
@@ -1292,8 +1338,8 @@ export const HomePage = ({ setselected }) => {
                         }}
                       >
                         Food waste profit
-                      </Text>
-                      <Text
+                      </Text> */}
+                      {/* <Text
                         style={{
                           color: grayTextColor,
                           fontSize: 14,
@@ -1301,7 +1347,7 @@ export const HomePage = ({ setselected }) => {
                         }}
                       >
                         Total this month: $0
-                      </Text>
+                      </Text> */}
                     </View>
 
                     <Image

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, ScrollView, TouchableOpacity } from "react-native";
+import { View, ScrollView, TouchableOpacity, Image } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { RegularButton } from "../../../../components/Buttons/RegularButton";
 import { MainScreenContainer } from "../../../MainScreenContainers";
@@ -17,6 +17,8 @@ import { colors } from "../../../../helpers/utlils";
 import { InventoryDetailPage } from "./InventoryDetailPage";
 import { HeadingBox } from "../../../../components/HeadingBox/HeadingBox";
 import noRecipe from "../../../../assets/images/noRecipe.png";
+import deleteIconWhite from "../../../../assets/images/deleteIconWhite.png";
+import updateIcon from "../../../../assets/images/updateIcon.png";
 import { primaryColor } from "../../../../theme/colors";
 import { boxWithShadow } from "../../../../theme/styles";
 import { SwipeListView } from "react-native-swipe-list-view";
@@ -178,35 +180,52 @@ export const InventoryListPage = () => {
                             flexDirection: "row",
                             alignItems: "center",
                             justifyContent: "space-between",
+                            overflow: "hidden",
                           }}
                         >
                           <TouchableOpacity
                             onPress={() => deleteInventory(item?.inventoryId)}
                             style={{
-                              marginTop: 20,
-                              backgroundColor: "tomato",
+                              marginTop: 30,
+                              backgroundColor: "#EA1A27",
                               marginBottom: 10,
                               justifyContent: "center",
-                              width: 100,
-                              height: 50,
+                              width: 150,
+                              height: "80%",
+                              borderTopLeftRadius: 10,
+                              borderBottomLeftRadius: 10,
+                              alignItems: "center",
                             }}
                             disabled={deleteLoading}
                           >
                             {deleteLoading ? (
                               <Spinner size="sm" color={"white"} />
                             ) : (
-                              <Text
+                              <View
                                 style={{
-                                  color: "white",
-                                  fontSize: 16,
-                                  marginLeft: 15,
-                                  fontWeight: "bold",
+                                  flexDirection: "row",
+                                  alignItems: "center",
+                                  justifyContent: "center",
                                 }}
                               >
-                                Delete
-                              </Text>
+                                <Image
+                                  source={deleteIconWhite}
+                                  style={{ width: 15, height: 18 }}
+                                />
+                                <Text
+                                  style={{
+                                    color: "white",
+                                    fontSize: 14,
+                                    fontFamily: "openSans_bold",
+                                    marginLeft: 15,
+                                  }}
+                                >
+                                  Delete
+                                </Text>
+                              </View>
                             )}
                           </TouchableOpacity>
+
                           <TouchableOpacity
                             onPress={() =>
                               navigation.navigate("inventoryUpdate", {
@@ -214,35 +233,53 @@ export const InventoryListPage = () => {
                               })
                             }
                             style={{
-                              marginTop: 20,
-                              backgroundColor: "#32CD32",
+                              marginTop: 30,
+                              backgroundColor: "#A561D8",
                               marginBottom: 10,
                               justifyContent: "center",
-                              width: 100,
-                              height: 50,
-                              alignItems: "flex-end",
+                              width: 150,
+                              height: "80%",
+                              borderTopRightRadius: 10,
+                              borderBottomRightRadius: 10,
+                              alignItems: "center",
                             }}
                             disabled={deleteLoading}
                           >
                             {deleteLoading ? (
                               <Spinner size="sm" color={"white"} />
                             ) : (
-                              <Text
+                              <View
                                 style={{
-                                  color: "white",
-                                  fontSize: 16,
-                                  marginRight: 10,
-                                  fontWeight: "bold",
+                                  flexDirection: "row",
+                                  alignItems: "center",
+                                  justifyContent: "center",
                                 }}
                               >
-                                Update
-                              </Text>
+                                <Image
+                                  source={updateIcon}
+                                  style={{
+                                    width: 18,
+                                    height: 15,
+                                    resizeMode: "contain",
+                                  }}
+                                />
+                                <Text
+                                  style={{
+                                    color: "white",
+                                    fontSize: 14,
+                                    fontFamily: "openSans_bold",
+                                    marginLeft: 15,
+                                  }}
+                                >
+                                  Update
+                                </Text>
+                              </View>
                             )}
                           </TouchableOpacity>
                         </View>
                       )}
-                      leftOpenValue={75}
-                      rightOpenValue={-75}
+                      leftOpenValue={150}
+                      rightOpenValue={-150}
                     />
                   </View>
                 </View>

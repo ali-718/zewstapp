@@ -103,8 +103,9 @@ export const posReducer = produce((state = initialState, { payload, type }) => {
       break;
     }
     case UPDATE_ORDER.FAILED: {
-      const index = state.orders.orders.findIndex(
-        (item) => item.orderId === payload
+      const allOrders = [...state.orders.createdOrders];
+      const index = allOrders.findIndex(
+        (item) => item.orderId === payload.orderId
       );
 
       if (index > -1) {
@@ -139,6 +140,9 @@ export const posReducer = produce((state = initialState, { payload, type }) => {
         ...createdOrders?.dineInOrdersCreated,
         ...createdOrders?.takeAwayOrdersCreated,
         ...createdOrders?.deliveryOrdersCreated,
+        ...paidOrders?.dineInOrdersPaid,
+        ...paidOrders?.takeAwayOrdersPaid,
+        ...paidOrders?.deliveryOrdersPaid,
       ];
       state.orders.orders = [
         ...paidOrders?.dineInOrdersPaid,
