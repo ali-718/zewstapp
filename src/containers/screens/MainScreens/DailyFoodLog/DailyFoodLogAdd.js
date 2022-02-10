@@ -12,6 +12,7 @@ import { RegularButton } from "../../../../components/Buttons/RegularButton";
 import { marginTop } from "styled-system";
 import validator from "validator";
 import { dailyFoodLogAddAction } from "../../../../Redux/actions/DashboardActions/DashboardActions";
+import { ToastError } from "../../../../helpers/Toast";
 
 export const DailyFoodLogAdd = () => {
   const [selectedItem, setSelectedItem] = useState({});
