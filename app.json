@@ -2,7 +2,7 @@
   "expo": {
     "name": "zewst",
     "slug": "zewstapp",
-    "version": "1.0.38",
+    "version": "1.0.39",
     "icon": "./assets/icon.png",
     "splash": {
       "image": "./assets/splash.png",
@@ -25,6 +25,9 @@
       "bundleIdentifier": "com.hauraki.zewst",
       "splash": {
         "tabletImage": "./assets/tabletSplash.png"
+      },
+      "config": {
+        "googleMapsApiKey": "AIzaSyCuePe80Z09iUIds3L9tMVf2_G21HfugN0"
       }
     },
     "android": {
@@ -34,7 +37,12 @@
       },
       "package": "com.hauraki.zewst",
       "useNextNotificationsApi": true,
-      "googleServicesFile": "./google-services.json"
+      "googleServicesFile": "./google-services.json",
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyCuePe80Z09iUIds3L9tMVf2_G21HfugN0"
+        }
+      }
     },
     "web": {
       "favicon": "./assets/icon.png"

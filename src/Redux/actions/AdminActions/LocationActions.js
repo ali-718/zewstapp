@@ -18,6 +18,8 @@ export const AddNewLocation =
     district,
     navigation,
     taxRate,
+    longitude,
+    latitude,
   }) =>
   (dispatch) => {
     dispatch({ type: ADD_NEW_LOCATION.REQUESTED });
@@ -33,6 +35,8 @@ export const AddNewLocation =
         mode: "Manual",
         default_location: true,
         taxRate,
+        longitude,
+        latitude,
       })
       .then((data) => {
         // dispatch(setPrimaryLocationAction({}));
@@ -82,6 +86,8 @@ export const updateLocation =
     navigation,
     locationId,
     taxRate,
+    longitude,
+    latitude,
   }) =>
   (dispatch) => {
     dispatch({ type: EDIT_LOCATION.REQUESTED });
@@ -97,6 +103,8 @@ export const updateLocation =
         locationId,
         mode: "Manual",
         taxRate,
+        longitude,
+        latitude,
       })
       .then((data) => {
         dispatch({
