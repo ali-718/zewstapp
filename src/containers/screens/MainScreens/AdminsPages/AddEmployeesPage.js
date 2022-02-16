@@ -30,6 +30,9 @@ export const AddEmployeesPage = (props) => {
   const deleteError = useSelector(
     (state) => state.employee.deleteEmployee.isError
   );
+  const defaultLocation = useSelector(
+    (state) => state.locations.defaultLocation
+  );
   const [selectedType, setSelectedType] = useState("");
   const [firstName, setfirstName] = useState("");
   const [lastName, setlastName] = useState("");
@@ -38,6 +41,7 @@ export const AddEmployeesPage = (props) => {
   const [available, setavailable] = useState(true);
   const [isEdit, setIsEdit] = useState(false);
   const [deleteModal, setdeleteModal] = useState(false);
+  const [roles, setRoles] = useState([]);
 
   useEffect(() => {
     if (!deleteError) return;
@@ -46,6 +50,8 @@ export const AddEmployeesPage = (props) => {
   }, [deleteError]);
 
   useEffect(() => {
+    actions.getEmployeeRoles().then((res) => setRoles(res));
+
     const data = props?.route?.params?.data;
 
     if (data) {
@@ -73,8 +79,7 @@ export const AddEmployeesPage = (props) => {
       selectedType.trim().length === 0 ||
       firstName.trim().length === 0 ||
       lastName.trim().length === 0 ||
-      contact.trim().length === 0 ||
-      email.trim().length === 0
+      contact.trim().length === 0
     ) {
       ToastError("Kindly all fields");
       return;
@@ -82,12 +87,11 @@ export const AddEmployeesPage = (props) => {
 
     if (isEdit) {
       const data = {
-        clientId: user.clientId,
+        locationId: defaultLocation.locationId,
         firstName,
         lastName,
         phone: contact,
-        email: email,
-        type: selectedType,
+        role: selectedType,
         active: available,
         navigation,
         employeeId: props.route.params.data.employeeId,
@@ -98,12 +102,11 @@ export const AddEmployeesPage = (props) => {
     }
 
     const data = {
-      clientId: user.clientId,
+      locationId: defaultLocation.locationId,
       firstName,
       lastName,
       phone: contact,
-      email: email,
-      type: selectedType,
+      role: selectedType,
       active: available,
       navigation,
     };
@@ -114,7 +117,7 @@ export const AddEmployeesPage = (props) => {
   const deleteEmployee = () =>
     dispatch(
       actions.deleteEmployee({
-        clientId: user?.clientId,
+        locationId: defaultLocation.locationId,
         employeeId: props.route.params.data.employeeId,
         navigation,
       })
@@ -162,21 +165,21 @@ export const AddEmployeesPage = (props) => {
           />
         </View>
 
-        <View style={{ width: "100%", marginTop: 20 }}>
+        {/* <View style={{ width: "100%", marginTop: 20 }}>
           <Input
             keyboardType={"email-address"}
             placeholder={"Email address"}
             value={email}
             setValue={(val) => setEmail(val)}
           />
-        </View>
+        </View> */}
 
         <View style={{ width: "100%", marginTop: 20, zIndex: 1 }}>
           <Dropdown
             selectedMenu={selectedType}
             setMenu={setSelectedType}
-            placeholder={"Type"}
-            menus={["Manager", "Cashier", "kitchen Staff", "Order Taker"]}
+            placeholder={"Role"}
+            menus={roles}
             style={{ zIndex: 3 }}
           />
           {/* <View

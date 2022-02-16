@@ -2,7 +2,7 @@
   "expo": {
     "name": "zewst",
     "slug": "zewstapp",
-    "version": "1.0.39",
+    "version": "1.0.41",
     "icon": "./assets/icon.png",
     "splash": {
       "image": "./assets/splash.png",
@@ -27,7 +27,7 @@
         "tabletImage": "./assets/tabletSplash.png"
       },
       "config": {
-        "googleMapsApiKey": "AIzaSyCuePe80Z09iUIds3L9tMVf2_G21HfugN0"
+        "googleMapsApiKey": "AIzaSyAGC7lHJNpuBGN4RCobhFeTkcCL_mX5_BY"
       }
     },
     "android": {
@@ -40,7 +40,7 @@
       "googleServicesFile": "./google-services.json",
       "config": {
         "googleMaps": {
-          "apiKey": "AIzaSyCuePe80Z09iUIds3L9tMVf2_G21HfugN0"
+          "apiKey": "AIzaSyAGC7lHJNpuBGN4RCobhFeTkcCL_mX5_BY"
         }
       }
     },

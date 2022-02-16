@@ -8,38 +8,49 @@ import { client } from "../client";
 import { ToastError, ToastSuccess } from "../../../helpers/Toast";
 
 export const getAllEmployees =
-  ({ clientId }) =>
+  ({ locationId }) =>
   (dispatch) => {
     dispatch({ type: GET_EMPLOYEES.REQUESTED });
 
+    console.log({ locationId });
     client
-      .get(`client/getEmployees/${clientId}`)
+      .get(`/employee/getEmployees/${locationId}`)
       .then(({ data }) => {
         dispatch({
           type: GET_EMPLOYEES.SUCCEEDED,
-          payload: data.employees.Items,
+          payload: data.employees,
         });
+        console.log(data);
       })
       .catch((e) => {
+        console.log(e.response);
         dispatch({ type: GET_EMPLOYEES.FAILED });
       });
   };
 
 export const addEmployeeAction =
-  ({ clientId, firstName, lastName, phone, email, type, active, navigation }) =>
+  ({ locationId, firstName, lastName, phone, role, active, navigation }) =>
   (dispatch) => {
     dispatch({ type: ADD_EMPLOYEES.REQUESTED });
 
+    console.log({
+      locationId,
+      firstName,
+      lastName,
+      phone,
+      role,
+      active,
+      navigation,
+    });
     client
       .post(
-        `client/addEmployee`,
+        `employee/addEmployee`,
         JSON.stringify({
-          clientId,
+          locationId,
           firstName,
           lastName,
           phone: `+${phone}`,
-          email,
-          type,
+          role,
           active,
         })
       )
@@ -47,28 +58,29 @@ export const addEmployeeAction =
         dispatch({
           type: ADD_EMPLOYEES.SUCCEEDED,
         });
-        dispatch(getAllEmployees({ clientId }));
+        dispatch(getAllEmployees({ locationId }));
         navigation.goBack();
         ToastSuccess("Success", "Employee added successfully");
       })
       .catch((e) => {
+        console.log(e.response);
         ToastError("Some error occoured, please try again later");
         dispatch({ type: ADD_EMPLOYEES.FAILED });
       });
   };
 
 export const deleteEmployee =
-  ({ clientId, employeeId, navigation }) =>
+  ({ locationId, employeeId, navigation }) =>
   (dispatch) => {
     dispatch({ type: DELETE_EMPLOYEES.REQUESTED });
 
     client
-      .post(`client/deleteEmployee/${clientId}/${employeeId}`)
+      .post(`employee/deleteEmployee/${locationId}/${employeeId}`)
       .then(() => {
         dispatch({
           type: DELETE_EMPLOYEES.SUCCEEDED,
         });
-        dispatch(getAllEmployees({ clientId }));
+        dispatch(getAllEmployees({ locationId }));
         ToastSuccess("Success", "Employee deleted successfully!");
 
         navigation.pop(1);
@@ -82,7 +94,7 @@ export const deleteEmployee =
 export const editEmployeeAction =
   ({
     employeeId,
-    clientId,
+    locationId,
     firstName,
     lastName,
     phone,
@@ -98,7 +110,7 @@ export const editEmployeeAction =
       .post(
         `client/updateEmployee`,
         JSON.stringify({
-          clientId,
+          locationId,
           firstName,
           lastName,
           phone: `+${phone}`,
@@ -112,7 +124,7 @@ export const editEmployeeAction =
         dispatch({
           type: EDIT_EMPLOYEES.SUCCEEDED,
         });
-        dispatch(getAllEmployees({ clientId }));
+        dispatch(getAllEmployees({ locationId }));
         navigation.goBack();
         ToastSuccess("Success", "Employee edited successfully");
       })
@@ -121,3 +133,15 @@ export const editEmployeeAction =
         dispatch({ type: EDIT_EMPLOYEES.FAILED });
       });
   };
+
+export const getEmployeeRoles = () =>
+  new Promise((resolve, reject) => {
+    client
+      .get(`/client/getRoles`)
+      .then(({ data }) => {
+        resolve(data?.roles);
+      })
+      .catch((e) => {
+        reject();
+      });
+  });

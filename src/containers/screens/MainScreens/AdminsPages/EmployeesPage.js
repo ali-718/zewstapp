@@ -25,6 +25,9 @@ export const EmployeesPage = () => {
   const list = useSelector((state) => state.employee.employee.employees);
   const isLoading = useSelector((state) => state.employee.employee.isLoading);
   const isError = useSelector((state) => state.employee.employee.isError);
+  const defaultLocation = useSelector(
+    (state) => state.locations.defaultLocation
+  );
   const [search, setSearch] = useState("");
   const [filteredItem, setFiltereditem] = useState([]);
 
@@ -49,7 +52,7 @@ export const EmployeesPage = () => {
   }, [list]);
 
   const fetchEmployees = () =>
-    dispatch(getAllEmployees({ clientId: user.clientId }));
+    dispatch(getAllEmployees({ locationId: defaultLocation.locationId }));
 
   return (
     <MainScreenContainer title={"Employees"}>
@@ -73,8 +76,8 @@ export const EmployeesPage = () => {
                   <View style={{ width: "100%", marginTop: 10 }}>
                     <AdminOverviewBox
                       key={i}
-                      label={item.type}
-                      name={`${item.firstName} ${item.lastName}`}
+                      label={`${item.firstName} ${item.lastName}`}
+                      name={item.role}
                       rightText={item.active ? "Active" : "Inactive"}
                       onPress={() =>
                         navigation.navigate("addEmployees", { data: item })
