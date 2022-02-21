@@ -13,6 +13,10 @@ import { marginTop } from "styled-system";
 import validator from "validator";
 import { dailyFoodLogAddAction } from "../../../../Redux/actions/DashboardActions/DashboardActions";
 import { ToastError } from "../../../../helpers/Toast";
+import {
+  getUpdatedQuantitynUnit,
+  validConversionUnits,
+} from "../../../../helpers/utlils";
 
 export const DailyFoodLogAdd = () => {
   const [selectedItem, setSelectedItem] = useState({});
@@ -96,11 +100,13 @@ export const DailyFoodLogAdd = () => {
           selectedMenu={selectedItem?.itemName ?? ""}
           setMenu={(val) => {
             setSelectedItem(list.find((item) => item.itemName === val));
+            setQuantity("");
+            setUnit("");
           }}
           placeholder={"Item"}
           menus={list.map((item) => item.itemName)}
           style={{
-            zIndex: 3,
+            zIndex: 4,
             borderWidth: 1,
             borderBottomWidth: 1,
             borderColor: inputBorderColor,
@@ -122,25 +128,38 @@ export const DailyFoodLogAdd = () => {
           inputStyle={{ opacity: 0.5 }}
         />
 
-        <Input
-          placeholder={"Quantity"}
-          value={quantity}
+        <Dropdown
+          selectedMenu={unit}
+          setMenu={(val) => {
+            setUnit(val);
+            setQuantity("");
+          }}
+          placeholder={"Unit"}
+          menus={validConversionUnits(selectedItem.originalUnit)}
           style={{
-            marginTop: 12,
-            borderColor: inputBorderColor,
+            zIndex: 3,
             borderWidth: 1,
             borderBottomWidth: 1,
+            borderColor: inputBorderColor,
             borderRadius: 8,
+            marginTop: 12,
           }}
-          setValue={(val) => setQuantity(val)}
-          keyboardType={"number-pad"}
         />
 
         <Dropdown
-          selectedMenu={unit}
-          setMenu={setUnit}
-          placeholder={"Unit"}
-          menus={allUnits}
+          selectedMenu={quantity}
+          setMenu={(val) => setQuantity(val)}
+          placeholder={"Quantity"}
+          menus={Array.from(
+            {
+              length: getUpdatedQuantitynUnit(
+                selectedItem.originalUnit,
+                unit,
+                parseInt(selectedItem.quantity)
+              )?.quantity,
+            },
+            (_, i) => i + 1
+          )}
           style={{
             zIndex: 2,
             borderWidth: 1,
@@ -149,6 +168,7 @@ export const DailyFoodLogAdd = () => {
             borderRadius: 8,
             marginTop: 12,
           }}
+          invetoryItems
         />
 
         <Input
