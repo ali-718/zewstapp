@@ -1,12 +1,16 @@
-import React, { useEffect, useState } from "react";
-import { TouchableOpacity, View } from "react-native";
+import React, { useEffect, useRef, useState } from "react";
+import { Image, TouchableOpacity, View } from "react-native";
 import { Input } from "../../../../components/Inputs/Input";
 import { Text } from "../../../../components/Text/Text";
 import { primaryColor } from "../../../../theme/colors";
 import { RegularButton } from "../../../../components/Buttons/RegularButton";
 import { MainScreenContainer } from "../../../MainScreenContainers";
+import cashier from "../../../../assets/images/cashier.png";
 import switchOn from "../../../../assets/images/switchOn.png";
 import switchOff from "../../../../assets/images/switchOff.png";
+import grayCircle from "../../../../assets/images/grayCircle.png";
+import checkCircle from "../../../../assets/images/checkCircle.png";
+import purpleCashier from "../../../../assets/images/purpleCashier.png";
 import { MealItem } from "../../../../components/Meals/MealItem";
 import { ToastError } from "../../../../helpers/Toast";
 import { useDispatch, useSelector } from "react-redux";
@@ -16,9 +20,11 @@ import deleteIconWhite from "../../../../assets/images/deleteIconWhite.png";
 import { DeleteModal } from "../../../../components/Meals/DeleteModal";
 import { Dropdown } from "../../../../components/Inputs/DropDown";
 import { HeadingBox } from "../../../../components/HeadingBox/HeadingBox";
+import BottomSheet from "react-native-gesture-bottom-sheet";
 
 export const AddEmployeesPage = (props) => {
   const dispatch = useDispatch();
+  const bottomSheet = useRef();
   const navigation = useNavigation();
   const user = useSelector((state) => state.auth.user.user);
   const isLoading = useSelector(
@@ -175,13 +181,50 @@ export const AddEmployeesPage = (props) => {
         </View> */}
 
         <View style={{ width: "100%", marginTop: 20, zIndex: 1 }}>
-          <Dropdown
+          {selectedType === "" ? (
+            <Input
+              value={selectedType}
+              setValue={(val) => null}
+              keyboardType={"number-pad"}
+              placeholder={"Role"}
+              editable={false}
+              onPress={() => bottomSheet.current.show()}
+            />
+          ) : (
+            <View
+              style={{
+                width: "100%",
+                height: 80,
+                borderWidth: 2,
+                borderColor: "#A461D8",
+                backgroundColor: "white",
+                borderRadius: 8,
+                flexDirection: "row",
+                alignItems: "center",
+                paddingLeft: 20,
+              }}
+            >
+              <Image source={purpleCashier} style={{ width: 50, height: 50 }} />
+
+              <Text
+                style={{
+                  fontSize: 18,
+                  marginLeft: 20,
+                  color: "#A461D8",
+                  fontFamily: "openSans_bold",
+                }}
+              >
+                {selectedType}
+              </Text>
+            </View>
+          )}
+          {/* <Dropdown
             selectedMenu={selectedType}
             setMenu={setSelectedType}
             placeholder={"Role"}
             menus={roles}
             style={{ zIndex: 3 }}
-          />
+          /> */}
           {/* <View
             style={{
               width: "100%",
@@ -302,7 +345,7 @@ export const AddEmployeesPage = (props) => {
           </View> */}
         </View>
 
-        <View style={{ width: "100%", marginTop: 10 }}>
+        <View style={{ width: "100%", marginTop: 20 }}>
           <MealItem
             label={"Availability"}
             text={available ? "Available" : "Hidden"}
@@ -318,6 +361,54 @@ export const AddEmployeesPage = (props) => {
             text={isEdit ? "Update" : "Save"}
           />
         </View>
+
+        <BottomSheet
+          sheetBackgroundColor={"white"}
+          hasDraggableIcon
+          ref={bottomSheet}
+          height={800}
+        >
+          <View style={{ width: "100%", flex: 1, backgroundColor: "white" }}>
+            <View style={{ marginLeft: 30, marginTop: 40, marginBottom: 30 }}>
+              <Text
+                style={{
+                  fontSize: 26,
+                  color: "#363636",
+                  fontFamily: "openSans_semiBold",
+                }}
+              >
+                Select the Role
+              </Text>
+            </View>
+
+            {roles.map((item, i) => (
+              <TouchableOpacity
+                key={i}
+                style={{
+                  width: "100%",
+                  height: 100,
+                  alignItems: "center",
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  paddingLeft: 30,
+                  backgroundColor: i % 2 === 0 ? "#FAFAFB" : "white",
+                }}
+                onPress={() => setSelectedType(item)}
+              >
+                <View style={{ flexDirection: "row", alignItems: "center" }}>
+                  <Image source={cashier} style={{ width: 50, height: 50 }} />
+
+                  <Text style={{ fontSize: 21, marginLeft: 20 }}>{item}</Text>
+                </View>
+
+                <Image
+                  source={selectedType === item ? checkCircle : grayCircle}
+                  style={{ width: 50, height: 50, marginRight: 30 }}
+                />
+              </TouchableOpacity>
+            ))}
+          </View>
+        </BottomSheet>
       </View>
     </MainScreenContainer>
   );

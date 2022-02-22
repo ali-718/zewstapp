@@ -1015,7 +1015,6 @@ export const HomePage = ({ setselected }) => {
                           Total: ${currencyDisplay(forecastedRevenue)}
                         </Text>
                       </View>
-
                       <View
                         style={{
                           flex: device === "tablet" ? 0.8 : 0.9,

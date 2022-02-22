@@ -7072,6 +7072,11 @@ react-is@^17.0.1:
   resolved "https://registry.npmjs.org/react-is/-/react-is-17.0.2.tgz"
   integrity sha512-w2GsyukL62IJnlaff/nRegPQR94C/XXamvMWmSHRJ4y7Ts/4ocGRmTHvOs8PSE6pB3dWOrD/nueuU5sduBsQ4w==
 
+react-native-gesture-bottom-sheet@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/react-native-gesture-bottom-sheet/-/react-native-gesture-bottom-sheet-1.1.0.tgz#cd6efd4d1cd8df2c0a077da7c9b6c023b3044af1"
+  integrity sha512-1kF6wwtN9cPOav9iNC1hZ9gdpILucQ4vTgUYjyCHGc100WTgm6j7QDclT3a12Ge8X4PTsZF1PRZreGGIkGJKUg==
+
 react-native-gesture-handler@~1.10.2:
   version "1.10.3"
   resolved "https://registry.npmjs.org/react-native-gesture-handler/-/react-native-gesture-handler-1.10.3.tgz"
