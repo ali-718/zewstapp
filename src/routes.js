@@ -70,7 +70,7 @@ const AuthRoutes = () => {
         screenOptions={{ headerShown: false }}
       >
         <Stack.Screen name="SigningCheck" component={SigningCheck} />
-        <Stack.Screen name="OnBoardingPage" component={OnBoardingPage} />
+        {/* <Stack.Screen name="OnBoardingPage" component={OnBoardingPage} /> */}
         <Stack.Screen name="Signup" component={SignUpPage} />
         <Stack.Screen name="Verification" component={VerificationPage} />
         <Stack.Screen name="Login" component={LoginPage} />

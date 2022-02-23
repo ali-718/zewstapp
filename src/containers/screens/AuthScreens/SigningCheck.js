@@ -28,12 +28,12 @@ export const SigningCheck = () => {
           dispatch({ type: USER, payload: res });
         })
         .catch((e) => {
-          navigation.navigate("OnBoardingPage");
+          navigation.navigate("Signup");
         });
       return;
     }
 
-    navigation.navigate("OnBoardingPage");
+    navigation.navigate("Signup");
   };
 
   useEffect(() => {

@@ -29,7 +29,16 @@ export const getAllEmployees =
   };
 
 export const addEmployeeAction =
-  ({ locationId, firstName, lastName, phone, role, active, navigation }) =>
+  ({
+    locationId,
+    firstName,
+    lastName,
+    phone,
+    role,
+    active,
+    navigation,
+    shift,
+  }) =>
   (dispatch) => {
     dispatch({ type: ADD_EMPLOYEES.REQUESTED });
 
@@ -40,6 +49,7 @@ export const addEmployeeAction =
       phone,
       role,
       active,
+      shift,
       navigation,
     });
     client
@@ -52,6 +62,7 @@ export const addEmployeeAction =
           phone: `+${phone}`,
           role,
           active,
+          shift,
         })
       )
       .then(() => {
@@ -99,25 +110,39 @@ export const editEmployeeAction =
     lastName,
     phone,
     email,
-    type,
+    role,
     active,
     navigation,
+    shift,
   }) =>
   (dispatch) => {
     dispatch({ type: EDIT_EMPLOYEES.REQUESTED });
 
+    console.log({
+      locationId,
+      firstName,
+      lastName,
+      phone,
+      role,
+      active,
+      shift,
+      navigation,
+      employeeId,
+    });
+
     client
       .post(
-        `client/updateEmployee`,
+        `employee/updateEmployee`,
         JSON.stringify({
           locationId,
           firstName,
           lastName,
           phone: `+${phone}`,
           email,
-          type,
+          role,
           active,
           employeeId,
+          shift,
         })
       )
       .then(() => {
@@ -129,6 +154,7 @@ export const editEmployeeAction =
         ToastSuccess("Success", "Employee edited successfully");
       })
       .catch((e) => {
+        console.log(e.response.data);
         ToastError("Some error occoured, please try again later");
         dispatch({ type: EDIT_EMPLOYEES.FAILED });
       });

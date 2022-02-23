@@ -1,32 +1,42 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Image, TouchableOpacity, View } from "react-native";
+import {
+  FlatList,
+  Image,
+  ScrollView,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { Input } from "../../../../components/Inputs/Input";
 import { Text } from "../../../../components/Text/Text";
-import { primaryColor } from "../../../../theme/colors";
 import { RegularButton } from "../../../../components/Buttons/RegularButton";
 import { MainScreenContainer } from "../../../MainScreenContainers";
 import cashier from "../../../../assets/images/cashier.png";
-import switchOn from "../../../../assets/images/switchOn.png";
-import switchOff from "../../../../assets/images/switchOff.png";
 import grayCircle from "../../../../assets/images/grayCircle.png";
 import checkCircle from "../../../../assets/images/checkCircle.png";
+import purpleClock from "../../../../assets/images/purpleClock.png";
+import purpleCalendar from "../../../../assets/images/purpleCalendar.png";
 import purpleCashier from "../../../../assets/images/purpleCashier.png";
-import { MealItem } from "../../../../components/Meals/MealItem";
 import { ToastError } from "../../../../helpers/Toast";
 import { useDispatch, useSelector } from "react-redux";
 import * as actions from "../../../../Redux/actions/EmployeeActions/EmployeeActions";
 import { useNavigation } from "@react-navigation/core";
 import deleteIconWhite from "../../../../assets/images/deleteIconWhite.png";
 import { DeleteModal } from "../../../../components/Meals/DeleteModal";
-import { Dropdown } from "../../../../components/Inputs/DropDown";
 import { HeadingBox } from "../../../../components/HeadingBox/HeadingBox";
 import BottomSheet from "react-native-gesture-bottom-sheet";
+import { HEIGHT } from "../../../../helpers/utlils";
+import { DateTimeSelector } from "../../../../components/DateTimeSelector/DateTimeSelector";
+import moment from "moment";
 
 export const AddEmployeesPage = (props) => {
   const dispatch = useDispatch();
   const bottomSheet = useRef();
+  const shiftSheet = useRef();
   const navigation = useNavigation();
+  const device = useSelector((state) => state.system.device);
   const user = useSelector((state) => state.auth.user.user);
+  const [show1, setShow1] = useState(false);
+  const [show2, setShow2] = useState(false);
   const isLoading = useSelector(
     (state) => state.employee.addEmployee.isLoading
   );
@@ -48,6 +58,30 @@ export const AddEmployeesPage = (props) => {
   const [isEdit, setIsEdit] = useState(false);
   const [deleteModal, setdeleteModal] = useState(false);
   const [roles, setRoles] = useState([]);
+  const [selectedShiftDays, setSelectedShiftDays] = useState([]);
+  const [shiftStartTime, setShiftStartTime] = useState(new Date(1598051730000));
+  const [shiftEndTime, setShiftEndTime] = useState(new Date(1598051730000));
+
+  const sorter = {
+    monday: 1,
+    tuesday: 2,
+    wednesday: 3,
+    thursday: 4,
+    friday: 5,
+    saturday: 6,
+    sunday: 7,
+  };
+
+  const shiftDaysSelection = (item) => {
+    const check = selectedShiftDays.filter((data) => data === item).length > 0;
+
+    if (check) {
+      setSelectedShiftDays(selectedShiftDays.filter((data) => data !== item));
+      return;
+    }
+
+    setSelectedShiftDays([...selectedShiftDays, item]);
+  };
 
   useEffect(() => {
     if (!deleteError) return;
@@ -67,7 +101,7 @@ export const AddEmployeesPage = (props) => {
         email = "",
         phone = "",
         firstName = "",
-        type = "",
+        role = "",
       } = data;
 
       setIsEdit(true);
@@ -76,7 +110,7 @@ export const AddEmployeesPage = (props) => {
       setContact(phone);
       setlastName(lastName);
       setfirstName(firstName);
-      setSelectedType(type);
+      setSelectedType(role);
     }
   }, []);
 
@@ -85,7 +119,8 @@ export const AddEmployeesPage = (props) => {
       selectedType.trim().length === 0 ||
       firstName.trim().length === 0 ||
       lastName.trim().length === 0 ||
-      contact.trim().length === 0
+      contact.trim().length === 0 ||
+      selectedShiftDays.length === 0
     ) {
       ToastError("Kindly all fields");
       return;
@@ -98,9 +133,16 @@ export const AddEmployeesPage = (props) => {
         lastName,
         phone: contact,
         role: selectedType,
-        active: available,
+        active: true,
         navigation,
         employeeId: props.route.params.data.employeeId,
+        shift: {
+          days: selectedShiftDays,
+          timings: {
+            startTime: moment(shiftStartTime),
+            endTime: moment(shiftEndTime),
+          },
+        },
       };
 
       dispatch(actions.editEmployeeAction(data));
@@ -113,8 +155,15 @@ export const AddEmployeesPage = (props) => {
       lastName,
       phone: contact,
       role: selectedType,
-      active: available,
+      active: true,
       navigation,
+      shift: {
+        days: selectedShiftDays,
+        timings: {
+          startTime: moment(shiftStartTime),
+          endTime: moment(shiftEndTime),
+        },
+      },
     };
 
     dispatch(actions.addEmployeeAction(data));
@@ -189,9 +238,11 @@ export const AddEmployeesPage = (props) => {
               placeholder={"Role"}
               editable={false}
               onPress={() => bottomSheet.current.show()}
+              noInput
             />
           ) : (
-            <View
+            <TouchableOpacity
+              onPress={() => bottomSheet.current.show()}
               style={{
                 width: "100%",
                 height: 80,
@@ -216,7 +267,96 @@ export const AddEmployeesPage = (props) => {
               >
                 {selectedType}
               </Text>
-            </View>
+            </TouchableOpacity>
+          )}
+          <View style={{ marginTop: 20 }} />
+          {selectedShiftDays.length === 0 ? (
+            <Input
+              value={""}
+              setValue={(val) => null}
+              keyboardType={"number-pad"}
+              placeholder={"Select Shift"}
+              editable={false}
+              onPress={() => shiftSheet.current.show()}
+              noInput
+            />
+          ) : (
+            <TouchableOpacity
+              onPress={() => shiftSheet.current.show()}
+              style={{
+                width: "100%",
+                height: 80,
+                borderWidth: 2,
+                borderColor: "#A461D8",
+                backgroundColor: "white",
+                borderRadius: 8,
+                paddingLeft: 20,
+              }}
+            >
+              <Text style={{ marginTop: 10, color: "gray" }}>Select Shift</Text>
+
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  // justifyContent: "center",
+                  marginTop: 10,
+                }}
+              >
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <Image
+                    style={{ width: 20, height: 20 }}
+                    source={purpleClock}
+                  />
+
+                  <Text
+                    style={{
+                      fontSize: 18,
+                      color: "#A461D8",
+                      fontFamily: "openSans_bold",
+                      marginLeft: 10,
+                    }}
+                  >
+                    {moment(shiftStartTime).format("h:mm a")} -{" "}
+                    {moment(shiftEndTime).format("h:mm a")}
+                  </Text>
+                </View>
+
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    marginLeft: 40,
+                  }}
+                >
+                  <Image
+                    style={{ width: 20, height: 20 }}
+                    source={purpleCalendar}
+                  />
+
+                  <Text
+                    style={{
+                      fontSize: 18,
+                      color: "#A461D8",
+                      fontFamily: "openSans_bold",
+                      marginLeft: 10,
+                    }}
+                    numberOfLines={1}
+                  >
+                    {selectedShiftDays.length > 1
+                      ? `${selectedShiftDays.join(" - ")}`
+                      : selectedShiftDays[0]}
+                  </Text>
+                </View>
+              </View>
+            </TouchableOpacity>
           )}
           {/* <Dropdown
             selectedMenu={selectedType}
@@ -345,14 +485,14 @@ export const AddEmployeesPage = (props) => {
           </View> */}
         </View>
 
-        <View style={{ width: "100%", marginTop: 20 }}>
+        {/* <View style={{ width: "100%", marginTop: 20 }}>
           <MealItem
             label={"Availability"}
             text={available ? "Available" : "Hidden"}
             icon={available ? switchOn : switchOff}
             onIconClick={() => setavailable(!available)}
           />
-        </View>
+        </View> */}
 
         <View style={{ width: "100%", marginTop: 20 }}>
           <RegularButton
@@ -366,7 +506,7 @@ export const AddEmployeesPage = (props) => {
           sheetBackgroundColor={"white"}
           hasDraggableIcon
           ref={bottomSheet}
-          height={800}
+          height={600}
         >
           <View style={{ width: "100%", flex: 1, backgroundColor: "white" }}>
             <View style={{ marginLeft: 30, marginTop: 40, marginBottom: 30 }}>
@@ -381,33 +521,231 @@ export const AddEmployeesPage = (props) => {
               </Text>
             </View>
 
-            {roles.map((item, i) => (
-              <TouchableOpacity
-                key={i}
-                style={{
-                  width: "100%",
-                  height: 100,
-                  alignItems: "center",
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  paddingLeft: 30,
-                  backgroundColor: i % 2 === 0 ? "#FAFAFB" : "white",
-                }}
-                onPress={() => setSelectedType(item)}
-              >
-                <View style={{ flexDirection: "row", alignItems: "center" }}>
-                  <Image source={cashier} style={{ width: 50, height: 50 }} />
+            {roles
+              .filter((item) => item !== "OWNER" && item !== "GM")
+              .map((item, i) => (
+                <TouchableOpacity
+                  key={i}
+                  style={{
+                    width: "100%",
+                    height: 100,
+                    alignItems: "center",
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    paddingLeft: 30,
+                    backgroundColor: i % 2 === 0 ? "#FAFAFB" : "white",
+                  }}
+                  onPress={() => setSelectedType(item)}
+                >
+                  <View style={{ flexDirection: "row", alignItems: "center" }}>
+                    <Image source={cashier} style={{ width: 50, height: 50 }} />
 
-                  <Text style={{ fontSize: 21, marginLeft: 20 }}>{item}</Text>
+                    <Text
+                      style={{
+                        fontSize: device === "tablet" ? 21 : 18,
+                        marginLeft: 20,
+                      }}
+                    >
+                      {item}
+                    </Text>
+                  </View>
+
+                  <Image
+                    source={selectedType === item ? checkCircle : grayCircle}
+                    style={{
+                      width: device === "tablet" ? 50 : 30,
+                      height: device === "tablet" ? 50 : 30,
+                      marginRight: 30,
+                    }}
+                  />
+                </TouchableOpacity>
+              ))}
+          </View>
+        </BottomSheet>
+
+        {/* select shift */}
+        <BottomSheet
+          sheetBackgroundColor={"white"}
+          hasDraggableIcon
+          ref={shiftSheet}
+          height={HEIGHT / 1.3}
+        >
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            style={{ width: "100%" }}
+          >
+            <View
+              style={{
+                width: "100%",
+                flex: 1,
+                backgroundColor: "white",
+                alignItems: "center",
+              }}
+            >
+              <View style={{ marginTop: 40, marginBottom: 30, width: "90%" }}>
+                <Text
+                  style={{
+                    fontSize: 26,
+                    color: "#000000",
+                    fontFamily: "openSans_semiBold",
+                  }}
+                >
+                  Assign Shift or Select Shift
+                </Text>
+                <Text
+                  style={{
+                    fontSize: device === "tablet" ? 24 : 20,
+                    color: "#363636",
+                    fontFamily: "openSans_semiBold",
+                    marginTop: 43,
+                  }}
+                >
+                  Select Days
+                </Text>
+
+                <View
+                  style={{
+                    width: "100%",
+                    backgroundColor: "#FAFAFA",
+                    borderRadius: 8,
+                    padding: device === "tablet" ? 20 : 10,
+                    marginTop: 16,
+                  }}
+                >
+                  <FlatList
+                    data={[
+                      "Monday",
+                      "Tuesday",
+                      "Wednesday",
+                      "Thursday",
+                      "Friday",
+                      "Saturday",
+                      "Sunday",
+                    ]}
+                    keyExtractor={(item) => item}
+                    numColumns={2}
+                    columnWrapperStyle={{ justifyContent: "space-between" }}
+                    renderItem={({ item }) => (
+                      <TouchableOpacity
+                        style={{
+                          width: "48%",
+                          flexDirection: "row",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                          height: 75,
+                          marginTop: 20,
+                          backgroundColor:
+                            selectedShiftDays.filter((data) => data === item)
+                              .length > 0
+                              ? "#A461D8"
+                              : "white",
+                          paddingLeft: device === "tablet" ? 20 : 10,
+                          borderRadius: 8,
+                        }}
+                        onPress={() => shiftDaysSelection(item)}
+                      >
+                        <Text
+                          style={{
+                            fontSize: device === "tablet" ? 21 : 18,
+                            color:
+                              selectedShiftDays.filter((data) => data === item)
+                                .length > 0
+                                ? "white"
+                                : "black",
+                          }}
+                        >
+                          {item}
+                        </Text>
+
+                        <Image
+                          source={
+                            selectedShiftDays.filter((data) => data === item)
+                              .length > 0
+                              ? checkCircle
+                              : grayCircle
+                          }
+                          style={{
+                            width: device === "tablet" ? 50 : 30,
+                            height: device === "tablet" ? 50 : 30,
+                            marginRight: 30,
+                            ...(selectedShiftDays.filter(
+                              (data) => data === item
+                            ).length > 0 && { tintColor: "white" }),
+                          }}
+                        />
+                      </TouchableOpacity>
+                    )}
+                  />
                 </View>
 
-                <Image
-                  source={selectedType === item ? checkCircle : grayCircle}
-                  style={{ width: 50, height: 50, marginRight: 30 }}
-                />
-              </TouchableOpacity>
-            ))}
-          </View>
+                <View style={{ width: "100%", marginTop: 10 }}>
+                  <Text
+                    style={{
+                      fontSize: 24,
+                      color: "#363636",
+                      fontFamily: "openSans_semiBold",
+                      marginTop: 43,
+                    }}
+                  >
+                    Select Time(s)
+                  </Text>
+
+                  <View
+                    style={{
+                      width: "100%",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      flexDirection: "row",
+                      marginTop: 20,
+                    }}
+                  >
+                    <Input
+                      noInput
+                      onPress={() => setShow1(true)}
+                      value={moment(shiftStartTime).format("h:mm a")}
+                      setValue={(val) => null}
+                      editable={false}
+                      style={{
+                        width: "48%",
+                        borderWidth: 2,
+                        borderBottomWidth: 2,
+                      }}
+                      placeholder={"Start Time"}
+                    />
+                    <Input
+                      noInput
+                      onPress={() => setShow2(true)}
+                      value={moment(shiftEndTime).format("h:mm a")}
+                      setValue={(val) => null}
+                      editable={false}
+                      style={{
+                        width: "48%",
+                        borderWidth: 1,
+                        borderBottomWidth: 1,
+                      }}
+                      placeholder={"End Time"}
+                    />
+                  </View>
+                </View>
+              </View>
+            </View>
+          </ScrollView>
+
+          <DateTimeSelector
+            show={show1 || show2}
+            value={show1 ? shiftStartTime : shiftEndTime}
+            mode={"time"}
+            is24Hour={true}
+            onChange={
+              show1
+                ? (date) => setShiftStartTime(date)
+                : (date) => setShiftEndTime(date)
+            }
+            onPress={() => {
+              setShow1(false);
+              setShow2(false);
+            }}
+          />
         </BottomSheet>
       </View>
     </MainScreenContainer>

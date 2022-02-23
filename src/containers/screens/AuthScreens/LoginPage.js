@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { TouchableOpacity, View } from "react-native";
+import React, { useEffect, useRef, useState } from "react";
+import { Image, ScrollView, TouchableOpacity, View } from "react-native";
 import { Input } from "../../../components/Inputs/Input";
 import { AuthScreenContainer } from "../../AuthScreenContainer";
 import { PasswordInput } from "../../../components/Inputs/PasswordInput";
@@ -17,12 +17,18 @@ import { USER } from "../../../Redux/actions/AuthActions/Types";
 import { useDispatch, useSelector } from "react-redux";
 import { ToastError } from "../../../helpers/Toast";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import * as Device from "expo-device";
-import { OnBoardingPage } from "./onBoardingPage";
+import purpleCashier from "../../../assets/images/purpleCashier.png";
 import { FullPageLoadingModall } from "../../../components/FullPageLoadingModall/FullPageLoadingModall";
+import BottomSheet from "react-native-gesture-bottom-sheet";
+import { getEmployeeRoles } from "../../../Redux/actions/EmployeeActions/EmployeeActions";
+import grayCircle from "../../../assets/images/grayCircle.png";
+import checkCircle from "../../../assets/images/checkCircle.png";
+import cashier from "../../../assets/images/cashier.png";
+import { HEIGHT } from "../../../helpers/utlils";
 
 export const LoginPage = (props) => {
   const dispatch = useDispatch();
+  const bottomSheet = useRef();
   const orientation = useSelector((state) => state.system.orientation);
   const device = useSelector((state) => state.system.device);
   const [email, setEmail] = useState("");
@@ -34,8 +40,12 @@ export const LoginPage = (props) => {
     email: false,
     password: false,
   });
+  const [selectedType, setSelectedType] = useState("");
+  const [roles, setRoles] = useState([]);
 
   useEffect(() => {
+    getEmployeeRoles().then((res) => setRoles(res));
+
     const noBack = props.route.params?.noBack;
     const email = props.route.params?.email;
 
@@ -82,9 +92,9 @@ export const LoginPage = (props) => {
       <View style={{ width: "100%", marginBottom: 40 }}>
         <View style={{ width: "100%" }}>
           <Text style={{ fontSize: 28, fontFamily: "openSans_bold" }}>
-            Welcome to Zewst
+            Please login to your account
           </Text>
-          <Text
+          {/* <Text
             style={{
               fontSize: 16,
               marginTop: 16,
@@ -94,61 +104,176 @@ export const LoginPage = (props) => {
           >
             Enter your Phone number or Email address for sign in. Enjoy your
             food :)
-          </Text>
+          </Text> */}
         </View>
-        <View style={{ width: "100%", marginTop: 20 }}>
+
+        {selectedType.length > 0 ? (
+          <>
+            <View style={{ width: "100%", marginTop: 20 }}>
+              <Input
+                keyboardType={"email-address"}
+                placeholder={"Email address"}
+                value={email}
+                setValue={(val) => setEmail(val)}
+                rule={emailValidator}
+                showError={showError}
+                setHighOrderError={(val) =>
+                  setIsError({ ...isError, email: val })
+                }
+              />
+            </View>
+            <View style={{ width: "100%", marginTop: 20 }}>
+              <PasswordInput
+                value={password}
+                setValue={(val) => setPassword(val)}
+                placeholder={"Password"}
+                rule={passwordValidator}
+                showError={showError}
+                setHighOrderError={(val) =>
+                  setIsError({ ...isError, password: val })
+                }
+              />
+            </View>
+          </>
+        ) : null}
+
+        {selectedType === "" ? (
           <Input
-            keyboardType={"email-address"}
-            placeholder={"Email address"}
-            value={email}
-            setValue={(val) => setEmail(val)}
-            rule={emailValidator}
-            showError={showError}
-            setHighOrderError={(val) => setIsError({ ...isError, email: val })}
+            value={selectedType}
+            setValue={(val) => null}
+            keyboardType={"number-pad"}
+            placeholder={"Role"}
+            editable={false}
+            onPress={() => bottomSheet.current.show()}
+            noInput
+            style={{ marginTop: 40 }}
           />
-        </View>
+        ) : (
+          <TouchableOpacity
+            onPress={() => bottomSheet.current.show()}
+            style={{
+              width: "100%",
+              height: 80,
+              borderWidth: 2,
+              borderColor: "#A461D8",
+              backgroundColor: "white",
+              borderRadius: 8,
+              flexDirection: "row",
+              alignItems: "center",
+              paddingLeft: 20,
+              marginTop: 20,
+            }}
+          >
+            <Image source={purpleCashier} style={{ width: 50, height: 50 }} />
 
-        <View style={{ width: "100%", marginTop: 20 }}>
-          <PasswordInput
-            value={password}
-            setValue={(val) => setPassword(val)}
-            placeholder={"Password"}
-            rule={passwordValidator}
-            showError={showError}
-            setHighOrderError={(val) =>
-              setIsError({ ...isError, password: val })
-            }
-          />
-        </View>
-
-        <View style={{ width: "100%", marginTop: 20 }}>
-          <RegularButton
-            isLoading={isLoading}
-            onPress={onLogin}
-            text={"Get Started"}
-            style={{ borderRadius: 10, width: "100%" }}
-            colors={[primaryColor, primaryColor]}
-          />
-        </View>
-
-        <View style={{ width: "100%", marginTop: 20, alignItems: "center" }}>
-          <TouchableOpacity onPress={() => props.navigation.navigate("Forgot")}>
             <Text
               style={{
                 fontSize: 18,
-                color: primaryColor,
+                marginLeft: 20,
+                color: "#A461D8",
+                fontFamily: "openSans_bold",
               }}
             >
-              Forgot Password?
+              {selectedType}
             </Text>
           </TouchableOpacity>
-        </View>
+        )}
+
+        {selectedType.length > 0 ? (
+          <View style={{ width: "100%", marginTop: 20 }}>
+            <RegularButton
+              isLoading={isLoading}
+              onPress={onLogin}
+              text={"Login"}
+              style={{ borderRadius: 10, width: "100%" }}
+              colors={[primaryColor, primaryColor]}
+            />
+          </View>
+        ) : null}
+
+        {selectedType.length > 0 ? (
+          <View style={{ width: "100%", marginTop: 20, alignItems: "center" }}>
+            <TouchableOpacity
+              onPress={() => props.navigation.navigate("Forgot")}
+            >
+              <Text
+                style={{
+                  fontSize: 18,
+                  color: primaryColor,
+                }}
+              >
+                Forgot Password?
+              </Text>
+            </TouchableOpacity>
+          </View>
+        ) : null}
       </View>
       <FullPageLoadingModall
         visible={isLoading}
         accessibilityLabel={"Signing you in"}
         text={"Signing you in..."}
       />
+
+      <BottomSheet
+        sheetBackgroundColor={"white"}
+        hasDraggableIcon
+        ref={bottomSheet}
+        height={device === "tablet" ? 800 : HEIGHT / 1.2}
+      >
+        <ScrollView style={{ width: "100%" }}>
+          <View style={{ width: "100%", flex: 1, backgroundColor: "white" }}>
+            <View style={{ marginLeft: 30, marginTop: 40, marginBottom: 30 }}>
+              <Text
+                style={{
+                  fontSize: 26,
+                  color: "#363636",
+                  fontFamily: "openSans_semiBold",
+                }}
+              >
+                Select the Role
+              </Text>
+            </View>
+
+            {roles.map((item, i) => (
+              <TouchableOpacity
+                key={i}
+                style={{
+                  width: "100%",
+                  height: 100,
+                  alignItems: "center",
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  paddingLeft: 30,
+                  backgroundColor: i % 2 === 0 ? "#FAFAFB" : "white",
+                }}
+                onPress={() => setSelectedType(item)}
+              >
+                <View style={{ flexDirection: "row", alignItems: "center" }}>
+                  <Image source={cashier} style={{ width: 50, height: 50 }} />
+
+                  <Text
+                    style={{
+                      fontSize: device === "tablet" ? 21 : 18,
+                      marginLeft: 20,
+                    }}
+                  >
+                    {item}
+                  </Text>
+                </View>
+
+                <Image
+                  source={selectedType === item ? checkCircle : grayCircle}
+                  style={{
+                    width: device === "tablet" ? 50 : 30,
+                    height: device === "tablet" ? 50 : 30,
+                    marginRight: 30,
+                  }}
+                />
+              </TouchableOpacity>
+            ))}
+          </View>
+        </ScrollView>
+      </BottomSheet>
     </AuthScreenContainer>
   );
 };
