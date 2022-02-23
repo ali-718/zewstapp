@@ -171,3 +171,19 @@ export const getEmployeeRoles = () =>
         reject();
       });
   });
+export const getEmployeeTimingsHistory = ({ id }) =>
+  new Promise((resolve, reject) => {
+    client
+      .get(`/employee/getEmployeeTimeHistory/${id}`)
+      .then(({ data }) => {
+        console.log(data);
+        resolve(data?.timeHistory);
+      })
+      .catch((e) => {
+        ToastError(
+          e.response.data?.message ||
+            "Some error occoured, please try again later"
+        );
+        reject();
+      });
+  });

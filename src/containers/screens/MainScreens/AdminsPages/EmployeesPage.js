@@ -80,7 +80,7 @@ export const EmployeesPage = () => {
                       name={item.role}
                       rightText={item.active ? "Active" : "Inactive"}
                       onPress={() =>
-                        navigation.navigate("addEmployees", { data: item })
+                        navigation.navigate("employeeDetail", { data: item })
                       }
                     />
                   </View>

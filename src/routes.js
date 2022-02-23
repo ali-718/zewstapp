@@ -59,6 +59,7 @@ import { WasteDetailPage } from "./containers/screens/MainScreens/WasteScreens/W
 import { WasteItemAddForUbf } from "./containers/screens/MainScreens/WasteScreens/WasteItemAddForUbf";
 import { WasteItemAddForDiscount } from "./containers/screens/MainScreens/WasteScreens/WasteItemAddForDiscount";
 import { UpdateInventoryPage } from "./containers/screens/MainScreens/InventoryPages/UpdateInventory";
+import { EmployeeDetail } from "./containers/screens/MainScreens/AdminsPages/EmployeeDetail";
 
 const Stack = createNativeStackNavigator();
 
@@ -160,6 +161,7 @@ const AdminRoutes = () => {
       <Stack.Screen name="taxDocument" component={TaxDocument} />
       <Stack.Screen name="employees" component={EmployeesPage} />
       <Stack.Screen name="addEmployees" component={AddEmployeesPage} />
+      <Stack.Screen name="employeeDetail" component={EmployeeDetail} />
       <Stack.Screen name="bankPage" component={BankPage} />
       <Stack.Screen name="bankDetails" component={BankDetailsPage} />
       <Stack.Screen name="changePass" component={ChangePasswordPage} />
