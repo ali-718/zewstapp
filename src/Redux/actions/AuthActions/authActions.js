@@ -31,6 +31,21 @@ export const confirmCode = ({ username, code }) =>
       .catch((e) => reject(e.response.data));
   });
 
+export const loginActionOther = ({ pin }) =>
+  new Promise((resolve, reject) => {
+    client
+      .post("/employee/login", {
+        pin,
+      })
+      .then((data) => {
+        resolve(data.data.employee);
+      })
+      .catch((e) => {
+        console.log(e.response.data);
+        reject(e.response.data);
+      });
+  });
+
 export const loginAction = ({ email, password }) =>
   new Promise((resolve, reject) => {
     client

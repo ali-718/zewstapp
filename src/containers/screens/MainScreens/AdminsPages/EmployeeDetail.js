@@ -30,6 +30,7 @@ export const EmployeeDetail = (props) => {
       } = data;
 
       getEmployeeTimingsHistory({
+        // id: "0a5ba2cc-52ee-4c72-8647-53dc8c4c00f1",
         id: employeeId,
       }).then((res) => setTimings(res));
 

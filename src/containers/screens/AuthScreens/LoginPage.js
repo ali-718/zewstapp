@@ -12,7 +12,10 @@ import {
 } from "../../../theme/colors";
 import { emailValidator, passwordValidator } from "../../../helpers/rules";
 import validator from "validator";
-import { loginAction } from "../../../Redux/actions/AuthActions/authActions";
+import {
+  loginAction,
+  loginActionOther,
+} from "../../../Redux/actions/AuthActions/authActions";
 import { USER } from "../../../Redux/actions/AuthActions/Types";
 import { useDispatch, useSelector } from "react-redux";
 import { ToastError } from "../../../helpers/Toast";
@@ -42,6 +45,7 @@ export const LoginPage = (props) => {
   });
   const [selectedType, setSelectedType] = useState("");
   const [roles, setRoles] = useState([]);
+  const [pin, setPin] = useState("");
 
   useEffect(() => {
     getEmployeeRoles().then((res) => setRoles(res));
@@ -58,25 +62,64 @@ export const LoginPage = (props) => {
   }, []);
 
   const onLogin = () => {
-    setshowError(true);
-    if (
-      validator.isEmpty(email, { ignore_whitespace: true }) ||
-      validator.isEmpty(password, { ignore_whitespace: true })
-    ) {
+    if (selectedType === "OWNER") {
+      setshowError(true);
+      if (
+        validator.isEmpty(email, { ignore_whitespace: true }) ||
+        validator.isEmpty(password, { ignore_whitespace: true })
+      ) {
+        ToastError("please fill all fields");
+        return;
+      }
+
+      if (isError.email || isError.password) return;
+
+      setIsLoading(true);
+
+      loginAction({ email, password })
+        .then((res) => {
+          dispatch({
+            type: USER,
+            payload: { ...res, user: { role: selectedType, ...res.user } },
+          });
+          AsyncStorage.removeItem("defaultLocation");
+          AsyncStorage.setItem(
+            "user",
+            JSON.stringify({
+              ...res,
+              user: { role: selectedType, ...res.user },
+            })
+          );
+          setIsLoading(false);
+        })
+        .catch((e) => {
+          ToastError(
+            e.err?.message || "Some error occoured, please try again later"
+          );
+          setIsLoading(false);
+        });
+
+      return;
+    }
+
+    if (validator.isEmpty(pin, { ignore_whitespace: true })) {
       ToastError("please fill all fields");
       return;
     }
 
-    if (isError.email || isError.password) return;
-
     setIsLoading(true);
 
-    loginAction({ email, password })
+    loginActionOther({ pin })
       .then((res) => {
-        dispatch({ type: USER, payload: res });
+        dispatch({
+          type: USER,
+          payload: { ...res, user: { role: selectedType, ...res.user } },
+        });
         AsyncStorage.removeItem("defaultLocation");
-        AsyncStorage.setItem("refreshToken", res.token.refreshToken.token);
-        AsyncStorage.setItem("user", JSON.stringify(res));
+        AsyncStorage.setItem(
+          "user",
+          JSON.stringify({ ...res, user: { role: selectedType, ...res.user } })
+        );
         setIsLoading(false);
       })
       .catch((e) => {
@@ -108,33 +151,42 @@ export const LoginPage = (props) => {
         </View>
 
         {selectedType.length > 0 ? (
-          <>
-            <View style={{ width: "100%", marginTop: 20 }}>
-              <Input
-                keyboardType={"email-address"}
-                placeholder={"Email address"}
-                value={email}
-                setValue={(val) => setEmail(val)}
-                rule={emailValidator}
-                showError={showError}
-                setHighOrderError={(val) =>
-                  setIsError({ ...isError, email: val })
-                }
-              />
-            </View>
-            <View style={{ width: "100%", marginTop: 20 }}>
-              <PasswordInput
-                value={password}
-                setValue={(val) => setPassword(val)}
-                placeholder={"Password"}
-                rule={passwordValidator}
-                showError={showError}
-                setHighOrderError={(val) =>
-                  setIsError({ ...isError, password: val })
-                }
-              />
-            </View>
-          </>
+          selectedType === "OWNER" ? (
+            <>
+              <View style={{ width: "100%", marginTop: 20 }}>
+                <Input
+                  keyboardType={"email-address"}
+                  placeholder={"Email address"}
+                  value={email}
+                  setValue={(val) => setEmail(val)}
+                  rule={emailValidator}
+                  showError={showError}
+                  setHighOrderError={(val) =>
+                    setIsError({ ...isError, email: val })
+                  }
+                />
+              </View>
+              <View style={{ width: "100%", marginTop: 20 }}>
+                <PasswordInput
+                  value={password}
+                  setValue={(val) => setPassword(val)}
+                  placeholder={"Password"}
+                  rule={passwordValidator}
+                  showError={showError}
+                  setHighOrderError={(val) =>
+                    setIsError({ ...isError, password: val })
+                  }
+                />
+              </View>
+            </>
+          ) : (
+            <Input
+              keyboardType={"number-pad"}
+              placeholder={"Pin"}
+              value={pin}
+              setValue={(val) => setPin(val)}
+            />
+          )
         ) : null}
 
         {selectedType === "" ? (

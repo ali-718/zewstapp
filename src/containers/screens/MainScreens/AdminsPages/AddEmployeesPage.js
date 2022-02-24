@@ -522,7 +522,7 @@ export const AddEmployeesPage = (props) => {
             </View>
 
             {roles
-              .filter((item) => item !== "OWNER" && item !== "GM")
+              .filter((item) => item !== "OWNER")
               .map((item, i) => (
                 <TouchableOpacity
                   key={i}

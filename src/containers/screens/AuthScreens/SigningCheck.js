@@ -15,21 +15,10 @@ export const SigningCheck = () => {
   const getData = async () => {
     const user = await AsyncStorage.getItem("user");
 
-    // AsyncStorage.removeItem("user");
-    // AsyncStorage.removeItem("refreshToken");
-    // AsyncStorage.removeItem("defaultLocation");
     if (user) {
       const data = JSON.parse(user);
-      refreshTokenAction({
-        refreshToken: data.token?.refreshToken?.token,
-        email: data.user.email,
-      })
-        .then((res) => {
-          dispatch({ type: USER, payload: res });
-        })
-        .catch((e) => {
-          navigation.navigate("Signup");
-        });
+
+      dispatch({ type: USER, payload: data });
       return;
     }
 
