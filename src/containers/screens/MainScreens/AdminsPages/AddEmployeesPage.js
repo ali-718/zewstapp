@@ -102,15 +102,19 @@ export const AddEmployeesPage = (props) => {
         phone = "",
         firstName = "",
         role = "",
+        shift,
       } = data;
 
       setIsEdit(true);
       setavailable(active);
       setEmail(email);
-      setContact(phone);
+      setContact(phone.replace("+", ""));
       setlastName(lastName);
       setfirstName(firstName);
       setSelectedType(role);
+      setSelectedShiftDays(shift.days);
+      setShiftStartTime(moment(shift.timings?.startTime).valueOf());
+      setShiftEndTime(moment(shift.timings?.endTime).valueOf());
     }
   }, []);
 
@@ -139,10 +143,11 @@ export const AddEmployeesPage = (props) => {
         shift: {
           days: selectedShiftDays,
           timings: {
-            startTime: moment(shiftStartTime),
-            endTime: moment(shiftEndTime),
+            startTime: moment(shiftStartTime).toString(),
+            endTime: moment(shiftEndTime).toString(),
           },
         },
+        pin: props.route.params.data.pin,
       };
 
       dispatch(actions.editEmployeeAction(data));
@@ -160,8 +165,8 @@ export const AddEmployeesPage = (props) => {
       shift: {
         days: selectedShiftDays,
         timings: {
-          startTime: moment(shiftStartTime),
-          endTime: moment(shiftEndTime),
+          startTime: moment(shiftStartTime).toString(),
+          endTime: moment(shiftEndTime).toString(),
         },
       },
     };
@@ -334,6 +339,8 @@ export const AddEmployeesPage = (props) => {
                     alignItems: "center",
                     justifyContent: "center",
                     marginLeft: 40,
+                    flex: 1,
+                    paddingRight: 10,
                   }}
                 >
                   <Image
@@ -347,6 +354,7 @@ export const AddEmployeesPage = (props) => {
                       color: "#A461D8",
                       fontFamily: "openSans_bold",
                       marginLeft: 10,
+                      flex: 1,
                     }}
                     numberOfLines={1}
                   >

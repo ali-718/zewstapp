@@ -234,7 +234,7 @@ export const LoginPage = (props) => {
           </View>
         ) : null}
 
-        {selectedType.length > 0 ? (
+        {selectedType.length > 0 && selectedType === "OWNER" ? (
           <View style={{ width: "100%", marginTop: 20, alignItems: "center" }}>
             <TouchableOpacity
               onPress={() => props.navigation.navigate("Forgot")}

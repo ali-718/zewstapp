@@ -100,7 +100,7 @@ export const SignUpPage = (props) => {
   };
 
   return (
-    <AuthScreenContainer title={"Register"}>
+    <AuthScreenContainer noBack title={"Register"}>
       <View style={{ width: "100%", marginVertical: 0, marginBottom: 32 }}>
         <View style={{ width: "100%" }}>
           <Text style={{ fontSize: 28, fontFamily: "openSans_bold" }}>

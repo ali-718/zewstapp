@@ -53,18 +53,15 @@ export const addEmployeeAction =
       navigation,
     });
     client
-      .post(
-        `employee/addEmployee`,
-        JSON.stringify({
-          locationId,
-          firstName,
-          lastName,
-          phone: `+${phone}`,
-          role,
-          active,
-          shift,
-        })
-      )
+      .post(`employee/addEmployee`, {
+        locationId,
+        firstName,
+        lastName,
+        phone: `+${phone}`,
+        role,
+        active,
+        shift,
+      })
       .then(() => {
         dispatch({
           type: ADD_EMPLOYEES.SUCCEEDED,
@@ -114,6 +111,7 @@ export const editEmployeeAction =
     active,
     navigation,
     shift,
+    pin,
   }) =>
   (dispatch) => {
     dispatch({ type: EDIT_EMPLOYEES.REQUESTED });
@@ -128,29 +126,28 @@ export const editEmployeeAction =
       shift,
       navigation,
       employeeId,
+      pin,
     });
 
     client
-      .post(
-        `employee/updateEmployee`,
-        JSON.stringify({
-          locationId,
-          firstName,
-          lastName,
-          phone: `+${phone}`,
-          email,
-          role,
-          active,
-          employeeId,
-          shift,
-        })
-      )
+      .post(`employee/updateEmployee`, {
+        locationId,
+        firstName,
+        lastName,
+        phone: `+${phone}`,
+        email,
+        role,
+        active,
+        employeeId,
+        shift,
+        pin,
+      })
       .then(() => {
         dispatch({
           type: EDIT_EMPLOYEES.SUCCEEDED,
         });
         dispatch(getAllEmployees({ locationId }));
-        navigation.goBack();
+        navigation.pop(2);
         ToastSuccess("Success", "Employee edited successfully");
       })
       .catch((e) => {
