@@ -80,16 +80,10 @@ export const LoginPage = (props) => {
         .then((res) => {
           dispatch({
             type: USER,
-            payload: { ...res, user: { role: selectedType, ...res.user } },
+            payload: res,
           });
           AsyncStorage.removeItem("defaultLocation");
-          AsyncStorage.setItem(
-            "user",
-            JSON.stringify({
-              ...res,
-              user: { role: selectedType, ...res.user },
-            })
-          );
+          AsyncStorage.setItem("user", JSON.stringify(res));
           setIsLoading(false);
         })
         .catch((e) => {
@@ -113,13 +107,10 @@ export const LoginPage = (props) => {
       .then((res) => {
         dispatch({
           type: USER,
-          payload: { ...res, user: { role: selectedType, ...res.user } },
+          payload: { user: res },
         });
         AsyncStorage.removeItem("defaultLocation");
-        AsyncStorage.setItem(
-          "user",
-          JSON.stringify({ ...res, user: { role: selectedType, ...res.user } })
-        );
+        AsyncStorage.setItem("user", JSON.stringify({ user: res }));
         setIsLoading(false);
       })
       .catch((e) => {

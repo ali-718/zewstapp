@@ -5,6 +5,7 @@ import { LOGOUT, NOTIFICATION_DATA } from "./Types";
 
 export const signupAction = ({ owner_name, contact_no, email, password }) =>
   new Promise((resolve, reject) => {
+    console.log({ owner_name, contact_no, email, password });
     client
       .post("/auth/signup", {
         owner_name,
@@ -15,11 +16,15 @@ export const signupAction = ({ owner_name, contact_no, email, password }) =>
       .then((data) => {
         resolve(data.data);
       })
-      .catch((e) => reject(e.response.data));
+      .catch((e) => {
+        console.log(e.response.data);
+        reject(e.response.data);
+      });
   });
 
 export const confirmCode = ({ username, code }) =>
   new Promise((resolve, reject) => {
+    console.log({ username, code });
     client
       .post("/auth/confirm", {
         username,
@@ -28,7 +33,10 @@ export const confirmCode = ({ username, code }) =>
       .then((data) => {
         resolve(data.data);
       })
-      .catch((e) => reject(e.response.data));
+      .catch((e) => {
+        console.log(e.response.data);
+        reject(e.response.data);
+      });
   });
 
 export const loginActionOther = ({ pin }) =>

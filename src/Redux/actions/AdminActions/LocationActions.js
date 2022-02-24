@@ -157,6 +157,7 @@ export const getPrimaryLocationAction = (clientId) => (dispatch) => {
       });
     })
     .catch((e) => {
+      console.log(e?.response?.data);
       ToastError(
         e?.response?.data?.message ||
           "Some error occoured, unable to fetch primary location"

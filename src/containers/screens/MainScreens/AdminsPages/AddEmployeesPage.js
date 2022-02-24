@@ -506,7 +506,7 @@ export const AddEmployeesPage = (props) => {
           sheetBackgroundColor={"white"}
           hasDraggableIcon
           ref={bottomSheet}
-          height={600}
+          height={700}
         >
           <View style={{ width: "100%", flex: 1, backgroundColor: "white" }}>
             <View style={{ marginLeft: 30, marginTop: 40, marginBottom: 30 }}>

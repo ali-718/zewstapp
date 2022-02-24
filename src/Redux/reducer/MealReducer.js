@@ -184,8 +184,8 @@ export const mealReducer = produce(
         state.hotel.hotels = [
           ...state.hotel.hotels,
           {
-            name: payload.user.restaurantName,
-            owner: payload.user?.owner_name,
+            name: payload?.user?.restaurantName,
+            owner: payload?.user?.owner_name,
 
             locations: [],
           },

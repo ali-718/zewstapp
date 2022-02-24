@@ -6,6 +6,16 @@ import vegeterian from "../assets/images/categories/vegeterian.png";
 import baked from "../assets/images/categories/baked.png";
 import lactose from "../assets/images/allergens/lactose.png";
 import gluten from "../assets/images/allergens/gluten.png";
+import overviewIcon from "../assets/images/MenuIcons/overview.png";
+import menuIcon from "../assets/images/MenuIcons/menu.png";
+import recipeIcon from "../assets/images/MenuIcons/recipeIcon.png";
+import wasteIcon from "../assets/images/MenuIcons/WastePredictionIco.png";
+import inventoryIcon from "../assets/images/MenuIcons/inventoryIcon.png";
+import adminIcon from "../assets/images/MenuIcons/adminIcon.png";
+import VendorIcon from "../assets/images/MenuIcons/VendorIcon.png";
+import posIcon from "../assets/images/MenuIcons/posIcon.png";
+import kitchenIcon from "../assets/images/MenuIcons/kitchenIcon.png";
+import foodLogIcon from "../assets/images/MenuIcons/foodLogIcon.png";
 
 export const WIDTH = Dimensions.get("screen").width;
 export const HEIGHT = Dimensions.get("screen").height;
@@ -753,4 +763,156 @@ export const validConversionUnits = (originalUnit) => {
   }
 
   return units;
+};
+
+export const allMenus = {
+  OWNER: [
+    { name: "Overview", icon: overviewIcon, index: 0, path: "Home" },
+    { name: "Menu", icon: menuIcon, index: 1, path: "Menu" },
+    { name: "Recipe Engineering", icon: recipeIcon, index: 3, path: "Recipe" },
+    {
+      name: "Waste Prediction",
+      icon: wasteIcon,
+      index: 4,
+      path: "WastePrediction",
+    },
+    {
+      name: "Inventory",
+      icon: inventoryIcon,
+      index: 5,
+      path: "Inventory",
+    },
+    {
+      name: "Admin",
+      icon: adminIcon,
+      index: 6,
+      path: "Admin",
+    },
+    {
+      name: "Vendor",
+      icon: VendorIcon,
+      index: 7,
+      path: "Vendor",
+    },
+    {
+      name: "POS",
+      icon: posIcon,
+      index: 8,
+      path: "Pos",
+      isTablet: true,
+    },
+    {
+      name: "Kitchen",
+      icon: kitchenIcon,
+      index: 9,
+      path: "Kitchen",
+      isTablet: true,
+    },
+    {
+      name: "Food Log",
+      icon: foodLogIcon,
+      index: 10,
+      path: "DailyFoodLog",
+    },
+  ],
+  GM: [
+    { name: "Overview", icon: overviewIcon, index: 0, path: "Home" },
+    { name: "Menu", icon: menuIcon, index: 1, path: "Menu" },
+    { name: "Recipe Engineering", icon: recipeIcon, index: 3, path: "Recipe" },
+    {
+      name: "Waste Prediction",
+      icon: wasteIcon,
+      index: 4,
+      path: "WastePrediction",
+    },
+    {
+      name: "Inventory",
+      icon: inventoryIcon,
+      index: 5,
+      path: "Inventory",
+    },
+    {
+      name: "Admin",
+      icon: adminIcon,
+      index: 6,
+      path: "Admin",
+    },
+    {
+      name: "Vendor",
+      icon: VendorIcon,
+      index: 7,
+      path: "Vendor",
+    },
+    {
+      name: "POS",
+      icon: posIcon,
+      index: 8,
+      path: "Pos",
+      isTablet: true,
+    },
+    {
+      name: "Kitchen",
+      icon: kitchenIcon,
+      index: 9,
+      path: "Kitchen",
+      isTablet: true,
+    },
+    {
+      name: "Food Log",
+      icon: foodLogIcon,
+      index: 10,
+      path: "DailyFoodLog",
+    },
+  ],
+  KITCHEN_STAFF: [
+    { name: "Overview", icon: overviewIcon, index: 0, path: "Home" },
+    { name: "Menu", icon: menuIcon, index: 1, path: "Menu" },
+    { name: "Recipe Engineering", icon: recipeIcon, index: 3, path: "Recipe" },
+    {
+      name: "Inventory",
+      icon: inventoryIcon,
+      index: 5,
+      path: "Inventory",
+    },
+    {
+      name: "Vendor",
+      icon: VendorIcon,
+      index: 7,
+      path: "Vendor",
+    },
+    {
+      name: "Kitchen",
+      icon: kitchenIcon,
+      index: 9,
+      path: "Kitchen",
+      isTablet: true,
+    },
+    {
+      name: "Food Log",
+      icon: foodLogIcon,
+      index: 10,
+      path: "DailyFoodLog",
+    },
+  ],
+  WAITER: [
+    { name: "Overview", icon: overviewIcon, index: 0, path: "Home" },
+    {
+      name: "POS",
+      icon: posIcon,
+      index: 8,
+      path: "Pos",
+      isTablet: true,
+    },
+  ],
+  CASHIER: [
+    { name: "Overview", icon: overviewIcon, index: 0, path: "Home" },
+    {
+      name: "POS",
+      icon: posIcon,
+      index: 8,
+      path: "Pos",
+      isTablet: true,
+    },
+  ],
+  CLEANER: [{ name: "Overview", icon: overviewIcon, index: 0, path: "Home" }],
 };

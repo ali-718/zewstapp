@@ -106,7 +106,7 @@ export const VerificationPage = (props) => {
 
     confirmCode({
       username,
-      code: `${code1}${code2}${code3}${code4}${code5}${code6}`,
+      code: `${code1}${code2}${code3}${code4}`,
     })
       .then((res) => {
         setIsLoading(false);
@@ -176,18 +176,6 @@ export const VerificationPage = (props) => {
             setRef={(val) => (refs.fourth = val)}
             val={code4}
             setVal={setcode4}
-            onChangeText={() => refs?.fifth?.current?.focus()}
-          />
-          <TextBox
-            setRef={(val) => (refs.fifth = val)}
-            val={code5}
-            setVal={setcode5}
-            onChangeText={() => refs?.sixth?.current?.focus()}
-          />
-          <TextBox
-            setRef={(val) => (refs.sixth = val)}
-            val={code6}
-            setVal={setcode6}
             onChangeText={() => null}
           />
         </View>

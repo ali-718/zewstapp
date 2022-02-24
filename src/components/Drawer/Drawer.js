@@ -37,6 +37,7 @@ import { useRoute } from "@react-navigation/native";
 import { RegularButton } from "../Buttons/RegularButton";
 import { LogoutAction } from "../../Redux/actions/AuthActions/authActions";
 import logoutIcon from "../../assets/images/logoutIcon.png";
+import { allMenus } from "../../helpers/utlils";
 
 export const Menu = ({ image, name, setselected, selected, style, noName }) => (
   <TouchableOpacity
@@ -85,6 +86,7 @@ export const DrawerMenu = ({
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const device = useSelector((state) => state.system.device);
+  const user = useSelector((state) => state.auth.user.user);
 
   const Logout = () => dispatch(LogoutAction(navigation));
 
@@ -113,109 +115,24 @@ export const DrawerMenu = ({
             >
               Main
             </Text>
-            <Menu
-              selected={index === 0}
-              setselected={() => {
-                navigation.navigate("Home");
-                changeMenuIndex(0);
-              }}
-              image={overviewIcon}
-              name={"Overview"}
-              style={{ marginTop: 20 }}
-            />
-            <Menu
-              selected={index === 1}
-              setselected={() => {
-                navigation.navigate("Menu");
-                changeMenuIndex(1);
-              }}
-              image={menuIcon}
-              name={"Menu"}
-            />
-            {/* <Menu
-              selected={index === 2}
-              setselected={() => {
-                navigation.navigate("Sales");
-                changeMenuIndex(2);
-              }}
-              image={salesIcon}
-              name={"Sales"}
-            /> */}
-            <Menu
-              selected={index === 3}
-              setselected={() => {
-                navigation.navigate("Recipe");
-                changeMenuIndex(3);
-              }}
-              image={recipeIcon}
-              name={"Recipe Engineering"}
-            />
-            <Menu
-              selected={index === 4}
-              setselected={() => {
-                navigation.navigate("WastePrediction");
-                changeMenuIndex(4);
-              }}
-              image={wasteIcon}
-              name={"Waste Prediction"}
-            />
-            <Menu
-              selected={index === 5}
-              setselected={() => {
-                navigation.navigate("Inventory");
-                changeMenuIndex(5);
-              }}
-              image={inventoryIcon}
-              name={"Inventory"}
-            />
-            <Menu
-              selected={index === 6}
-              setselected={() => {
-                navigation.navigate("Admin");
-                changeMenuIndex(6);
-              }}
-              image={adminIcon}
-              name={"Admin"}
-            />
-            <Menu
-              selected={index === 7}
-              setselected={() => {
-                navigation.navigate("Vendor");
-                changeMenuIndex(7);
-              }}
-              image={VendorIcon}
-              name={"Vendor"}
-            />
-            <Menu
-              selected={index === 8}
-              setselected={() => {
-                navigation.navigate("Pos");
-                changeMenuIndex(8);
-              }}
-              image={posIcon}
-              name={"POS"}
-            />
-            {device === "tablet" ? (
-              <Menu
-                selected={index === 9}
-                setselected={() => {
-                  navigation.navigate("Kitchen");
-                  changeMenuIndex(9);
-                }}
-                image={kitchenIcon}
-                name={"Kitchen"}
-              />
-            ) : null}
+            {allMenus[user.role]?.map((item, i) => {
+              if (item.isTablet && device !== "tablet") {
+                return null;
+              }
 
-            <Menu
-              selected={index === 10}
-              setselected={() => {
-                navigation.navigate("DailyFoodLog");
-                changeMenuIndex(0);
-              }}
-              image={foodLogIcon}
-              name={"Food Log"}
-            />
+              return (
+                <Menu
+                  selected={index === item.index}
+                  setselected={() => {
+                    navigation.navigate(item.path);
+                    changeMenuIndex(item.index);
+                  }}
+                  image={item.icon}
+                  name={item.name}
+                  style={{ marginTop: 20 }}
+                />
+              );
+            })}
           </View>
 
           <View style={{ width: "100%", marginTop: 40 }}>
@@ -274,7 +191,7 @@ export const DrawerMenuWithoutNames = ({
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const device = useSelector((state) => state.system.device);
-  const Logout = () => dispatch(LogoutAction(navigation));
+  const user = useSelector((state) => state.auth.user.user);
 
   return (
     <SafeAreaView style={{ flex: 1, paddingTop: 30 }}>
@@ -300,123 +217,27 @@ export const DrawerMenuWithoutNames = ({
             >
               Main
             </Text>
-            <Menu
-              selected={index === 0}
-              setselected={() => {
-                navigation.navigate("Home");
-                changeMenuIndex(0);
-              }}
-              image={overviewIcon}
-              name={"Overview"}
-              style={{ marginTop: 20 }}
-              noName
-            />
-            <Menu
-              selected={index === 1}
-              setselected={() => {
-                changeMenuIndex(1);
-                navigation.navigate("Menu");
-              }}
-              image={menuIcon}
-              name={"Menu"}
-              noName
-            />
-            {/* <Menu
-              selected={index === 2}
-              setselected={() => {
-                navigation.navigate("Sales");
-                changeMenuIndex(2);
-              }}
-              image={salesIcon}
-              name={"Sales"}
-              noName
-            /> */}
-            <Menu
-              selected={index === 3}
-              setselected={() => {
-                navigation.navigate("Recipe");
-                changeMenuIndex(3);
-              }}
-              image={recipeIcon}
-              name={"Recipe Engineering"}
-              noName
-            />
-            <Menu
-              selected={index === 4}
-              setselected={() => {
-                navigation.navigate("WastePrediction");
-                changeMenuIndex(4);
-              }}
-              image={wasteIcon}
-              name={"Waste Prediction"}
-              noName
-            />
-            <Menu
-              selected={index === 5}
-              setselected={() => {
-                navigation.navigate("Inventory");
-                changeMenuIndex(5);
-              }}
-              image={inventoryIcon}
-              name={"Inventory"}
-              noName
-            />
-            <Menu
-              selected={index === 6}
-              setselected={() => {
-                navigation.navigate("Admin");
-                changeMenuIndex(6);
-              }}
-              image={adminIcon}
-              name={"Admin"}
-              noName
-            />
-            <Menu
-              selected={index === 7}
-              setselected={() => {
-                navigation.navigate("Vendor");
-                changeMenuIndex(7);
-              }}
-              image={VendorIcon}
-              name={"Vendor"}
-              noName
-            />
-            {device === "tablet" ? (
-              <Menu
-                selected={index === 8}
-                setselected={() => {
-                  navigation.navigate("Pos");
-                  changeMenuIndex(8);
-                }}
-                image={posIcon}
-                name={"POS"}
-                noName
-              />
-            ) : null}
 
-            {device === "tablet" ? (
-              <Menu
-                selected={index === 9}
-                setselected={() => {
-                  navigation.navigate("Kitchen");
-                  changeMenuIndex(9);
-                }}
-                image={kitchenIcon}
-                name={"Kitchen"}
-                noName
-              />
-            ) : null}
+            {allMenus[user.role]?.map((item, i) => {
+              if (item.isTablet && device !== "tablet") {
+                return null;
+              }
 
-            <Menu
-              selected={index === 10}
-              setselected={() => {
-                navigation.navigate("DailyFoodLog");
-                changeMenuIndex(10);
-              }}
-              image={foodLogIcon}
-              name={"Food Log"}
-              noName
-            />
+              return (
+                <Menu
+                  key={i}
+                  selected={index === item.index}
+                  setselected={() => {
+                    navigation.navigate(item.path);
+                    changeMenuIndex(item.index);
+                  }}
+                  image={item.icon}
+                  name={item.name}
+                  style={{ marginTop: 20 }}
+                  noName
+                />
+              );
+            })}
           </View>
 
           {/* <View style={{ width: "100%", marginTop: 40 }}>

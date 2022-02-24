@@ -60,6 +60,7 @@ import { WasteItemAddForUbf } from "./containers/screens/MainScreens/WasteScreen
 import { WasteItemAddForDiscount } from "./containers/screens/MainScreens/WasteScreens/WasteItemAddForDiscount";
 import { UpdateInventoryPage } from "./containers/screens/MainScreens/InventoryPages/UpdateInventory";
 import { EmployeeDetail } from "./containers/screens/MainScreens/AdminsPages/EmployeeDetail";
+import { DashboardPage } from "./containers/screens/MainScreens/HomePages/DashboardPage";
 
 const Stack = createNativeStackNavigator();
 
@@ -134,11 +135,18 @@ const MenuRoutes = () => {
 };
 
 const DashboardRoutes = () => {
+  const user = useSelector((state) => state.auth.user?.user);
+
   return (
     <Stack.Navigator
       screenOptions={{ headerShown: false, gestureEnabled: false }}
     >
-      <Drawer.Screen name="Home" component={HomePage} />
+      <Drawer.Screen
+        name="Home"
+        component={
+          user.role === "OWNER" || user.role === "GM" ? HomePage : DashboardPage
+        }
+      />
       <Stack.Screen name="lossInKitchen" component={LossInKitchen} />
       <Stack.Screen name="location" component={LocationsPage} />
       <Stack.Screen name="addLocation" component={AddLocationsPage} />
@@ -207,6 +215,7 @@ const MainRoutes = () => {
   const orientation = useSelector((state) => state.system.orientation);
   const device = useSelector((state) => state.system.device);
   const isMenuSmall = useSelector((state) => state.system.isMenuSmall);
+  const user = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
 
   return (
@@ -259,7 +268,7 @@ const MainRoutes = () => {
 };
 
 export const Routes = () => {
-  const user = useSelector((state) => state.auth.user);
+  const user = useSelector((state) => state.auth.user.user);
 
   const dispatch = useDispatch();
 
@@ -305,7 +314,7 @@ export const Routes = () => {
     dispatch(actions.deviceType({ type: MOBILE }));
   }, []);
 
-  if (user?.token) {
+  if (user?.role) {
     return <MainRoutes />;
   }
   return <AuthRoutes />;

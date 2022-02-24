@@ -7,7 +7,10 @@ import { Text } from "../../../components/Text/Text";
 import { grayTextColor, primaryColor } from "../../../theme/colors";
 import { PasswordInput } from "../../../components/Inputs/PasswordInput";
 import { RegularButton } from "../../../components/Buttons/RegularButton";
-import { signupAction } from "../../../Redux/actions/AuthActions/authActions";
+import {
+  resendCode,
+  signupAction,
+} from "../../../Redux/actions/AuthActions/authActions";
 import {
   confirmPasswordValidator,
   emailValidator,
@@ -79,14 +82,19 @@ export const SignUpPage = (props) => {
       password: password,
     })
       .then((data) => {
-        dispatch({ type: SIGNUP, payload: data.user });
+        dispatch({ type: SIGNUP, payload: email });
         props.navigation.navigate("Verification", { phone: contact });
         setIsLoading(false);
       })
       .catch((e) => {
-        ToastError(
-          e.err?.message || "Some error occoured, please try again later"
-        );
+        if (e?.message === "Email exists but not confirmed") {
+          resendCode({ email: email });
+          dispatch({ type: SIGNUP, payload: email });
+          props.navigation.navigate("Verification", { phone: contact });
+          setIsLoading(false);
+          return;
+        }
+        ToastError(e?.message || "Some error occoured, please try again later");
         setIsLoading(false);
       });
   };
