@@ -29,7 +29,6 @@ export const AddVendorsPage = (props) => {
   const [email, setEmail] = useState("");
   const [address, setAddress] = useState("");
   const [phone, setPhone] = useState("");
-
   const [isEdit, setIsEdit] = useState(false);
   const [deleteModal, setdeleteModal] = useState(false);
 
@@ -79,6 +78,22 @@ export const AddVendorsPage = (props) => {
 
     if (!defaultLocation.locationId) {
       ToastError("Kindly select primary location, first");
+      return;
+    }
+
+    if (isEdit) {
+      const data = {
+        locationId: defaultLocation.locationId,
+        name: name,
+        email: email,
+        address: address,
+        phoneNo: `+${phone}`,
+        navigation,
+        vendorId: props?.route?.params?.data?.vendorId,
+      };
+
+      dispatch(actions.updateVendorActions(data));
+
       return;
     }
 
@@ -162,7 +177,7 @@ export const AddVendorsPage = (props) => {
           isLoading={isLoading}
           onPress={addVendor}
           style={{ marginTop: 20 }}
-          text={"save"}
+          text={isEdit ? "Update" : "save"}
         />
 
         {/* {isEdit && (

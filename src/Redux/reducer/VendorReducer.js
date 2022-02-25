@@ -1,5 +1,9 @@
 import produce from "immer";
-import { ADD_VENDOR, FETCH_VENDOR } from "../actions/VendorActions/Types";
+import {
+  ADD_VENDOR,
+  DELETE_VENDOR,
+  FETCH_VENDOR,
+} from "../actions/VendorActions/Types";
 
 const initialState = {
   vendors: {
@@ -20,6 +24,16 @@ const initialState = {
 export const vendorReducer = produce(
   (state = initialState, { payload, type }) => {
     switch (type) {
+      case DELETE_VENDOR.REQUESTED: {
+        state.deleteVendors.isLoading = true;
+        state.deleteVendors.isError = false;
+        break;
+      }
+      case DELETE_VENDOR.SUCCEEDED: {
+        state.deleteVendors.isLoading = false;
+        state.deleteVendors.isError = false;
+        break;
+      }
       case ADD_VENDOR.REQUESTED: {
         state.addVendors.isLoading = true;
         state.addVendors.isError = false;

@@ -202,3 +202,46 @@ export const getEmployeeTodayTime = ({ id }) =>
         reject();
       });
   });
+
+export const startEmployeeTrackTime = ({ employeeId, firstName, lastName }) =>
+  new Promise((resolve, reject) => {
+    console.log({ employeeId, firstName, lastName });
+    client
+      .post(`/employee/trackTimeStart`, {
+        employeeId,
+        firstName,
+        lastName,
+      })
+      .then(({ data }) => {
+        resolve();
+      })
+      .catch((e) => {
+        console.log(e.response.data);
+        ToastError(
+          e.response.data?.message ||
+            "Some error occoured, please try again later"
+        );
+        reject();
+      });
+  });
+
+export const stopEmployeeTrackTime = ({ employeeId, dayId, startTime }) =>
+  new Promise((resolve, reject) => {
+    client
+      .post(`/employee/trackTimeEnd`, {
+        employeeId,
+        dayId,
+        startTime,
+      })
+      .then(({ data }) => {
+        resolve();
+      })
+      .catch((e) => {
+        console.log(e.response.data);
+        ToastError(
+          e.response.data?.message ||
+            "Some error occoured, please try again later"
+        );
+        reject();
+      });
+  });

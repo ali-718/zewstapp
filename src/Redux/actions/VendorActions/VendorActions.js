@@ -1,6 +1,6 @@
 import { ToastError, ToastSuccess } from "../../../helpers/Toast";
 import { client } from "../client";
-import { ADD_VENDOR, FETCH_VENDOR } from "./Types";
+import { ADD_VENDOR, DELETE_VENDOR, FETCH_VENDOR } from "./Types";
 
 export const fetchVendorActions =
   ({ locationId }) =>
@@ -34,5 +34,57 @@ export const addVendorActions =
       .catch((e) => {
         ToastError("Some error occoured, please try again later");
         dispatch({ type: ADD_VENDOR.FAILED });
+      });
+  };
+
+export const updateVendorActions =
+  ({ locationId, name, email, address, phoneNo, navigation, vendorId }) =>
+  (dispatch) => {
+    console.log({
+      locationId,
+      name,
+      email,
+      address,
+      phoneNo,
+      navigation,
+      vendorId,
+    });
+    dispatch({ type: ADD_VENDOR.REQUESTED });
+    client
+      .post(`/vendors/update`, {
+        locationId,
+        name,
+        email,
+        address,
+        phoneNo,
+        vendorId,
+      })
+      .then((res) => {
+        ToastSuccess("Success", "Vendor added successfully");
+        dispatch(fetchVendorActions({ locationId }));
+        dispatch({ type: ADD_VENDOR.SUCCEEDED });
+        navigation.goBack();
+      })
+      .catch((e) => {
+        ToastError("Some error occoured, please try again later");
+        dispatch({ type: ADD_VENDOR.FAILED });
+      });
+  };
+
+export const deleteVendorActions =
+  ({ locationId, vendorId }) =>
+  (dispatch) => {
+    console.log({ locationId, vendorId });
+    dispatch({ type: DELETE_VENDOR.REQUESTED });
+    client
+      .post(`/vendors/delete/${locationId}/${vendorId}`)
+      .then((res) => {
+        ToastSuccess("Success", "Vendor deleted successfully");
+        dispatch(fetchVendorActions({ locationId }));
+        dispatch({ type: DELETE_VENDOR.SUCCEEDED });
+      })
+      .catch((e) => {
+        ToastError("Some error occoured, please try again later");
+        dispatch({ type: DELETE_VENDOR.FAILED });
       });
   };

@@ -7,10 +7,22 @@ import { PRIMARY_LOCATION } from "../../../../Redux/actions/AdminActions/Types";
 import stopwatchPurple from "../../../../assets/images/stopwatchPurple.png";
 import blackWatchTimer from "../../../../assets/images/blackWatchTimer.png";
 import purplePlay from "../../../../assets/images/purplePlay.png";
-import { getEmployeeTodayTime } from "../../../../Redux/actions/EmployeeActions/EmployeeActions";
+import stopTime from "../../../../assets/images/stopTime.png";
+import loggedArrow from "../../../../assets/images/loggedArow.png";
+import shiftIcon from "../../../../assets/images/shiftIcon.png";
+import daysTookOff from "../../../../assets/images/daysTookOff.png";
+import calender from "../../../../assets/images/calender.png";
+import {
+  getEmployeeTodayTime,
+  startEmployeeTrackTime,
+  stopEmployeeTrackTime,
+} from "../../../../Redux/actions/EmployeeActions/EmployeeActions";
 import moment from "moment";
 import { Modal } from "../../../../components/Modal/Modal";
 import { Text } from "../../../../components/Text/Text";
+import { Spinner } from "native-base";
+import { primaryColor } from "../../../../theme/colors";
+import { ToastSuccess } from "../../../../helpers/Toast";
 
 export const DashboardPage = () => {
   const dispatch = useDispatch();
@@ -18,6 +30,8 @@ export const DashboardPage = () => {
   const device = useSelector((state) => state.system.device);
   const [startTime, setStartTime] = useState("");
   const [openWatchModal, setOpenWatchModal] = useState(false);
+  const [timeLoading, setTimeLoading] = useState(false);
+  const [timeObject, setTimeObject] = useState({});
 
   useEffect(() => {
     dispatch({
@@ -34,9 +48,53 @@ export const DashboardPage = () => {
   const getTime = () =>
     getEmployeeTodayTime({ id: user?.employeeId }).then((res) => {
       if (res?.startTime) {
+        setTimeObject(res);
+        if (res?.endTime) {
+          setStartTime("");
+          return;
+        }
         setStartTime(res?.startTime);
       }
     });
+
+  const startTrackTime = () => {
+    setTimeLoading(true);
+
+    startEmployeeTrackTime({
+      employeeId: user?.employeeId,
+      firstName: user?.firstName,
+      lastName: user?.lastName,
+    })
+      .then(() => {
+        setTimeLoading(false);
+        setStartTime(moment());
+        setOpenWatchModal(false);
+        ToastSuccess("Success", "Time track has been started");
+        getTime();
+      })
+      .catch(() => {
+        setTimeLoading(false);
+      });
+  };
+
+  const stopTrackTime = () => {
+    setTimeLoading(true);
+
+    stopEmployeeTrackTime({
+      employeeId: user?.employeeId,
+      dayId: timeObject?.dayId,
+      startTime: startTime,
+    })
+      .then(() => {
+        setTimeLoading(false);
+        setOpenWatchModal(false);
+        ToastSuccess("Success", "Time track has been ended");
+        getTime();
+      })
+      .catch(() => {
+        setTimeLoading(false);
+      });
+  };
 
   return (
     <MainScreenContainer mainHeading={"Overview"} shortDrawer isDrawer>
@@ -50,6 +108,213 @@ export const DashboardPage = () => {
           alignSelf: "center",
         }}
       >
+        <View
+          style={{
+            width: "100%",
+            alignItems: "center",
+            justifyContent: "space-between",
+            flexDirection: device === "tablet" ? "row" : "column",
+          }}
+        >
+          <View
+            style={{
+              width: device === "tablet" ? "48%" : "100%",
+              padding: device === "tablet" ? 20 : 15,
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-between",
+              backgroundColor: "#0184E9",
+              borderRadius: 12,
+              height: 150,
+            }}
+          >
+            <Image
+              source={loggedArrow}
+              style={{
+                width: 50,
+                height: 50,
+              }}
+            />
+
+            <View style={{ alignItems: "flex-end" }}>
+              <Text
+                style={{
+                  fontSize: 11,
+                  textTransform: "uppercase",
+                  color: "white",
+                  fontFamily: "openSans_semiBold",
+                }}
+              >
+                Logged in time
+              </Text>
+              <Text
+                style={{
+                  fontSize: device === "tablet" ? 24 : 22,
+                  textTransform: "uppercase",
+                  color: "white",
+                  fontFamily: "openSans_bold",
+                }}
+              >
+                5:00 pm
+              </Text>
+            </View>
+          </View>
+
+          <View
+            style={{
+              width: device === "tablet" ? "48%" : "100%",
+              padding: device === "tablet" ? 20 : 15,
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-between",
+              backgroundColor: "#68BAA6",
+              borderRadius: 12,
+              height: 150,
+              marginTop: device === "tablet" ? 0 : 20,
+            }}
+          >
+            <Image
+              source={shiftIcon}
+              style={{
+                width: 50,
+                height: 50,
+              }}
+            />
+
+            <View style={{ alignItems: "flex-end" }}>
+              <Text
+                style={{
+                  fontSize: 11,
+                  textTransform: "uppercase",
+                  color: "white",
+                  fontFamily: "openSans_semiBold",
+                }}
+              >
+                Shift Details
+              </Text>
+              <Text
+                style={{
+                  fontSize: device === "tablet" ? 24 : 22,
+                  textTransform: "uppercase",
+                  color: "white",
+                  fontFamily: "openSans_bold",
+                }}
+              >
+                5:00pm - 2am
+              </Text>
+              <Text
+                style={{
+                  fontSize: device === "tablet" ? 18 : 16,
+                  textTransform: "uppercase",
+                  color: "white",
+                  fontFamily: "openSans_bold",
+                }}
+              >
+                Mon - Tues - Wed
+              </Text>
+            </View>
+          </View>
+        </View>
+
+        <View
+          style={{
+            width: "100%",
+            alignItems: "center",
+            justifyContent: "space-between",
+            flexDirection: device === "tablet" ? "row" : "column",
+            marginTop: 20,
+          }}
+        >
+          <View
+            style={{
+              width: device === "tablet" ? "48%" : "100%",
+              padding: device === "tablet" ? 20 : 15,
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-between",
+              backgroundColor: "#876FFF",
+              borderRadius: 12,
+              height: 150,
+            }}
+          >
+            <Image
+              source={calender}
+              style={{
+                width: 50,
+                height: 50,
+              }}
+            />
+
+            <View style={{ alignItems: "flex-end" }}>
+              <Text
+                style={{
+                  fontSize: 11,
+                  textTransform: "uppercase",
+                  color: "white",
+                  fontFamily: "openSans_semiBold",
+                }}
+              >
+                Days Worked
+              </Text>
+              <Text
+                style={{
+                  fontSize: device === "tablet" ? 24 : 22,
+                  textTransform: "uppercase",
+                  color: "white",
+                  fontFamily: "openSans_bold",
+                }}
+              >
+                21 days
+              </Text>
+            </View>
+          </View>
+
+          <View
+            style={{
+              width: device === "tablet" ? "48%" : "100%",
+              padding: device === "tablet" ? 20 : 15,
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-between",
+              backgroundColor: "#2936A3",
+              borderRadius: 12,
+              height: 150,
+              marginTop: device === "tablet" ? 0 : 20,
+            }}
+          >
+            <Image
+              source={daysTookOff}
+              style={{
+                width: 50,
+                height: 50,
+              }}
+            />
+
+            <View style={{ alignItems: "flex-end" }}>
+              <Text
+                style={{
+                  fontSize: 11,
+                  textTransform: "uppercase",
+                  color: "white",
+                  fontFamily: "openSans_semiBold",
+                }}
+              >
+                Days Took Off
+              </Text>
+              <Text
+                style={{
+                  fontSize: device === "tablet" ? 24 : 22,
+                  textTransform: "uppercase",
+                  color: "white",
+                  fontFamily: "openSans_bold",
+                }}
+              >
+                5 Days
+              </Text>
+            </View>
+          </View>
+        </View>
+
         <View
           style={{
             width: "100%",
@@ -127,7 +392,20 @@ export const DashboardPage = () => {
             <TouchableOpacity
               style={{ marginTop: device === "tablet" ? 0 : 20 }}
             >
-              <Image source={purplePlay} style={{ width: 69, height: 69 }} />
+              {timeLoading ? (
+                <Spinner color={primaryColor} size={"large"} />
+              ) : timeObject?.startTime && !timeObject.endTime ? (
+                <TouchableOpacity onPress={stopTrackTime}>
+                  <Image source={stopTime} style={{ width: 69, height: 69 }} />
+                </TouchableOpacity>
+              ) : (
+                <TouchableOpacity onPress={startTrackTime}>
+                  <Image
+                    source={purplePlay}
+                    style={{ width: 69, height: 69 }}
+                  />
+                </TouchableOpacity>
+              )}
             </TouchableOpacity>
           </View>
         </View>

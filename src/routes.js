@@ -314,7 +314,7 @@ export const Routes = () => {
     dispatch(actions.deviceType({ type: MOBILE }));
   }, []);
 
-  if (user?.role) {
+  if (user?.role || user?.email) {
     return <MainRoutes />;
   }
   return <AuthRoutes />;

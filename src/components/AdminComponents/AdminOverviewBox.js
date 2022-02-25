@@ -28,6 +28,7 @@ export const AdminOverviewBox = ({
   primary = null,
   boxStyle,
   rightTextStyle,
+  activeOpacity,
 }) => {
   const device = useSelector((state) => state.system.device);
 
@@ -46,6 +47,7 @@ export const AdminOverviewBox = ({
       }}
       onPress={onPress}
       onLongPress={onLongPress}
+      activeOpacity={activeOpacity ?? 0.1}
     >
       {image ? (
         <Image
