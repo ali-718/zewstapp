@@ -1,4 +1,4 @@
-import { View, Image, TouchableOpacity } from "react-native";
+import { View, Image, TouchableOpacity, Alert, Linking } from "react-native";
 import React, { useState } from "react";
 import { MainScreenContainer } from "../../../MainScreenContainers";
 import { useEffect } from "react";
@@ -23,6 +23,8 @@ import { Text } from "../../../../components/Text/Text";
 import { Spinner } from "native-base";
 import { primaryColor } from "../../../../theme/colors";
 import { ToastSuccess } from "../../../../helpers/Toast";
+import * as Location from "expo-location";
+import { distanceBetweeTwoCoords } from "../../../../helpers/utlils";
 
 export const DashboardPage = () => {
   const dispatch = useDispatch();
@@ -45,6 +47,67 @@ export const DashboardPage = () => {
     getTime();
   }, [user]);
 
+  useEffect(() => {
+    (async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== "granted") {
+        alert("Permission to access location was denied");
+        return;
+      }
+    })();
+  }, []);
+
+  const startTrackTime = async () => {
+    setTimeLoading(true);
+
+    Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Highest })
+      .then((location) => {
+        const distance = distanceBetweeTwoCoords({
+          lat1: location.coords.latitude,
+          lon1: location.coords.longitude,
+          lat2: 24.856383,
+          lon2: 67.015987,
+        });
+
+        if (distance > 7) {
+          console.log("distance", distance);
+          alert(`you are ${(distance - 7).toFixed(2)}m away`);
+          setTimeLoading(false);
+          return;
+        }
+
+        console.log("distance", distance);
+
+        startEmployeeTrackTime({
+          employeeId: user?.employeeId,
+          firstName: user?.firstName,
+          lastName: user?.lastName,
+        })
+          .then(() => {
+            setTimeLoading(false);
+            setStartTime(moment());
+            setOpenWatchModal(false);
+            ToastSuccess("Success", "Time track has been started");
+            getTime();
+          })
+          .catch(() => {
+            setTimeLoading(false);
+          });
+      })
+      .catch(() => {
+        setTimeLoading(false);
+        Alert.alert(
+          "Error !",
+          "You need to provide location permission from settings",
+          [
+            { text: "cancel", cancelable: true },
+            { text: "open settings", onPress: () => Linking.openSettings() },
+          ]
+        );
+        return false;
+      });
+  };
+
   const getTime = () =>
     getEmployeeTodayTime({ id: user?.employeeId }).then((res) => {
       if (res?.startTime) {
@@ -56,26 +119,6 @@ export const DashboardPage = () => {
         setStartTime(res?.startTime);
       }
     });
-
-  const startTrackTime = () => {
-    setTimeLoading(true);
-
-    startEmployeeTrackTime({
-      employeeId: user?.employeeId,
-      firstName: user?.firstName,
-      lastName: user?.lastName,
-    })
-      .then(() => {
-        setTimeLoading(false);
-        setStartTime(moment());
-        setOpenWatchModal(false);
-        ToastSuccess("Success", "Time track has been started");
-        getTime();
-      })
-      .catch(() => {
-        setTimeLoading(false);
-      });
-  };
 
   const stopTrackTime = () => {
     setTimeLoading(true);

@@ -165,12 +165,12 @@ export const DrawerMenu = ({
               image={settingsIcon}
               name={"Settings"}
             /> */}
-            <Menu
+            {/* <Menu
               selected={index === 13}
               setselected={() => null}
               image={supportIcon}
               name={"Support"}
-            />
+            /> */}
 
             <Menu
               setselected={() => null}
