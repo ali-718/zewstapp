@@ -13,6 +13,7 @@ import shiftIcon from "../../../../assets/images/shiftIcon.png";
 import daysTookOff from "../../../../assets/images/daysTookOff.png";
 import calender from "../../../../assets/images/calender.png";
 import {
+  getEmployeeDashboardData,
   getEmployeeTodayTime,
   startEmployeeTrackTime,
   stopEmployeeTrackTime,
@@ -22,9 +23,10 @@ import { Modal } from "../../../../components/Modal/Modal";
 import { Text } from "../../../../components/Text/Text";
 import { Spinner } from "native-base";
 import { primaryColor } from "../../../../theme/colors";
-import { ToastSuccess } from "../../../../helpers/Toast";
+import { ToastError, ToastSuccess } from "../../../../helpers/Toast";
 import * as Location from "expo-location";
 import { distanceBetweeTwoCoords } from "../../../../helpers/utlils";
+import { FullPageLoadingModall } from "../../../../components/FullPageLoadingModall/FullPageLoadingModall";
 
 export const DashboardPage = () => {
   const dispatch = useDispatch();
@@ -34,6 +36,8 @@ export const DashboardPage = () => {
   const [openWatchModal, setOpenWatchModal] = useState(false);
   const [timeLoading, setTimeLoading] = useState(false);
   const [timeObject, setTimeObject] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
+  const [dashboardData, setDashboardData] = useState({});
 
   useEffect(() => {
     dispatch({
@@ -43,6 +47,8 @@ export const DashboardPage = () => {
         location: {},
       },
     });
+
+    getDashboarddata();
 
     getTime();
   }, [user]);
@@ -65,8 +71,8 @@ export const DashboardPage = () => {
         const distance = distanceBetweeTwoCoords({
           lat1: location.coords.latitude,
           lon1: location.coords.longitude,
-          lat2: 24.856383,
-          lon2: 67.015987,
+          lat2: user?.location?.latitude,
+          lon2: user?.location?.longitude,
         });
 
         if (distance > 7) {
@@ -120,6 +126,18 @@ export const DashboardPage = () => {
       }
     });
 
+  const getDashboarddata = () => {
+    setIsLoading(true);
+    getEmployeeDashboardData({ employeeId: user?.employeeId })
+      .then((res) => {
+        setDashboardData(res);
+        setIsLoading(false);
+      })
+      .catch((e) => {
+        setIsLoading(false);
+      });
+  };
+
   const stopTrackTime = () => {
     setTimeLoading(true);
 
@@ -129,6 +147,7 @@ export const DashboardPage = () => {
       startTime: startTime,
     })
       .then(() => {
+        getDashboarddata();
         setTimeLoading(false);
         setOpenWatchModal(false);
         ToastSuccess("Success", "Time track has been ended");
@@ -141,236 +160,381 @@ export const DashboardPage = () => {
 
   return (
     <MainScreenContainer mainHeading={"Overview"} shortDrawer isDrawer>
-      <View
-        style={{
-          width: "95%",
-          marginBottom: 80,
-          alignItems: "center",
-          marginTop: 20,
-          zIndex: 1,
-          alignSelf: "center",
-        }}
-      >
+      {isLoading ? (
         <View
           style={{
-            width: "100%",
+            flex: 1,
             alignItems: "center",
-            justifyContent: "space-between",
-            flexDirection: device === "tablet" ? "row" : "column",
+            justifyContent: "center",
           }}
         >
-          <View
-            style={{
-              width: device === "tablet" ? "48%" : "100%",
-              padding: device === "tablet" ? 20 : 15,
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "space-between",
-              backgroundColor: "#0184E9",
-              borderRadius: 12,
-              height: 150,
-            }}
-          >
-            <Image
-              source={loggedArrow}
-              style={{
-                width: 50,
-                height: 50,
-              }}
-            />
-
-            <View style={{ alignItems: "flex-end" }}>
-              <Text
-                style={{
-                  fontSize: 11,
-                  textTransform: "uppercase",
-                  color: "white",
-                  fontFamily: "openSans_semiBold",
-                }}
-              >
-                Logged in time
-              </Text>
-              <Text
-                style={{
-                  fontSize: device === "tablet" ? 24 : 22,
-                  textTransform: "uppercase",
-                  color: "white",
-                  fontFamily: "openSans_bold",
-                }}
-              >
-                5:00 pm
-              </Text>
-            </View>
-          </View>
-
-          <View
-            style={{
-              width: device === "tablet" ? "48%" : "100%",
-              padding: device === "tablet" ? 20 : 15,
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "space-between",
-              backgroundColor: "#68BAA6",
-              borderRadius: 12,
-              height: 150,
-              marginTop: device === "tablet" ? 0 : 20,
-            }}
-          >
-            <Image
-              source={shiftIcon}
-              style={{
-                width: 50,
-                height: 50,
-              }}
-            />
-
-            <View style={{ alignItems: "flex-end" }}>
-              <Text
-                style={{
-                  fontSize: 11,
-                  textTransform: "uppercase",
-                  color: "white",
-                  fontFamily: "openSans_semiBold",
-                }}
-              >
-                Shift Details
-              </Text>
-              <Text
-                style={{
-                  fontSize: device === "tablet" ? 24 : 22,
-                  textTransform: "uppercase",
-                  color: "white",
-                  fontFamily: "openSans_bold",
-                }}
-              >
-                5:00pm - 2am
-              </Text>
-              <Text
-                style={{
-                  fontSize: device === "tablet" ? 18 : 16,
-                  textTransform: "uppercase",
-                  color: "white",
-                  fontFamily: "openSans_bold",
-                }}
-              >
-                Mon - Tues - Wed
-              </Text>
-            </View>
-          </View>
+          <Spinner size={"large"} color={primaryColor} />
         </View>
-
+      ) : (
         <View
           style={{
-            width: "100%",
+            width: "95%",
+            marginBottom: 80,
             alignItems: "center",
-            justifyContent: "space-between",
-            flexDirection: device === "tablet" ? "row" : "column",
             marginTop: 20,
+            zIndex: 1,
+            alignSelf: "center",
           }}
         >
           <View
             style={{
-              width: device === "tablet" ? "48%" : "100%",
-              padding: device === "tablet" ? 20 : 15,
-              flexDirection: "row",
+              width: "100%",
               alignItems: "center",
               justifyContent: "space-between",
-              backgroundColor: "#876FFF",
-              borderRadius: 12,
-              height: 150,
+              flexDirection: device === "tablet" ? "row" : "column",
             }}
           >
-            <Image
-              source={calender}
+            <View
               style={{
-                width: 50,
-                height: 50,
+                width: device === "tablet" ? "48%" : "100%",
+                padding: device === "tablet" ? 20 : 15,
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "space-between",
+                backgroundColor: "#0184E9",
+                borderRadius: 12,
+                height: 150,
               }}
-            />
+            >
+              <Image
+                source={loggedArrow}
+                style={{
+                  width: 50,
+                  height: 50,
+                }}
+              />
 
-            <View style={{ alignItems: "flex-end" }}>
-              <Text
+              <View style={{ alignItems: "flex-end" }}>
+                <Text
+                  style={{
+                    fontSize: 11,
+                    textTransform: "uppercase",
+                    color: "white",
+                    fontFamily: "openSans_semiBold",
+                  }}
+                >
+                  Logged in time
+                </Text>
+                <Text
+                  style={{
+                    fontSize: device === "tablet" ? 24 : 22,
+                    textTransform: "uppercase",
+                    color: "white",
+                    fontFamily: "openSans_bold",
+                  }}
+                >
+                  5:00 pm
+                </Text>
+              </View>
+            </View>
+
+            <View
+              style={{
+                width: device === "tablet" ? "48%" : "100%",
+                padding: device === "tablet" ? 20 : 15,
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "space-between",
+                backgroundColor: "#68BAA6",
+                borderRadius: 12,
+                height: 150,
+                marginTop: device === "tablet" ? 0 : 20,
+              }}
+            >
+              <Image
+                source={shiftIcon}
                 style={{
-                  fontSize: 11,
-                  textTransform: "uppercase",
-                  color: "white",
-                  fontFamily: "openSans_semiBold",
+                  width: 50,
+                  height: 50,
                 }}
-              >
-                Days Worked
-              </Text>
-              <Text
-                style={{
-                  fontSize: device === "tablet" ? 24 : 22,
-                  textTransform: "uppercase",
-                  color: "white",
-                  fontFamily: "openSans_bold",
-                }}
-              >
-                21 days
-              </Text>
+              />
+
+              <View style={{ alignItems: "flex-end", flex: 1 }}>
+                <Text
+                  style={{
+                    fontSize: 11,
+                    textTransform: "uppercase",
+                    color: "white",
+                    fontFamily: "openSans_semiBold",
+                  }}
+                >
+                  Shift Details
+                </Text>
+                <Text
+                  style={{
+                    fontSize: device === "tablet" ? 24 : 22,
+                    textTransform: "uppercase",
+                    color: "white",
+                    fontFamily: "openSans_bold",
+                  }}
+                >
+                  {moment(
+                    dashboardData?.shiftDetails?.timings?.startTime
+                  ).format("h:mm a")}{" "}
+                  -{" "}
+                  {moment(dashboardData?.shiftDetails?.timings?.endTime).format(
+                    "h:mm a"
+                  )}
+                </Text>
+                <Text
+                  numberOfLines={2}
+                  style={{
+                    fontSize: device === "tablet" ? 18 : 16,
+                    textTransform: "uppercase",
+                    color: "white",
+                    fontFamily: "openSans_bold",
+                    flex: 1,
+                    marginLeft: 10,
+                  }}
+                >
+                  {dashboardData?.shiftDetails?.days.length > 0
+                    ? dashboardData?.shiftDetails?.days.length > 1
+                      ? `${dashboardData?.shiftDetails?.days.join(" - ")}`
+                      : dashboardData?.shiftDetails?.days[0]
+                    : ""}
+                </Text>
+              </View>
             </View>
           </View>
 
           <View
             style={{
-              width: device === "tablet" ? "48%" : "100%",
-              padding: device === "tablet" ? 20 : 15,
-              flexDirection: "row",
+              width: "100%",
               alignItems: "center",
               justifyContent: "space-between",
-              backgroundColor: "#2936A3",
-              borderRadius: 12,
-              height: 150,
-              marginTop: device === "tablet" ? 0 : 20,
+              flexDirection: device === "tablet" ? "row" : "column",
+              marginTop: 20,
             }}
           >
-            <Image
-              source={daysTookOff}
+            <View
               style={{
-                width: 50,
-                height: 50,
+                width: device === "tablet" ? "48%" : "100%",
+                padding: device === "tablet" ? 20 : 15,
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "space-between",
+                backgroundColor: "#876FFF",
+                borderRadius: 12,
+                height: 150,
               }}
-            />
-
-            <View style={{ alignItems: "flex-end" }}>
-              <Text
+            >
+              <Image
+                source={calender}
                 style={{
-                  fontSize: 11,
-                  textTransform: "uppercase",
-                  color: "white",
-                  fontFamily: "openSans_semiBold",
+                  width: 50,
+                  height: 50,
                 }}
-              >
-                Days Took Off
-              </Text>
+              />
+
+              <View style={{ alignItems: "flex-end" }}>
+                <Text
+                  style={{
+                    fontSize: 11,
+                    textTransform: "uppercase",
+                    color: "white",
+                    fontFamily: "openSans_semiBold",
+                  }}
+                >
+                  Days Worked
+                </Text>
+                <Text
+                  style={{
+                    fontSize: device === "tablet" ? 24 : 22,
+                    textTransform: "uppercase",
+                    color: "white",
+                    fontFamily: "openSans_bold",
+                  }}
+                >
+                  {dashboardData?.daysWorked} Days
+                </Text>
+              </View>
+            </View>
+
+            <View
+              style={{
+                width: device === "tablet" ? "48%" : "100%",
+                padding: device === "tablet" ? 20 : 15,
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "space-between",
+                backgroundColor: "#2936A3",
+                borderRadius: 12,
+                height: 150,
+                marginTop: device === "tablet" ? 0 : 20,
+              }}
+            >
+              <Image
+                source={daysTookOff}
+                style={{
+                  width: 50,
+                  height: 50,
+                }}
+              />
+
+              <View style={{ alignItems: "flex-end" }}>
+                <Text
+                  style={{
+                    fontSize: 11,
+                    textTransform: "uppercase",
+                    color: "white",
+                    fontFamily: "openSans_semiBold",
+                  }}
+                >
+                  Days Took Off
+                </Text>
+                <Text
+                  style={{
+                    fontSize: device === "tablet" ? 24 : 22,
+                    textTransform: "uppercase",
+                    color: "white",
+                    fontFamily: "openSans_bold",
+                  }}
+                >
+                  {dashboardData?.offDays} Days
+                </Text>
+              </View>
+            </View>
+          </View>
+
+          {dashboardData?.timeHistory?.length > 0 ? (
+            <View style={{ width: "100%", marginTop: 40 }}>
               <Text
                 style={{
-                  fontSize: device === "tablet" ? 24 : 22,
-                  textTransform: "uppercase",
-                  color: "white",
+                  fontSize: 20,
+                  color: "black",
                   fontFamily: "openSans_bold",
                 }}
               >
-                5 Days
+                Timings
               </Text>
+
+              <View
+                style={{
+                  width: "100%",
+                  padding: 18,
+                  borderRadius: 8,
+                  marginTop: 20,
+                  backgroundColor: "white",
+                  flexDirection: "row",
+                  flexWrap: "wrap",
+                }}
+              >
+                <View style={{ width: 100, alignItems: "center" }}>
+                  <Text
+                    style={{
+                      fontSize: 11,
+                      textTransform: "uppercase",
+                      fontFamily: "openSans_semiBold",
+                    }}
+                  >
+                    Date
+                  </Text>
+                  <Text
+                    style={{
+                      fontSize: 16,
+                      marginTop: 10,
+                      fontFamily: "openSans_semiBold",
+                    }}
+                  >
+                    {moment().format("d MMM yyyy")}
+                  </Text>
+                </View>
+                <View
+                  style={{ width: 100, alignItems: "center", marginLeft: 20 }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 11,
+                      textTransform: "uppercase",
+                      fontFamily: "openSans_semiBold",
+                    }}
+                  >
+                    In
+                  </Text>
+                  <Text
+                    style={{
+                      fontSize: 16,
+                      marginTop: 10,
+                      fontFamily: "openSans_semiBold",
+                    }}
+                  >
+                    {moment(dashboardData?.timeHistory[0]?.startTime).format(
+                      "h:mm a"
+                    )}
+                  </Text>
+                </View>
+                <View
+                  style={{ width: 100, alignItems: "center", marginLeft: 20 }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 11,
+                      textTransform: "uppercase",
+                      fontFamily: "openSans_semiBold",
+                    }}
+                  >
+                    Out
+                  </Text>
+                  <Text
+                    style={{
+                      fontSize: 16,
+                      marginTop: 10,
+                      fontFamily: "openSans_semiBold",
+                    }}
+                  >
+                    {moment(dashboardData?.timeHistory[0]?.endTime).format(
+                      "h:mm a"
+                    )}
+                  </Text>
+                </View>
+                <View
+                  style={{ width: 100, alignItems: "center", marginLeft: 20 }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 11,
+                      textTransform: "uppercase",
+                      fontFamily: "openSans_semiBold",
+                    }}
+                  >
+                    total hours
+                  </Text>
+                  <Text
+                    style={{
+                      fontSize: 16,
+                      marginTop: 10,
+                      fontFamily: "openSans_semiBold",
+                    }}
+                  >
+                    {dashboardData?.timeHistory[0]?.hoursWorked} Hours
+                  </Text>
+                </View>
+              </View>
             </View>
+          ) : null}
+
+          <View
+            style={{
+              width: "100%",
+              alignItems: "flex-end",
+              justifyContent: "flex-end",
+              marginTop: 30,
+            }}
+          >
+            <TouchableOpacity onPress={() => setOpenWatchModal(true)}>
+              <Image
+                source={stopwatchPurple}
+                style={{ width: 40, height: 40 }}
+              />
+            </TouchableOpacity>
           </View>
         </View>
-
-        <View
-          style={{
-            width: "100%",
-            alignItems: "flex-end",
-            justifyContent: "flex-end",
-            marginTop: 30,
-          }}
-        >
-          <TouchableOpacity onPress={() => setOpenWatchModal(true)}>
-            <Image source={stopwatchPurple} style={{ width: 40, height: 40 }} />
-          </TouchableOpacity>
-        </View>
-      </View>
+      )}
 
       <Modal
         visible={openWatchModal}

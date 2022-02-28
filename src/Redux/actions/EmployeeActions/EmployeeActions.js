@@ -237,7 +237,27 @@ export const stopEmployeeTrackTime = ({ employeeId, dayId, startTime }) =>
         resolve();
       })
       .catch((e) => {
-        console.log(e.response.data);
+        console.log("error in get time");
+        console.log(e);
+        ToastError(
+          e.response.data?.message ||
+            "Some error occoured, please try again later"
+        );
+        reject();
+      });
+  });
+
+export const getEmployeeDashboardData = ({ employeeId }) =>
+  new Promise((resolve, reject) => {
+    client
+      .get(`/employee/getEmployeeDashboardData/${employeeId}`)
+      .then(({ data }) => {
+        console.log(data);
+        resolve(data);
+      })
+      .catch((e) => {
+        console.log("error in dashboard data");
+        console.log(e);
         ToastError(
           e.response.data?.message ||
             "Some error occoured, please try again later"
