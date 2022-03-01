@@ -57,7 +57,7 @@ export const addEmployeeAction =
         locationId,
         firstName,
         lastName,
-        phone: `+${phone}`,
+        phone: `+${phone.replace("+", "")}`,
         role,
         active,
         shift,
@@ -90,8 +90,6 @@ export const deleteEmployee =
         });
         dispatch(getAllEmployees({ locationId }));
         ToastSuccess("Success", "Employee deleted successfully!");
-
-        navigation.pop(1);
       })
       .catch((e) => {
         dispatch({ type: DELETE_EMPLOYEES.FAILED });
@@ -134,7 +132,7 @@ export const editEmployeeAction =
         locationId,
         firstName,
         lastName,
-        phone: `+${phone}`,
+        phone: `+${phone.replace("+", "")}`,
         email,
         role,
         active,

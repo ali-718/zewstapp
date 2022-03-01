@@ -1,6 +1,7 @@
 import {
   LOGOUT,
   NOTIFICATION_DATA,
+  REMOVE_NOTIFICATION_DATA,
   SIGNUP,
   USER,
 } from "../actions/AuthActions/Types";
@@ -14,6 +15,10 @@ const initialState = {
 export const authReducer = produce(
   (state = initialState, { payload, type }) => {
     switch (type) {
+      case REMOVE_NOTIFICATION_DATA: {
+        state.notificationData = {};
+        break;
+      }
       case NOTIFICATION_DATA: {
         state.notificationData = payload;
         break;

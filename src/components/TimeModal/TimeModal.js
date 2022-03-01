@@ -72,11 +72,20 @@ const TimeBox = ({ day, onchange, timedays = [] }) => {
         value={show1 ? start : end}
         mode={"time"}
         is24Hour={true}
-        onChange={show1 ? (date) => setStart(date) : (date) => setEnd(date)}
+        onChange={
+          show1
+            ? (date) => {
+                setStart(date);
+                onchange(date, end);
+              }
+            : (date) => {
+                setEnd(date);
+                onchange(start, date);
+              }
+        }
         onPress={() => {
           setShow1(false);
           setShow2(false);
-          onchange(start, end);
         }}
       />
     </View>

@@ -164,7 +164,7 @@ export const AddLocationsPage = (props) => {
           <Input
             value={district}
             setValue={(val) => setDistrict(val)}
-            placeholder={"District"}
+            placeholder={"State"}
           />
         </View>
         <View style={{ width: "100%", marginTop: 10 }}>

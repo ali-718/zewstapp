@@ -154,7 +154,9 @@ export const AddInventoryPage = (props) => {
     }
 
     if (!defaultLocation.locationId) {
-      ToastError("Kindly select primary location, first");
+      ToastError(
+        "Set primary location by long pressing on the desired location "
+      );
       return;
     }
 

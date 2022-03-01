@@ -334,6 +334,7 @@ export const AddMeal = (props) => {
               fontSize: 30,
               color: primaryColor,
               fontWeight: "bold",
+              flex: 1,
             }}
             value={value}
             onChangeText={(val) => onChange(val)}
@@ -348,7 +349,7 @@ export const AddMeal = (props) => {
     <MainScreenContainer title={isEdit ? "Edit Meal" : "Add Meal"}>
       <HeadingBox heading={isEdit ? "Edit menu item" : "Add menu item"} />
 
-      <View style={{ width: "90%", marginTop: 20, marginBottom: 40 }}>
+      <View style={{ width: "90%", marginTop: 20, marginBottom: 120 }}>
         <View
           style={{
             width: "100%",

@@ -130,6 +130,13 @@ export const AddEmployeesPage = (props) => {
       return;
     }
 
+    if (!defaultLocation.locationId) {
+      ToastError(
+        "Set primary location by long pressing on the desired location "
+      );
+      return;
+    }
+
     if (isEdit) {
       const data = {
         locationId: defaultLocation.locationId,
@@ -219,7 +226,12 @@ export const AddEmployeesPage = (props) => {
         <View style={{ width: "100%", marginTop: 20 }}>
           <Input
             value={contact}
-            setValue={(val) => setContact(val)}
+            setValue={(val) => {
+              if (val.split("+").length > 2) {
+                return;
+              }
+              setContact(val);
+            }}
             keyboardType={"number-pad"}
             placeholder={"Contact number"}
           />
@@ -543,7 +555,10 @@ export const AddEmployeesPage = (props) => {
                     paddingLeft: 30,
                     backgroundColor: i % 2 === 0 ? "#FAFAFB" : "white",
                   }}
-                  onPress={() => setSelectedType(item)}
+                  onPress={() => {
+                    bottomSheet.current.close();
+                    setSelectedType(item);
+                  }}
                 >
                   <View style={{ flexDirection: "row", alignItems: "center" }}>
                     <Image source={cashier} style={{ width: 50, height: 50 }} />

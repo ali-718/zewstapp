@@ -2,3 +2,4 @@ export const SIGNUP = "SIGNUP";
 export const USER = "USER";
 export const LOGOUT = "LOGOUT";
 export const NOTIFICATION_DATA = "NOTIFICATION_DATA";
+export const REMOVE_NOTIFICATION_DATA = "REMOVE_NOTIFICATION_DATA";

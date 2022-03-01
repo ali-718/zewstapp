@@ -98,7 +98,9 @@ export const RecipeAdd = (props) => {
 
   const onAddData = () => {
     if (!defaultLocation.locationId) {
-      ToastError("No primary location selected!");
+      ToastError(
+        "Set primary location by long pressing on the desired location "
+      );
       return;
     }
 

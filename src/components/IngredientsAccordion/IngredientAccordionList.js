@@ -179,7 +179,7 @@ export const IngredientAccordionList = ({
             )}
           </View>
 
-          <Dropdown
+          {/* <Dropdown
             selectedMenu={item.type}
             setMenu={(val) => updatePacking(val, i)}
             placeholder={"Fresh/Packed"}
@@ -189,7 +189,7 @@ export const IngredientAccordionList = ({
               flex: 1,
               borderBottomWidth: 0,
             }}
-          />
+          /> */}
         </View>
       )}
     </View>

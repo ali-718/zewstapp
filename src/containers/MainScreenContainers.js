@@ -33,6 +33,7 @@ import { Text } from "../components/Text/Text";
 import { Progress } from "native-base";
 import { RegularButton } from "../components/Buttons/RegularButton";
 import moment from "moment";
+import { removeNotificationData } from "../Redux/actions/AuthActions/authActions";
 
 export const MainScreenContainer = ({
   noScroll,
@@ -57,6 +58,11 @@ export const MainScreenContainer = ({
       setShowModal(true);
     }
   }, [notificationData]);
+
+  const onCloseModal = () => {
+    dispatch(removeNotificationData());
+    setShowModal(false);
+  };
 
   return (
     <SafeAreaView
@@ -144,7 +150,7 @@ export const MainScreenContainer = ({
 
       <Modal
         visible={showModal}
-        onRequestClose={() => setShowModal(false)}
+        onRequestClose={() => onCloseModal()}
         transparent
         animationType="slide"
       >
@@ -167,7 +173,7 @@ export const MainScreenContainer = ({
               flex: 1,
             }}
             activeOpacity={1}
-            onPress={() => setShowModal(false)}
+            onPress={() => onCloseModal()}
           ></TouchableOpacity>
           <View
             style={{
@@ -285,11 +291,11 @@ export const MainScreenContainer = ({
                   style={{ width: "48%" }}
                   white
                   text={"REMIND ME"}
-                  onPress={() => setShowModal(false)}
+                  onPress={() => onCloseModal()}
                 />
 
                 <RegularButton
-                  onPress={() => setShowModal(false)}
+                  onPress={() => onCloseModal()}
                   style={{ width: "48%" }}
                   text={"OK"}
                 />

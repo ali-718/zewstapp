@@ -77,7 +77,9 @@ export const AddVendorsPage = (props) => {
     }
 
     if (!defaultLocation.locationId) {
-      ToastError("Kindly select primary location, first");
+      ToastError(
+        "Set primary location by long pressing on the desired location "
+      );
       return;
     }
 
@@ -87,11 +89,10 @@ export const AddVendorsPage = (props) => {
         name: name,
         email: email,
         address: address,
-        phoneNo: `+${phone}`,
+        phoneNo: `+${phone.replace("+", "")}`,
         navigation,
         vendorId: props?.route?.params?.data?.vendorId,
       };
-
       dispatch(actions.updateVendorActions(data));
 
       return;
@@ -102,7 +103,7 @@ export const AddVendorsPage = (props) => {
       name: name,
       email: email,
       address: address,
-      phoneNo: `+${phone}`,
+      phoneNo: `+${phone.replace("+", "")}`,
       navigation,
     };
 
@@ -154,7 +155,12 @@ export const AddVendorsPage = (props) => {
             keyboardType={"number-pad"}
             placeholder={"Phone"}
             value={phone}
-            setValue={(val) => setPhone(val)}
+            setValue={(val) => {
+              if (val.split("+").length > 2) {
+                return;
+              }
+              setPhone(val);
+            }}
             style={{
               marginTop: 10,
               borderRadius: 0,

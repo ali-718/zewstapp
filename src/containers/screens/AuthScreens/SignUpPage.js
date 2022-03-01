@@ -150,7 +150,13 @@ export const SignUpPage = (props) => {
         <View style={{ width: "100%", marginTop: 20 }}>
           <Input
             value={contact}
-            setValue={(val) => setContact(val)}
+            setValue={(val) => {
+              if (val.split("+").length > 2) {
+                return;
+              }
+
+              setContact(val);
+            }}
             keyboardType={"number-pad"}
             placeholder={"Phone number"}
             rule={phoneValidator}

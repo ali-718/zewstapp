@@ -109,12 +109,14 @@ export const AdminPage = () => {
               />
             </View>
 
-            <View style={{ width: "100%", marginTop: 10 }}>
+            <View style={{ width: "100%", marginTop: 10, opacity: 0.3 }}>
               <AdminOverviewBox
+                activeOpacity={1}
                 label={"Tax Invoices UBF"}
                 name={"2021 Available"}
                 image={taxIcon}
-                onPress={() => navigation.navigate("tax", { data: item })}
+                // onPress={() => navigation.navigate("tax", { data: item })}
+                onPress={() => null}
               />
             </View>
 

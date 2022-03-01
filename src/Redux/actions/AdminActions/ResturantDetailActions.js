@@ -29,20 +29,32 @@ export const saveClientDetails = (
   isProfile = false
 ) =>
   new Promise((resolve, reject) => {
+    console.log({
+      restaurantName,
+      address,
+      contact_no,
+      email,
+      clientId,
+      timmings,
+      representative,
+      logo,
+      owner_name,
+    });
+
     client
       .post(
         `/client/editClientDetails`,
         isProfile
           ? {
               owner_name,
-              contact_no,
+              contact_no: `+${contact_no.replace("+", "")}`,
               email,
               clientId,
             }
           : {
               restaurantName,
               address,
-              contact_no,
+              contact_no: `+${contact_no.replace("+", "")}`,
               email,
               clientId,
               timmings,

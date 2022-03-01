@@ -1,7 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ToastError, ToastSuccess } from "../../../helpers/Toast";
 import { client } from "../client";
-import { LOGOUT, NOTIFICATION_DATA } from "./Types";
+import { LOGOUT, NOTIFICATION_DATA, REMOVE_NOTIFICATION_DATA } from "./Types";
 
 export const signupAction = ({ owner_name, contact_no, email, password }) =>
   new Promise((resolve, reject) => {
@@ -9,7 +9,7 @@ export const signupAction = ({ owner_name, contact_no, email, password }) =>
     client
       .post("/auth/signup", {
         owner_name,
-        contact_no: `+${contact_no}`,
+        contact_no: `+${contact_no.replace("+", "")}`,
         email,
         password,
       })
@@ -184,4 +184,10 @@ export const notificationData =
   ({ data }) =>
   (dispatch) => {
     dispatch({ type: NOTIFICATION_DATA, payload: data });
+  };
+
+export const removeNotificationData =
+  ({ data }) =>
+  (dispatch) => {
+    dispatch({ type: REMOVE_NOTIFICATION_DATA });
   };

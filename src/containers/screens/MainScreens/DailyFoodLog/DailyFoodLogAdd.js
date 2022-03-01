@@ -50,9 +50,9 @@ export const DailyFoodLogAdd = () => {
 
   const addFoodLog = () => {
     if (
-      validator.isEmpty(unit, { ignore_whitespace: true }) ||
-      validator.isEmpty(quantity, { ignore_whitespace: true }) ||
-      validator.isEmpty(reason, { ignore_whitespace: true }) ||
+      validator.isEmpty(`${unit}`, { ignore_whitespace: true }) ||
+      validator.isEmpty(`${quantity}`, { ignore_whitespace: true }) ||
+      validator.isEmpty(`${reason}`, { ignore_whitespace: true }) ||
       !selectedItem?.itemName
     ) {
       ToastError("please fill all fields");

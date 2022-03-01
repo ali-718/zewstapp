@@ -100,7 +100,13 @@ export const ProfilePage = () => {
         <View style={{ width: "100%", marginTop: 10 }}>
           <Input
             value={phone}
-            setValue={(val) => setPhone(val)}
+            setValue={(val) => {
+              if (val.split("+").length > 2) {
+                return;
+              }
+
+              setPhone(val);
+            }}
             placeholder={"Owner phone"}
             keyboardType={"number-pad"}
           />

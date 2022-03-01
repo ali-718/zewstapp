@@ -35,33 +35,6 @@ export const ResturantDetails = () => {
   const device = useSelector((state) => state.system.device);
   const isFocused = useIsFocused();
 
-  useEffect(() => {
-    if (!isFocused) return;
-
-    action
-      .getResturantDetail({ clientId: user.clientId })
-      .then(({ client }) => {
-        const {
-          owner_name = "",
-          restaurantName = "",
-          representative = "",
-          contact_no = "",
-          address = "",
-          timmings = [],
-          email = "",
-          logo = [],
-          clientId = "",
-        } = client;
-
-        setEmail(email);
-        setTimeDays(timmings);
-        setAddress(address);
-        setPhone(contact_no);
-        setSelectedCsr(representative);
-        setName(restaurantName);
-      });
-  }, [isFocused]);
-
   const saveDetails = () => {
     if (
       validator.isEmpty(name, { ignore_whitespace: true }) ||
@@ -90,13 +63,46 @@ export const ResturantDetails = () => {
       .then((data) => {
         ToastSuccess("Success", "Data saved successfully");
         setIsLoading(false);
+        getResturant();
       })
       .catch((e) => {
         setIsLoading(false);
       });
   };
 
+  useEffect(() => {
+    if (!isFocused) return;
+
+    getResturant();
+  }, [isFocused]);
+
+  const getResturant = () => {
+    action
+      .getResturantDetail({ clientId: user.clientId })
+      .then(({ client }) => {
+        const {
+          owner_name = "",
+          restaurantName = "",
+          representative = "",
+          contact_no = "",
+          address = "",
+          timmings = [],
+          email = "",
+          logo = [],
+          clientId = "",
+        } = client;
+
+        setEmail(email);
+        setTimeDays(timmings);
+        setAddress(address);
+        setPhone(contact_no);
+        setSelectedCsr(representative);
+        setName(restaurantName);
+      });
+  };
+
   const setTime = (start, end, day) => {
+    console.log(start);
     if (timeDays.filter((item) => item.day === day).length > 0) {
       const localTime = [...timeDays];
       const index = timeDays.findIndex((item) => item.day === day);
@@ -149,7 +155,12 @@ export const ResturantDetails = () => {
         <View style={{ width: "100%", marginTop: 10 }}>
           <Input
             value={phone}
-            setValue={(val) => setPhone(val)}
+            setValue={(val) => {
+              if (val.split("+").length > 2) {
+                return;
+              }
+              setPhone(val);
+            }}
             placeholder={"Phone"}
             keyboardType={"number-pad"}
           />

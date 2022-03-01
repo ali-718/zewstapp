@@ -201,7 +201,7 @@ export const VerificationPage = (props) => {
           >
             Didn’t receive code?{" "}
             <Text onPress={resetCountDown} style={{ color: primaryColor }}>
-              Resend Again.
+              Resend.
             </Text>
           </Text>
         </View>

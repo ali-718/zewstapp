@@ -289,7 +289,10 @@ export const LoginPage = (props) => {
                   paddingLeft: 30,
                   backgroundColor: i % 2 === 0 ? "#FAFAFB" : "white",
                 }}
-                onPress={() => setSelectedType(item)}
+                onPress={() => {
+                  setSelectedType(item);
+                  bottomSheet.current.close();
+                }}
               >
                 <View style={{ flexDirection: "row", alignItems: "center" }}>
                   <Image source={cashier} style={{ width: 50, height: 50 }} />
