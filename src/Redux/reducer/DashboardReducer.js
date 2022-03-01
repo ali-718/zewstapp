@@ -102,8 +102,8 @@ export const dashboardReducer = produce(
       case COST_BY_CATEGORY.SUCCEEDED: {
         state.costByCategory.isLoading = false;
         state.costByCategory.isError = false;
-        state.costByCategory.list = payload.data.categoryData;
-        state.costByCategory.totalPrice = payload.data.total ?? 0;
+        state.costByCategory.list = payload.data;
+        state.costByCategory.totalPrice = payload.totalCost ?? 0;
         break;
       }
       case COST_BY_CATEGORY.FAILED: {

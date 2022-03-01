@@ -935,3 +935,34 @@ export const distanceBetweeTwoCoords = ({ lat1, lat2, lon1, lon2 }) => {
 function deg2rad(deg) {
   return deg * (Math.PI / 180);
 }
+
+export const unitConverter = (unitt, cost, orgUnit) => {
+  let unit = unitt.toLowerCase();
+  let newCost = 0;
+  if (unit === "kg") {
+    newCost = cost / 1000;
+  }
+  if (unit === "pounds") {
+    newCost = cost / 454;
+  }
+  if (unit === "grams") {
+    newCost =
+      orgUnit !== "grams" || orgUnit !== "number/pieces" ? cost / 1000 : cost;
+  }
+  if (unit === "ounces") {
+    newCost = cost / 28.35;
+  }
+  if (unit === "liters") {
+    newCost = cost / 1000;
+  }
+  if (unit === "teaspoon") {
+    newCost = cost / 4.28;
+  }
+  if (unit === "number/pieces") {
+    newCost = cost;
+  }
+  if (unit === "tablespoon") {
+    newCost = cost / 14.1;
+  }
+  return newCost;
+};

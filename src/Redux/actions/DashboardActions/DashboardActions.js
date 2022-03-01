@@ -71,6 +71,7 @@ export const fetchCostByCategoryAction =
         `/dashboard/costByCategory/${locationId}?interval=${interval}&startDate=${startDate}&endDate=${endDate}`
       )
       .then((data) => {
+        console.log(data?.data);
         dispatch({
           type: COST_BY_CATEGORY.SUCCEEDED,
           payload: data.data,

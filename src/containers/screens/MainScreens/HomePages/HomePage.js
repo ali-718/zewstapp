@@ -559,7 +559,7 @@ export const HomePage = ({ setselected }) => {
     setCostByCategoryListData(
       costByCategoryList.map((item) => ({
         category: item.category,
-        value: ((item.cost / costByCategoryPrice) * 100).toFixed(0),
+        value: item.totalCost.toFixed(2),
         svg: {
           fill:
             item.category === "Other"
@@ -1749,7 +1749,7 @@ export const HomePage = ({ setselected }) => {
                                 {item.category}
                               </Text>
                             </View>
-
+                            {console.log(item)}
                             <Text
                               style={{
                                 fontSize: 12,

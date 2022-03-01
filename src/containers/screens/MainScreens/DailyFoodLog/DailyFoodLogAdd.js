@@ -15,6 +15,7 @@ import { dailyFoodLogAddAction } from "../../../../Redux/actions/DashboardAction
 import { ToastError } from "../../../../helpers/Toast";
 import {
   getUpdatedQuantitynUnit,
+  unitConverter,
   validConversionUnits,
 } from "../../../../helpers/utlils";
 
@@ -23,6 +24,7 @@ export const DailyFoodLogAdd = () => {
   const [quantity, setQuantity] = useState("");
   const [unit, setUnit] = useState("");
   const [allUnits, setallUnits] = useState([]);
+  const [unitCost, setUnitCost] = useState("");
   const [reason, setReason] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const device = useSelector((state) => state.system.device);
@@ -99,7 +101,8 @@ export const DailyFoodLogAdd = () => {
         <Dropdown
           selectedMenu={selectedItem?.itemName ?? ""}
           setMenu={(val) => {
-            setSelectedItem(list.find((item) => item.itemName === val));
+            const data = list.find((item) => item.itemName === val);
+            setSelectedItem(data);
             setQuantity("");
             setUnit("");
           }}
@@ -133,6 +136,14 @@ export const DailyFoodLogAdd = () => {
           setMenu={(val) => {
             setUnit(val);
             setQuantity("");
+            console.log(
+              unitConverter(
+                val,
+                unit,
+                selectedItem?.costPerUnit,
+                selectedItem?.units
+              )
+            );
           }}
           placeholder={"Unit"}
           menus={validConversionUnits(selectedItem.originalUnit)}

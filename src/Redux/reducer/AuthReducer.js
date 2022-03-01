@@ -10,6 +10,7 @@ import produce from "immer";
 const initialState = {
   user: {},
   notificationData: {},
+  isNotification: false,
 };
 
 export const authReducer = produce(
@@ -17,10 +18,12 @@ export const authReducer = produce(
     switch (type) {
       case REMOVE_NOTIFICATION_DATA: {
         state.notificationData = {};
+        state.isNotification = false;
         break;
       }
       case NOTIFICATION_DATA: {
         state.notificationData = payload;
+        state.isNotification = true;
         break;
       }
       case LOGOUT: {

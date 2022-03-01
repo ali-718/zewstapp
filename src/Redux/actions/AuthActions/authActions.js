@@ -186,8 +186,6 @@ export const notificationData =
     dispatch({ type: NOTIFICATION_DATA, payload: data });
   };
 
-export const removeNotificationData =
-  ({ data }) =>
-  (dispatch) => {
-    dispatch({ type: REMOVE_NOTIFICATION_DATA });
-  };
+export const removeNotificationData = () => (dispatch) => {
+  dispatch({ type: REMOVE_NOTIFICATION_DATA });
+};
