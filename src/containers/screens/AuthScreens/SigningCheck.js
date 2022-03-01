@@ -5,7 +5,10 @@ import { primaryShade1 } from "../../../theme/colors";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/core";
 import { useDispatch } from "react-redux";
-import { refreshTokenAction } from "../../../Redux/actions/AuthActions/authActions";
+import {
+  loginActionOther,
+  refreshTokenAction,
+} from "../../../Redux/actions/AuthActions/authActions";
 import { USER } from "../../../Redux/actions/AuthActions/Types";
 
 export const SigningCheck = () => {
@@ -20,6 +23,18 @@ export const SigningCheck = () => {
     // AsyncStorage.removeItem("defaultLocation");
     if (user) {
       const data = JSON.parse(user);
+      console.log(data);
+      if (data?.user?.pin) {
+        loginActionOther({ pin: data?.user?.pin })
+          .then((res) => {
+            dispatch({ type: USER, payload: { user: res } });
+          })
+          .catch((e) => {
+            navigation.navigate("Signup");
+          });
+
+        return;
+      }
 
       dispatch({ type: USER, payload: data });
       return;

@@ -401,7 +401,7 @@ export const DashboardPage = () => {
             </View>
           </View>
 
-          {dashboardData?.timeHistory?.length > 0 ? (
+          {timeObject?.startTime ? (
             <View style={{ width: "100%", marginTop: 40 }}>
               <Text
                 style={{
@@ -463,9 +463,7 @@ export const DashboardPage = () => {
                       fontFamily: "openSans_semiBold",
                     }}
                   >
-                    {moment(dashboardData?.timeHistory[0]?.startTime).format(
-                      "h:mm a"
-                    )}
+                    {moment(timeObject?.startTime).format("h:mm a")}
                   </Text>
                 </View>
                 <View
@@ -480,17 +478,17 @@ export const DashboardPage = () => {
                   >
                     Out
                   </Text>
-                  <Text
-                    style={{
-                      fontSize: 16,
-                      marginTop: 10,
-                      fontFamily: "openSans_semiBold",
-                    }}
-                  >
-                    {moment(dashboardData?.timeHistory[0]?.endTime).format(
-                      "h:mm a"
-                    )}
-                  </Text>
+                  {timeObject?.endTime ? (
+                    <Text
+                      style={{
+                        fontSize: 16,
+                        marginTop: 10,
+                        fontFamily: "openSans_semiBold",
+                      }}
+                    >
+                      {moment(timeObject?.endTime).format("h:mm a")}
+                    </Text>
+                  ) : null}
                 </View>
                 <View
                   style={{ width: 100, alignItems: "center", marginLeft: 20 }}
@@ -504,15 +502,18 @@ export const DashboardPage = () => {
                   >
                     total hours
                   </Text>
-                  <Text
-                    style={{
-                      fontSize: 16,
-                      marginTop: 10,
-                      fontFamily: "openSans_semiBold",
-                    }}
-                  >
-                    {dashboardData?.timeHistory[0]?.hoursWorked} Hours
-                  </Text>
+                  {timeObject?.hoursWorked === 0 ||
+                  timeObject?.hoursWorked > 0 ? (
+                    <Text
+                      style={{
+                        fontSize: 16,
+                        marginTop: 10,
+                        fontFamily: "openSans_semiBold",
+                      }}
+                    >
+                      {timeObject?.hoursWorked} Hours
+                    </Text>
+                  ) : null}
                 </View>
               </View>
             </View>

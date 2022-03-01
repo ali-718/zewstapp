@@ -46,6 +46,7 @@ export const loginActionOther = ({ pin }) =>
         pin,
       })
       .then((data) => {
+        console.log(data.data.employee);
         resolve(data.data.employee);
       })
       .catch((e) => {
