@@ -67,7 +67,9 @@ export const DailyFoodLogAdd = () => {
       item: selectedItem,
       reason,
       wastedQuantity: quantity,
-      costPerUnit: selectedItem?.costPerUnit,
+      costPerUnit:
+        unitConverter(unit, selectedItem?.costPerUnit, selectedItem?.units) *
+        quantity,
     };
 
     dailyFoodLogAddAction(data)
@@ -120,7 +122,17 @@ export const DailyFoodLogAdd = () => {
         <Input
           editable={false}
           placeholder={"Wastage Cost"}
-          value={`${selectedItem?.costPerUnit ?? ""}`}
+          value={`${
+            unit && quantity && selectedItem?.units
+              ? (
+                  unitConverter(
+                    unit,
+                    selectedItem?.costPerUnit,
+                    selectedItem?.units
+                  ) * quantity
+                ).toFixed(5)
+              : ""
+          }`}
           style={{
             marginTop: 12,
             borderColor: inputBorderColor,
@@ -137,12 +149,7 @@ export const DailyFoodLogAdd = () => {
             setUnit(val);
             setQuantity("");
             console.log(
-              unitConverter(
-                val,
-                unit,
-                selectedItem?.costPerUnit,
-                selectedItem?.units
-              )
+              unitConverter(val, selectedItem?.costPerUnit, selectedItem?.units)
             );
           }}
           placeholder={"Unit"}

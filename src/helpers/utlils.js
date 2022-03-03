@@ -940,7 +940,7 @@ export const unitConverter = (unitt, cost, orgUnit) => {
   let unit = unitt.toLowerCase();
   let newCost = 0;
   if (unit === "kg") {
-    newCost = cost / 1000;
+    newCost = cost;
   }
   if (unit === "pounds") {
     newCost = cost / 454;
