@@ -104,6 +104,7 @@ import { HeadingBox } from "../../../../components/HeadingBox/HeadingBox";
 import * as Notifications from "expo-notifications";
 import * as OS from "expo-device";
 import { notificationData } from "../../../../Redux/actions/AuthActions/authActions";
+import WebView from "react-native-webview";
 
 const data1 = [72, 96, 33, 66];
 const data2 = [89, 70, 86, 84];
@@ -1107,59 +1108,18 @@ export const HomePage = ({ setselected }) => {
                         flex: 1,
                         flexDirection: "row",
                         marginTop: 20,
+                        width: "100%",
                       }}
                     >
-                      <YAxis
-                        data={[...data1, ...data2]}
-                        style={{ marginBottom: 10, marginLeft: 10 }}
-                        contentInset={{ top: 20, bottom: 20 }}
-                        svg={{ fontSize: 10, fill: "grey" }}
-                        formatLabel={(value) => `$${currencyDisplay(value)}`}
-                        numberOfTicks={5}
+                      <WebView
+                        source={{
+                          uri: `https://main.d3vut34a54xvmd.amplifyapp.com/?data=${JSON.stringify(
+                            graphData
+                          )}`,
+                        }}
+                        style={{ width: "100%", height: 200 }}
                       />
-
-                      <View style={{ flex: 1 }}>
-                        <LineChart
-                          animate={true}
-                          style={{ height: 200, marginLeft: 10, flex: 1 }}
-                          data={barData}
-                          //yAccessor={({ item }) => item}
-                          //xAccessor={({ item }) => item}
-                          //spacingInner={0.9}
-                          contentInset={{ top: 20, bottom: 20 }}
-                        >
-                          {/* <RoundedBars /> */}
-                          <Grid
-                            ticks={5}
-                            svg={{
-                              stroke: "#F1F1F5",
-                            }}
-                            direction={Grid.Direction.HORIZONTAL}
-                          />
-                        </LineChart>
-                        <XAxis
-                          data={[...data1, ...data2]}
-                          contentInset={{ left: 20, right: 0 }}
-                          svg={{ fontSize: 10, fill: "grey" }}
-                          numberOfTicks={6}
-                          formatLabel={(value, index) =>
-                            graphData.map((item) =>
-                              moment(item.date).format("DD-MM")
-                            )[index]
-                          }
-                          xAccessor={(item) => item.item}
-                        />
-                      </View>
                     </View>
-
-                    {/* <XAxis
-                      data={[...startDate, ...endDate]}
-                      style={{ margin: 20 }}
-                      formatLabel={(value, index) => value}
-                      contentInset={{ left: 10, right: 10 }}
-                      // contentInset={{ top: 20, bottom: 20 }}
-                      svg={{ fontSize: 10, fill: "grey" }}
-                    /> */}
                   </View>
                 )}
 
