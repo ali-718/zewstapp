@@ -1,19 +1,16 @@
 import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
-import { View, TouchableOpacity, Image, TextInput } from "react-native";
+import { View, TouchableOpacity, Image } from "react-native";
 import { useSelector } from "react-redux";
-import {
-  backgroundGrayColor,
-  drawerHeadingColor,
-  primaryColor,
-  primaryShade1,
-} from "../../theme/colors";
+import { primaryColor } from "../../theme/colors";
 import belliconGray from "../../assets/images/belliconGray.png";
 import personGrayIcon from "../../assets/images/personGrayIcon.png";
-import qrcodeIcon from "../../assets/images/qrcodeIcon.png";
 import { Text } from "../Text/Text";
+import { useNavigation } from "@react-navigation/native";
+import posIcon from "../../assets/images/MenuIcons/posIcon.png";
 
 export const Header = ({ leftImage, onPressLeft, mainHeading }) => {
+  const navigation = useNavigation();
   const orientation = useSelector((state) => state.system.orientation);
   const device = useSelector((state) => state.system.device);
   const user = useSelector((state) => state.auth.user.user);
@@ -77,7 +74,6 @@ export const Header = ({ leftImage, onPressLeft, mainHeading }) => {
 
           {device === "tablet" && (
             <TouchableOpacity
-              disabled
               style={{
                 padding: 10,
                 paddingHorizontal: 15,
@@ -86,20 +82,29 @@ export const Header = ({ leftImage, onPressLeft, mainHeading }) => {
                 alignItems: "center",
                 justifyContent: "center",
                 borderRadius: 100,
-                opacity: 0.5,
+                minWidth: 150,
               }}
+              onPress={() => navigation.navigate("Pos")}
             >
               <Image
                 style={{
                   width: 20,
                   height: 20,
                   resizeMode: "contain",
+                  tintColor: "white",
                 }}
-                source={qrcodeIcon}
+                source={posIcon}
               />
 
-              <Text style={{ color: "white", fontSize: 16, marginLeft: 10 }}>
-                Scan QR code
+              <Text
+                style={{
+                  color: "white",
+                  fontSize: 16,
+                  marginLeft: 10,
+                  fontFamily: "openSans_bold",
+                }}
+              >
+                POS
               </Text>
             </TouchableOpacity>
           )}
@@ -113,13 +118,14 @@ export const Header = ({ leftImage, onPressLeft, mainHeading }) => {
             justifyContent: "center",
           }}
         >
-          <TouchableOpacity onPress={() => null}>
+          <TouchableOpacity disabled onPress={() => null}>
             <Image
               source={belliconGray}
               style={{
                 width: 20,
                 height: 20,
                 resizeMode: "contain",
+                opacity: 0.5,
               }}
             />
           </TouchableOpacity>

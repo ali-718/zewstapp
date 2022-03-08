@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   View,
   TouchableOpacity,
@@ -11,30 +11,10 @@ import {
   grayMenuText,
   grayTextColor,
   primaryColor,
-  primaryShade1,
-  primaryShade2,
-  primaryShade3,
 } from "../../theme/colors";
-import overviewIcon from "../../assets/images/MenuIcons/overview.png";
-import menuIcon from "../../assets/images/MenuIcons/menu.png";
-import salesIcon from "../../assets/images/MenuIcons/sales.png";
-import recipeIcon from "../../assets/images/MenuIcons/recipeIcon.png";
-import wasteIcon from "../../assets/images/MenuIcons/WastePredictionIco.png";
-import inventoryIcon from "../../assets/images/MenuIcons/inventoryIcon.png";
-import VendorIcon from "../../assets/images/MenuIcons/VendorIcon.png";
-import messageIcon from "../../assets/images/MenuIcons/message.png";
-import libraryIcon from "../../assets/images/MenuIcons/library.png";
-import settingsIcon from "../../assets/images/MenuIcons/settings.png";
-import supportIcon from "../../assets/images/MenuIcons/support.png";
-import adminIcon from "../../assets/images/MenuIcons/adminIcon.png";
-import kitchenIcon from "../../assets/images/MenuIcons/kitchenIcon.png";
-import foodLogIcon from "../../assets/images/MenuIcons/foodLogIcon.png";
-import posIcon from "../../assets/images/MenuIcons/posIcon.png";
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
 import { Text } from "../Text/Text";
-import { useRoute } from "@react-navigation/native";
-import { RegularButton } from "../Buttons/RegularButton";
 import { LogoutAction } from "../../Redux/actions/AuthActions/authActions";
 import logoutIcon from "../../assets/images/logoutIcon.png";
 import { allMenus } from "../../helpers/utlils";

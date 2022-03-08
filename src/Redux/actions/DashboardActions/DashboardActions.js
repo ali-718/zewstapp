@@ -176,6 +176,7 @@ export const sendTokenToDb = ({ deviceId, locationId, fcmToken }) => {
       deviceId,
       locationId,
       fcmToken,
+      platform: "app",
     })
     .then((res) => {
       console.log("notification");
