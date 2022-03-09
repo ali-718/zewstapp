@@ -326,7 +326,7 @@ export const MenuPage = () => {
                                       fontFamily: "openSans_semiBold",
                                     }}
                                   >
-                                    ${item.mealTotalUnitCost}
+                                    ${item.mealTotalUnitCost?.toFixed(2)}
                                   </Text>
                                 </View>
                                 <View style={{ width: 150 }}>
@@ -353,7 +353,13 @@ export const MenuPage = () => {
                                   </Text>
                                 </View>
                               </View>
-                              <View style={{ width: "70%", marginTop: 5 }}>
+                              <View
+                                style={{
+                                  width: "70%",
+                                  marginTop: 5,
+                                  maxWidth: 300,
+                                }}
+                              >
                                 <Text
                                   style={{
                                     fontSize: 14,

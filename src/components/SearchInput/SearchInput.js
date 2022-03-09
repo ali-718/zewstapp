@@ -4,11 +4,17 @@ import { Feather } from "@expo/vector-icons";
 import { useSelector } from "react-redux";
 import { grayBorderColor } from "../../theme/colors";
 
-export const SearchInput = ({ search, setSearch, searchKeyword, style }) => {
+export const SearchInput = ({
+  search,
+  setSearch,
+  searchKeyword,
+  style,
+  placeholder,
+}) => {
   const device = useSelector((state) => state.system.device);
   return (
     <Input
-      placeholder={"Search..."}
+      placeholder={placeholder ?? "Search..."}
       iconName={"search"}
       iconType={Feather}
       value={search}

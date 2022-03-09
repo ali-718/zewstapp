@@ -38,6 +38,7 @@ import validator from "validator";
 import { useStripe } from "@stripe/stripe-react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { StripeModal } from "../../../components/StripeModal/StripeModal";
+import { SearchInput } from "../../../components/SearchInput/SearchInput";
 
 const CategoryComponent = ({ width, name, onPress }) => {
   const [color, setColor] = useState("");
@@ -165,6 +166,35 @@ export const OrderTakingScreen = (props) => {
   const [reserveOrderError, setReserveOrderError] = useState(false);
   const [fullDisplay, setFullDisplay] = useState(false);
   const [reservedTotalPrice, setReservedTotalPrice] = useState(0);
+  const [recommendedNum, setRecommendedNum] = useState([]);
+  const [search, setSearch] = useState("");
+  const [filteredItems, setfilteredItems] = useState([]);
+
+  useEffect(() => {
+    if (meals.length === 0) return;
+
+    recommededData(meals.length);
+  }, [meals]);
+
+  const recommededData = (length) => {
+    var nums = Array.from(
+        {
+          length,
+        },
+        (_, i) => i + 1
+      ),
+      ranNums = [],
+      i = nums.length,
+      j = 0;
+
+    while (i--) {
+      j = Math.floor(Math.random() * (i + 1));
+      ranNums.push(nums[j]);
+      nums.splice(j, 1);
+    }
+
+    setRecommendedNum(ranNums.map((item) => item - 1));
+  };
 
   useEffect(() => {
     const isReserved = props.route.params.isReserved;
@@ -634,6 +664,18 @@ export const OrderTakingScreen = (props) => {
     }
   };
 
+  const searchKeyword = (text) => {
+    const keyword = text?.toLowerCase();
+    const realData = mealsToShow.filter(
+      (item) => item.mealCategory === selectedCategory
+    );
+    const finalData = realData.filter((item) =>
+      item.mealName?.toLowerCase()?.includes(keyword)
+    );
+
+    setfilteredItems(finalData);
+  };
+
   if (device === "tablet") {
     return (
       <MainScreenContainer noScroll>
@@ -680,6 +722,17 @@ export const OrderTakingScreen = (props) => {
                           flexDirection: "row",
                         }}
                       >
+                        {selectedCategory.length > 0 ? (
+                          <View style={{ width: "90%", paddingLeft: 10 }}>
+                            <SearchInput
+                              search={search}
+                              setSearch={setSearch}
+                              searchKeyword={searchKeyword}
+                              placeholder={"Search by Name, Brand, Varian etc…"}
+                            />
+                          </View>
+                        ) : null}
+
                         {categories.map((item) => (
                           <TouchableOpacity
                             onPress={() => setSelectedCategory(item)}
@@ -697,9 +750,14 @@ export const OrderTakingScreen = (props) => {
                         <View style={{ width: "100%", marginTop: 30 }}>
                           <FlatList
                             scrollEnabled={false}
-                            data={mealsToShow.filter(
-                              (item) => item.mealCategory === selectedCategory
-                            )}
+                            data={
+                              search.length > 0
+                                ? filteredItems
+                                : mealsToShow.filter(
+                                    (item) =>
+                                      item.mealCategory === selectedCategory
+                                  )
+                            }
                             numColumns={4}
                             style={{
                               marginTop: 20,
@@ -719,6 +777,46 @@ export const OrderTakingScreen = (props) => {
                                 meal={item}
                               />
                             )}
+                          />
+
+                          <FlatList
+                            ListHeaderComponent={() => (
+                              <Text
+                                style={{
+                                  color: "#92929D",
+                                  fontSize: 16,
+                                  marginLeft: 10,
+                                  marginBottom: 20,
+                                }}
+                              >
+                                Recommended dishes
+                              </Text>
+                            )}
+                            scrollEnabled={false}
+                            data={meals.slice(0, 4)}
+                            numColumns={4}
+                            style={{
+                              marginTop: 20,
+                              width: "100%",
+                              marginBottom: 50,
+                            }}
+                            renderItem={(data) => {
+                              const item = meals[recommendedNum[data.index]];
+
+                              return (
+                                <MealComponent
+                                  onPress={
+                                    isSuccess
+                                      ? () => null
+                                      : () => {
+                                          incrementMealItem(item.mealId);
+                                          createOrderList(item);
+                                        }
+                                  }
+                                  meal={item}
+                                />
+                              );
+                            }}
                           />
                         </View>
                       ) : null}
