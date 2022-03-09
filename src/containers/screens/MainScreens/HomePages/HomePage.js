@@ -105,6 +105,7 @@ import * as Notifications from "expo-notifications";
 import * as OS from "expo-device";
 import { notificationData } from "../../../../Redux/actions/AuthActions/authActions";
 import WebView from "react-native-webview";
+import { DatePickerComponent } from "../../../../components/DatePicker";
 
 const data1 = [72, 96, 33, 66];
 const data2 = [89, 70, 86, 84];
@@ -414,6 +415,8 @@ export const HomePage = ({ setselected }) => {
   const [endDate, setEndDate] = useState("");
   const notificationListener = useRef();
   const responseListener = useRef();
+  const [dashboardStartDate, setdashboardStartDate] = useState(new Date());
+  const [dashboardEndDate, setdashboardEndDate] = useState(new Date());
 
   async function registerForPushNotificationsAsync() {
     let token;
@@ -604,7 +607,7 @@ export const HomePage = ({ setselected }) => {
       fetchPriceFluctuation(),
       fetchAllOrdersForaModal(),
     ]);
-  }, [selectedTime, isScreenFocused, defaultLocation]);
+  }, [dashboardStartDate, dashboardEndDate, isScreenFocused, defaultLocation]);
 
   useEffect(() => {
     dispatch(getPrimaryLocationAction(user?.clientId));
@@ -635,23 +638,9 @@ export const HomePage = ({ setselected }) => {
     dispatch(
       fetchFoodCountAction({
         locationId: location ?? "",
-        interval:
-          selectedTime === "This month"
-            ? "month"
-            : selectedTime === "This year"
-            ? "year"
-            : selectedTime === "This day"
-            ? "day"
-            : "",
-        startDate:
-          selectedTime === "This month"
-            ? moment().subtract(30, "days").format("DD-M-yyy")
-            : selectedTime === "This year"
-            ? moment().subtract(365, "days").format("DD-M-yyy")
-            : selectedTime === "This day"
-            ? moment().format("DD-M-yyy")
-            : "",
-        endDate: moment().format("DD-M-yyy"),
+        interval: "custom",
+        startDate: moment(dashboardStartDate).format("DD-M-yyy"),
+        endDate: moment(dashboardEndDate).format("DD-M-yyy"),
       })
     );
   };
@@ -664,14 +653,7 @@ export const HomePage = ({ setselected }) => {
     dispatch(
       fetchPriceFluctuationAction({
         locationId: location ?? "",
-        interval:
-          selectedTime === "This month"
-            ? "month"
-            : selectedTime === "This year"
-            ? "year"
-            : selectedTime === "This day"
-            ? "lastTwoDays"
-            : "",
+        interval: "custom",
         month:
           selectedTime === "This month"
             ? "1"
@@ -703,23 +685,9 @@ export const HomePage = ({ setselected }) => {
       fetchCostByCategoryAction({
         // locationId: "0f06628b-9b71-48b6-be64-5cc7a377f501",
         locationId: location ?? "",
-        interval:
-          selectedTime === "This month"
-            ? "month"
-            : selectedTime === "This year"
-            ? "year"
-            : selectedTime === "This day"
-            ? "day"
-            : "",
-        startDate:
-          selectedTime === "This month"
-            ? moment().subtract(30, "days").format("DD-M-yyy")
-            : selectedTime === "This year"
-            ? moment().subtract(365, "days").format("DD-M-yyy")
-            : selectedTime === "This day"
-            ? moment().format("DD-M-yyy")
-            : "",
-        endDate: moment().format("DD-M-yyy"),
+        interval: "custom",
+        startDate: moment(dashboardStartDate).format("DD-M-yyy"),
+        endDate: moment(dashboardEndDate).format("DD-M-yyy"),
       })
     );
   };
@@ -733,23 +701,9 @@ export const HomePage = ({ setselected }) => {
       fetchForecastedSalesAction({
         // locationId: "0f06628b-9b71-48b6-be64-5cc7a377f501",
         locationId: location ?? "",
-        interval:
-          selectedTime === "This month"
-            ? "month"
-            : selectedTime === "This year"
-            ? "year"
-            : selectedTime === "This day"
-            ? "day"
-            : "",
-        startDate:
-          selectedTime === "This month"
-            ? moment().subtract(30, "days").format("DD-M-yyy")
-            : selectedTime === "This year"
-            ? moment().subtract(365, "days").format("DD-M-yyy")
-            : selectedTime === "This day"
-            ? moment().format("DD-M-yyy")
-            : "",
-        endDate: moment().format("DD-M-yyy"),
+        interval: "custom",
+        startDate: moment(dashboardStartDate).format("DD-M-yyy"),
+        endDate: moment(dashboardEndDate).format("DD-M-yyy"),
       })
     );
   };
@@ -762,28 +716,16 @@ export const HomePage = ({ setselected }) => {
     dispatch(
       fetchLossInKitchenAction({
         locationId: location ?? "",
-        interval:
-          selectedTime === "This month"
-            ? "month"
-            : selectedTime === "This year"
-            ? "year"
-            : selectedTime === "This day"
-            ? "day"
-            : "",
-        startDate:
-          selectedTime === "This month"
-            ? moment().subtract(30, "days").format("DD-M-yyy")
-            : selectedTime === "This year"
-            ? moment().subtract(365, "days").format("DD-M-yyy")
-            : selectedTime === "This day"
-            ? moment().format("DD-M-yyy")
-            : "",
-        endDate: moment().format("DD-M-yyy"),
+        interval: "custom",
+        startDate: moment(dashboardStartDate).format("DD-M-yyy"),
+        endDate: moment(dashboardEndDate).format("DD-M-yyy"),
       })
     );
   };
 
   const changeTime = (val) => setSelectedTime(val);
+
+  console.log("dashboardStartDate", dashboardStartDate);
 
   return (
     <MainScreenContainer mainHeading={"Overview"} shortDrawer isDrawer>
@@ -824,22 +766,29 @@ export const HomePage = ({ setselected }) => {
               >
                 <View
                   style={{
-                    flexDirection: "row",
+                    flexDirection: device === "tablet" ? "row" : "column",
                     alignItems: "center",
                     justifyContent: "center",
                     zIndex: 4,
                   }}
                 >
-                  <Text
+                  <View
                     style={{
-                      fontSize: device === "tablet" ? 16 : 14,
-                      color: drawerHeadingColor,
+                      flexDirection: "row",
+                      alignItems: "center",
+                      justifyContent: "center",
                     }}
                   >
-                    Show:
-                  </Text>
+                    <Text
+                      style={{
+                        fontSize: device === "tablet" ? 16 : 14,
+                        color: drawerHeadingColor,
+                      }}
+                    >
+                      from:
+                    </Text>
 
-                  <Dropdown
+                    {/* <Dropdown
                     dropdDownStyle={{ width: 200 }}
                     noPlaceholder
                     selectedMenu={selectedTime}
@@ -867,7 +816,45 @@ export const HomePage = ({ setselected }) => {
                       marginTop: device === "tablet" ? 30 : 40,
                     }}
                     dropDownOffset={device === "tablet" ? 50 : 40}
-                  />
+                  /> */}
+
+                    <View style={{ marginLeft: 10, width: 140 }}>
+                      <DatePickerComponent
+                        selectedDate={dashboardStartDate}
+                        setSelectedDate={setdashboardStartDate}
+                      />
+                    </View>
+                  </View>
+
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      marginTop: device === "tablet" ? 0 : 20,
+                    }}
+                  >
+                    <Text
+                      style={{
+                        fontSize: device === "tablet" ? 16 : 14,
+                        color: drawerHeadingColor,
+                      }}
+                    >
+                      to:
+                    </Text>
+
+                    <View
+                      style={{
+                        marginLeft: device === "tablet" ? 10 : 30,
+                        width: 140,
+                      }}
+                    >
+                      <DatePickerComponent
+                        selectedDate={dashboardEndDate}
+                        setSelectedDate={setdashboardEndDate}
+                      />
+                    </View>
+                  </View>
                 </View>
               </View>
 
