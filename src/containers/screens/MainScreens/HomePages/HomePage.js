@@ -105,6 +105,7 @@ import * as Notifications from "expo-notifications";
 import * as OS from "expo-device";
 import { notificationData } from "../../../../Redux/actions/AuthActions/authActions";
 import WebView from "react-native-webview";
+import { DatePickerComponent } from "../../../../components/DatePicker";
 
 const data1 = [72, 96, 33, 66];
 const data2 = [89, 70, 86, 84];
@@ -414,6 +415,8 @@ export const HomePage = ({ setselected }) => {
   const [endDate, setEndDate] = useState("");
   const notificationListener = useRef();
   const responseListener = useRef();
+
+  const [ selectedDate, setSelectedDate ] = useState(new Date());
 
   async function registerForPushNotificationsAsync() {
     let token;
@@ -785,6 +788,8 @@ export const HomePage = ({ setselected }) => {
 
   const changeTime = (val) => setSelectedTime(val);
 
+  console.log("selectedDate", selectedDate);
+
   return (
     <MainScreenContainer mainHeading={"Overview"} shortDrawer isDrawer>
       {!!defaultLocation.locationId ? (
@@ -868,6 +873,13 @@ export const HomePage = ({ setselected }) => {
                     }}
                     dropDownOffset={device === "tablet" ? 50 : 40}
                   />
+
+                  <View style={{ marginLeft: 10, width: 150 }}>
+                    {
+                      <DatePickerComponent selectedDate={selectedDate} setSelectedDate={setSelectedDate} />
+                    }
+                  </View>
+                  
                 </View>
               </View>
 
