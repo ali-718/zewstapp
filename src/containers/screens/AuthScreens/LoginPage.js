@@ -146,6 +146,7 @@ export const LoginPage = (props) => {
             <>
               <View style={{ width: "100%", marginTop: 20 }}>
                 <Input
+                  autoCorrect={true}
                   keyboardType={"email-address"}
                   placeholder={"Email address"}
                   value={email}

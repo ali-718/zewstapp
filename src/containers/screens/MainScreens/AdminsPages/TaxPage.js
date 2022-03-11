@@ -40,7 +40,7 @@ export const TaxPage = () => {
   return (
     <MainScreenContainer title={"Tax Documents"}>
       <HeadingBox heading={"Tax Document"} />
-      <View style={{ width: "90%", marginBottom: 30 }}>
+      <View style={{ width: "100%", marginBottom: 30 }}>
         <View style={{ width: "100%", marginTop: 10 }}>
           {tax.map((item, i) => (
             <View key={i} style={{ width: "100%", marginTop: 10 }}>

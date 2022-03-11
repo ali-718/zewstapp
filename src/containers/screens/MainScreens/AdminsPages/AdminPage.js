@@ -70,7 +70,7 @@ export const AdminPage = () => {
 
       <View
         style={{
-          width: "90%",
+          width: "100%",
           alignItems: "center",
           marginBottom: 50,
           backgroundColor: "white",

@@ -84,7 +84,7 @@ export const PasswordInput = ({
               alignItems: "center",
             }}
           >
-            {isFocused && (
+            {isFocused ? (
               <Text style={{ marginBottom: 5, color: "gray" }}>
                 {placeholder}{" "}
                 {isError && showError && (
@@ -93,6 +93,18 @@ export const PasswordInput = ({
                   </Text>
                 )}
               </Text>
+            ) : (
+              isError &&
+              showError && (
+                <Text style={{ marginBottom: 5, color: "gray" }}>
+                  {placeholder}{" "}
+                  {isError && showError && (
+                    <Text>
+                      - <Text style={{ color: "red" }}>{errorText}</Text>
+                    </Text>
+                  )}
+                </Text>
+              )
             )}
           </View>
 
@@ -105,7 +117,9 @@ export const PasswordInput = ({
             }}
             selectionColor={primaryColor}
             style={{ width: "100%", fontSize: device === "tablet" ? 20 : 16 }}
-            placeholder={isFocused ? "" : placeholder}
+            placeholder={
+              isError && showError ? "" : isFocused ? "" : placeholder
+            }
             placeholderTextColor={"gray"}
             onFocus={() => setIsFocused(true)}
             secureTextEntry={isSecured}

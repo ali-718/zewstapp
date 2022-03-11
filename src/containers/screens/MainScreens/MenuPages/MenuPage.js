@@ -120,7 +120,7 @@ export const MenuPage = () => {
               marginBottom: 50,
             }}
           >
-            <View style={{ width: "95%", alignItems: "center" }}>
+            <View style={{ width: "100%", alignItems: "center" }}>
               <View
                 style={{
                   flexDirection: "column",
@@ -415,7 +415,7 @@ export const MenuPage = () => {
         ).length > 0 ? (
         <View
           style={{
-            width: "90%",
+            width: "100%",
             marginBottom: 60,
             alignItems: "center",
           }}

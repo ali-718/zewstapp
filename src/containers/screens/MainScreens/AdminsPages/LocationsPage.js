@@ -64,11 +64,11 @@ export const LocationsPage = () => {
   const setPrimaryLocation = (payload) => {
     let data = {
       clientId: payload.clientId,
-      locationId: payload.locationId
-    }
+      locationId: payload.locationId,
+    };
     dispatch(setPrimaryLocationAction(data));
-  }
-    
+  };
+
   //console.log(defaultLocation, "lalalla")
 
   return (
@@ -76,7 +76,7 @@ export const LocationsPage = () => {
       <HeadingBox heading={"Location"} />
       <View
         style={{
-          width: "90%",
+          width: "100%",
           alignItems: "center",
           marginBottom: 30,
         }}
@@ -143,21 +143,23 @@ export const LocationsPage = () => {
             /> */}
             <View style={{ width: "100%", marginTop: 10 }}>
               {locations.map((item, i) => {
-               return <AdminOverviewBox
-                  key={i}
-                  label={`Location ${i + 1}`}
-                  name={item.streetInfo}
-                  primary={
-                    defaultLocation.locationId === item.locationId
-                      ? "Primary"
-                      : ""
-                  }
-                  onPress={() =>
-                    navigation.navigate("addLocation", { data: item })
-                  }
-                  onLongPress={() => setPrimaryLocation(item)}
-                />
-                })}
+                return (
+                  <AdminOverviewBox
+                    key={i}
+                    label={`Location ${i + 1}`}
+                    name={item.streetInfo}
+                    primary={
+                      defaultLocation.locationId === item.locationId
+                        ? "Primary"
+                        : ""
+                    }
+                    onPress={() =>
+                      navigation.navigate("addLocation", { data: item })
+                    }
+                    onLongPress={() => setPrimaryLocation(item)}
+                  />
+                );
+              })}
 
               <RegularButton
                 style={{ marginTop: 20 }}

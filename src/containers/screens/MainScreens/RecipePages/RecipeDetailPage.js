@@ -224,7 +224,7 @@ export const RecipeDetailPage = ({ isTab, data, ...props }) => {
       </TouchableOpacity>
       <View
         style={{
-          width: "95%",
+          width: "100%",
           flex: 1,
           alignItems: "center",
           backgroundColor: "white",

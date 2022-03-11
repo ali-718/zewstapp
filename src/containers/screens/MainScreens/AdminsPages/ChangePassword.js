@@ -18,7 +18,7 @@ export const ChangePasswordPage = () => {
       <HeadingBox heading={"Change password"} />
       <View
         style={{
-          width: "90%",
+          width: "100%",
           alignItems: "center",
           marginBottom: 50,
           marginTop: 20,

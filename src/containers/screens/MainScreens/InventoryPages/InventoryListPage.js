@@ -96,7 +96,7 @@ export const InventoryListPage = () => {
       ) : (
         <View
           style={{
-            width: "90%",
+            width: "100%",
             marginBottom: 60,
             alignItems: "center",
             marginTop: 0,

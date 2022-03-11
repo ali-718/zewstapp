@@ -2,7 +2,7 @@
   "expo": {
     "name": "zewst",
     "slug": "zewstapp",
-    "version": "1.0.47",
+    "version": "1.0.48",
     "icon": "./assets/icon.png",
     "splash": {
       "image": "./assets/splash.png",

@@ -173,7 +173,7 @@ export const DashboardPage = () => {
       ) : (
         <View
           style={{
-            width: "95%",
+            width: "100%",
             marginBottom: 80,
             alignItems: "center",
             marginTop: 20,

@@ -276,7 +276,7 @@ export const AddInventoryPage = (props) => {
       <HeadingBox heading={isEdit ? "Edit Item" : "Add Item"} />
       <View
         style={{
-          width: "95%",
+          width: "100%",
           flex: 1,
           alignItems: "center",
           marginVertical: 20,

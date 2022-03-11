@@ -38,6 +38,8 @@ export const addEmployeeAction =
     active,
     navigation,
     shift,
+    countryCode,
+    country,
   }) =>
   (dispatch) => {
     dispatch({ type: ADD_EMPLOYEES.REQUESTED });
@@ -51,16 +53,20 @@ export const addEmployeeAction =
       active,
       shift,
       navigation,
+      countryCode,
+      country,
     });
     client
       .post(`employee/addEmployee`, {
         locationId,
         firstName,
         lastName,
-        phone: `+${phone.replace("+", "")}`,
+        phone,
         role,
         active,
         shift,
+        countryCode,
+        country,
       })
       .then(() => {
         dispatch({
@@ -110,6 +116,8 @@ export const editEmployeeAction =
     navigation,
     shift,
     pin,
+    countryCode,
+    country,
   }) =>
   (dispatch) => {
     dispatch({ type: EDIT_EMPLOYEES.REQUESTED });
@@ -125,6 +133,8 @@ export const editEmployeeAction =
       navigation,
       employeeId,
       pin,
+      countryCode,
+      country,
     });
 
     client
@@ -132,13 +142,15 @@ export const editEmployeeAction =
         locationId,
         firstName,
         lastName,
-        phone: `+${phone.replace("+", "")}`,
+        phone,
         email,
         role,
         active,
         employeeId,
         shift,
         pin,
+        countryCode,
+        country,
       })
       .then(() => {
         dispatch({

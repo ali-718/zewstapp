@@ -20,11 +20,28 @@ export const fetchVendorActions =
   };
 
 export const addVendorActions =
-  ({ locationId, name, email, address, phoneNo, navigation }) =>
+  ({
+    locationId,
+    name,
+    email,
+    address,
+    phoneNo,
+    navigation,
+    countryCode,
+    country,
+  }) =>
   (dispatch) => {
     dispatch({ type: ADD_VENDOR.REQUESTED });
     client
-      .post(`/vendors/add`, { locationId, name, email, address, phoneNo })
+      .post(`/vendors/add`, {
+        locationId,
+        name,
+        email,
+        address,
+        phoneNo,
+        countryCode,
+        country,
+      })
       .then((res) => {
         ToastSuccess("Success", "Vendor added successfully");
         dispatch(fetchVendorActions({ locationId }));
@@ -38,7 +55,17 @@ export const addVendorActions =
   };
 
 export const updateVendorActions =
-  ({ locationId, name, email, address, phoneNo, navigation, vendorId }) =>
+  ({
+    locationId,
+    name,
+    email,
+    address,
+    phoneNo,
+    navigation,
+    vendorId,
+    countryCode,
+    country,
+  }) =>
   (dispatch) => {
     console.log({
       locationId,
@@ -48,6 +75,8 @@ export const updateVendorActions =
       phoneNo,
       navigation,
       vendorId,
+      countryCode,
+      country,
     });
     dispatch({ type: ADD_VENDOR.REQUESTED });
     client

@@ -54,7 +54,7 @@ export const passwordValidator = (data) =>
     ) {
       return reject({
         success: false,
-        error: "Error",
+        error: "Incorrect format, see requirements below",
       });
     }
 
@@ -79,7 +79,7 @@ export const confirmPasswordValidator = (data, pass) =>
     ) {
       return reject({
         success: false,
-        error: "Error",
+        error: "Incorrect format, see requirements below",
       });
     }
 

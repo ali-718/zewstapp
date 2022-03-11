@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { View } from "react-native";
 import { Input } from "../../../../components/Inputs/Input";
 import { MainScreenContainer } from "../../../MainScreenContainers";
@@ -11,12 +11,17 @@ import * as action from "../../../../Redux/actions/AdminActions/ResturantDetailA
 import { ToastError, ToastSuccess } from "../../../../helpers/Toast";
 import validator from "validator";
 import { client } from "../../../../Redux/actions/client";
+import PhoneInput from "react-native-phone-number-input";
 
 export const ProfilePage = () => {
   const navigation = useNavigation();
+  const phonneRef = useRef();
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
+  const [unFormatted, setUnFormatted] = useState("");
+  const [countryCode, setCountryCode] = useState("US");
+  const [renderIt, setRenderIt] = useState(false);
   const isFocused = useIsFocused();
   const defaultLocation = useSelector(
     (state) => state.locations.defaultLocation
@@ -30,11 +35,20 @@ export const ProfilePage = () => {
     action
       .getResturantDetail({ clientId: user.clientId })
       .then(({ client }) => {
-        const { owner_name = "", email = "", contact_no = "" } = client;
+        const {
+          owner_name = "",
+          email = "",
+          contact_no = "",
+          country = "US",
+          countryCode = "",
+        } = client;
 
+        setUnFormatted(contact_no?.replace("+", "")?.replace(countryCode, ""));
+        setCountryCode(country);
         setEmail(email);
         setName(owner_name);
         setPhone(contact_no);
+        setRenderIt(true);
       });
   }, [isFocused]);
 
@@ -42,7 +56,7 @@ export const ProfilePage = () => {
     if (
       validator.isEmpty(name, { ignore_whitespace: true }) ||
       validator.isEmpty(email, { ignore_whitespace: true }) ||
-      validator.isEmpty(phone, { ignore_whitespace: true })
+      validator.isEmpty(unFormatted, { ignore_whitespace: true })
     ) {
       ToastError("kindly fill all fields");
       return;
@@ -55,6 +69,8 @@ export const ProfilePage = () => {
       email,
       contact_no: phone,
       clientId: user.clientId,
+      countryCode: phonneRef.current.getCallingCode(),
+      country: phonneRef.current.getCountryCode(),
     };
 
     action
@@ -78,12 +94,14 @@ export const ProfilePage = () => {
     });
   };
 
+  if (!renderIt) return null;
+
   return (
     <MainScreenContainer title={"Profile"}>
       <HeadingBox heading={"Profile"} />
       <View
         style={{
-          width: "90%",
+          width: "100%",
           alignItems: "center",
           marginBottom: 50,
           marginTop: 20,
@@ -98,17 +116,24 @@ export const ProfilePage = () => {
         </View>
 
         <View style={{ width: "100%", marginTop: 10 }}>
-          <Input
-            value={phone}
-            setValue={(val) => {
-              if (val.split("+").length > 2) {
-                return;
-              }
-
-              setPhone(val);
+          <PhoneInput
+            textInputProps={{ value: unFormatted }}
+            defaultCode={countryCode}
+            ref={phonneRef}
+            layout="first"
+            onChangeText={(text) => {
+              setUnFormatted(text);
             }}
-            placeholder={"Owner phone"}
-            keyboardType={"number-pad"}
+            onChangeFormattedText={(text) => {
+              setPhone(text);
+            }}
+            countryPickerProps={{ countryCode: "PK" }}
+            containerStyle={{
+              backgroundColor: "white",
+              flex: 1,
+              width: "100%",
+            }}
+            textContainerStyle={{ backgroundColor: "white", flex: 1 }}
           />
         </View>
         <View style={{ width: "100%", marginTop: 10 }}>

@@ -91,9 +91,9 @@ export const Input = ({
         borderBottomWidth: isError && showError ? 1 : 0,
         borderColor: inputBorderColor,
         borderWidth: 0.5,
+        borderRadius: 10,
         zIndex: 1,
         ...style,
-        borderRadius: 10,
       }}
       activeOpacity={1}
       onPress={onPress ? onPress : () => ref.current?.focus()}
@@ -120,9 +120,20 @@ export const Input = ({
                 </Text>
               )}
             </Text>
-          ) : (
-            isFocused &&
+          ) : isFocused ? (
             !noPlaceHolder && (
+              <Text style={{ marginBottom: 5, color: "gray" }}>
+                {placeholder}{" "}
+                {isError && showError && (
+                  <Text>
+                    - <Text style={{ color: "red" }}>{errorText}</Text>
+                  </Text>
+                )}
+              </Text>
+            )
+          ) : (
+            isError &&
+            showError && (
               <Text style={{ marginBottom: 5, color: "gray" }}>
                 {placeholder}{" "}
                 {isError && showError && (
@@ -192,7 +203,6 @@ export const Input = ({
           >
             {prefix ? prefix : null}
             <TextInput
-              autoCorrect={false}
               autoCapitalize={"words"}
               selectionColor={primaryColor}
               onBlur={() => {
@@ -208,7 +218,9 @@ export const Input = ({
                 ...inputStyle,
                 flex: 1,
               }}
-              placeholder={isFocused ? "" : placeholder}
+              placeholder={
+                isError && showError ? "" : isFocused ? "" : placeholder
+              }
               placeholderTextColor={"gray"}
               onFocus={() => setIsFocused(true)}
               value={value}

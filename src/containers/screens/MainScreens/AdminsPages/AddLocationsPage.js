@@ -123,7 +123,7 @@ export const AddLocationsPage = (props) => {
       <HeadingBox heading={isEdit ? "Edit location" : "Add location"} />
       <View
         style={{
-          width: "90%",
+          width: "100%",
           alignItems: "center",
           marginBottom: 50,
           marginTop: 20,

@@ -240,7 +240,7 @@ export const UpdateInventoryPage = (props) => {
       <HeadingBox heading={"Update Item"} />
       <View
         style={{
-          width: "95%",
+          width: "100%",
           flex: 1,
           alignItems: "center",
           marginVertical: 20,

@@ -3,15 +3,24 @@ import { ToastError, ToastSuccess } from "../../../helpers/Toast";
 import { client } from "../client";
 import { LOGOUT, NOTIFICATION_DATA, REMOVE_NOTIFICATION_DATA } from "./Types";
 
-export const signupAction = ({ owner_name, contact_no, email, password }) =>
+export const signupAction = ({
+  owner_name,
+  contact_no,
+  email,
+  password,
+  countryCode,
+  country,
+}) =>
   new Promise((resolve, reject) => {
     console.log({ owner_name, contact_no, email, password });
     client
       .post("/auth/signup", {
         owner_name,
-        contact_no: `+${contact_no.replace("+", "")}`,
+        contact_no: contact_no,
         email,
         password,
+        countryCode,
+        country,
       })
       .then((data) => {
         resolve(data.data);

@@ -1,8 +1,7 @@
-import React, { useState } from "react";
-import { TouchableOpacity, View } from "react-native";
+import React, { useRef, useState } from "react";
+import { View } from "react-native";
 import { Input } from "../../../components/Inputs/Input";
 import { AuthScreenContainer } from "../../AuthScreenContainer";
-import { MaterialIcons } from "@expo/vector-icons";
 import { Text } from "../../../components/Text/Text";
 import { grayTextColor, primaryColor } from "../../../theme/colors";
 import { PasswordInput } from "../../../components/Inputs/PasswordInput";
@@ -22,14 +21,14 @@ import validator from "validator";
 import { ToastError } from "../../../helpers/Toast";
 import { useDispatch, useSelector } from "react-redux";
 import { SIGNUP } from "../../../Redux/actions/AuthActions/Types";
-import { OnBoardingPage } from "./onBoardingPage";
-import { GoogleButton } from "../../../components/Buttons/GoogleButton";
 import { useNavigation } from "@react-navigation/core";
 import { FullPageLoadingModall } from "../../../components/FullPageLoadingModall/FullPageLoadingModall";
+import PhoneInput from "react-native-phone-number-input";
 
 export const SignUpPage = (props) => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
+  const phonneRef = useRef();
   const orientation = useSelector((state) => state.system.orientation);
   const device = useSelector((state) => state.system.device);
   const [selectedType, setSelectedType] = useState("");
@@ -42,6 +41,7 @@ export const SignUpPage = (props) => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [showError, setshowError] = useState(false);
+  const [unFormatted, setUnFormatted] = useState("");
   const [isError, setIsError] = useState({
     name: false,
     email: false,
@@ -55,12 +55,16 @@ export const SignUpPage = (props) => {
 
     if (
       validator.isEmpty(name, { ignore_whitespace: true }) ||
-      validator.isEmpty(contact, { ignore_whitespace: true }) ||
       validator.isEmpty(email, { ignore_whitespace: true }) ||
       validator.isEmpty(password, { ignore_whitespace: true }) ||
       validator.isEmpty(confirmPassword, { ignore_whitespace: true })
     ) {
       ToastError("please fill all fields");
+      return;
+    }
+
+    if (validator.isEmpty(unFormatted, { ignore_whitespace: true })) {
+      ToastError("Kindly enter your phone number");
       return;
     }
 
@@ -80,6 +84,8 @@ export const SignUpPage = (props) => {
       contact_no: contact,
       email: email,
       password: password,
+      countryCode: phonneRef.current.getCallingCode(),
+      country: phonneRef.current.getCountryCode(),
     })
       .then((data) => {
         dispatch({ type: SIGNUP, payload: email });
@@ -148,7 +154,26 @@ export const SignUpPage = (props) => {
         </View>
 
         <View style={{ width: "100%", marginTop: 20 }}>
-          <Input
+          <PhoneInput
+            defaultCode={"US"}
+            ref={phonneRef}
+            layout="first"
+            onChangeText={(text) => {
+              setUnFormatted(text);
+            }}
+            onChangeFormattedText={(text) => {
+              setContact(text);
+            }}
+            containerStyle={{
+              backgroundColor: "white",
+              flex: 1,
+              width: "100%",
+              paddingVertical: 10,
+              borderRadius: 10,
+            }}
+            textContainerStyle={{ backgroundColor: "white", flex: 1 }}
+          />
+          {/* <Input
             value={contact}
             setValue={(val) => {
               if (val.split("+").length > 2) {
@@ -162,7 +187,7 @@ export const SignUpPage = (props) => {
             rule={phoneValidator}
             showError={showError}
             setHighOrderError={(val) => setIsError({ ...isError, phone: val })}
-          />
+          /> */}
         </View>
 
         <View style={{ width: "100%", marginTop: 20 }}>

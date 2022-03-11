@@ -54,7 +54,7 @@ export const BankDetailsPage = () => {
   return (
     <MainScreenContainer title={"Bank Details"}>
       <HeadingBox heading={"Add Bank Details"} />
-      <View style={{ width: "90%", marginVertical: 20, marginBottom: 80 }}>
+      <View style={{ width: "100%", marginVertical: 20, marginBottom: 80 }}>
         <View style={{ width: "100%" }}>
           <Input
             value={bankName}

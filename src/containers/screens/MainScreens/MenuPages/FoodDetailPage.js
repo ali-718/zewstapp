@@ -101,7 +101,7 @@ export const FoodDetailPage = ({
 
   return (
     <MainScreenContainer>
-      <View style={{ width: "95%", alignItems: "center", marginTop: 10 }}>
+      <View style={{ width: "100%", alignItems: "center", marginTop: 10 }}>
         <View
           style={{
             flexDirection: "row",

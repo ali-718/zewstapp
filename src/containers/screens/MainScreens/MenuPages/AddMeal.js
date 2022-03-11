@@ -349,7 +349,7 @@ export const AddMeal = (props) => {
     <MainScreenContainer title={isEdit ? "Edit Meal" : "Add Meal"}>
       <HeadingBox heading={isEdit ? "Edit menu item" : "Add menu item"} />
 
-      <View style={{ width: "90%", marginTop: 20, marginBottom: 120 }}>
+      <View style={{ width: "100%", marginTop: 20, marginBottom: 120 }}>
         <View
           style={{
             width: "100%",

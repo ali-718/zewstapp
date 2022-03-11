@@ -7,6 +7,7 @@ import { getEmployeeTimingsHistory } from "../../../../Redux/actions/EmployeeAct
 import moment from "moment";
 import { RegularButton } from "../../../../components/Buttons/RegularButton";
 import { useNavigation } from "@react-navigation/native";
+import { WIDTH } from "../../../../helpers/utlils";
 
 export const EmployeeDetail = (props) => {
   const navigation = useNavigation();
@@ -50,40 +51,34 @@ export const EmployeeDetail = (props) => {
 
   return (
     <MainScreenContainer>
+      <HeadingBox heading={"Employee Details"} />
+
+      <RegularButton
+        onPress={() =>
+          navigation.navigate("addEmployees", {
+            data: props.route.params.data,
+          })
+        }
+        style={{
+          width: 150,
+          right: 0,
+          marginTop: 20,
+          position: "absolute",
+          zIndex: 10,
+        }}
+        white
+        text={"Edit Employee"}
+      />
       <View
         style={{
-          width: "90%",
+          width: "100%",
           alignItems: "center",
           alignSelf: "center",
           flex: 1,
           marginTop: 20,
         }}
       >
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "center",
-            width: "100%",
-          }}
-        >
-          <View style={{ flex: 1 }}>
-            <HeadingBox heading={"Employee Details"} />
-          </View>
-
-          <RegularButton
-            onPress={() =>
-              navigation.navigate("addEmployees", {
-                data: props.route.params.data,
-              })
-            }
-            style={{ width: 150, right: 0, marginTop: 10 }}
-            white
-            text={"Edit Employee"}
-          />
-        </View>
-
-        <ScrollView horizontal>
+        <ScrollView style={{ width: "100%" }} horizontal>
           <View style={{ width: "100%" }}>
             <View
               style={{
@@ -96,6 +91,7 @@ export const EmployeeDetail = (props) => {
                 alignSelf: "center",
                 justifyContent: "center",
                 flex: 1,
+                minWidth: WIDTH,
               }}
             >
               <View

@@ -88,7 +88,7 @@ export const LossInKitchen = () => {
             marginBottom: 50,
           }}
         >
-          <View style={{ width: "95%", alignItems: "center" }}>
+          <View style={{ width: "100%", alignItems: "center" }}>
             <View
               style={{
                 flexDirection: "column",

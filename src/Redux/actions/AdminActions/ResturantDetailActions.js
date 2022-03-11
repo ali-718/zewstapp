@@ -25,6 +25,8 @@ export const saveClientDetails = (
     representative,
     logo,
     owner_name,
+    countryCode,
+    country,
   },
   isProfile = false
 ) =>
@@ -39,6 +41,8 @@ export const saveClientDetails = (
       representative,
       logo,
       owner_name,
+      countryCode,
+      country,
     });
 
     client
@@ -47,19 +51,23 @@ export const saveClientDetails = (
         isProfile
           ? {
               owner_name,
-              contact_no: `+${contact_no.replace("+", "")}`,
+              contact_no: contact_no,
               email,
               clientId,
+              countryCode,
+              country,
             }
           : {
               restaurantName,
               address,
-              contact_no: `+${contact_no.replace("+", "")}`,
+              contact_no: contact_no,
               email,
               clientId,
               timmings,
               representative,
               logo: [`data:image/jpeg;base64,${logo ?? "abc"}`],
+              countryCode,
+              country,
             }
       )
       .then((data) => {

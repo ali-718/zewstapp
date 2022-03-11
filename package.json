@@ -47,6 +47,7 @@
     "react-native-maps": "0.28.0",
     "react-native-masked-text": "^1.13.0",
     "react-native-modal-datetime-picker": "^13.0.0",
+    "react-native-phone-number-input": "^2.1.0",
     "react-native-reanimated": "~2.2.0",
     "react-native-safe-area-context": "3.2.0",
     "react-native-screens": "~3.4.0",

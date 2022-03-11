@@ -77,7 +77,7 @@ export const EmployeesPage = () => {
       <HeadingBox heading={"Employees"} />
       <View
         style={{
-          width: "90%",
+          width: "100%",
           alignItems: "center",
           marginBottom: 30,
         }}

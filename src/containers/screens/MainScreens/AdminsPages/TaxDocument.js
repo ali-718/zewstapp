@@ -13,7 +13,7 @@ export const TaxDocument = (props) => {
   return (
     <MainScreenContainer title={name}>
       <HeadingBox heading={"Tax documents"} />
-      <View style={{ width: "90%", marginTop: 10, marginBottom: 30, flex: 1 }}>
+      <View style={{ width: "100%", marginTop: 10, marginBottom: 30, flex: 1 }}>
         <WebView
           style={{ width: "100%", height: HEIGHT - 60 }}
           source={{

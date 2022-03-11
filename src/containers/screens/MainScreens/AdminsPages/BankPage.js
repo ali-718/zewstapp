@@ -17,7 +17,7 @@ const BankPage = () => {
       <HeadingBox heading={"Payments methods"} />
       <View
         style={{
-          width: "90%",
+          width: "100%",
           alignItems: "center",
           marginBottom: 50,
           backgroundColor: "white",

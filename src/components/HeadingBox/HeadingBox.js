@@ -3,6 +3,7 @@ import React from "react";
 import { Image, TouchableOpacity, View } from "react-native";
 import { useSelector } from "react-redux";
 import blackBackArrow from "../../assets/images/blackBackArrow.png";
+import { backgroundGrayColor } from "../../theme/colors";
 import { Text } from "../Text/Text";
 
 export const HeadingBox = ({ noBack, heading, onGoBack }) => {
@@ -12,14 +13,17 @@ export const HeadingBox = ({ noBack, heading, onGoBack }) => {
   return (
     <View
       style={{
-        width: "90%",
+        flex: 1,
         marginTop: 20,
+        zIndex: 1,
       }}
     >
       <View
         style={{
           flexDirection: "row",
           alignItems: "center",
+          backgroundColor: backgroundGrayColor,
+          paddingVertical: 10,
         }}
       >
         {!noBack && (

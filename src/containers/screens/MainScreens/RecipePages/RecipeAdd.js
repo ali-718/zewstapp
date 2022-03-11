@@ -235,7 +235,7 @@ export const RecipeAdd = (props) => {
       <HeadingBox heading={isEdit ? "Edit recipe" : "Add recipe"} />
       <View
         style={{
-          width: "95%",
+          width: "100%",
           flex: 1,
           alignItems: "center",
           marginVertical: 20,

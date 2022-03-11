@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { Input } from "../../../../components/Inputs/Input";
@@ -9,10 +9,12 @@ import { useNavigation } from "@react-navigation/core";
 import { DeleteModal } from "../../../../components/Meals/DeleteModal";
 import { HeadingBox } from "../../../../components/HeadingBox/HeadingBox";
 import { RegularButton } from "../../../../components/Buttons/RegularButton";
+import PhoneInput from "react-native-phone-number-input";
 
 export const AddVendorsPage = (props) => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
+  const phonneRef = useRef();
   const device = useSelector((state) => state.system.device);
   const defaultLocation = useSelector(
     (state) => state.locations.defaultLocation
@@ -25,12 +27,14 @@ export const AddVendorsPage = (props) => {
     (state) => state.vendor.deleteVendors.isError
   );
 
+  const [unFormatted, setUnFormatted] = useState("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [address, setAddress] = useState("");
   const [phone, setPhone] = useState("");
   const [isEdit, setIsEdit] = useState(false);
   const [deleteModal, setdeleteModal] = useState(false);
+  const [countryCode, setCountryCode] = useState("US");
 
   useEffect(() => {
     if (!deleteError) return;
@@ -46,6 +50,7 @@ export const AddVendorsPage = (props) => {
         email = "",
         phoneNo = "",
         name = "",
+        country = "",
       } = props?.route?.params?.data;
 
       setIsEdit(true);
@@ -53,6 +58,7 @@ export const AddVendorsPage = (props) => {
       setEmail(email);
       setPhone(phoneNo);
       setAddress(address);
+      setCountryCode(country);
     }
   }, []);
 
@@ -70,7 +76,7 @@ export const AddVendorsPage = (props) => {
       name.trim().length === 0 ||
       email.trim().length === 0 ||
       address.trim().length === 0 ||
-      phone.trim().length === 0
+      unFormatted.trim().length === 0
     ) {
       ToastError("Kindly fill all fields");
       return;
@@ -89,9 +95,11 @@ export const AddVendorsPage = (props) => {
         name: name,
         email: email,
         address: address,
-        phoneNo: `+${phone.replace("+", "")}`,
+        phoneNo: phone,
         navigation,
         vendorId: props?.route?.params?.data?.vendorId,
+        countryCode: phonneRef.current.getCallingCode(),
+        country: phonneRef.current.getCountryCode(),
       };
       dispatch(actions.updateVendorActions(data));
 
@@ -103,8 +111,10 @@ export const AddVendorsPage = (props) => {
       name: name,
       email: email,
       address: address,
-      phoneNo: `+${phone.replace("+", "")}`,
+      phoneNo: phone,
       navigation,
+      countryCode: phonneRef.current.getCallingCode(),
+      country: phonneRef.current.getCountryCode(),
     };
 
     dispatch(actions.addVendorActions(data));
@@ -115,7 +125,7 @@ export const AddVendorsPage = (props) => {
       <HeadingBox heading={isEdit ? "Edit Vendor" : "Add Vendor"} />
       <View
         style={{
-          width: "95%",
+          width: "100%",
           flex: 1,
           alignItems: "center",
           borderRadius: 10,
@@ -125,7 +135,7 @@ export const AddVendorsPage = (props) => {
       >
         <View
           style={{
-            width: "95%",
+            width: "100%",
             paddingTop: 10,
             alignItems: "center",
           }}
@@ -151,22 +161,27 @@ export const AddVendorsPage = (props) => {
               flex: 1,
             }}
           />
-          <Input
-            keyboardType={"number-pad"}
-            placeholder={"Phone"}
-            value={phone}
-            setValue={(val) => {
-              if (val.split("+").length > 2) {
-                return;
-              }
-              setPhone(val);
+          <PhoneInput
+            defaultCode={countryCode}
+            defaultValue={phone}
+            ref={phonneRef}
+            layout="first"
+            onChangeText={(text) => {
+              setUnFormatted(text);
             }}
-            style={{
-              marginTop: 10,
-              borderRadius: 0,
+            onChangeFormattedText={(text) => {
+              setPhone(text);
+            }}
+            containerStyle={{
+              backgroundColor: "white",
               flex: 1,
+              width: "100%",
+              borderRadius: 0,
+              marginTop: 10,
             }}
+            textContainerStyle={{ backgroundColor: "white", flex: 1 }}
           />
+
           <Input
             placeholder={"Address"}
             value={address}

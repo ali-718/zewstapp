@@ -312,7 +312,9 @@ export const TablesListScreen = () => {
                   <View style={{ width: "100%", flex: 1 }}>
                     <FlatList
                       ref={insideRef}
-                      data={insidetablesToShow}
+                      data={[...insidetablesToShow].sort(
+                        (a, b) => a.name - b.name
+                      )}
                       numColumns={3}
                       style={{
                         marginTop: 20,
@@ -375,7 +377,9 @@ export const TablesListScreen = () => {
 
                   <FlatList
                     ref={outsideRef}
-                    data={outsidetablesToShow}
+                    data={[...outsidetablesToShow].sort(
+                      (a, b) => a.name - b.name
+                    )}
                     numColumns={2}
                     style={{
                       marginTop: 10,

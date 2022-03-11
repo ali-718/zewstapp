@@ -114,38 +114,44 @@ export const MainScreenContainer = ({
           </View>
         </View>
       ) : (
-        <KeyboardAwareScrollView style={{ width: "100%", flex: 1 }}>
-          <View style={{ width: "100%", flexDirection: "row", flex: 1 }}>
-            {isDrawer ? (
-              device === "tablet" ? (
-                shortDrawer ? (
-                  <View style={{ width: 70 }}>
-                    <DrawerMenuWithoutNames
-                      changeMenuIndex={(index) =>
-                        dispatch(changeMenuIndex({ index }))
-                      }
-                      {...{ state: { index } }}
-                    />
-                  </View>
-                ) : (
-                  <View style={{ width: 230, minHeight: HEIGHT }}>
-                    <DrawerMenu
-                      changeMenuIndex={(index) =>
-                        dispatch(changeMenuIndex({ index }))
-                      }
-                      {...{ state: { index } }}
-                    />
-                  </View>
-                )
-              ) : null
-            ) : null}
-            <View style={{ flex: 1 }}>
-              <View style={{ width: "100%", flex: 1, alignItems: "center" }}>
+        <View style={{ width: "100%", flexDirection: "row", flex: 1 }}>
+          {isDrawer ? (
+            device === "tablet" ? (
+              shortDrawer ? (
+                <View style={{ width: 70 }}>
+                  <DrawerMenuWithoutNames
+                    changeMenuIndex={(index) =>
+                      dispatch(changeMenuIndex({ index }))
+                    }
+                    {...{ state: { index } }}
+                  />
+                </View>
+              ) : (
+                <View style={{ width: 230, minHeight: HEIGHT }}>
+                  <DrawerMenu
+                    changeMenuIndex={(index) =>
+                      dispatch(changeMenuIndex({ index }))
+                    }
+                    {...{ state: { index } }}
+                  />
+                </View>
+              )
+            ) : null
+          ) : null}
+          <View style={{ flex: 1 }}>
+            <View style={{ width: "100%", flex: 1, alignItems: "center" }}>
+              {console.log(navigation.getState().index)}
+              <KeyboardAwareScrollView
+                stickyHeaderIndices={
+                  navigation.getState().index === 0 ? [] : [0]
+                }
+                style={{ width: "90%" }}
+              >
                 {props.children}
-              </View>
+              </KeyboardAwareScrollView>
             </View>
           </View>
-        </KeyboardAwareScrollView>
+        </View>
       )}
 
       <Modal

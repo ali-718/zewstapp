@@ -723,10 +723,6 @@ export const HomePage = ({ setselected }) => {
     );
   };
 
-  const changeTime = (val) => setSelectedTime(val);
-
-  console.log("dashboardStartDate", dashboardStartDate);
-
   return (
     <MainScreenContainer mainHeading={"Overview"} shortDrawer isDrawer>
       {!!defaultLocation.locationId ? (
@@ -740,7 +736,7 @@ export const HomePage = ({ setselected }) => {
         >
           <View
             style={{
-              width: "95%",
+              width: "100%",
               marginBottom: 80,
               alignItems: "center",
               marginTop: 20,

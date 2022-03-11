@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Image, TouchableOpacity, View } from "react-native";
 import { Input } from "../../../../components/Inputs/Input";
 import { MealItem } from "../../../../components/Meals/MealItem";
@@ -16,11 +16,13 @@ import moment from "moment";
 import validator from "validator";
 import * as action from "../../../../Redux/actions/AdminActions/ResturantDetailActions";
 import { ToastError, ToastSuccess } from "../../../../helpers/Toast";
+import PhoneInput from "react-native-phone-number-input";
 
 const emp = ["Ali", "Zainab", "Umer", "Kanwal", "Zaid", "Yahya"];
 
 export const ResturantDetails = () => {
   const navigation = useNavigation();
+  const phonneRef = useRef();
   const [name, setName] = useState("");
   const [address, setAddress] = useState("");
   const [phone, setPhone] = useState("");
@@ -33,13 +35,16 @@ export const ResturantDetails = () => {
   const [isLoading, setIsLoading] = useState(false);
   const user = useSelector((state) => state.auth.user.user);
   const device = useSelector((state) => state.system.device);
+  const [unFormatted, setUnFormatted] = useState("");
+  const [countryCode, setCountryCode] = useState("US");
+  const [renderIt, setRenderIt] = useState(false);
   const isFocused = useIsFocused();
 
   const saveDetails = () => {
     if (
       validator.isEmpty(name, { ignore_whitespace: true }) ||
       validator.isEmpty(email, { ignore_whitespace: true }) ||
-      validator.isEmpty(phone, { ignore_whitespace: true }) ||
+      validator.isEmpty(unFormatted, { ignore_whitespace: true }) ||
       validator.isEmpty(address, { ignore_whitespace: true })
     ) {
       ToastError("kindly fill all fields");
@@ -56,6 +61,8 @@ export const ResturantDetails = () => {
       clientId: user.clientId,
       timmings: timeDays,
       representative: selectedCsr,
+      countryCode: phonneRef.current.getCallingCode(),
+      country: phonneRef.current.getCountryCode(),
     };
 
     action
@@ -80,6 +87,7 @@ export const ResturantDetails = () => {
     action
       .getResturantDetail({ clientId: user.clientId })
       .then(({ client }) => {
+        console.log(client);
         const {
           owner_name = "",
           restaurantName = "",
@@ -90,14 +98,19 @@ export const ResturantDetails = () => {
           email = "",
           logo = [],
           clientId = "",
+          country = "US",
+          countryCode = "",
         } = client;
 
+        setUnFormatted(contact_no?.replace("+", "")?.replace(countryCode, ""));
+        setCountryCode(country);
         setEmail(email);
         setTimeDays(timmings);
         setAddress(address);
         setPhone(contact_no);
         setSelectedCsr(representative);
         setName(restaurantName);
+        setRenderIt(true);
       });
   };
 
@@ -126,12 +139,14 @@ export const ResturantDetails = () => {
     setTimeDays([...timeDays, time]);
   };
 
+  if (!renderIt) return null;
+
   return (
     <MainScreenContainer>
       <HeadingBox heading={"Restaurant details"} />
       <View
         style={{
-          width: "90%",
+          width: "100%",
           alignItems: "center",
           marginBottom: 50,
           marginTop: 20,
@@ -153,16 +168,24 @@ export const ResturantDetails = () => {
         </View>
 
         <View style={{ width: "100%", marginTop: 10 }}>
-          <Input
-            value={phone}
-            setValue={(val) => {
-              if (val.split("+").length > 2) {
-                return;
-              }
-              setPhone(val);
+          <PhoneInput
+            textInputProps={{ value: unFormatted }}
+            defaultCode={countryCode}
+            ref={phonneRef}
+            layout="first"
+            onChangeText={(text) => {
+              setUnFormatted(text);
             }}
-            placeholder={"Phone"}
-            keyboardType={"number-pad"}
+            onChangeFormattedText={(text) => {
+              setPhone(text);
+            }}
+            countryPickerProps={{ countryCode: "PK" }}
+            containerStyle={{
+              backgroundColor: "white",
+              flex: 1,
+              width: "100%",
+            }}
+            textContainerStyle={{ backgroundColor: "white", flex: 1 }}
           />
         </View>
 
