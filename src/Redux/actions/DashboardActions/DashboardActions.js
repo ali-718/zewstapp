@@ -169,6 +169,24 @@ export const dailyFoodLogAddAction = ({
       });
   });
 
+export const dailyFoodLogListAction = ({ locationId }) =>
+  new Promise((resolve, reject) => {
+    client
+      .get(`wastelogs/findAllLogs/${locationId}`)
+      .then(({ data }) => {
+        resolve(data.logs?.Items);
+        console.log(data);
+      })
+      .catch((e) => {
+        console.log(e.response.data);
+        reject();
+        ToastError(
+          e.response.data?.message ||
+            "Some error occoured, please try again later"
+        );
+      });
+  });
+
 export const sendTokenToDb = ({ deviceId, locationId, fcmToken }) => {
   console.log({ deviceId, locationId, fcmToken });
   client

@@ -50,6 +50,7 @@ export const confirmCode = ({ username, code }) =>
 
 export const loginActionOther = ({ pin }) =>
   new Promise((resolve, reject) => {
+    console.log({ pin });
     client
       .post("/employee/login", {
         pin,

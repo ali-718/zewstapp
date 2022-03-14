@@ -43,6 +43,7 @@ export const MainScreenContainer = ({
   isDrawer,
   shortDrawer,
   mainHeading,
+  mainWitdh,
   ...props
 }) => {
   const index = useSelector((state) => state.system.menuIndex);
@@ -145,7 +146,7 @@ export const MainScreenContainer = ({
                 stickyHeaderIndices={
                   navigation.getState().index === 0 ? [] : [0]
                 }
-                style={{ width: "90%" }}
+                style={{ width: mainWitdh ?? "90%" }}
               >
                 {props.children}
               </KeyboardAwareScrollView>

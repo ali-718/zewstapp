@@ -724,7 +724,12 @@ export const HomePage = ({ setselected }) => {
   };
 
   return (
-    <MainScreenContainer mainHeading={"Overview"} shortDrawer isDrawer>
+    <MainScreenContainer
+      mainWitdh={"95%"}
+      mainHeading={"Overview"}
+      shortDrawer
+      isDrawer
+    >
       {!!defaultLocation.locationId ? (
         <LinearGradient
           colors={[backgroundGrayColor, backgroundGrayColor]}

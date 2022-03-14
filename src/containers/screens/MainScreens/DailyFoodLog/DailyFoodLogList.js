@@ -7,10 +7,10 @@ import { HeadingBox } from "../../../../components/HeadingBox/HeadingBox";
 import { SearchInput } from "../../../../components/SearchInput/SearchInput";
 import { MainScreenContainer } from "../../../MainScreenContainers";
 import { LoadingPage } from "../../../../components/LoadingPage/LoadingPage";
-import { fetchExpiredMeals } from "../../../../Redux/actions/WasteActions/WasteActions";
-import moment from "moment";
+import { RegularButton } from "../../../../components/Buttons/RegularButton";
+import { dailyFoodLogListAction } from "../../../../Redux/actions/DashboardActions/DashboardActions";
 
-export const WasteItemList = () => {
+export const DailyFoodlogList = () => {
   const navigation = useNavigation();
   const device = useSelector((state) => state.system.device);
   const defaultLocation = useSelector(
@@ -24,15 +24,14 @@ export const WasteItemList = () => {
 
   useEffect(() => {
     if (!isScreenFocused) return;
-    //       locationId: "8985da3c-2077-4b3b-8470-c4d3271c9a51",
     setIsLoading(true);
-    fetchExpiredMeals({
+
+    dailyFoodLogListAction({
       locationId: defaultLocation?.locationId,
     }).then((res) => {
       setIsLoading(false);
       setFiltereditem(res);
       setAllData(res);
-      console.log(res);
     });
   }, [isScreenFocused]);
 
@@ -40,7 +39,7 @@ export const WasteItemList = () => {
     const keyword = text?.toLowerCase();
     const realData = allData;
     const finalData = realData.filter((item) =>
-      item.mealName?.toLowerCase()?.includes(keyword)
+      item.itemName?.toLowerCase()?.includes(keyword)
     );
 
     setFiltereditem(finalData);
@@ -48,7 +47,20 @@ export const WasteItemList = () => {
 
   return (
     <MainScreenContainer shortDrawer isDrawer>
-      <HeadingBox noBack heading={"Waste Prediction"} />
+      <HeadingBox noBack heading={"Daily Food Log"} />
+
+      <RegularButton
+        onPress={() => navigation.navigate("DailyFoodLogAdd")}
+        style={{
+          width: 250,
+          right: 0,
+          position: "absolute",
+          zIndex: 10,
+          top: 20,
+        }}
+        white
+        text={"+ Add a menu item"}
+      />
 
       {isLoading ? (
         <LoadingPage />
@@ -73,22 +85,15 @@ export const WasteItemList = () => {
 
           {filteredItem.map((item, i) => (
             <AdminOverviewBox
-              name={`Expire date: ${moment(
-                item?.expiredIngredients[0]?.expiryDate
-              ).format("DD.M.yyy")}`}
+              name={""}
               boxStyle={{ marginTop: 10 }}
-              label={item?.mealName}
-              rightText={device === "tablet" ? "Reccomended recipes" : ""}
+              label={item?.itemName}
+              rightText={""}
               rightTextStyle={{
                 fontSize: 12,
                 color: "#CCCCCC",
                 marginRight: 20,
               }}
-              onPress={() =>
-                navigation.navigate("WasteItemDetail", {
-                  data: { ...item?.mealRecipes[0], mealId: item?.mealId },
-                })
-              }
             />
           ))}
         </View>

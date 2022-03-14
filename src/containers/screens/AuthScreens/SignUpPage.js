@@ -122,7 +122,7 @@ export const SignUpPage = (props) => {
           >
             Enter your Name, Email and Password for sign up.{" "}
             <Text
-              onPress={() => navigation.navigate("Login")}
+              onPress={() => navigation.navigate("EmployeeCodePage")}
               style={{ color: primaryColor }}
             >
               Already have account?

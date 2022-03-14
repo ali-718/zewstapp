@@ -116,7 +116,7 @@ export const PasswordInput = ({
               setIsFocused(false);
             }}
             selectionColor={primaryColor}
-            style={{ width: "100%", fontSize: device === "tablet" ? 20 : 16 }}
+            style={{ width: "100%", fontSize: device === "tablet" ? 16 : 14 }}
             placeholder={
               isError && showError ? "" : isFocused ? "" : placeholder
             }

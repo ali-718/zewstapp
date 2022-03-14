@@ -6,7 +6,7 @@ import { MainScreenContainer } from "../../../MainScreenContainers";
 import { inputBorderColor } from "../../../../theme/colors";
 import { Dropdown } from "../../../../components/Inputs/DropDown";
 import { useDispatch, useSelector } from "react-redux";
-import { useIsFocused } from "@react-navigation/native";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
 import * as actions from "../../../../Redux/actions/InventoryAction/InventoryActions";
 import { RegularButton } from "../../../../components/Buttons/RegularButton";
 import { marginTop } from "styled-system";
@@ -20,6 +20,7 @@ import {
 } from "../../../../helpers/utlils";
 
 export const DailyFoodLogAdd = () => {
+  const navigation = useNavigation();
   const [selectedItem, setSelectedItem] = useState({});
   const [quantity, setQuantity] = useState("");
   const [unit, setUnit] = useState("");
@@ -79,6 +80,7 @@ export const DailyFoodLogAdd = () => {
         setUnit("");
         setQuantity("");
         setReason("");
+        navigation.goBack();
       })
       .catch((e) => {
         setIsLoading(false);
@@ -87,7 +89,7 @@ export const DailyFoodLogAdd = () => {
 
   return (
     <MainScreenContainer shortDrawer isDrawer>
-      <HeadingBox noBack heading={"Log in food"} />
+      <HeadingBox heading={"Log in food"} />
       <View
         style={{
           width: "95%",

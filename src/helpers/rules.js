@@ -26,6 +26,13 @@ export const phoneValidator = (phone) =>
 
 export const emailValidator = (email) =>
   new Promise((resolve, reject) => {
+    if (email.trim().length === 0) {
+      return reject({
+        success: false,
+        error: "Empty field",
+      });
+    }
+
     if (!validator.isEmail(email)) {
       return reject({
         success: false,

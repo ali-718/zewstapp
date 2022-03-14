@@ -61,6 +61,8 @@ import { WasteItemAddForDiscount } from "./containers/screens/MainScreens/WasteS
 import { UpdateInventoryPage } from "./containers/screens/MainScreens/InventoryPages/UpdateInventory";
 import { EmployeeDetail } from "./containers/screens/MainScreens/AdminsPages/EmployeeDetail";
 import { DashboardPage } from "./containers/screens/MainScreens/HomePages/DashboardPage";
+import { DailyFoodlogList } from "./containers/screens/MainScreens/DailyFoodLog/DailyFoodLogList";
+import { EmployeeCodePage } from "./containers/screens/AuthScreens/EmployeeCodePage";
 
 const Stack = createNativeStackNavigator();
 
@@ -73,6 +75,7 @@ const AuthRoutes = () => {
       >
         <Stack.Screen name="SigningCheck" component={SigningCheck} />
         {/* <Stack.Screen name="OnBoardingPage" component={OnBoardingPage} /> */}
+        <Stack.Screen name="EmployeeCodePage" component={EmployeeCodePage} />
         <Stack.Screen name="Signup" component={SignUpPage} />
         <Stack.Screen name="Verification" component={VerificationPage} />
         <Stack.Screen name="Login" component={LoginPage} />
@@ -209,6 +212,17 @@ const WasteRoutes = () => {
   );
 };
 
+const DailyFoodLogRoutes = () => {
+  return (
+    <Stack.Navigator
+      screenOptions={{ headerShown: false, gestureEnabled: false }}
+    >
+      <Stack.Screen name="DailyFoodlogList" component={DailyFoodlogList} />
+      <Stack.Screen name="DailyFoodLogAdd" component={DailyFoodLogAdd} />
+    </Stack.Navigator>
+  );
+};
+
 const Drawer = createDrawerNavigator();
 
 const MainRoutes = () => {
@@ -254,7 +268,7 @@ const MainRoutes = () => {
         <Drawer.Screen name="Vendor" component={VendorRoutes} />
         <Drawer.Screen name="Pos" component={OrderRoutes} />
         <Drawer.Screen name="Kitchen" component={KitchenPage} />
-        <Stack.Screen name="DailyFoodLog" component={DailyFoodLogAdd} />
+        <Stack.Screen name="DailyFoodLog" component={DailyFoodLogRoutes} />
 
         <Drawer.Screen name="Messages" component={AdminPage} />
         <Drawer.Screen name="Library" component={AdminPage} />
