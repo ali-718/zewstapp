@@ -6,17 +6,25 @@ import blackBackArrow from "../../assets/images/blackBackArrow.png";
 import { backgroundGrayColor } from "../../theme/colors";
 import { Text } from "../Text/Text";
 
-export const HeadingBox = ({ noBack, heading, onGoBack }) => {
+export const HeadingBox = ({ noBack, heading, onGoBack, noScroll }) => {
   const navigation = useNavigation();
   const device = useSelector((state) => state.system.device);
 
   return (
     <View
-      style={{
-        flex: 1,
-        marginTop: 20,
-        zIndex: 1,
-      }}
+      style={
+        noScroll
+          ? {
+              width: "100%",
+              marginTop: 20,
+              zIndex: 1,
+            }
+          : {
+              flex: 1,
+              marginTop: 20,
+              zIndex: 1,
+            }
+      }
     >
       <View
         style={{

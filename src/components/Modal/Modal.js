@@ -1,12 +1,17 @@
 import { View, Modal as ModalComponent, TouchableOpacity } from "react-native";
 import React from "react";
 
-export const Modal = ({ visible, onRequestClose, ...props }) => {
+export const Modal = ({
+  visible,
+  onRequestClose,
+  transparent = true,
+  ...props
+}) => {
   return (
     <ModalComponent
       visible={visible}
       onRequestClose={onRequestClose}
-      transparent
+      transparent={transparent}
       animationType="slide"
     >
       <View

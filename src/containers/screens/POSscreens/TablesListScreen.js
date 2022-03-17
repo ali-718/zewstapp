@@ -240,96 +240,171 @@ export const TablesListScreen = () => {
   if (device === "tablet") {
     return (
       <MainScreenContainer isDrawer shortDrawer noScroll>
-        <HeadingBox heading={"Overview"} noBack />
+        <View
+          style={{
+            width: "95%",
+            flex: 1,
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <HeadingBox noScroll heading={"Overview"} />
 
-        <View style={{ width: "90%", marginTop: 20 }}>
-          <Text style={{ color: "black", fontSize: 18 }}>Tables</Text>
-        </View>
+          <View style={{ width: "100%", marginTop: 20 }}>
+            <Text style={{ color: "black", fontSize: 18 }}>Tables</Text>
+          </View>
 
-        {isDefaultLocation ? (
-          <View
-            style={{
-              width: "90%",
-              marginTop: 20,
-              height: "100%",
-              flex: 1,
-            }}
-          >
-            {isLoading ? (
-              <View
-                style={{
-                  flex: 1,
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  padding: 10,
-                  paddingVertical: 20,
-                }}
-              >
-                <Spinner size={"large"} color={primaryColor} />
-              </View>
-            ) : (
-              <View
-                style={{
-                  width: "100%",
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  height: "100%",
-                }}
-              >
-                <View style={{ width: "55%" }}>
-                  <View
-                    style={{
-                      width: "100%",
-                      flexDirection: "row",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    <Text
+          {isDefaultLocation ? (
+            <View
+              style={{
+                width: "100%",
+                marginTop: 20,
+                height: "100%",
+                flex: 1,
+              }}
+            >
+              {isLoading ? (
+                <View
+                  style={{
+                    flex: 1,
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    padding: 10,
+                    paddingVertical: 20,
+                  }}
+                >
+                  <Spinner size={"large"} color={primaryColor} />
+                </View>
+              ) : (
+                <View
+                  style={{
+                    width: "100%",
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    height: "100%",
+                  }}
+                >
+                  <View style={{ width: "55%" }}>
+                    <View
                       style={{
-                        color: grayMenuText,
-                        textTransform: "uppercase",
-                        fontSize: 16,
+                        width: "100%",
+                        flexDirection: "row",
+                        alignItems: "center",
+                        justifyContent: "space-between",
                       }}
-                    >
-                      Inside
-                    </Text>
-                    <TouchableOpacity
-                      onPress={() => addNewTable(insidetablesToShow, "INSIDE")}
                     >
                       <Text
                         style={{
-                          color: "black",
-                          textDecorationLine: "underline",
+                          color: grayMenuText,
+                          textTransform: "uppercase",
+                          fontSize: 16,
                         }}
                       >
-                        + Add a table
+                        Inside
                       </Text>
-                    </TouchableOpacity>
-                  </View>
+                      <TouchableOpacity
+                        onPress={() =>
+                          addNewTable(insidetablesToShow, "INSIDE")
+                        }
+                      >
+                        <Text
+                          style={{
+                            color: "black",
+                            textDecorationLine: "underline",
+                          }}
+                        >
+                          + Add a table
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
 
-                  <View style={{ width: "100%", flex: 1 }}>
+                    <View style={{ width: "100%", flex: 1 }}>
+                      <FlatList
+                        ref={insideRef}
+                        data={[...insidetablesToShow].sort(
+                          (a, b) => a.name - b.name
+                        )}
+                        numColumns={3}
+                        style={{
+                          marginTop: 20,
+                          width: "100%",
+                          height: "100%",
+                          paddingBottom: 20,
+                        }}
+                        columnWrapperStyle={{
+                          flexDirection: "row",
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                          marginVertical: 10,
+                        }}
+                        renderItem={({ item }) => (
+                          <TableComponent
+                            key={item.name}
+                            tableNo={item.name}
+                            status={item.stature}
+                            isLoading={item?.isLoading}
+                            navigation={navigation}
+                            tableId={item?.tableId}
+                            table={item}
+                            dispatch={dispatch}
+                          />
+                        )}
+                      />
+                    </View>
+                  </View>
+                  <View style={{ width: "35%" }}>
+                    <View
+                      style={{
+                        width: "100%",
+                        flexDirection: "row",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <Text
+                        style={{
+                          color: grayMenuText,
+                          textTransform: "uppercase",
+                          fontSize: 16,
+                        }}
+                      >
+                        Outside
+                      </Text>
+                      <TouchableOpacity
+                        onPress={() => addNewTable(outsideTables, "OUTSIDE")}
+                      >
+                        <Text
+                          style={{
+                            color: "black",
+                            textDecorationLine: "underline",
+                          }}
+                        >
+                          + Add a table
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
+
                     <FlatList
-                      ref={insideRef}
-                      data={[...insidetablesToShow].sort(
+                      ref={outsideRef}
+                      data={[...outsidetablesToShow].sort(
                         (a, b) => a.name - b.name
                       )}
-                      numColumns={3}
+                      numColumns={2}
                       style={{
-                        marginTop: 20,
+                        marginTop: 10,
                         width: "100%",
-                        height: "100%",
-                        paddingBottom: 20,
+                        marginBottom: 50,
                       }}
                       columnWrapperStyle={{
                         flexDirection: "row",
                         alignItems: "center",
                         justifyContent: "space-between",
-                        marginVertical: 10,
+                        marginTop: 20,
                       }}
                       renderItem={({ item }) => (
                         <TableComponent
+                          width={"45%"}
                           key={item.name}
                           tableNo={item.name}
                           status={item.stature}
@@ -343,88 +418,24 @@ export const TablesListScreen = () => {
                     />
                   </View>
                 </View>
-                <View style={{ width: "35%" }}>
-                  <View
-                    style={{
-                      width: "100%",
-                      flexDirection: "row",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    <Text
-                      style={{
-                        color: grayMenuText,
-                        textTransform: "uppercase",
-                        fontSize: 16,
-                      }}
-                    >
-                      Outside
-                    </Text>
-                    <TouchableOpacity
-                      onPress={() => addNewTable(outsideTables, "OUTSIDE")}
-                    >
-                      <Text
-                        style={{
-                          color: "black",
-                          textDecorationLine: "underline",
-                        }}
-                      >
-                        + Add a table
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
-
-                  <FlatList
-                    ref={outsideRef}
-                    data={[...outsidetablesToShow].sort(
-                      (a, b) => a.name - b.name
-                    )}
-                    numColumns={2}
-                    style={{
-                      marginTop: 10,
-                      width: "100%",
-                      marginBottom: 50,
-                    }}
-                    columnWrapperStyle={{
-                      flexDirection: "row",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                      marginTop: 20,
-                    }}
-                    renderItem={({ item }) => (
-                      <TableComponent
-                        width={"45%"}
-                        key={item.name}
-                        tableNo={item.name}
-                        status={item.stature}
-                        isLoading={item?.isLoading}
-                        navigation={navigation}
-                        tableId={item?.tableId}
-                        table={item}
-                        dispatch={dispatch}
-                      />
-                    )}
-                  />
-                </View>
-              </View>
-            )}
-          </View>
-        ) : (
-          <View
-            style={{
-              width: "100%",
-              flex: 1,
-              alignItems: "center",
-              justifyContent: "center",
-              height: HEIGHT - 100,
-            }}
-          >
-            <Text style={{ fontSize: 20, width: "80%", textAlign: "center" }}>
-              You need to add atleast one location to start order 😃
-            </Text>
-          </View>
-        )}
+              )}
+            </View>
+          ) : (
+            <View
+              style={{
+                width: "100%",
+                flex: 1,
+                alignItems: "center",
+                justifyContent: "center",
+                height: HEIGHT - 100,
+              }}
+            >
+              <Text style={{ fontSize: 20, width: "80%", textAlign: "center" }}>
+                You need to add atleast one location to start order 😃
+              </Text>
+            </View>
+          )}
+        </View>
       </MainScreenContainer>
     );
   }
@@ -449,7 +460,7 @@ export const TablesListScreen = () => {
           <Spinner size={"large"} color={primaryColor} />
         </View>
       ) : (
-        <View style={{ width: "90%", height: "100%" }}>
+        <View style={{ width: "100%", height: "100%" }}>
           <View style={{ width: "100%", marginTop: 10 }}>
             <Text style={{ color: "black", fontSize: 20 }}>Tables</Text>
           </View>

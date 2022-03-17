@@ -50,6 +50,7 @@ import { VendorListPage } from "./containers/screens/MainScreens/VendorPages/Ven
 import { AddVendorsPage } from "./containers/screens/MainScreens/VendorPages/AddVendorsPage";
 import { TablesListScreen } from "./containers/screens/POSscreens/TablesListScreen";
 import { OrderTakingScreen } from "./containers/screens/POSscreens/OrderTakingScreen";
+import { PosMenuScreen } from "./containers/screens/POSscreens/PosMenuScreen";
 import { StripePage } from "./containers/screens/MainScreens/AdminsPages/StripePage";
 import { KitchenPage } from "./containers/screens/MainScreens/KitchenPages/KitchenPage";
 import { Text } from "./components/Text/Text";
@@ -190,6 +191,7 @@ const OrderRoutes = () => {
     <Stack.Navigator
       screenOptions={{ headerShown: false, gestureEnabled: false }}
     >
+      <Stack.Screen name="PosMenuScreen" component={PosMenuScreen} />
       <Stack.Screen name="tableList" component={TablesListScreen} />
       <Stack.Screen name="orderTaking" component={OrderTakingScreen} />
     </Stack.Navigator>
