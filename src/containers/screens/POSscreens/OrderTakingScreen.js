@@ -16,7 +16,7 @@ import {
   orderBillBackground,
   primaryColor,
 } from "../../../theme/colors";
-import {  HEIGHT } from "../../../helpers/utlils";
+import { HEIGHT } from "../../../helpers/utlils";
 import * as actions from "../../../Redux/actions/PosActions/OrderActions";
 import { ToastError } from "../../../helpers/Toast";
 import { Icon, Spinner } from "native-base";
@@ -72,25 +72,24 @@ const MealComponent = ({ meal, onPress, width }) => {
   return (
     <TouchableOpacity
       style={{
-        width: width || "22%",
         borderRadius: 8,
         backgroundColor: 'white',
         minHeight: 120,
-        marginLeft: "2%",
+        marginLeft: 20,
         marginTop: 10,
         padding: 10,
         justifyContent: "space-between",
-        alignItems:'center'
+        alignItems: 'center'
       }}
       onPress={onPress}
     >
-      <Image source={placeholderImage} style={{width:90,height:90}} />
+      <Image source={placeholderImage} style={{ width: 90, height: 90 }} />
       <Text
         style={{
           fontSize: 9,
           color: "black",
-          textAlign:'center',
-          marginTop:10
+          textAlign: 'center',
+          marginTop: 10
         }}
       >
         {meal.mealName}
@@ -99,7 +98,7 @@ const MealComponent = ({ meal, onPress, width }) => {
         style={{
           fontSize: 10,
           color: "#803D22",
-          textAlign:'center'
+          textAlign: 'center'
         }}
       >
         ${meal.mealPrice}
@@ -167,11 +166,11 @@ export const OrderTakingScreen = (props) => {
 
   const recommededData = (length) => {
     var nums = Array.from(
-        {
-          length,
-        },
-        (_, i) => i + 1
-      ),
+      {
+        length,
+      },
+      (_, i) => i + 1
+    ),
       ranNums = [],
       i = nums.length,
       j = 0;
@@ -750,76 +749,79 @@ export const OrderTakingScreen = (props) => {
 
                         {selectedCategory.length > 0 ? (
                           <View style={{ width: "100%", marginTop: 30 }}>
-                            <FlatList
-                              scrollEnabled={false}
-                              data={
-                                search.length > 0
-                                  ? filteredItems
-                                  : mealsToShow.filter(
-                                      (item) =>
-                                        item.mealCategory === selectedCategory
-                                    )
-                              }
-                              numColumns={4}
+
+                            <View
                               style={{
                                 marginTop: 20,
                                 width: "100%",
                                 marginBottom: 50,
-                              }}
-                              renderItem={({ item }) => (
-                                <MealComponent
+                                alignItems: 'center',
+                                flexDirection: 'row',
+                                flexWrap: 'wrap'
+                              }}>
+                              {search.length > 0
+                                ? filteredItems
+                                : mealsToShow.filter(
+                                  (item) =>
+                                    item.mealCategory === selectedCategory
+                                ).map((item, i) => <MealComponent
+                                  key={i}
                                   onPress={
                                     isSuccess
                                       ? () => null
                                       : () => {
-                                          incrementMealItem(item.mealId);
-                                          createOrderList(item);
-                                        }
+                                        incrementMealItem(item.mealId);
+                                        createOrderList(item);
+                                      }
                                   }
                                   meal={item}
-                                />
-                              )}
-                            />
+                                />)}
 
-                            <FlatList
-                              ListHeaderComponent={() => (
-                                <Text
-                                  style={{
-                                    color: "#92929D",
-                                    fontSize: 16,
-                                    marginLeft: 10,
-                                    marginBottom: 20,
-                                  }}
-                                >
-                                  Recommended dishes
-                                </Text>
-                              )}
-                              scrollEnabled={false}
-                              data={meals.slice(0, 4)}
-                              numColumns={4}
+
+                            </View>
+
+                            <Text
                               style={{
-                                marginTop: 20,
+                                color: "#92929D",
+                                fontSize: 16,
+                                marginLeft: 10,
+                                marginBottom: 20,
+                              }}
+                            >
+                              Recommended dishes
+                            </Text>
+
+                            <View
+                              style={{
+                                marginTop: 0,
                                 width: "100%",
                                 marginBottom: 50,
-                              }}
-                              renderItem={(data) => {
-                                const item = meals[recommendedNum[data.index]];
+                                alignItems: 'center',
+                                flexDirection: 'row',
+                                flexWrap: 'wrap'
+                              }}>
+                              {meals.slice(0, 4).map((item, i) => {
 
                                 return (
                                   <MealComponent
+                                    key={i}
                                     onPress={
                                       isSuccess
                                         ? () => null
                                         : () => {
-                                            incrementMealItem(item.mealId);
-                                            createOrderList(item);
-                                          }
+                                          incrementMealItem(item.mealId);
+                                          createOrderList(item);
+                                        }
                                     }
                                     meal={item}
+
                                   />
                                 );
-                              }}
-                            />
+                              })}
+                            </View>
+
+
+
                           </View>
                         ) : null}
                       </View>
@@ -957,23 +959,23 @@ export const OrderTakingScreen = (props) => {
                                     {isReserved
                                       ? null
                                       : mealSelectedForAdjustment !== i && (
-                                          <TouchableOpacity
-                                            onPress={() =>
-                                              deleteOrderList(item)
-                                            }
+                                        <TouchableOpacity
+                                          onPress={() =>
+                                            deleteOrderList(item)
+                                          }
+                                        >
+                                          <Text
+                                            style={{
+                                              color: "#868686",
+                                              fontSize: 20,
+                                              marginLeft: 10,
+                                              margin: 0,
+                                            }}
                                           >
-                                            <Text
-                                              style={{
-                                                color: "#868686",
-                                                fontSize: 20,
-                                                marginLeft: 10,
-                                                margin: 0,
-                                              }}
-                                            >
-                                              x
-                                            </Text>
-                                          </TouchableOpacity>
-                                        )}
+                                            x
+                                          </Text>
+                                        </TouchableOpacity>
+                                      )}
                                   </View>
                                 </TouchableOpacity>
 
@@ -1402,24 +1404,24 @@ export const OrderTakingScreen = (props) => {
             list={
               reservedOrder?.catalog
                 ? [
-                    ...orderList?.map((item) => ({
-                      quantity: item.selected,
-                      description: item.mealName,
-                      amount: item.totalPrice?.toFixed(2),
-                    })),
-                    ...reservedOrder?.catalog?.map((item) => ({
-                      quantity: item.quantity,
-                      description: item.mealName,
-                      amount: (item.mealPrice * item.quantity).toFixed(2),
-                    })),
-                  ]
+                  ...orderList?.map((item) => ({
+                    quantity: item.selected,
+                    description: item.mealName,
+                    amount: item.totalPrice?.toFixed(2),
+                  })),
+                  ...reservedOrder?.catalog?.map((item) => ({
+                    quantity: item.quantity,
+                    description: item.mealName,
+                    amount: (item.mealPrice * item.quantity).toFixed(2),
+                  })),
+                ]
                 : [
-                    ...orderList?.map((item) => ({
-                      quantity: item.selected,
-                      description: item.mealName,
-                      amount: item.totalPrice?.toFixed(2),
-                    })),
-                  ]
+                  ...orderList?.map((item) => ({
+                    quantity: item.selected,
+                    description: item.mealName,
+                    amount: item.totalPrice?.toFixed(2),
+                  })),
+                ]
             }
             visible={showTerminal}
             handleClose={() => setShowTerminal(false)}
