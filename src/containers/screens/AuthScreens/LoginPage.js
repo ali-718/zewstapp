@@ -21,11 +21,13 @@ import * as Device from "expo-device";
 import { OnBoardingPage } from "./onBoardingPage";
 import { FullPageLoadingModall } from "../../../components/FullPageLoadingModall/FullPageLoadingModall";
 import Logo from "../../../assets/images/logo.png";
-import purpleCashier from "../../../assets/images/purpleCashier.png";
+import loginBottom from "../../../assets/images/loginBottom.png";
 import moment from "moment";
 import { Icon } from "native-base";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { useNavigation } from "@react-navigation/native";
+import { HEIGHT } from "../../../helpers/utlils";
+import { marginTop } from "styled-system";
 
 export const LoginPage = (props) => {
   const dispatch = useDispatch();
@@ -89,7 +91,7 @@ export const LoginPage = (props) => {
       style={{
         width: "100%",
         flex: 1,
-        backgroundColor: "#F3F2F2",
+        backgroundColor: "#FBFAFB",
         paddingHorizontal: 20,
       }}
     >
@@ -120,7 +122,7 @@ export const LoginPage = (props) => {
           alignItems: "center",
           justifyContent: "center",
           flex: 1,
-          backgroundColor: "#F3F2F2",
+          backgroundColor: "#FBFAFB",
         }}
       >
         <View
@@ -130,15 +132,17 @@ export const LoginPage = (props) => {
             alignItems: "center",
             justifyContent: "center",
             flex: 1,
+            zIndex:9,
+            marginTop:device === "tablet" ?  -100 : 0
           }}
         >
           <Image
             source={Logo}
             style={{ width: 410, height: 65, resizeMode: "contain" }}
           />
-          <Text
+        <Text
             style={{
-              fontSize: device === "tablet" ? 60 : 40,
+              fontSize: device === "tablet" ? 50 : 40,
               fontFamily: "openSans_bold",
             }}
           >
@@ -146,7 +150,7 @@ export const LoginPage = (props) => {
           </Text>
           <Text
             style={{
-              fontSize: device === "tablet" ? 27 : 18,
+              fontSize: device === "tablet" ? 22 : 16,
             }}
           >
             {moment().format("dddd,MMMM D,YYYY")}
@@ -154,14 +158,14 @@ export const LoginPage = (props) => {
           <Text
             style={{
               fontSize: device === "tablet" ? 27 : 18,
-              marginTop: 10,
+              marginTop:  device === "tablet" ?  80 :10,
             }}
           >
             Sign In
           </Text>
 
           <View
-            style={{ width: "100%", marginBottom: 40, alignItems: "center" }}
+            style={{ width: "100%", marginBottom: 40, alignItems: "center",zIndex:9 }}
           >
             <View style={{ width: "100%", marginTop: 20 }}>
               <Input
@@ -190,16 +194,10 @@ export const LoginPage = (props) => {
                   setIsError({ ...isError, password: val })
                 }
               />
-              <TouchableOpacity
-                onPress={() => props.navigation.navigate("Forgot")}
-              >
-                <Text style={{ color: "#868686", fontSize: 18, marginTop: 10 }}>
-                  Forgot Password?
-                </Text>
-              </TouchableOpacity>
+           
             </View>
 
-            <View style={{ width: "100%", marginTop: 20 }}>
+            <View style={{ width: "100%", marginTop: 20,zIndex:9 }}>
               <RegularButton
                 isLoading={isLoading}
                 onPress={onLogin}
@@ -210,12 +208,21 @@ export const LoginPage = (props) => {
             </View>
 
             <View
-              style={{ width: "100%", marginTop: 20, alignItems: "center" }}
+              style={{ width: "100%", marginTop: 10, alignItems: "center" }}
             >
+                 <TouchableOpacity
+                onPress={() => props.navigation.navigate("Forgot")}
+              >
+                <Text style={{ color: "#868686", fontSize: 18, marginTop: 10 }}>
+                  Forgot Password?
+                </Text>
+              </TouchableOpacity>
+
               <Text
                 style={{
                   fontSize: 18,
                   color: "#868686",
+                  marginTop:20
                 }}
               >
                 Don’t have an account?{" "}
@@ -237,7 +244,11 @@ export const LoginPage = (props) => {
             text={"Signing you in..."}
           />
         </View>
+        {device === "tablet" &&
+          <Image source={loginBottom} style={{ position: 'absolute', zIndex: 0, width: 400, height: 160, resizeMode: 'contain', bottom: 0,alignSelf:'center' }} />}
+  
       </View>
-    </View>
+
+      </View>
   );
 };

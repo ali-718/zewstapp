@@ -23,23 +23,27 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { FullPageLoadingModall } from "../../../components/FullPageLoadingModall/FullPageLoadingModall";
 import { getEmployeeRoles } from "../../../Redux/actions/EmployeeActions/EmployeeActions";
 import Logo from "../../../assets/images/logo.png";
-import purpleCashier from "../../../assets/images/purpleCashier.png";
+import purpleCashier from "../../../assets/images/loginUser.png";
+import passcodeLeft from "../../../assets/images/passcodeLeft.png";
+import rightPasscode from "../../../assets/images/rightPasscode.png";
 import moment from "moment";
 import { useNavigation } from "@react-navigation/native";
+import { zIndex } from "styled-system";
 
 const NumberCircle = ({ number, device, onPress }) => (
   <TouchableOpacity
     onPress={onPress}
     style={{
-      width: device === "tablet" ? 100 : 70,
-      height: device === "tablet" ? 100 : 70,
+      width: device === "tablet" ? 70 : 70,
+      height: device === "tablet" ? 70 : 70,
       borderRadius: 999,
       alignItems: "center",
       justifyContent: "center",
-      backgroundColor: "#F3F2F2",
+      backgroundColor: "white",
+      zIndex: 9
     }}
   >
-    <Text style={{ fontSize: device === "tablet" ? 50 : 30 }}>{number}</Text>
+    <Text style={{ fontSize: device === "tablet" ? 30 : 30 }}>{number}</Text>
   </TouchableOpacity>
 );
 
@@ -123,7 +127,7 @@ export const EmployeeCodePage = (props) => {
       style={{
         width: "100%",
         flex: 1,
-        backgroundColor: "white",
+        backgroundColor: "#FBFAFB",
       }}
     >
       <View
@@ -132,7 +136,7 @@ export const EmployeeCodePage = (props) => {
           alignItems: "center",
           justifyContent: "center",
           flex: 1,
-          backgroundColor: "white",
+          backgroundColor: "#FBFAFB",
         }}
       >
         <View
@@ -142,6 +146,7 @@ export const EmployeeCodePage = (props) => {
             alignItems: "center",
             justifyContent: "center",
             flex: 1,
+            zIndex: 9
           }}
         >
           <Image
@@ -150,7 +155,7 @@ export const EmployeeCodePage = (props) => {
           />
           <Text
             style={{
-              fontSize: device === "tablet" ? 60 : 40,
+              fontSize: device === "tablet" ? 50 : 40,
               fontFamily: "openSans_bold",
             }}
           >
@@ -158,7 +163,7 @@ export const EmployeeCodePage = (props) => {
           </Text>
           <Text
             style={{
-              fontSize: device === "tablet" ? 27 : 18,
+              fontSize: device === "tablet" ? 22 : 16,
             }}
           >
             {moment().format("dddd,MMMM D,YYYY")}
@@ -166,7 +171,7 @@ export const EmployeeCodePage = (props) => {
           <Text
             style={{
               fontSize: device === "tablet" ? 27 : 18,
-              marginTop: 10,
+              marginTop:  device === "tablet" ?  50 :10,
             }}
           >
             Enter Passcode
@@ -177,19 +182,17 @@ export const EmployeeCodePage = (props) => {
               <View
                 key={item}
                 style={{
-                  width: device === "tablet" ? 50 : 40,
-                  height: device === "tablet" ? 50 : 40,
-                  borderWidth: 1,
-                  borderColor: "#A461D8",
+                  width: device === "tablet" ? 30 : 30,
+                  height: device === "tablet" ? 30 : 30,
                   borderRadius: 100,
-                  marginLeft: 10,
-                  backgroundColor: pin.length >= item ? "#92929D" : "white",
+                  marginLeft: 20,
+                  backgroundColor: pin.length >= item ? "#A461D8" : "#868686",
                 }}
               />
             ))}
           </View>
 
-          <View style={{ width: "100%" }}>
+          <View style={{ width: "100%", zIndex: 9 }}>
             <View
               style={{
                 width: "100%",
@@ -197,6 +200,7 @@ export const EmployeeCodePage = (props) => {
                 alignItems: "center",
                 justifyContent: "space-around",
                 marginTop: 40,
+                zIndex: 9
               }}
             >
               <NumberCircle
@@ -221,7 +225,7 @@ export const EmployeeCodePage = (props) => {
                 flexDirection: "row",
                 alignItems: "center",
                 justifyContent: "space-around",
-                marginTop: device === "tablet" ? 40 : 20,
+                marginTop: device === "tablet" ? 30 : 20,
               }}
             >
               <NumberCircle
@@ -246,7 +250,8 @@ export const EmployeeCodePage = (props) => {
                 flexDirection: "row",
                 alignItems: "center",
                 justifyContent: "space-around",
-                marginTop: device === "tablet" ? 40 : 20,
+                marginTop: device === "tablet" ? 30 : 20,
+                zIndex: 9
               }}
             >
               <NumberCircle
@@ -271,7 +276,7 @@ export const EmployeeCodePage = (props) => {
                 flexDirection: "row",
                 alignItems: "center",
                 justifyContent: "space-around",
-                marginTop: device === "tablet" ? 40 : 20,
+                marginTop: device === "tablet" ? 30 : 20,
               }}
             >
               <TouchableOpacity
@@ -327,7 +332,8 @@ export const EmployeeCodePage = (props) => {
             flexDirection: "row",
             alignItems: "center",
             justifyContent: "space-between",
-            bottom: device === "tablet" ? 30 : 50,
+            bottom: device === "tablet" ? 30 : 40,
+            zIndex:9
           }}
         >
           <View />
@@ -338,15 +344,20 @@ export const EmployeeCodePage = (props) => {
               alignItems: "center",
               justifyContent: "center",
               marginRight: 20,
+              backgroundColor: 'white',
+              padding: device === "tablet" ? 20 : 15,
+              borderRadius: 8,
+              zIndex:9
             }}
             onPress={() => navigation.navigate("Login")}
           >
             <Image
               source={purpleCashier}
               style={{
-                width: device === "tablet" ? 50 : 40,
-                height: device === "tablet" ? 50 : 40,
+                width: device === "tablet" ? 30 : 20,
+                height: device === "tablet" ? 30 : 20,
                 marginRight: 20,
+                resizeMode: 'contain'
               }}
             />
 
@@ -366,6 +377,13 @@ export const EmployeeCodePage = (props) => {
           accessibilityLabel={"Signing you in"}
           text={"Signing you in..."}
         />
+
+        {device === "tablet" &&
+          <Image source={passcodeLeft} style={{ position: 'absolute', zIndex: 0, left: 0, width: 200, height: 400, resizeMode: 'contain', bottom: 0 }} />}
+       
+        {device === "tablet" &&
+          <Image source={rightPasscode} style={{ position: 'absolute', zIndex: 0, right: 0, width: 200, height: 400, resizeMode: 'contain', bottom: 0 }} />}
+
       </View>
     </View>
   );

@@ -1,4 +1,4 @@
-import { TouchableOpacity, View } from "react-native";
+import { Image, TouchableOpacity, View } from "react-native";
 import React, { useRef, useState } from "react";
 import { Text } from "../../../components/Text/Text";
 import { MainScreenContainer } from "../../MainScreenContainers";
@@ -6,6 +6,12 @@ import { useNavigation } from "@react-navigation/native";
 import { Modal } from "../../../components/Modal/Modal";
 import { Input } from "../../../components/Inputs/Input";
 import PhoneInput from "react-native-phone-number-input";
+import tableService from '../../../assets/images/tableService.png'
+import toGo from '../../../assets/images/toGo.png'
+import deliveryPos from '../../../assets/images/deliveryPos.png'
+import currentOrders from '../../../assets/images/currentOrders.png'
+import textPos from '../../../assets/images/textPos.png'
+import registerNewPos from '../../../assets/images/registerNewPos.png'
 
 export const PosMenuScreen = () => {
   const navigation = useNavigation();
@@ -40,18 +46,18 @@ export const PosMenuScreen = () => {
             <TouchableOpacity
               style={{
                 width: "48%",
-                height: 150,
+                height: 200,
                 borderRadius: 12,
                 backgroundColor: "#0184E9",
-                alignItems: "center",
                 justifyContent: "center",
+                paddingLeft:20
               }}
               onPress={() => navigation.navigate("tableList")}
             >
+              <Image source={tableService} style={{width:50,height:50,resizeMode:'contain'}} />
               <Text
                 style={{
                   fontSize: 30,
-                  fontFamily: "openSans_bold",
                   color: "white",
                 }}
               >
@@ -61,18 +67,19 @@ export const PosMenuScreen = () => {
             <View
               style={{
                 width: "48%",
-                height: 150,
+                height: 200,
                 borderRadius: 12,
                 backgroundColor: "#0184E9",
-                alignItems: "center",
                 justifyContent: "center",
+                paddingLeft:20
               }}
             >
+               <Image source={toGo} style={{width:50,height:50,resizeMode:'contain'}} />
               <Text
                 style={{
                   fontSize: 30,
-                  fontFamily: "openSans_bold",
                   color: "white",
+                  marginTop: 5
                 }}
               >
                 To Go
@@ -84,7 +91,7 @@ export const PosMenuScreen = () => {
             style={{
               width: "100%",
               flexDirection: "row",
-              alignItems: "center",
+              
               justifyContent: "space-between",
               marginTop: 30,
             }}
@@ -92,18 +99,19 @@ export const PosMenuScreen = () => {
             <View
               style={{
                 width: "48%",
-                height: 150,
+                height: 200,
                 borderRadius: 12,
                 backgroundColor: "#876FFF",
-                alignItems: "center",
+                paddingLeft:20,
                 justifyContent: "center",
               }}
             >
+                <Image source={deliveryPos} style={{width:50,height:50,resizeMode:'contain'}} />
               <Text
                 style={{
                   fontSize: 30,
-                  fontFamily: "openSans_bold",
                   color: "white",
+                  marginTop: 5
                 }}
               >
                 Delivery
@@ -112,18 +120,19 @@ export const PosMenuScreen = () => {
             <View
               style={{
                 width: "48%",
-                height: 150,
+                height: 200,
                 borderRadius: 12,
                 backgroundColor: "#2936A3",
-                alignItems: "center",
+                paddingLeft:20,
                 justifyContent: "center",
               }}
             >
+                <Image source={currentOrders} style={{width:50,height:50,resizeMode:'contain'}} />
               <Text
                 style={{
                   fontSize: 30,
-                  fontFamily: "openSans_bold",
                   color: "white",
+                  marginTop: 5
                 }}
               >
                 Current Orders
@@ -143,18 +152,19 @@ export const PosMenuScreen = () => {
             <View
               style={{
                 width: "48%",
-                height: 150,
+                height: 200,
                 borderRadius: 12,
                 backgroundColor: "#876FFF",
-                alignItems: "center",
+                paddingLeft:20,
                 justifyContent: "center",
               }}
             >
+                <Image source={textPos} style={{width:50,height:50,resizeMode:'contain'}} />
               <Text
                 style={{
                   fontSize: 30,
-                  fontFamily: "openSans_bold",
                   color: "white",
+                  marginTop:5
                 }}
               >
                 Text
@@ -163,20 +173,20 @@ export const PosMenuScreen = () => {
             <TouchableOpacity
               style={{
                 width: "48%",
-                height: 150,
+                height: 200,
                 borderRadius: 12,
                 backgroundColor: "#2936A3",
-                alignItems: "center",
+                paddingLeft:20,
                 justifyContent: "center",
               }}
               onPressIn={() => setIsModal(true)}
             >
+                <Image source={registerNewPos} style={{width:50,height:50,resizeMode:'contain'}} />
               <Text
                 style={{
                   fontSize: 30,
-                  fontFamily: "openSans_bold",
                   color: "white",
-                  textAlign: "center",
+                  marginTop:5
                 }}
               >
                 Register a new customer
