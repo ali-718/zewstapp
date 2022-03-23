@@ -64,6 +64,7 @@ import { EmployeeDetail } from "./containers/screens/MainScreens/AdminsPages/Emp
 import { DashboardPage } from "./containers/screens/MainScreens/HomePages/DashboardPage";
 import { DailyFoodlogList } from "./containers/screens/MainScreens/DailyFoodLog/DailyFoodLogList";
 import { EmployeeCodePage } from "./containers/screens/AuthScreens/EmployeeCodePage";
+import { CurrentOrders } from "./containers/screens/POSscreens/CurrentOrders";
 
 const Stack = createNativeStackNavigator();
 
@@ -194,6 +195,7 @@ const OrderRoutes = () => {
       <Stack.Screen name="PosMenuScreen" component={PosMenuScreen} />
       <Stack.Screen name="tableList" component={TablesListScreen} />
       <Stack.Screen name="orderTaking" component={OrderTakingScreen} />
+      <Stack.Screen name="currentOrders" component={CurrentOrders} />
     </Stack.Navigator>
   );
 };

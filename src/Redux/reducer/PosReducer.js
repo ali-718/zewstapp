@@ -8,6 +8,7 @@ import {
   UPDATE_ORDER,
   GET_PAYMENT_INTENT_KEY,
   RESET_SUCCESS,
+  FIND_ALL_CUSTOMERS,
 } from "../actions/PosActions/Types";
 
 const initialState = {
@@ -36,16 +37,45 @@ const initialState = {
     isSuccess: false,
     doneOrders: [],
     createdOrders: [],
+    TableService:[],
+    Delivery:[],
+    Takeaway:[],
+    TotalOrders: []
   },
   paymentIntent: {
     intentKey: null,
     isError: false,
     isLoading: false,
   },
+  customers:{
+    isLoading: false,
+    isError: false,
+    isSuccess: false,
+    list: [],
+  }
 };
 
 export const posReducer = produce((state = initialState, { payload, type }) => {
   switch (type) {
+    case FIND_ALL_CUSTOMERS.REQUESTED:{
+      state.customers.isLoading = true;
+      state.customers.isError = false;
+      state.customers.isSuccess = false;
+      break;
+    }
+    case FIND_ALL_CUSTOMERS.SUCCEEDED:{
+      state.customers.isLoading = false;
+      state.customers.isError = false;
+      state.customers.isSuccess = true;
+      state.customers.list = payload;
+      break;
+    }
+    case FIND_ALL_CUSTOMERS.FAILED:{
+      state.customers.isLoading = false;
+      state.customers.isError = true;
+      state.customers.isSuccess = false;
+      break;
+    }
     case UPDATE_ORDER.REQUESTED: {
       const index = state.orders.createdOrders.findIndex(
         (item) => item.orderId === payload.orderId
@@ -136,6 +166,11 @@ export const posReducer = produce((state = initialState, { payload, type }) => {
 
       state.orders.isLoading = false;
       state.orders.isError = false;
+      state.orders.TableService = payload?.dineInOrders;
+      state.orders.Delivery = payload?.deliveryOrders;
+      state.orders.Takeaway = payload?.takeAwayOrders;
+      state.orders.TotalOrders = [...payload.takeAwayOrders, ...payload?.dineInOrders, ...payload?.deliveryOrders];
+
       state.orders.createdOrders = [
         ...createdOrders?.dineInOrdersCreated,
         ...createdOrders?.takeAwayOrdersCreated,

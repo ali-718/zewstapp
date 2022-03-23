@@ -9,6 +9,7 @@ import {
   UPDATE_ORDER,
   GET_PAYMENT_INTENT_KEY,
   RESET_SUCCESS,
+  FIND_ALL_CUSTOMERS,
 } from "./Types";
 import moment from "moment";
 
@@ -117,9 +118,29 @@ export const fetchTablesAction =
   };
 
 export const createOrder =
-  ({ client_id, locationId, catalog, price, discount, customerId }) =>
+  ({
+    client_id,
+    locationId,
+    catalog,
+    price,
+    discount,
+    customerId,
+    customer,
+    orderType,
+  }) =>
   (dispatch) => {
     dispatch({ type: CREATE_ORDER.REQUESTED });
+
+    console.log({
+      client_id,
+      locationId,
+      catalog,
+      price,
+      discount,
+      customerId,
+      customer,
+      orderType,
+    });
 
     client
       .post(`/manual-orders/addOrder`, {
@@ -130,7 +151,8 @@ export const createOrder =
         price,
         discount,
         customerId,
-        orderType: "Dine-In",
+        orderType,
+        ...(customer && { customer }),
       })
       .then((res) => {
         dispatch({
@@ -141,7 +163,7 @@ export const createOrder =
       })
       .catch((e) => {
         dispatch({ type: CREATE_ORDER.FAILED });
-        console.log(e.response.data);
+        console.log("createorder", e.response.data);
         ToastError(
           e.response.data.err || "Some error occoured, while confirming order"
         );
@@ -218,7 +240,7 @@ export const orderUpdateAction =
         ToastSuccess("Order served successfully");
       })
       .catch((e) => {
-        console.log(e.response.data);
+        console.log("order update action", e.response.data);
         ToastError(
           e.response.data.err || "Unable to complete order, please try again"
         );
@@ -251,7 +273,7 @@ export const orderMarkServedAction =
         });
       })
       .catch((e) => {
-        console.log(e);
+        console.log("orderMarkServedAction", e);
         ToastError(
           e?.response?.data?.err || "Unable to complete order, please try again"
         );
@@ -279,7 +301,7 @@ export const getOrderPaymentIntentAction =
       })
       .catch((e) => {
         dispatch({ type: GET_PAYMENT_INTENT_KEY.FAILED });
-        console.log(e.response.data);
+        console.log("getOrderPaymentIntentAction", e.response.data);
         ToastError(
           e.response.data.err || "Some error occoured, while confirming order"
         );
@@ -301,6 +323,7 @@ export const fetchOrderByTableId = ({ locationId, tableId }) =>
       })
       .catch((e) => {
         reject();
+        console.log("fetchOrderByTableId", e?.response?.data);
         ToastError(
           e?.response?.data?.err ||
             "Some error occoured, while confirming order"
@@ -331,7 +354,7 @@ export const updateExistingOrderAction =
       })
       .catch((e) => {
         dispatch({ type: CREATE_ORDER.FAILED });
-        console.log(e?.response?.data);
+        console.log("updateExistingOrderAction", e?.response?.data);
         ToastError(
           e.response.data.err || "Some error occoured, while confirming order"
         );
@@ -340,3 +363,52 @@ export const updateExistingOrderAction =
 
 export const resetOrderState = () => (dispatch) =>
   dispatch({ type: RESET_SUCCESS });
+
+export const findAllCustomers =
+  ({ locationId }) =>
+  (dispatch) => {
+    dispatch({ type: FIND_ALL_CUSTOMERS.REQUESTED });
+
+    client
+      .get(
+        `/manual-orders/findAllCustomers/${locationId}`
+      )
+      .then(({ data }) => {
+        console.log(data);
+        dispatch({ type: FIND_ALL_CUSTOMERS.SUCCEEDED, payload: data?.Items });
+      });
+  };
+
+export const createCustomer = ({
+  locationId,
+  firstName,
+  lastName,
+  phone,
+  email,
+  address,
+  countryCode,
+  country,
+}) =>
+  new Promise((resolve, reject) => {
+    client
+      .post(`/manual-orders/addCustomer`, {
+        locationId,
+        firstName,
+        lastName,
+        phone,
+        email,
+        address,
+        countryCode,
+        country,
+      })
+      .then(({ data }) => {
+        resolve();
+      })
+      .catch((e) => {
+        console.log(   e.response.data)
+      reject()
+        ToastError(
+          e.response.data.err || "Some error occoured, please try again later"
+        );
+      });
+  });

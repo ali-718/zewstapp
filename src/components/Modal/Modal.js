@@ -5,6 +5,9 @@ export const Modal = ({
   visible,
   onRequestClose,
   transparent = true,
+  modalProps,
+  style,
+  animationType,
   ...props
 }) => {
   return (
@@ -12,7 +15,8 @@ export const Modal = ({
       visible={visible}
       onRequestClose={onRequestClose}
       transparent={transparent}
-      animationType="slide"
+      animationType={animationType ?? "slide"}
+      {...modalProps}
     >
       <View
         style={{
@@ -20,6 +24,7 @@ export const Modal = ({
           flex: 1,
           alignItems: "center",
           justifyContent: "center",
+          ...style
         }}
       >
         <TouchableOpacity

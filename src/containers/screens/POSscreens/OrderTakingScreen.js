@@ -24,6 +24,8 @@ import { useIsFocused, useNavigation } from "@react-navigation/core";
 import { getRandomColor } from "../../../helpers/utlils";
 import { RegularButton } from "../../../components/Buttons/RegularButton";
 import deleteIcon from "../../../assets/images/deleteIcon.png";
+import walletWhite from "../../../assets/images/walletWhite.png";
+import chefHat from "../../../assets/images/chefHat.png";
 import placeholderImage from "../../../assets/images/food2.png";
 import { Chip } from "../../../components/Chip/Chip";
 import moment from "moment";
@@ -131,7 +133,6 @@ export const OrderTakingScreen = (props) => {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [isDefaultLocation, setIsDefaultLocation] = useState(false);
   const [mealsToShow, setMealsToShow] = useState([]);
-  const [tableNo, setTableNo] = useState(props.route?.params?.tableNo ?? "");
   const [orderList, setOrderList] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
   const [charge, setCharge] = useState(false);
@@ -191,6 +192,8 @@ export const OrderTakingScreen = (props) => {
       setIsReserved(true);
       getOrderByTableId();
     }
+
+    console.log('customers',props.route.params)
   }, []);
 
   const getOrderByTableId = () => {
@@ -241,7 +244,11 @@ export const OrderTakingScreen = (props) => {
     if (!isSuccess) return;
     if (firstTime) return;
 
+
     setPaymentTime(true);
+
+    if(props.route.params?.customer) return;
+
 
     actions
       .attachOrderToTableAction({
@@ -284,6 +291,14 @@ export const OrderTakingScreen = (props) => {
           paymentDetails: "Cash",
         })
         .then((res) => {
+          if(props.route.params.customer){
+            setcreateOrderLoading(false);
+            setcreateOrderLoadingWithCard(false);
+            setpaymentSuccessfull(true);
+            navigation.goBack();
+            return;
+          }
+
           setLoadingLabel("Attaching order to table");
           setcreateOrderLoading(false);
           setcreateOrderLoadingWithCard(false);
@@ -312,6 +327,13 @@ export const OrderTakingScreen = (props) => {
           paymentDetails: "Stripe",
         })
         .then((res) => {
+          if(props.route.params.customer){
+            setcreateOrderLoading(false);
+            setcreateOrderLoadingWithCard(false);
+            setpaymentSuccessfull(true);
+            navigation.goBack();
+            return;
+          }
           setLoadingLabel("Attaching order to table");
           setcreateOrderLoading(false);
           setcreateOrderLoadingWithCard(false);
@@ -384,7 +406,8 @@ export const OrderTakingScreen = (props) => {
       ],
       price: totalPrice,
       discount: 0,
-      customerId: "12345",
+      orderType: props.route.params?.customer ? props.route.params?.orderType : "Dine-In",
+      ...(props.route?.params?.customer && { customer:props.route?.params?.customer })
     };
 
     dispatch(actions.createOrder(data));
@@ -677,13 +700,13 @@ export const OrderTakingScreen = (props) => {
         >
           <HeadingBox
             noScroll
-            heading={`Table ${props.route?.params?.tableNo || ""}`}
+            heading={'Back'}
           />
 
           {isDefaultLocation ? (
             <View
               style={{
-                width: "98%",
+                width: "100%",
                 marginTop: 20,
                 height: "100%",
                 flex: 1,
@@ -1338,21 +1361,27 @@ export const OrderTakingScreen = (props) => {
                               </TouchableOpacity>
                             </View>
                           ) : (
-                            <View style={{ display: "flex", width: "100%" }}>
+                            <View style={{ display: "flex", width: "100%",justifyContent:'space-between' }}>
                               <RegularButton
                                 isLoading={orderLoading}
                                 onPress={createOrder}
                                 text={"Sent to kitchen"}
                                 disabled={isSuccess}
+                                iconRight={chefHat}
+                                iconRightStyle={{width:30,height:30,resizeMode:'contain'}}
+                                innerProps={{justifyContent:'space-between',alignItems:'center',paddingHorizontal:20}}
                               />
                               <RegularButton
                                 disabled={!paymentTime}
-                                style={{ marginTop: 10 }}
-                                white
+                                style={{ marginTop: 10, opacity: !paymentTime ? 0.5 : 1 }}
+                                colors={["#0184E9",'#0184E9']}
                                 onPress={() => setCharge(true)}
                                 text={`Payment $${(
                                   totalPrice + reservedTotalPrice
                                 ).toFixed(2)}`}
+                                iconRight={walletWhite}
+                                iconRightStyle={{width:30,height:30,resizeMode:'contain'}}
+                                innerProps={{justifyContent:'space-between',alignItems:'center',paddingHorizontal:20}}         
                               />
                             </View>
                           )}

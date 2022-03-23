@@ -725,7 +725,6 @@ export const AddEmployeesPage = (props) => {
             onChangeFormattedText={(text) => {
               setContact(text);
             }}
-            countryPickerProps={{ countryCode: "PK" }}
             containerStyle={{
               backgroundColor: "white",
               flex: 1,

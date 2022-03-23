@@ -18,6 +18,8 @@ export const RegularButton = ({
   colors,
   iconLeft,
   iconStyle,
+  iconRight,
+  iconRightStyle,
   isLoading,
   disabled,
   red,
@@ -25,6 +27,7 @@ export const RegularButton = ({
   white,
   fullPageLoad,
   loadingLabel,
+  innerProps,
   ...props
 }) => {
   const device = useSelector((state) => state.system.device);
@@ -53,10 +56,10 @@ export const RegularButton = ({
             (disabled
               ? ["#CCCCCC", "#CCCCCC"]
               : white
-              ? ["white", "white"]
-              : red
-              ? [primaryRedColor, primaryRedColor]
-              : [primaryColor, primaryColor])
+                ? ["white", "white"]
+                : red
+                  ? [primaryRedColor, primaryRedColor]
+                  : [primaryColor, primaryColor])
           }
           style={{
             width: "100%",
@@ -64,6 +67,7 @@ export const RegularButton = ({
             alignItems: "center",
             justifyContent: "center",
             flexDirection: "row",
+      
           }}
         >
           {isLoading ? (
@@ -78,6 +82,7 @@ export const RegularButton = ({
                 alignItems: "center",
                 justifyContent: "center",
                 flexDirection: "row",
+                ...innerProps
               }}
             >
               {iconLeft ? (
@@ -99,6 +104,10 @@ export const RegularButton = ({
                   {text}
                 </Text>
               )}
+
+              {iconRight ? (
+                <Image style={{ ...iconRightStyle }} source={iconRight} />
+              ) : null}
             </View>
           )}
         </LinearGradient>
