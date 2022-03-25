@@ -16,6 +16,7 @@ import textPos from "../../../assets/images/textPos.png";
 import registerNewPos from "../../../assets/images/registerNewPos.png";
 import grayCross from "../../../assets/images/grayCross.png";
 import blackBackArrow from "../../../assets/images/blackBackArrow.png";
+import deal from "../../../assets/images/deal.png";
 import { RegularButton } from "../../../components/Buttons/RegularButton";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -112,11 +113,9 @@ export const PosMenuScreen = () => {
         ToastSuccess("Success", "Customer added Successfully");
         clearAllFields();
 
-        if (customersPage === 'custom') {
-          setIsModal(false)
-        }
-        else {
-
+        if (customersPage === "custom") {
+          setIsModal(false);
+        } else {
           setCustomersPage(0);
         }
         dispatch(findAllCustomers({ locationId: defaultLocation.locationId }));
@@ -158,7 +157,7 @@ export const PosMenuScreen = () => {
     setSelectedUser("");
     setRenderIt(false);
     setSelectedAddress("");
-    setListOfOtherAddress([])
+    setListOfOtherAddress([]);
   };
 
   const searchKeyword = (text) => {
@@ -190,208 +189,255 @@ export const PosMenuScreen = () => {
           justifyContent: "center",
         }}
       >
-        <View style={{ width: "95%", maxWidth: 900 }}>
+        <ScrollView style={{ width: "100%", marginTop: 40 }}>
           <View
             style={{
               width: "100%",
-              flexDirection: "row",
               alignItems: "center",
-              justifyContent: "space-between",
+              justifyContent: "center",
             }}
           >
-            <TouchableOpacity
-              style={{
-                width: "48%",
-                height: 200,
-                borderRadius: 12,
-                backgroundColor: "#0184E9",
-                justifyContent: "center",
-                paddingLeft: 20,
-              }}
-              onPress={() => navigation.navigate("tableList")}
-            >
-              <Image
-                source={tableService}
-                style={{ width: 50, height: 50, resizeMode: "contain" }}
-              />
-              <Text
+            <View style={{ width: "95%", maxWidth: 900 }}>
+              <View
                 style={{
-                  fontSize: 30,
-                  color: "white",
+                  width: "100%",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "space-between",
                 }}
               >
-                Table Service
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={{
-                width: "48%",
-                height: 200,
-                borderRadius: 12,
-                backgroundColor: "#0184E9",
-                justifyContent: "center",
-                paddingLeft: 20,
-              }}
-              onPressIn={() => {
-                setIsModal(true);
-                setOrderType("Takeaway");
+                <TouchableOpacity
+                  style={{
+                    width: "48%",
+                    height: 200,
+                    borderRadius: 12,
+                    backgroundColor: "#0184E9",
+                    justifyContent: "center",
+                    paddingLeft: 20,
+                  }}
+                  onPress={() => navigation.navigate("tableList")}
+                >
+                  <Image
+                    source={tableService}
+                    style={{ width: 50, height: 50, resizeMode: "contain" }}
+                  />
+                  <Text
+                    style={{
+                      fontSize: 30,
+                      color: "white",
+                    }}
+                  >
+                    Table Service
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={{
+                    width: "48%",
+                    height: 200,
+                    borderRadius: 12,
+                    backgroundColor: "#2AA688",
+                    justifyContent: "center",
+                    paddingLeft: 20,
+                  }}
+                  onPressIn={() => {
+                    setIsModal(true);
+                    setOrderType("Takeaway");
 
-              setCustomersPage(0);
-              }}
-            >
-              <Image
-                source={toGo}
-                style={{ width: 50, height: 50, resizeMode: "contain" }}
-              />
-              <Text
-                style={{
-                  fontSize: 30,
-                  color: "white",
-                  marginTop: 5,
-                }}
-              >
-                To Go
-              </Text>
-            </TouchableOpacity>
-          </View>
+                    setCustomersPage(0);
+                  }}
+                >
+                  <Image
+                    source={toGo}
+                    style={{ width: 50, height: 50, resizeMode: "contain" }}
+                  />
+                  <Text
+                    style={{
+                      fontSize: 30,
+                      color: "white",
+                      marginTop: 5,
+                    }}
+                  >
+                    To Go
+                  </Text>
+                </TouchableOpacity>
+              </View>
 
-          <View
-            style={{
-              width: "100%",
-              flexDirection: "row",
+              <View
+                style={{
+                  width: "100%",
+                  flexDirection: "row",
 
-              justifyContent: "space-between",
-              marginTop: 30,
-            }}
-          >
-            <TouchableOpacity
-              style={{
-                width: "48%",
-                height: 200,
-                borderRadius: 12,
-                backgroundColor: "#876FFF",
-                paddingLeft: 20,
-                justifyContent: "center",
-              }}
-              onPressIn={() => {
-                setIsModal(true);
-                setOrderType("Delivery");
-                setCustomersPage(0);
-              }}
-            >
-              <Image
-                source={deliveryPos}
-                style={{ width: 50, height: 50, resizeMode: "contain" }}
-              />
-              <Text
-                style={{
-                  fontSize: 30,
-                  color: "white",
-                  marginTop: 5,
+                  justifyContent: "space-between",
+                  marginTop: 30,
                 }}
               >
-                Delivery
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={{
-                width: "48%",
-                height: 200,
-                borderRadius: 12,
-                backgroundColor: "#2936A3",
-                paddingLeft: 20,
-                justifyContent: "center",
-              }}
-              onPress={() => navigation.navigate("currentOrders")}
-            >
-              <Image
-                source={currentOrders}
-                style={{ width: 50, height: 50, resizeMode: "contain" }}
-              />
-              <Text
-                style={{
-                  fontSize: 30,
-                  color: "white",
-                  marginTop: 5,
-                }}
-              >
-                Current Orders
-              </Text>
-            </TouchableOpacity>
-          </View>
+                <TouchableOpacity
+                  style={{
+                    width: "48%",
+                    height: 200,
+                    borderRadius: 12,
+                    backgroundColor: "#876FFF",
+                    paddingLeft: 20,
+                    justifyContent: "center",
+                  }}
+                  onPressIn={() => {
+                    setIsModal(true);
+                    setOrderType("Delivery");
+                    setCustomersPage(0);
+                  }}
+                >
+                  <Image
+                    source={deliveryPos}
+                    style={{ width: 50, height: 50, resizeMode: "contain" }}
+                  />
+                  <Text
+                    style={{
+                      fontSize: 30,
+                      color: "white",
+                      marginTop: 5,
+                    }}
+                  >
+                    Delivery
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={{
+                    width: "48%",
+                    height: 200,
+                    borderRadius: 12,
+                    backgroundColor: "#99582A",
+                    paddingLeft: 20,
+                    justifyContent: "center",
+                  }}
+                  onPress={() => navigation.navigate("currentOrders")}
+                >
+                  <Image
+                    source={currentOrders}
+                    style={{ width: 50, height: 50, resizeMode: "contain" }}
+                  />
+                  <Text
+                    style={{
+                      fontSize: 30,
+                      color: "white",
+                      marginTop: 5,
+                    }}
+                  >
+                    Current Orders
+                  </Text>
+                </TouchableOpacity>
+              </View>
 
-          <View
-            style={{
-              width: "100%",
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "space-between",
-              marginTop: 30,
-            }}
-          >
-            <View
-              style={{
-                width: "48%",
-                height: 200,
-                borderRadius: 12,
-                backgroundColor: "#876FFF",
-                paddingLeft: 20,
-                justifyContent: "center",
-              }}
-            >
-              <Image
-                source={textPos}
-                style={{ width: 50, height: 50, resizeMode: "contain" }}
-              />
-              <Text
+              <View
                 style={{
-                  fontSize: 30,
-                  color: "white",
-                  marginTop: 5,
+                  width: "100%",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  marginTop: 30,
                 }}
               >
-                Text
-              </Text>
+                <View
+                  style={{
+                    width: "48%",
+                    height: 200,
+                    borderRadius: 12,
+                    backgroundColor: "#A461D8",
+                    paddingLeft: 20,
+                    justifyContent: "center",
+                    opacity: 0.5,
+                  }}
+                >
+                  <Image
+                    source={textPos}
+                    style={{ width: 50, height: 50, resizeMode: "contain" }}
+                  />
+                  <Text
+                    style={{
+                      fontSize: 30,
+                      color: "white",
+                      marginTop: 5,
+                    }}
+                  >
+                    Text Blast
+                  </Text>
+                </View>
+                <TouchableOpacity
+                  style={{
+                    width: "48%",
+                    height: 200,
+                    borderRadius: 12,
+                    backgroundColor: "#073B4C",
+                    paddingLeft: 20,
+                    justifyContent: "center",
+                  }}
+                  onPressIn={() => {
+                    setIsModal(true);
+                    setCustomersPage("custom");
+                  }}
+                >
+                  <Image
+                    source={registerNewPos}
+                    style={{ width: 50, height: 50, resizeMode: "contain" }}
+                  />
+                  <Text
+                    style={{
+                      fontSize: 30,
+                      color: "white",
+                      marginTop: 5,
+                    }}
+                  >
+                    Register a new customer
+                  </Text>
+                </TouchableOpacity>
+              </View>
+              <View
+                style={{
+                  width: "100%",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  marginTop: 30,
+                }}
+              >
+                <View
+                  style={{
+                    width: "48%",
+                    height: 200,
+                    borderRadius: 12,
+                    backgroundColor: "#D19D18",
+                    paddingLeft: 20,
+                    justifyContent: "center",
+                    opacity: 0.5,
+                  }}
+                >
+                  <Image
+                    source={deal}
+                    style={{ width: 50, height: 50, resizeMode: "contain" }}
+                  />
+                  <Text
+                    style={{
+                      fontSize: 30,
+                      color: "white",
+                      marginTop: 5,
+                    }}
+                  >
+                    Make a deal
+                  </Text>
+                </View>
+              </View>
             </View>
-            <TouchableOpacity
-              style={{
-                width: "48%",
-                height: 200,
-                borderRadius: 12,
-                backgroundColor: "#2936A3",
-                paddingLeft: 20,
-                justifyContent: "center",
-              }}
-              onPressIn={() => {
-                setIsModal(true)
-                setCustomersPage("custom")
-              }}
-            >
-              <Image
-                source={registerNewPos}
-                style={{ width: 50, height: 50, resizeMode: "contain" }}
-              />
-              <Text
-                style={{
-                  fontSize: 30,
-                  color: "white",
-                  marginTop: 5,
-                }}
-              >
-                Register a new customer
-              </Text>
-            </TouchableOpacity>
           </View>
-        </View>
+        </ScrollView>
       </View>
 
       {/* new customer modal */}
       <Modal
         onShow={() => {
-          dispatch(findAllCustomers({ locationId: defaultLocation.locationId }))
-          clearAllFields()
-        }
-        }
+          dispatch(
+            findAllCustomers({ locationId: defaultLocation.locationId })
+          );
+          clearAllFields();
+        }}
         onRequestClose={closeModal}
         visible={isModal}
       >
@@ -408,7 +454,9 @@ export const PosMenuScreen = () => {
             overflow: "hidden",
           }}
         >
-          {customersPage === 1 || (customersPage === 3 && renderIt) || customersPage === 'custom' ? (
+          {customersPage === 1 ||
+          (customersPage === 3 && renderIt) ||
+          customersPage === "custom" ? (
             <ScrollView>
               <View
                 style={{
@@ -503,7 +551,14 @@ export const PosMenuScreen = () => {
                   </TouchableOpacity>
                 ) : (
                   <TouchableOpacity
-                    onPress={customersPage === "custom" ? () => { setIsModal(false); clearAllFields() } : () => setCustomersPage(0)}
+                    onPress={
+                      customersPage === "custom"
+                        ? () => {
+                            setIsModal(false);
+                            clearAllFields();
+                          }
+                        : () => setCustomersPage(0)
+                    }
                     style={{
                       borderWidth: 1,
                       borderColor: "#A461D8",
@@ -672,9 +727,7 @@ export const PosMenuScreen = () => {
                       }}
                     >
                       <Input
-                        setValue={(val) =>
-                          addOtherAddress({ val, index: i })
-                        }
+                        setValue={(val) => addOtherAddress({ val, index: i })}
                         value={item.address}
                         textarea
                         placeholder={"Current Delivery address "}

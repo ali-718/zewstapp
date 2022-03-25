@@ -13,6 +13,9 @@ export const StripeModal = ({
   ProcessPayment,
   list,
 }) => {
+  console.log(`https://master.do3nd3vjel0um.amplifyapp.com/?amount=${amount}&orderId=${orderId}&clientId=${clientId}&locationId=${locationId}&items=${JSON.stringify(
+    list
+  )}`)
   return (
     <Modal visible={visible} onRequestClose={() => handleClose}>
       <View

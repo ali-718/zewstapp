@@ -383,6 +383,37 @@ export const CurrentOrders = () => {
                   </Text>
                 </View>
               ))}
+
+              <View
+                style={{
+                  width: "100%",
+                  backgroundColor: "#E7E7E7",
+                  borderRadius: 20,
+                  marginTop: 20,
+                  padding: 20,
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                }}
+              >
+                <Text
+                  style={{
+                    fontSize: 16,
+                    fontFamily: "openSans_bold",
+                  }}
+                >
+                  Total
+                </Text>
+
+                <Text
+                  style={{
+                    fontSize: 16,
+                    fontFamily: "openSans_bold",
+                  }}
+                >
+                  ${selectedOrder.price}
+                </Text>
+              </View>
             </ScrollView>
           </View>
         </View>
