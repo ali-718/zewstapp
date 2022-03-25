@@ -490,6 +490,7 @@ export const PosMenuScreen = () => {
                         },
                         orderType,
                       });
+                      clearAllFields()
                     }}
                   >
                     <Text style={{ fontSize: 22, color: "white" }}>
