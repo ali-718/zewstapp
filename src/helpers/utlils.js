@@ -768,7 +768,7 @@ export const validConversionUnits = (originalUnit) => {
 export const allMenus = {
   OWNER: [
     { name: "Overview", icon: overviewIcon, index: 0, path: "Home" },
-    // { name: "Menu", icon: menuIcon, index: 1, path: "Menu" },
+    { name: "Menu", icon: menuIcon, index: 1, path: "Menu" },
     // { name: "Recipe Engineering", icon: recipeIcon, index: 3, path: "Recipe" },
     // {
     //   name: "Waste Prediction",

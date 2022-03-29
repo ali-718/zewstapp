@@ -153,7 +153,6 @@ export const DrawerMenu = ({
             /> */}
 
             <Menu
-              setselected={() => null}
               image={logoutIcon}
               setselected={Logout}
               name={"Logout"}

@@ -28,7 +28,7 @@ export const Header = ({ leftImage, onPressLeft, mainHeading }) => {
         style={{
           width: "100%",
           flexDirection: "row",
-          padding: device === "tablet" ? 25 : 10,
+          padding: device === "tablet" ? 15 : 10,
           justifyContent: "space-between",
           alignItems: "center",
         }}

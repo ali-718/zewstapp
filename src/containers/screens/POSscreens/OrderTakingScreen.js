@@ -86,7 +86,7 @@ const MealComponent = ({ meal, onPress, width }) => {
       onPress={onPress}
     >
       <Image
-        source={meal?.mealMedia ? { uri: eal?.mealMedia } : placeholderImage}
+        source={meal?.mealMedia ? { uri: meal?.mealMedia } : placeholderImage}
         style={{ width: 90, height: 90 }}
       />
       <Text

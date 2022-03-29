@@ -65,6 +65,8 @@ import { DashboardPage } from "./containers/screens/MainScreens/HomePages/Dashbo
 import { DailyFoodlogList } from "./containers/screens/MainScreens/DailyFoodLog/DailyFoodLogList";
 import { EmployeeCodePage } from "./containers/screens/AuthScreens/EmployeeCodePage";
 import { CurrentOrders } from "./containers/screens/POSscreens/CurrentOrders";
+import { TextBlast } from "./containers/screens/POSscreens/TextBlast";
+import { MakeADeal } from "./containers/screens/POSscreens/MakeADeal";
 
 const Stack = createNativeStackNavigator();
 
@@ -192,10 +194,14 @@ const OrderRoutes = () => {
     <Stack.Navigator
       screenOptions={{ headerShown: false, gestureEnabled: false }}
     >
+
       <Stack.Screen name="PosMenuScreen" component={PosMenuScreen} />
+      <Stack.Screen name="makeADeal" component={MakeADeal} />
       <Stack.Screen name="tableList" component={TablesListScreen} />
       <Stack.Screen name="orderTaking" component={OrderTakingScreen} />
       <Stack.Screen name="currentOrders" component={CurrentOrders} />
+      <Stack.Screen name="textBlast" component={TextBlast} />
+
     </Stack.Navigator>
   );
 };
@@ -250,8 +256,8 @@ const MainRoutes = () => {
               ? isMenuSmall
                 ? "front"
                 : // : orientation === "landscape"
-                  // ? "permanent"
-                  "front"
+                // ? "permanent"
+                "front"
               : "front",
           gestureEnabled: false,
           swipeEnabled: true,
