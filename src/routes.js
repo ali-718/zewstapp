@@ -67,6 +67,8 @@ import { EmployeeCodePage } from "./containers/screens/AuthScreens/EmployeeCodeP
 import { CurrentOrders } from "./containers/screens/POSscreens/CurrentOrders";
 import { TextBlast } from "./containers/screens/POSscreens/TextBlast";
 import { MakeADeal } from "./containers/screens/POSscreens/MakeADeal";
+import { MixtureAdd } from "./containers/screens/MainScreens/RecipePages/MixtureAdd";
+import { MixtureDetailPage } from "./containers/screens/MainScreens/RecipePages/MixtureDetailPage";
 
 const Stack = createNativeStackNavigator();
 
@@ -100,7 +102,9 @@ const RecipeRoutes = () => {
     >
       <Stack.Screen name="recipeList" component={RecipeListPage} />
       <Stack.Screen name="recipeAdd" component={RecipeAdd} />
+      <Stack.Screen name="mixtureAdd" component={MixtureAdd} />
       <Stack.Screen name="recipeDetailPage" component={RecipeDetailPage} />
+      <Stack.Screen name="mixtureDetailPage" component={MixtureDetailPage} />
     </Stack.Navigator>
   );
 };
@@ -194,9 +198,8 @@ const OrderRoutes = () => {
     <Stack.Navigator
       screenOptions={{ headerShown: false, gestureEnabled: false }}
     >
-
-      <Stack.Screen name="PosMenuScreen" component={PosMenuScreen} />
       <Stack.Screen name="makeADeal" component={MakeADeal} />
+      <Stack.Screen name="PosMenuScreen" component={PosMenuScreen} />
       <Stack.Screen name="tableList" component={TablesListScreen} />
       <Stack.Screen name="orderTaking" component={OrderTakingScreen} />
       <Stack.Screen name="currentOrders" component={CurrentOrders} />

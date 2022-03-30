@@ -28,6 +28,7 @@ export const RecipeListPage = () => {
   const isLoading = useSelector((state) => state.recipe.recipe.isLoading);
   const isError = useSelector((state) => state.recipe.recipe.isError);
   const list = useSelector((state) => state.recipe.recipe.list);
+  const mixtureList = useSelector((state) => state.recipe.mixture.list);
   const category = useSelector((state) => state.recipe.recipe.category);
   const [search, setSearch] = useState("");
   const [filteredItem, setFiltereditem] = useState([]);
@@ -39,7 +40,8 @@ export const RecipeListPage = () => {
 
   useEffect(() => {
     if (!isFocused) return;
-    fetchRecipes();
+
+    Promise.all([fetchRecipes(), fetchMixtures()]);
   }, [isFocused]);
 
   useEffect(() => {
@@ -49,6 +51,11 @@ export const RecipeListPage = () => {
   const fetchRecipes = () =>
     dispatch(
       actions.fetchRecipeActions({ locationId: defaultLocation.locationId })
+    );
+
+  const fetchMixtures = () =>
+    dispatch(
+      actions.fetchMixtureActions({ locationId: defaultLocation.locationId })
     );
 
   const searchKeyword = (text) => {
@@ -90,8 +97,62 @@ export const RecipeListPage = () => {
               width: "100%",
             }}
           >
-            {category?.length === 0 ? (
-              <NoMealBox image={noRecipe} text={"No recipe added. "} />
+            {mixtureList.length > 0 ? (
+              <View
+                style={{
+                  width: "100%",
+                  marginTop: 24,
+                }}
+              >
+                <Text
+                  style={{
+                    color: primaryColor,
+                    fontSize: 16,
+                    textTransform: "uppercase",
+                  }}
+                >
+                  Mixtures
+                </Text>
+                <View
+                  style={{
+                    backgroundColor: "white",
+                    borderRadius: 10,
+                    width: "100%",
+                    marginTop: 10,
+                  }}
+                >
+                  {mixtureList.map((item, i) => (
+                    <View
+                      key={i}
+                      style={{
+                        width: "100%",
+                        marginTop: 10,
+                        backgroundColor: "white",
+                        borderRadius: 10,
+                        padding: 10,
+                      }}
+                    >
+                      <AdminOverviewBox
+                        key={i}
+                        label={item.mixtureTitle}
+                        name={`Ingredients: ${item.ingredients.length}`}
+                        rightText={""}
+                        onPress={() =>
+                          navigation.navigate("mixtureDetailPage", {
+                            data: item,
+                          })
+                        }
+                        noLeftMargin
+                        primary={false}
+                      />
+                    </View>
+                  ))}
+                </View>
+              </View>
+            ): null}
+
+            {category?.length === 0 && mixtureList.length === 0 ? (
+              <NoMealBox image={noRecipe} text={"No recipe added."} />
             ) : (
               category.map((category) => (
                 <View
@@ -133,7 +194,7 @@ export const RecipeListPage = () => {
                           <AdminOverviewBox
                             key={i}
                             label={item.recipeTitle}
-                            name={`Macro: ${item.macroIngredient.itemName}`}
+                            name={`Ingredients: ${item.ingredients.length}`}
                             rightText={""}
                             onPress={() =>
                               navigation.navigate("recipeDetailPage", {
@@ -153,6 +214,11 @@ export const RecipeListPage = () => {
           <RegularButton
             onPress={() => navigation.navigate("recipeAdd")}
             text={"Add Recipe"}
+            style={{ borderRadius: 10, marginTop: 20 }}
+          />
+          <RegularButton
+            onPress={() => navigation.navigate("mixtureAdd")}
+            text={"Add a Mixture"}
             style={{ borderRadius: 10, marginTop: 20 }}
           />
         </View>

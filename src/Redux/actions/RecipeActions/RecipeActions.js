@@ -5,6 +5,7 @@ import {
   ALL_LOCATION,
   DELETE_RECIPE,
   EDIT_RECIPE,
+  FETCH_MIXTURE,
   FETCH_RECIPE,
 } from "./Types";
 
@@ -32,6 +33,128 @@ export const fetchRecipeActions =
       })
       .catch((e) => {
         dispatch({ type: FETCH_RECIPE.FAILED });
+      });
+  };
+
+export const fetchMixtureActions =
+  ({ locationId }) =>
+  (dispatch) => {
+    dispatch({ type: FETCH_MIXTURE.REQUESTED });
+    client
+      .get(`/mixture/all/${locationId}`)
+      .then((res) => {
+        console.log({mixtures:res.data })
+        dispatch({
+          type: FETCH_MIXTURE.SUCCEEDED,
+          payload: res.data.Items,
+        });
+      })
+      .catch((e) => {
+        console.log(e.response)
+        dispatch({ type: FETCH_MIXTURE.FAILED });
+      });
+  };
+
+  export const updateMixtureAction =
+  ({
+    clientId,
+    locationId,
+    mixtureTitle,
+    weight,
+    unit,
+    prepTime,
+    ingredients,
+    recipeSteps,
+    navigation,
+    mixtureId
+  }) =>
+  (dispatch) => {
+    console.log({
+      clientId,
+      locationId,
+      mixtureTitle,
+      weight,
+      unit,
+      prepTime,
+      ingredients,
+      recipeSteps,
+      navigation,
+      mixtureId
+    });
+    dispatch({ type: ADD_RECIPE.REQUESTED });
+    client
+      .post("/mixture/update", {
+        clientId,
+        locationId,
+        title: mixtureTitle,
+        weight,
+        unit,
+        prepTime,
+        ingredients,
+        steps: recipeSteps,
+        navigation,
+        mixtureId
+      })
+      .then((res) => {
+        ToastSuccess("Mixture updated successfully");
+        dispatch({ type: ADD_RECIPE.SUCCEEDED });
+        dispatch(fetchRecipeActions({ locationId }));
+        navigation.pop(2);
+      })
+      .catch((e) => {
+        console.log(e.response.data);
+        ToastError("Some error occoured, please try again later");
+        dispatch({ type: ADD_RECIPE.FAILED });
+      });
+  };
+
+  export const addMixtureAction =
+  ({
+    clientId,
+    locationId,
+    mixtureTitle,
+    weight,
+    unit,
+    prepTime,
+    ingredients,
+    recipeSteps,
+    navigation,
+  }) =>
+  (dispatch) => {
+    console.log({
+      clientId,
+      locationId,
+      mixtureTitle,
+      weight,
+      unit,
+      prepTime,
+      ingredients,
+      recipeSteps,
+      navigation,
+    });
+    dispatch({ type: ADD_RECIPE.REQUESTED });
+    client
+      .post("/mixture/add", {
+        clientId,
+        locationId,
+        title: mixtureTitle,
+        weight,
+        unit,
+        prepTime,
+        ingredients,
+        steps: recipeSteps,
+        navigation,
+      })
+      .then((res) => {
+        ToastSuccess("Mixture added successfully");
+        dispatch({ type: ADD_RECIPE.SUCCEEDED });
+        dispatch(fetchRecipeActions({ locationId }));
+        navigation.goBack();
+      })
+      .catch((e) => {
+        console.log(e.response.data);
+        ToastError("Some error occoured, please try again later");
+        dispatch({ type: ADD_RECIPE.FAILED });
       });
   };
 
@@ -150,6 +273,28 @@ export const deleteRecipeAction =
         navigation.goBack();
       })
       .catch((e) => {
+        ToastError("Some error occoured, please try again later");
+        dispatch({ type: DELETE_RECIPE.FAILED });
+      });
+  };
+
+export const deleteMixtureAction =
+  ({ mixtureId, locationId, navigation }) =>
+  (dispatch) => {
+    console.log({ mixtureId, locationId, navigation })
+    dispatch({ type: DELETE_RECIPE.REQUESTED });
+    client
+      .get(`/mixture/delete/${locationId}/${mixtureId}`)
+      .then((res) => {
+        ToastSuccess("Recipe deleted successfully");
+        dispatch({
+          type: DELETE_RECIPE.SUCCEEDED,
+        });
+        dispatch(fetchRecipeActions({ locationId }));
+        navigation.goBack();
+      })
+      .catch((e) => {
+        console.log(e.response.data)
         ToastError("Some error occoured, please try again later");
         dispatch({ type: DELETE_RECIPE.FAILED });
       });

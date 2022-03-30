@@ -228,7 +228,7 @@ export const DashboardPage = () => {
                     fontFamily: "openSans_bold",
                   }}
                 >
-                  5:00 pm
+                  {timeObject?.startTime ?? ''}
                 </Text>
               </View>
             </View>

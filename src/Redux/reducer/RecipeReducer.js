@@ -3,6 +3,7 @@ import {
   ADD_RECIPE,
   DELETE_RECIPE,
   EDIT_RECIPE,
+  FETCH_MIXTURE,
   FETCH_RECIPE,
 } from "../actions/RecipeActions/Types";
 
@@ -21,6 +22,11 @@ const initialState = {
     isLoading: false,
     isError: false,
   },
+  mixture:{
+    isLoading: false,
+    isError: false,
+    list: [],
+  }
 };
 
 export const recipeReducer = produce(
@@ -40,6 +46,23 @@ export const recipeReducer = produce(
       case DELETE_RECIPE.FAILED: {
         state.deleteRecipe.isLoading = false;
         state.deleteRecipe.isError = true;
+        break;
+      }
+      case FETCH_MIXTURE.REQUESTED: {
+        state.mixture.isLoading = true;
+        state.mixture.isError = false;
+        break;
+      }
+      case FETCH_MIXTURE.SUCCEEDED: {
+        state.mixture.isLoading = false;
+        state.mixture.isError = false;
+        state.mixture.list = payload;
+        break;
+      }
+      case FETCH_MIXTURE.FAILED: {
+        state.mixture.isLoading = false;
+        state.mixture.isError = true;
+        state.mixture.list = [];
         break;
       }
       case FETCH_RECIPE.REQUESTED: {
