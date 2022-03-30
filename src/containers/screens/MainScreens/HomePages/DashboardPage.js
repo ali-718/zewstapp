@@ -228,7 +228,7 @@ export const DashboardPage = () => {
                     fontFamily: "openSans_bold",
                   }}
                 >
-                  {timeObject?.startTime ?? ''}
+                  {moment(timeObject?.startTime).format("h:mm a") ?? ''}
                 </Text>
               </View>
             </View>
@@ -254,7 +254,7 @@ export const DashboardPage = () => {
                 }}
               />
 
-              <View style={{ alignItems: "flex-end", flex: 1 }}>
+              <View style={{ alignItems: "flex-end", flex: 1, justifyContent:'center' }}>
                 <Text
                   style={{
                     fontSize: 11,
@@ -267,10 +267,11 @@ export const DashboardPage = () => {
                 </Text>
                 <Text
                   style={{
-                    fontSize: device === "tablet" ? 24 : 22,
+                    fontSize: device === "tablet" ? 18 : 18,
                     textTransform: "uppercase",
                     color: "white",
                     fontFamily: "openSans_bold",
+                    marginLeft: 10
                   }}
                 >
                   {moment(

@@ -95,11 +95,13 @@ export const fetchMixtureActions =
         navigation,
         mixtureId
       })
-      .then((res) => {
+      .then(({data}) => {
         ToastSuccess("Mixture updated successfully");
         dispatch({ type: ADD_RECIPE.SUCCEEDED });
         dispatch(fetchRecipeActions({ locationId }));
-        navigation.pop(2);
+        navigation.navigate("mixtureDetailPage", {
+          data: {...data?.Attributes, locationId, mixtureId},
+        })
       })
       .catch((e) => {
         console.log(e.response.data);
