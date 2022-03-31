@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, ScrollView } from "react-native";
+import { View, ScrollView, TouchableOpacity, Image } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { RegularButton } from "../../../../components/Buttons/RegularButton";
 import { MainScreenContainer } from "../../../MainScreenContainers";
@@ -13,11 +13,15 @@ import * as actions from "../../../../Redux/actions/RecipeActions/RecipeActions"
 import { RefetchDataError } from "../../../../components/ErrorPage/RefetchDataError";
 import { NoMealBox } from "../../../../components/NoMealBox/NoMealBox";
 import noRecipe from "../../../../assets/images/noRecipe.png";
+import deleteIconWhite from "../../../../assets/images/deleteIconWhite.png";
+import updateIcon from "../../../../assets/images/updateIcon.png";
 import { RecipeDetailPage } from "./RecipeDetailPage";
 import { SearchInput } from "../../../../components/SearchInput/SearchInput";
 import { HeadingBox } from "../../../../components/HeadingBox/HeadingBox";
 import { primaryColor } from "../../../../theme/colors";
 import { Text } from "../../../../components/Text/Text";
+import { SwipeListView } from "react-native-swipe-list-view";
+import { Spinner } from "native-base";
 
 export const RecipeListPage = () => {
   const navigation = useNavigation();
@@ -35,6 +39,9 @@ export const RecipeListPage = () => {
   const [selectedRecipeItemForTab, setselectedRecipeItemForTab] = useState({});
   const defaultLocation = useSelector(
     (state) => state.locations.defaultLocation
+  );
+  const deleteLoading = useSelector(
+    (state) => state.recipe.deleteRecipe.isLoading
   );
   const isFocused = useIsFocused();
 
@@ -66,6 +73,24 @@ export const RecipeListPage = () => {
     );
 
     setFiltereditem(finalData);
+  };
+
+  const onDeleteRecipe = ({ catalogId, locationId }) => {
+    dispatch(
+      actions.deleteRecipeAction({
+        catalogId,
+        locationId,
+      })
+    );
+  };
+
+  const onDeleteMixture = ({ mixtureId, locationId }) => {
+    dispatch(
+      actions.deleteMixtureAction({
+        mixtureId,
+        locationId,
+      })
+    );
   };
 
   return (
@@ -121,35 +146,150 @@ export const RecipeListPage = () => {
                     marginTop: 10,
                   }}
                 >
-                  {mixtureList.map((item, i) => (
-                    <View
-                      key={i}
-                      style={{
-                        width: "100%",
-                        marginTop: 10,
-                        backgroundColor: "white",
-                        borderRadius: 10,
-                        padding: 10,
-                      }}
-                    >
-                      <AdminOverviewBox
+                  <SwipeListView
+                    data={mixtureList}
+                    renderItem={({ item, index }, i) => (
+                      <View
                         key={i}
-                        label={item.mixtureTitle}
-                        name={`Ingredients: ${item.ingredients.length}`}
-                        rightText={""}
-                        onPress={() =>
-                          navigation.navigate("mixtureDetailPage", {
-                            data: item,
-                          })
-                        }
-                        noLeftMargin
-                        primary={false}
-                      />
-                    </View>
-                  ))}
+                        style={{
+                          width: "100%",
+                          marginTop: 10,
+                          backgroundColor: "white",
+                          borderRadius: 10,
+                          padding: 10,
+                        }}
+                      >
+                        <AdminOverviewBox
+                          key={i}
+                          label={item.mixtureTitle}
+                          name={`Ingredients: ${item.ingredients.length}`}
+                          rightText={""}
+                          onPress={() =>
+                            navigation.navigate("mixtureDetailPage", {
+                              data: item,
+                            })
+                          }
+                          noLeftMargin
+                          primary={false}
+                        />
+                      </View>
+                    )}
+                    renderHiddenItem={({ item }, rowMap) => (
+                      <View
+                        style={{
+                          width: "100%",
+                          flexDirection: "row",
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                          overflow: "hidden",
+                        }}
+                      >
+                        <TouchableOpacity
+                          onPress={() =>
+                            onDeleteMixture({
+                              mixtureId: item.mixtureId,
+                              locationId: item.locationId,
+                            })
+                          }
+                          style={{
+                            marginTop: 15,
+                            backgroundColor: "#EA1A27",
+                            marginBottom: 10,
+                            justifyContent: "center",
+                            width: 150,
+                            height: "80%",
+                            borderTopLeftRadius: 10,
+                            borderBottomLeftRadius: 10,
+                            alignItems: "center",
+                          }}
+                          disabled={deleteLoading}
+                        >
+                          {deleteLoading ? (
+                            <Spinner size="sm" color={"white"} />
+                          ) : (
+                            <View
+                              style={{
+                                flexDirection: "row",
+                                alignItems: "center",
+                                justifyContent: "center",
+                              }}
+                            >
+                              <Image
+                                source={deleteIconWhite}
+                                style={{ width: 15, height: 18 }}
+                              />
+                              <Text
+                                style={{
+                                  color: "white",
+                                  fontSize: 14,
+                                  fontFamily: "openSans_bold",
+                                  marginLeft: 15,
+                                }}
+                              >
+                                Delete
+                              </Text>
+                            </View>
+                          )}
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+                          onPress={() =>
+                            navigation.navigate("mixtureAdd", {
+                              data: item,
+                            })
+                          }
+                          style={{
+                            marginTop: 30,
+                            backgroundColor: "#A561D8",
+                            marginBottom: 10,
+                            justifyContent: "center",
+                            width: 150,
+                            height: "80%",
+                            borderTopRightRadius: 10,
+                            borderBottomRightRadius: 10,
+                            alignItems: "center",
+                          }}
+                          disabled={deleteLoading}
+                        >
+                          {deleteLoading ? (
+                            <Spinner size="sm" color={"white"} />
+                          ) : (
+                            <View
+                              style={{
+                                flexDirection: "row",
+                                alignItems: "center",
+                                justifyContent: "center",
+                              }}
+                            >
+                              <Image
+                                source={updateIcon}
+                                style={{
+                                  width: 18,
+                                  height: 15,
+                                  resizeMode: "contain",
+                                }}
+                              />
+                              <Text
+                                style={{
+                                  color: "white",
+                                  fontSize: 14,
+                                  fontFamily: "openSans_bold",
+                                  marginLeft: 15,
+                                }}
+                              >
+                                Update
+                              </Text>
+                            </View>
+                          )}
+                        </TouchableOpacity>
+                      </View>
+                    )}
+                    leftOpenValue={150}
+                    rightOpenValue={-150}
+                  />
                 </View>
               </View>
-            ): null}
+            ) : null}
 
             {category?.length === 0 && mixtureList.length === 0 ? (
               <NoMealBox image={noRecipe} text={"No recipe added."} />
@@ -178,9 +318,11 @@ export const RecipeListPage = () => {
                       marginTop: 10,
                     }}
                   >
-                    {filteredItem
-                      ?.filter((recipe) => recipe.recipeCategory === category)
-                      .map((item, i) => (
+                    <SwipeListView
+                      data={filteredItem?.filter(
+                        (recipe) => recipe.recipeCategory === category
+                      )}
+                      renderItem={({ item, index }, i) => (
                         <View
                           key={i}
                           style={{
@@ -205,7 +347,120 @@ export const RecipeListPage = () => {
                             primary={false}
                           />
                         </View>
-                      ))}
+                      )}
+                      renderHiddenItem={({ item }, rowMap) => (
+                        <View
+                          style={{
+                            width: "100%",
+                            flexDirection: "row",
+                            alignItems: "center",
+                            justifyContent: "space-between",
+                            overflow: "hidden",
+                          }}
+                        >
+                          <TouchableOpacity
+                            onPress={() =>
+                              onDeleteRecipe({
+                                catalogId: item.catalogId,
+                                locationId: item.locationId,
+                              })
+                            }
+                            style={{
+                              marginTop: 15,
+                              backgroundColor: "#EA1A27",
+                              marginBottom: 10,
+                              justifyContent: "center",
+                              width: 150,
+                              height: "80%",
+                              borderTopLeftRadius: 10,
+                              borderBottomLeftRadius: 10,
+                              alignItems: "center",
+                            }}
+                            disabled={deleteLoading}
+                          >
+                            {deleteLoading ? (
+                              <Spinner size="sm" color={"white"} />
+                            ) : (
+                              <View
+                                style={{
+                                  flexDirection: "row",
+                                  alignItems: "center",
+                                  justifyContent: "center",
+                                }}
+                              >
+                                <Image
+                                  source={deleteIconWhite}
+                                  style={{ width: 15, height: 18 }}
+                                />
+                                <Text
+                                  style={{
+                                    color: "white",
+                                    fontSize: 14,
+                                    fontFamily: "openSans_bold",
+                                    marginLeft: 15,
+                                  }}
+                                >
+                                  Delete
+                                </Text>
+                              </View>
+                            )}
+                          </TouchableOpacity>
+
+                          <TouchableOpacity
+                            onPress={() =>
+                              navigation.navigate("recipeAdd", {
+                                data: item,
+                              })
+                            }
+                            style={{
+                              marginTop: 30,
+                              backgroundColor: "#A561D8",
+                              marginBottom: 10,
+                              justifyContent: "center",
+                              width: 150,
+                              height: "80%",
+                              borderTopRightRadius: 10,
+                              borderBottomRightRadius: 10,
+                              alignItems: "center",
+                            }}
+                            disabled={deleteLoading}
+                          >
+                            {deleteLoading ? (
+                              <Spinner size="sm" color={"white"} />
+                            ) : (
+                              <View
+                                style={{
+                                  flexDirection: "row",
+                                  alignItems: "center",
+                                  justifyContent: "center",
+                                }}
+                              >
+                                <Image
+                                  source={updateIcon}
+                                  style={{
+                                    width: 18,
+                                    height: 15,
+                                    resizeMode: "contain",
+                                  }}
+                                />
+                                <Text
+                                  style={{
+                                    color: "white",
+                                    fontSize: 14,
+                                    fontFamily: "openSans_bold",
+                                    marginLeft: 15,
+                                  }}
+                                >
+                                  Update
+                                </Text>
+                              </View>
+                            )}
+                          </TouchableOpacity>
+                        </View>
+                      )}
+                      leftOpenValue={150}
+                      rightOpenValue={-150}
+                    />
                   </View>
                 </View>
               ))

@@ -39,11 +39,13 @@ export const RecipeAdd = (props) => {
   const [cookingTime, setCookingTime] = useState("");
   const [type, settype] = useState("");
   const [ingredients, setIngredients] = useState([]);
+  const [mixtures, setMixtures] = useState([]);
   const [coveredIngredients, setcoveredIngredients] = useState([]);
   const [recipeList, setrecipeList] = useState([]);
   const [isEdit, setIsEdit] = useState(false);
   const [allUnits, setallUnits] = useState([]);
   const isLoading = useSelector((state) => state.recipe.addRecipe.isLoading);
+  const mixtureList = useSelector((state) => state.recipe.mixture.list);
   const defaultLocation = useSelector(
     (state) => state.locations.defaultLocation
   );
@@ -58,11 +60,16 @@ export const RecipeAdd = (props) => {
 
     const data = props.route?.params?.data;
 
-    dispatch(
-      inventoryActions.fetchInventoryAction({
-        locationId: defaultLocation.locationId,
-      })
-    );
+    Promise.all([
+      dispatch(
+        inventoryActions.fetchInventoryAction({
+          locationId: defaultLocation.locationId,
+        })
+      ),
+      dispatch(
+        actions.fetchMixtureActions({ locationId: defaultLocation.locationId })
+      ),
+    ]);
 
     actions.fetchRecipeCategoryActions().then((res) => {
       setRecipeCategories(res);
@@ -80,11 +87,13 @@ export const RecipeAdd = (props) => {
       serving = "",
       recipeType = "",
       cookingTime = "",
-      ingredients = "",
+      ingredients = [],
       recipeSteps = "",
       recipeCategory = "",
+      mixtures = []
     } = data;
 
+    setMixtures(mixtures)
     setTitle(recipeTitle);
     setMacroIngredient(macroIngredient);
     setServing(serving);
@@ -139,6 +148,7 @@ export const RecipeAdd = (props) => {
         navigation,
         catalogId: props.route?.params?.data?.catalogId,
         recipeCategory: selectedCategory,
+        mixtures
       };
 
       dispatch(actions.updateRecipeAction(data));
@@ -157,6 +167,7 @@ export const RecipeAdd = (props) => {
       recipeSteps: recipeList,
       navigation,
       recipeCategory: selectedCategory,
+      mixtures
     };
 
     dispatch(actions.addRecipeAction(data));
@@ -230,6 +241,53 @@ export const RecipeAdd = (props) => {
     setIngredients(data);
   };
 
+  const addMixture = () => {
+    setMixtures([
+      ...mixtures,
+      { microIngredient: "", weight: "", units: "", type: "" },
+    ]);
+  };
+
+  const updateMixtureUnit = (value, index) => {
+    const data = [...mixtures];
+
+    data[index] = { ...data[index], units: value, weight: "" };
+
+    setMixtures(data);
+  };
+
+  const deleteMixture = (index) => {
+    const data = [...mixtures];
+
+    data.splice(index, 1);
+
+    setMixtures(data);
+  };
+
+  const updateMixtureWeight = (value, index) => {
+    const data = [...mixtures];
+
+    data[index] = { ...data[index], weight: value };
+
+    setMixtures(data);
+  };
+
+  const updateMixturePacking = (value, index) => {
+    const data = [...mixtures];
+
+    data[index] = { ...data[index], type: value };
+
+    setMixtures(data);
+  };
+
+  const updateMixtureName = (value, index) => {
+    const data = [...mixtures];
+
+    data[index] = { ...data[index], ...value };
+
+    setMixtures(data);
+  };
+
   return (
     <MainScreenContainer>
       <HeadingBox heading={isEdit ? "Edit recipe" : "Add recipe"} />
@@ -267,7 +325,7 @@ export const RecipeAdd = (props) => {
               width: "100%",
               flexDirection: "column",
               marginTop: 20,
-              zIndex: 2,
+              zIndex: 4,
             }}
           >
             <Text
@@ -299,20 +357,6 @@ export const RecipeAdd = (props) => {
               style={{ zIndex: 3, marginTop: 10 }}
             />
 
-            {/* {macroIngredient.totalQuantity && (
-              <Dropdown
-                errMsg={"Looks like there are no items left in inventory 😞"}
-                selectedMenu={quantity}
-                setMenu={setquantity}
-                placeholder={"Quantity"}
-                menus={Array.from(
-                  { length: macroIngredient.totalQuantity },
-                  (_, i) => i + 1
-                )}
-                style={{ zIndex: 4, marginTop: 10 }}
-              />
-            )} */}
-
             <Input
               keyboardType={"number-pad"}
               placeholder={"Serving"}
@@ -341,7 +385,7 @@ export const RecipeAdd = (props) => {
               setMenu={setSelectedCategory}
               placeholder={"Category"}
               menus={recipeCategories}
-              style={{ zIndex: 2, marginTop: 10 }}
+              style={{ zIndex: 4, marginTop: 10 }}
             />
 
             {/* <Dropdown
@@ -358,7 +402,7 @@ export const RecipeAdd = (props) => {
               width: "100%",
               flexDirection: "column",
               marginTop: 20,
-              zIndex: 1,
+              zIndex: 3,
             }}
           >
             <Text
@@ -420,6 +464,86 @@ export const RecipeAdd = (props) => {
                 }}
               >
                 Add Ingredients
+              </Text>
+              <Icon
+                name={"plus"}
+                as={Entypo}
+                style={{
+                  fontSize: device === "tablet" ? 30 : 20,
+                  color: primaryColor,
+                }}
+              />
+            </TouchableOpacity>
+          </View>
+
+          <View
+            style={{
+              width: "100%",
+              flexDirection: "column",
+              marginTop: 20,
+              zIndex: 2,
+            }}
+          >
+            <Text
+              style={{
+                fontSize: 20,
+                color: "black",
+                fontFamily: "openSans_bold",
+                marginBottom: 20,
+              }}
+            >
+              Mixture
+            </Text>
+            {mixtures.map((item, i) => (
+              <View
+                key={i}
+                style={{
+                  width: "100%",
+                  zIndex: mixtures.length - i,
+                  borderTopWidth: 1,
+                  borderBottomWidth: 1,
+                  borderColor: borderColor2,
+                }}
+              >
+                <IngredientAccordionList
+                  ingredients={mixtures}
+                  inventoryList={mixtureList.map(rec => ({...rec,originalUnit:rec.mixtureUnit}))}
+                  macroIngredient={{}}
+                  i={i}
+                  item={item}
+                  updateQuantity={updateMixtureWeight}
+                  updatePacking={updateMixturePacking}
+                  updateName={updateMixtureName}
+                  deleteIngredient={deleteMixture}
+                  updateUnit={updateMixtureUnit}
+                  allUnits={allUnits}
+                  isMixture
+                />
+              </View>
+            ))}
+
+            <TouchableOpacity
+              style={{
+                marginTop: 0,
+                flexDirection: "row",
+                alignItems: "center",
+                backgroundColor: "white",
+                paddingVertical: 10,
+                borderWidth: 2,
+                borderColor: borderColor2,
+              }}
+              onPress={addMixture}
+            >
+              <Text
+                style={{
+                  fontSize: 18,
+                  color: primaryColor,
+                  fontFamily: "openSans_bold",
+                  marginLeft: 10,
+                  flex: 1,
+                }}
+              >
+                Add Mixture
               </Text>
               <Icon
                 name={"plus"}

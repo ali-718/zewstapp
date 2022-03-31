@@ -189,26 +189,8 @@ export const RecipeDetailPage = ({ isTab, data, ...props }) => {
     cookingTime,
     clientId,
     serving,
+    mixture: mixtures = [],
   } = isTab ? data : props?.route?.params?.data;
-
-  const [deleteModal, setdeleteModal] = useState(false);
-
-  const onDeleteRecipe = () => {
-    dispatch(
-      actions.deleteRecipeAction({
-        catalogId,
-        locationId,
-        clientId,
-        navigation,
-      })
-    );
-  };
-
-  useEffect(() => {
-    if (!deleteError) return;
-
-    setdeleteModal(false);
-  }, [deleteError]);
 
   return (
     <MainScreenContainer onPressRight={() => setdeleteModal(true)}>
@@ -329,6 +311,75 @@ export const RecipeDetailPage = ({ isTab, data, ...props }) => {
           />
         </View>
 
+        {mixtures.length > 0 ? (
+          <View style={{ width: "100%", marginTop: 20 }}>
+            <Text
+              style={{
+                fontSize: 20,
+                color: "black",
+                fontFamily: "openSans_bold",
+                marginLeft: 10,
+              }}
+            >
+              Mixtures
+            </Text>
+
+            <FlatList
+              numColumns={1}
+              ListHeaderComponent={() => (
+                <View
+                  style={{
+                    flex: 1,
+                    flexDirection: "row",
+                    padding: 10,
+                    paddingTop: 10,
+                    alignItems: "center",
+                  }}
+                >
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      width: 150,
+                    }}
+                  >
+                    <Text
+                      style={{
+                        fontSize: 14,
+                        color: grayMenuText,
+                        textTransform: "uppercase",
+                      }}
+                    >
+                      Weight and unit
+                    </Text>
+                  </View>
+
+                  <View style={{ flex: 0.98 }}>
+                    <Text
+                      style={{
+                        fontSize: 14,
+                        color: grayMenuText,
+                        marginLeft: 20,
+                        textTransform: "uppercase",
+                      }}
+                    >
+                      Mixture
+                    </Text>
+                  </View>
+                </View>
+              )}
+              data={mixtures}
+              renderItem={({ item }) => (
+                <IngredientBox
+                  unit={item.mixtureUnit}
+                  name={item.mixtureTitle}
+                  value={item.weight}
+                />
+              )}
+            />
+          </View>
+        ) : null}
+
         <View style={{ width: "100%", marginTop: 20, paddingHorizontal: 10 }}>
           <View
             style={{
@@ -355,34 +406,7 @@ export const RecipeDetailPage = ({ isTab, data, ...props }) => {
             ))}
           </View>
         </View>
-
-        <View style={{ width: "100%", marginTop: 50 }}>
-          <RegularButton
-            text={"edit recipe"}
-            onPress={() =>
-              navigation.navigate("recipeAdd", {
-                data: props?.route?.params?.data,
-              })
-            }
-          />
-          <RegularButton
-            text={"delete recipe"}
-            onPress={() => setdeleteModal(true)}
-            textStyle={{ color: "red" }}
-            colors={["white", "white"]}
-            style={{ borderColor: "red", borderWidth: 1, marginTop: 20 }}
-          />
-        </View>
       </View>
-
-      <DeleteModal
-        onRequestClose={() => setdeleteModal(false)}
-        visible={deleteModal}
-        isLoading={deleteLoading}
-        onDelete={onDeleteRecipe}
-        heading={"Delete Recipe?"}
-        deleteItemText={"this recipe?"}
-      />
     </MainScreenContainer>
   );
 };

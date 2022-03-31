@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { View } from "react-native";
 import { MainScreenContainer } from "../../../MainScreenContainers";
 import personGrayIcon from "../../../../assets/images/personGrayIcon.png";
+import noMealAdded from "../../../../assets/images/noMealAdded.png";
 import storeIcon from "../../../../assets/images/storeIcon.png";
 import locationIcon from "../../../../assets/images/locationIcon.png";
 import taxIcon from "../../../../assets/images/taxIcon.png";
@@ -97,6 +98,14 @@ export const AdminPage = () => {
                 name={user.owner_name}
                 image={personGrayIcon}
                 onPress={() => navigation.navigate("profile", { data: item })}
+              />
+            </View>
+            <View style={{ width: "100%", marginTop: 10 }}>
+              <AdminOverviewBox
+                label={"Resturant Depot"}
+                name={''}
+                image={noMealAdded}
+                onPress={() => navigation.navigate("resturantDepot")}
               />
             </View>
 

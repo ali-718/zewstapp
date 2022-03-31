@@ -170,14 +170,7 @@ const RecipeBox = ({ step, recipe }) => {
 };
 
 export const MixtureDetailPage = ({ isTab, data, ...props }) => {
-  const navigation = useNavigation();
-  const dispatch = useDispatch();
   const device = useSelector((state) => state.system.device);
-  const deleteLoading = useSelector(
-    (state) => state.recipe.deleteRecipe.isLoading
-  );
-  const deleteError = useSelector((state) => state.recipe.deleteRecipe.isError);
-
   console.log({mixtureDetail: props?.route?.params?.data})
   const {
     locationId = '',
@@ -191,26 +184,8 @@ export const MixtureDetailPage = ({ isTab, data, ...props }) => {
     mixtureId
   } = isTab ? data : props?.route?.params?.data;
 
-  const [deleteModal, setdeleteModal] = useState(false);
-
-  const onDeleteRecipe = () => {
-    dispatch(
-      actions.deleteMixtureAction({
-        mixtureId,
-        locationId,
-        navigation,
-      })
-    );
-  };
-
-  useEffect(() => {
-    if (!deleteError) return;
-
-    setdeleteModal(false);
-  }, [deleteError]);
-
   return (
-    <MainScreenContainer onPressRight={() => setdeleteModal(true)}>
+    <MainScreenContainer>
       <HeadingBox heading={name} />
       <TouchableOpacity style={{ position: "absolute", right: 20 }}>
         <Image
@@ -343,34 +318,8 @@ export const MixtureDetailPage = ({ isTab, data, ...props }) => {
             ))}
           </View>
         </View>
-
-        <View style={{ width: "100%", marginTop: 50 }}>
-          <RegularButton
-            text={"edit mixture"}
-            onPress={() =>
-              navigation.navigate("mixtureAdd", {
-                data: props?.route?.params?.data,
-              })
-            }
-          />
-          <RegularButton
-            text={"delete mixture"}
-            onPress={() => setdeleteModal(true)}
-            textStyle={{ color: "red" }}
-            colors={["white", "white"]}
-            style={{ borderColor: "red", borderWidth: 1, marginTop: 20 }}
-          />
-        </View>
       </View>
 
-      <DeleteModal
-        onRequestClose={() => setdeleteModal(false)}
-        visible={deleteModal}
-        isLoading={deleteLoading}
-        onDelete={onDeleteRecipe}
-        heading={"Delete Recipe ?"}
-        deleteItemText={"this mixture ?"}
-      />
     </MainScreenContainer>
   );
 };

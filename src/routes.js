@@ -69,6 +69,7 @@ import { TextBlast } from "./containers/screens/POSscreens/TextBlast";
 import { MakeADeal } from "./containers/screens/POSscreens/MakeADeal";
 import { MixtureAdd } from "./containers/screens/MainScreens/RecipePages/MixtureAdd";
 import { MixtureDetailPage } from "./containers/screens/MainScreens/RecipePages/MixtureDetailPage";
+import { RestaurantDepot } from "./containers/screens/MainScreens/AdminsPages/ResturantDepot";
 
 const Stack = createNativeStackNavigator();
 
@@ -181,6 +182,7 @@ const AdminRoutes = () => {
       <Stack.Screen name="employees" component={EmployeesPage} />
       <Stack.Screen name="addEmployees" component={AddEmployeesPage} />
       <Stack.Screen name="employeeDetail" component={EmployeeDetail} />
+      <Stack.Screen name="resturantDepot" component={RestaurantDepot} />
       <Stack.Screen name="bankPage" component={BankPage} />
       <Stack.Screen name="bankDetails" component={BankDetailsPage} />
       <Stack.Screen name="changePass" component={ChangePasswordPage} />

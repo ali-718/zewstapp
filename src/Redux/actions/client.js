@@ -3,7 +3,7 @@ import { base_url } from "../../helpers/url";
 import store from "../../../store";
 
 const request = axios.create({
-  baseURL: base_url,
+  baseURL: 'https://ea14-59-103-213-13.ngrok.io/dev/',
 });
 
 request.interceptors.response.use((response) => {

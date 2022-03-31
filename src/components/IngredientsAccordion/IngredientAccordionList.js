@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { View, TouchableOpacity, Image, FlatList } from "react-native";
-import { borderColor2, grayMenuText, primaryColor } from "../../theme/colors";
+import { View, TouchableOpacity, Image } from "react-native";
+import { borderColor2, grayMenuText } from "../../theme/colors";
 import deleteIcon from "../../assets/images/deleteIcon.png";
 import arrowDownIcon from "../../assets/images/arrowDownIcon.png";
 import { Dropdown } from "../Inputs/DropDown";
@@ -26,6 +26,7 @@ export const IngredientAccordionList = ({
   deleteIngredient,
   updateUnit,
   allUnits,
+  isMixture
 }) => {
   const [isOpen, setIsOpen] = useState(true);
 
@@ -52,7 +53,7 @@ export const IngredientAccordionList = ({
             flex: 1,
           }}
         >
-          {ingredients[i].itemName}
+          {!isMixture ?  ingredients[i].itemName : ingredients[i].mixtureTitle}
         </Text>
         <Text
           style={{
@@ -61,7 +62,7 @@ export const IngredientAccordionList = ({
             color: grayMenuText,
           }}
         >
-          {ingredients[i].quantity} {ingredients[i].units}
+          {!isMixture ? ingredients[i].quantity : ingredients[i].weight} {ingredients[i].units}
         </Text>
         <Image
           style={{
@@ -104,29 +105,36 @@ export const IngredientAccordionList = ({
             />
           </TouchableOpacity>
           <Dropdown
-            errMsg={"Looks like there are no items left in inventory 😞"}
-            selectedMenu={ingredients[i].itemName}
+            errMsg={isMixture ? "Looks like there is no mixture available 😞": "Looks like there are no items left in inventory 😞"}
+            selectedMenu={isMixture ? ingredients[i].mixtureTitle : ingredients[i].itemName}
             setMenu={(val) =>
               updateName(
                 inventoryList
-                  .map((item) => ({
+                  .map(isMixture ? (item) => ({
+                    ...item,
+                    totalWeight: item.mixtureWeight,
+                    weight: undefined,
+                    originalUnit: item.mixtureUnit,
+                  }) : (item) => ({
                     ...item,
                     totalQuantity: item.quantity,
                     quantity: undefined,
                     originalUnit: item.units,
                   }))
-                  .find((item) => item.itemName === val),
+                  .find(isMixture ? (item) => item.mixtureTitle === val : (item) => item.itemName === val),
                 i
               )
             }
-            placeholder={"Ingredients"}
+            placeholder={isMixture  ? "Mixture" :"Ingredients"}
             menus={inventoryList
-              .filter(
+              .filter(isMixture ? (item) =>
+              ingredients.filter((val) => val.mixtureTitle === item.mixtureTitle)
+                .length === 0 : 
                 (item) =>
                   ingredients.filter((val) => val.itemName === item.itemName)
                     .length === 0
               )
-              .map((item) => item.itemName)}
+              .map(isMixture ? (item) => item.mixtureTitle : (item) => item.itemName)}
             style={{ zIndex: i + 3 }}
           />
           <View
@@ -142,15 +150,23 @@ export const IngredientAccordionList = ({
               getUpdatedQuantitynUnit(
                 ingredients[i]?.originalUnit,
                 item.units,
-                parseInt(ingredients[i].totalQuantity)
+                parseInt( isMixture ? ingredients[i].totalWeight : ingredients[i].totalQuantity)
               )
             )}
-            {ingredients[i].itemName && (
+            {ingredients[i].[isMixture ? 'mixtureTitle' :'itemName'] && (
               <Dropdown
-                selectedMenu={ingredients[i].quantity}
+                selectedMenu={isMixture ? ingredients[i].weight : ingredients[i].quantity}
                 setMenu={(val) => updateQuantity(val, i)}
                 placeholder={"Quantity"}
-                menus={Array.from(
+                menus={Array.from( isMixture ? 
+                  {
+                    length: getUpdatedQuantitynUnit(
+                      ingredients[i]?.originalUnit,
+                      item.units,
+                      parseInt(ingredients[i].totalWeight)
+                    )?.quantity,
+                  }
+                  :
                   {
                     length: getUpdatedQuantitynUnit(
                       ingredients[i]?.originalUnit,
@@ -165,7 +181,7 @@ export const IngredientAccordionList = ({
               />
             )}
 
-            {ingredients[i].itemName && (
+            {ingredients[i].[isMixture ? 'mixtureTitle' :'itemName'] && (
               <Dropdown
                 selectedMenu={item.units}
                 setMenu={(val) => updateUnit(val, i)}

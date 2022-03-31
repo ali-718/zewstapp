@@ -190,6 +190,25 @@ export const addBankDetailsAction = ({
       });
   });
 
+export const addResturantDepotAction = ({
+  clientId, locationId, email, password
+}) =>
+  new Promise((resolve, reject) => {
+    console.log({
+      clientId, locationId, email, password
+    });
+    client
+      .post("/restaurant-depo/add", {
+        clientId, locationId, email, password
+      })
+      .then(() => {
+        resolve();
+      })
+      .catch((e) => {
+        reject();
+      });
+  });
+
 export const notificationData =
   ({ data }) =>
   (dispatch) => {
