@@ -1,6 +1,6 @@
 import { ToastError, ToastSuccess } from "../../../helpers/Toast";
 import { client } from "../client";
-import { ADD_VENDOR, DELETE_VENDOR, FETCH_VENDOR } from "./Types";
+import { ADD_VENDOR, DELETE_VENDOR, FETCH_DEPOT, FETCH_VENDOR } from "./Types";
 
 export const fetchVendorActions =
   ({ locationId }) =>
@@ -16,6 +16,24 @@ export const fetchVendorActions =
       })
       .catch((e) => {
         dispatch({ type: FETCH_VENDOR.FAILED });
+      });
+  };
+
+export const fetchDepotActions =
+  ({ locationId, clientId }) =>
+  (dispatch) => {
+    dispatch({ type: FETCH_DEPOT.REQUESTED });
+    console.log({ locationId, clientId })
+    client
+      .get(`/restaurant-depo/find/${locationId}/${clientId}`)
+      .then((res) => {
+        dispatch({
+          type: FETCH_DEPOT.SUCCEEDED,
+          payload: res.data.Items,
+        });
+      })
+      .catch((e) => {
+        dispatch({ type: FETCH_DEPOT.FAILED });
       });
   };
 
@@ -113,6 +131,25 @@ export const deleteVendorActions =
         dispatch({ type: DELETE_VENDOR.SUCCEEDED });
       })
       .catch((e) => {
+        ToastError("Some error occoured, please try again later");
+        dispatch({ type: DELETE_VENDOR.FAILED });
+      });
+  };
+
+export const deleteDepotActions =
+  ({ locationId, depoId, clientId }) =>
+  (dispatch) => {
+    console.log({ locationId, depoId });
+    dispatch({ type: DELETE_VENDOR.REQUESTED });
+    client
+      .get(`/restaurant-depo/delete/${locationId}/${depoId}`)
+      .then((res) => {
+        ToastSuccess("Success", "Vendor deleted successfully");
+        dispatch(fetchDepotActions({ locationId, clientId }));
+        dispatch({ type: DELETE_VENDOR.SUCCEEDED });
+      })
+      .catch((e) => {
+        console.log(e.response)
         ToastError("Some error occoured, please try again later");
         dispatch({ type: DELETE_VENDOR.FAILED });
       });

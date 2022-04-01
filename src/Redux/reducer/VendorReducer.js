@@ -2,6 +2,7 @@ import produce from "immer";
 import {
   ADD_VENDOR,
   DELETE_VENDOR,
+  FETCH_DEPOT,
   FETCH_VENDOR,
 } from "../actions/VendorActions/Types";
 
@@ -19,17 +20,43 @@ const initialState = {
     isLoading: false,
     isError: false,
   },
+  depot:{
+    isLoading: false,
+    isError: false,
+    list: [],
+  }
 };
 
 export const vendorReducer = produce(
   (state = initialState, { payload, type }) => {
     switch (type) {
+      case FETCH_DEPOT.REQUESTED: {
+        state.depot.isLoading = true;
+        state.depot.isError = false;
+        break;
+      }
+      case FETCH_DEPOT.SUCCEEDED: {
+        state.depot.isLoading = false;
+        state.depot.isError = false;
+        state.depot.list = payload;
+        break;
+      }
+      case FETCH_DEPOT.FAILED: {
+        state.depot.isLoading = false;
+        state.depot.isError = true;
+        break;
+      }
       case DELETE_VENDOR.REQUESTED: {
         state.deleteVendors.isLoading = true;
         state.deleteVendors.isError = false;
         break;
       }
       case DELETE_VENDOR.SUCCEEDED: {
+        state.deleteVendors.isLoading = false;
+        state.deleteVendors.isError = false;
+        break;
+      }
+      case DELETE_VENDOR.FAILED: {
         state.deleteVendors.isLoading = false;
         state.deleteVendors.isError = false;
         break;

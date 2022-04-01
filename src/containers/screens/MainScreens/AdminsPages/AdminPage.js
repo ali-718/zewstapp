@@ -105,7 +105,7 @@ export const AdminPage = () => {
                 label={"Resturant Depot"}
                 name={''}
                 image={noMealAdded}
-                onPress={() => navigation.navigate("resturantDepot")}
+                onPress={() => navigation.navigate("resturantDepotList")}
               />
             </View>
 

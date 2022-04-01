@@ -70,6 +70,7 @@ import { MakeADeal } from "./containers/screens/POSscreens/MakeADeal";
 import { MixtureAdd } from "./containers/screens/MainScreens/RecipePages/MixtureAdd";
 import { MixtureDetailPage } from "./containers/screens/MainScreens/RecipePages/MixtureDetailPage";
 import { RestaurantDepot } from "./containers/screens/MainScreens/AdminsPages/ResturantDepot";
+import { ResturantDepotList } from "./containers/screens/MainScreens/AdminsPages/ResturantDepotList";
 
 const Stack = createNativeStackNavigator();
 
@@ -183,6 +184,7 @@ const AdminRoutes = () => {
       <Stack.Screen name="addEmployees" component={AddEmployeesPage} />
       <Stack.Screen name="employeeDetail" component={EmployeeDetail} />
       <Stack.Screen name="resturantDepot" component={RestaurantDepot} />
+      <Stack.Screen name="resturantDepotList" component={ResturantDepotList} />
       <Stack.Screen name="bankPage" component={BankPage} />
       <Stack.Screen name="bankDetails" component={BankDetailsPage} />
       <Stack.Screen name="changePass" component={ChangePasswordPage} />

@@ -14,11 +14,12 @@ export const PasswordInput = ({
   setHighOrderError,
   confirmPassword,
   value,
+  secured = true,
   ...props
 }) => {
   const device = useSelector((state) => state.system.device);
   const [isFocused, setIsFocused] = useState(false);
-  const [isSecured, setIsSecured] = useState(true);
+  const [isSecured, setIsSecured] = useState(secured ?? true);
   const [isError, setIsError] = useState(false);
   const [errorText, seterrorText] = useState("");
   const ref = useRef();
@@ -109,6 +110,7 @@ export const PasswordInput = ({
           </View>
 
           <TextInput
+            value={value}
             onBlur={() => {
               if (value.length > 0) {
                 return;

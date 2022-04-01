@@ -191,15 +191,53 @@ export const addBankDetailsAction = ({
   });
 
 export const addResturantDepotAction = ({
-  clientId, locationId, email, password
+  clientId,
+  locationId,
+  email,
+  password,
 }) =>
   new Promise((resolve, reject) => {
     console.log({
-      clientId, locationId, email, password
+      clientId,
+      locationId,
+      email,
+      password,
     });
     client
       .post("/restaurant-depo/add", {
-        clientId, locationId, email, password
+        clientId,
+        locationId,
+        accounts: [{ email, password }],
+      })
+      .then(() => {
+        resolve();
+      })
+      .catch((e) => {
+        reject();
+      });
+  });
+
+export const updateResturantDepotAction = ({
+  depoId,
+  clientId,
+  locationId,
+  email,
+  password,
+}) =>
+  new Promise((resolve, reject) => {
+    console.log({
+      clientId,
+      locationId,
+      email,
+      password,
+      depoId
+    });
+    client
+      .post("/restaurant-depo/update", {
+        clientId,
+        locationId,
+        accounts: [{ email, password }],
+        depoId
       })
       .then(() => {
         resolve();
