@@ -202,12 +202,12 @@ const OrderRoutes = () => {
     <Stack.Navigator
       screenOptions={{ headerShown: false, gestureEnabled: false }}
     >
-      <Stack.Screen name="makeADeal" component={MakeADeal} />
       <Stack.Screen name="PosMenuScreen" component={PosMenuScreen} />
       <Stack.Screen name="tableList" component={TablesListScreen} />
       <Stack.Screen name="orderTaking" component={OrderTakingScreen} />
       <Stack.Screen name="currentOrders" component={CurrentOrders} />
       <Stack.Screen name="textBlast" component={TextBlast} />
+      <Stack.Screen name="makeADeal" component={MakeADeal} />
 
     </Stack.Navigator>
   );
