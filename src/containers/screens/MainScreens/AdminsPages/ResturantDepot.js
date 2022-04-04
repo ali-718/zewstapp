@@ -5,14 +5,9 @@ import { MainScreenContainer } from "../../../MainScreenContainers";
 import { useNavigation } from "@react-navigation/native";
 import { RegularButton } from "../../../../components/Buttons/RegularButton";
 import { HeadingBox } from "../../../../components/HeadingBox/HeadingBox";
-import { Dropdown } from "../../../../components/Inputs/DropDown";
-import { MealItem } from "../../../../components/Meals/MealItem";
-import switchOn from "../../../../assets/images/switchOn.png";
-import switchOff from "../../../../assets/images/switchOff.png";
 import validator from "validator";
 import { ToastError, ToastSuccess } from "../../../../helpers/Toast";
 import {
-  addBankDetailsAction,
   addResturantDepotAction,
   updateResturantDepotAction,
 } from "../../../../Redux/actions/AuthActions/authActions";
@@ -21,12 +16,10 @@ import { PasswordInput } from "../../../../components/Inputs/PasswordInput";
 
 export const RestaurantDepot = (props) => {
   const navigation = useNavigation();
+  const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [bankName, setBankName] = useState("");
-  const [bankBranch, setbankBranch] = useState("");
-  const [iban, setIban] = useState("");
-  const [accountTitle, setAccountTitle] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState('')
   const [isLoading, setIsLoading] = useState("");
   const user = useSelector((state) => state.auth.user.user);
   const [isEdit, setIsEdit] = useState(false);
@@ -45,8 +38,10 @@ export const RestaurantDepot = (props) => {
       } = props?.route?.params?.data;
 
       if (accounts.length > 0) {
-        setEmail(accounts[0]?.email);
-        setPassword(accounts[0]?.password);
+        setFullName(accounts[0]?.username ?? '');
+        setEmail(accounts[0]?.email ?? '');
+        setPassword(accounts[0]?.password ?? '');
+        setConfirmPassword(accounts[0]?.password ?? '');
         setIsEdit(true);
       }
     }
@@ -55,9 +50,21 @@ export const RestaurantDepot = (props) => {
   const addBankDetails = () => {
     if (
       validator.isEmpty(email, { ignore_whitespace: true }) ||
-      validator.isEmpty(password, { ignore_whitespace: true })
+      validator.isEmpty(password, { ignore_whitespace: true }) ||
+      validator.isEmpty(fullName, { ignore_whitespace: true }) ||
+      validator.isEmpty(confirmPassword, { ignore_whitespace: true }) 
     ) {
       ToastError("please fill all fields");
+      return;
+    }
+
+    if (!validator.isEmail(email)) {
+      ToastError("Invalid email format");
+      return;
+    }
+
+    if (!validator.equals(password, confirmPassword)) {
+      ToastError("Password did'nt match");
       return;
     }
 
@@ -74,7 +81,8 @@ export const RestaurantDepot = (props) => {
         locationId: defaultLocation?.locationId,
         email,
         password,
-        depoId: props?.route?.params?.data?.restaurantDepoId
+        depoId: props?.route?.params?.data?.restaurantDepoId,
+        username: fullName
       })
         .then(() => {
           ToastSuccess("Success!", "details updated successfully");
@@ -95,6 +103,7 @@ export const RestaurantDepot = (props) => {
       locationId: defaultLocation?.locationId,
       email,
       password,
+      username: fullName
     })
       .then(() => {
         ToastSuccess("Success!", "details added successfully");
@@ -109,9 +118,16 @@ export const RestaurantDepot = (props) => {
 
   return (
     <MainScreenContainer>
-      <HeadingBox heading={"Resturant Depot"} />
+      <HeadingBox heading={isEdit ? 'Edit Account' : "Add Account"} />
       <View style={{ width: "100%", marginVertical: 20, marginBottom: 80 }}>
         <View style={{ width: "100%" }}>
+          <Input
+            placeholder={"Full Name"}
+            value={fullName}
+            setValue={(val) => setFullName(val)}
+          />
+        </View>
+        <View style={{ width: "100%", marginTop: 10 }}>
           <Input
             keyboardType={"email-address"}
             placeholder={"Email address"}
@@ -124,6 +140,13 @@ export const RestaurantDepot = (props) => {
             value={password}
             setValue={(val) => setPassword(val)}
             placeholder={"Password"}
+          />
+        </View>
+        <View style={{ width: "100%", marginTop: 10 }}>
+          <PasswordInput
+            value={confirmPassword}
+            setValue={(val) => setConfirmPassword(val)}
+            placeholder={"Connfirm Password"}
           />
         </View>
 

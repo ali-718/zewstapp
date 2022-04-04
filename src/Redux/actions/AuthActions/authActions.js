@@ -195,6 +195,7 @@ export const addResturantDepotAction = ({
   locationId,
   email,
   password,
+  username
 }) =>
   new Promise((resolve, reject) => {
     console.log({
@@ -202,12 +203,13 @@ export const addResturantDepotAction = ({
       locationId,
       email,
       password,
+      username
     });
     client
       .post("/restaurant-depo/add", {
         clientId,
         locationId,
-        accounts: [{ email, password }],
+        accounts: [{ email, password, username }],
       })
       .then(() => {
         resolve();
@@ -223,6 +225,7 @@ export const updateResturantDepotAction = ({
   locationId,
   email,
   password,
+  username
 }) =>
   new Promise((resolve, reject) => {
     console.log({
@@ -230,13 +233,14 @@ export const updateResturantDepotAction = ({
       locationId,
       email,
       password,
-      depoId
+      depoId,
+      username
     });
     client
       .post("/restaurant-depo/update", {
         clientId,
         locationId,
-        accounts: [{ email, password }],
+        accounts: [{ email, password, username }],
         depoId
       })
       .then(() => {
