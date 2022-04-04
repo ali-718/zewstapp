@@ -142,7 +142,7 @@ export const KitchenPage = () => {
 
   if (device === "tablet") {
     return (
-      <MainScreenContainer shortDrawer isDrawer>
+      <MainScreenContainer noScroll shortDrawer isDrawer>
         {defaultLocation?.locationId ? (
           isLoading ? (
             <View
