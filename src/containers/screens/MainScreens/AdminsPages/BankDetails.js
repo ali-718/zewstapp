@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View } from "react-native";
 import { Input } from "../../../../components/Inputs/Input";
 import { MainScreenContainer } from "../../../MainScreenContainers";
@@ -13,6 +13,7 @@ import validator from "validator";
 import { ToastError, ToastSuccess } from "../../../../helpers/Toast";
 import { addBankDetailsAction } from "../../../../Redux/actions/AuthActions/authActions";
 import { useSelector } from "react-redux";
+import { fetchBankDetails } from "../../../../Redux/actions/PaymentActions/PaymentActions";
 
 export const BankDetailsPage = () => {
   const [bankName, setBankName] = useState("");
@@ -21,6 +22,22 @@ export const BankDetailsPage = () => {
   const [accountTitle, setAccountTitle] = useState("");
   const [isLoading, setIsLoading] = useState("");
   const user = useSelector((state) => state.auth.user.user);
+
+  useEffect(() => {
+    fetchBankDetails({ clientId: user?.clientId }).then((res) => {
+      const {
+        bankName = "",
+        bankBranch = "",
+        accountTitle = "",
+        iban = "",
+      } = res;
+
+      setBankName(bankName);
+      setbankBranch(bankBranch);
+      setAccountTitle(accountTitle);
+      setIban(iban);
+    });
+  }, []);
 
   const addBankDetails = () => {
     if (

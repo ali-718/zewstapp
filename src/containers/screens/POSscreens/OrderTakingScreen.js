@@ -407,7 +407,7 @@ export const OrderTakingScreen = (props) => {
         catalog: [
           ...orderList.map((item) => ({
             quantity: item.selected,
-            recipe: item.mealRecipes[0],
+            recipe: item.mealRecipes?.[0] || [],
             mealName: item.mealName,
             mealPrice: item.mealPrice,
             mealTime: moment().format("h:mm:ss a"),
@@ -425,13 +425,15 @@ export const OrderTakingScreen = (props) => {
       return;
     }
 
+    console.log({orderList})
+
     const data = {
       client_id: user.clientId,
       locationId: defaultLocation.locationId,
       catalog: [
-        ...orderList.map((item) => ({
+        ...orderList?.map((item) => ({
           quantity: item.selected,
-          recipe: item.mealRecipes[0],
+          recipe: item.mealRecipes?.[0] || [],
           mealName: item.mealName,
           mealPrice: item.mealPrice,
           mealTime: moment().format("h:mm:ss a"),
@@ -469,7 +471,7 @@ export const OrderTakingScreen = (props) => {
       catalog: [
         ...orderList.map((item) => ({
           quantity: item.selected,
-          recipe: item.mealRecipes[0],
+          recipe: item.mealRecipes?.[0] || [],
           mealName: item.mealName,
           mealPrice: item.mealPrice,
         })),

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View } from "react-native";
 import { Input } from "../../../../components/Inputs/Input";
 import { MainScreenContainer } from "../../../MainScreenContainers";
@@ -17,6 +17,16 @@ export const StripePage = () => {
   const [stripeEmail, setstripeEmail] = useState("");
   const [publishKey, setPublishKey] = useState("");
   const [secretKey, setSecretKey] = useState("");
+
+  useEffect(() => {
+    actions.fetchStripeDetails({ clientId: user.clientId,}).then(res => {
+      const {stripeEmail = '', secretKey = '', publishKey = ''} = res
+      setstripeEmail(stripeEmail);
+      setPublishKey(publishKey);
+      setSecretKey(secretKey);
+    })
+  }, [])
+  
 
   const addStripeMethod = () => {
     if (

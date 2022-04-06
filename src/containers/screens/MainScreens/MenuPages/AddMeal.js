@@ -222,8 +222,7 @@ export const AddMeal = (props) => {
       name.trim().length === 0 ||
       desc.trim().length === 0 ||
       selectedCategories.trim().length === 0 ||
-      unitCost.length === 0 ||
-      !selectedRecipe.recipeTitle
+      unitCost.length === 0
     ) {
       ToastError("Fill all fields marked");
       return;
@@ -435,15 +434,15 @@ export const AddMeal = (props) => {
 
         <View style={{ width: "100%", marginTop: 30, zIndex: 1 }}>
           <Dropdown
-            selectedMenu={selectedRecipe.recipeTitle}
+            selectedMenu={selectedRecipe?.recipeTitle}
             setMenu={(val) =>
               setSelectedRecipe(
-                recipeList.find((item) => item.recipeTitle === val)
+                recipeList?.find((item) => item.recipeTitle === val)
               )
             }
             errMsg={"Looks like you have not added any recipe yet 😀"}
             placeholder={"Choose recipe"}
-            menus={recipeList.map((item) => item.recipeTitle)}
+            menus={recipeList?.map((item) => item.recipeTitle)}
             style={{ zIndex: 3 }}
           />
         </View>

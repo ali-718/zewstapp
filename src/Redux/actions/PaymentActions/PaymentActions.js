@@ -7,6 +7,32 @@ import {
 import { client } from "../client";
 import { ToastError, ToastSuccess } from "../../../helpers/Toast";
 
+export const fetchStripeDetails =
+  ({ clientId }) => new Promise((resolve,reject)  => {
+
+    client
+      .get(`/client/clientDetails/${clientId}`)
+      .then(({data}) => {
+        resolve(data?.client?.stripeDetails);
+      })
+      .catch((e) => {
+        reject()
+      });
+  });
+
+export const fetchBankDetails =
+  ({ clientId }) => new Promise((resolve,reject)  => {
+
+    client
+      .get(`/client/clientDetails/${clientId}`)
+      .then(({data}) => {
+        resolve(data?.client?.bankDetails);
+      })
+      .catch((e) => {
+        reject()
+      });
+  });
+
 export const addStripeDetails =
   ({ clientId, stripeEmail, publishKey, secretKey, navigation }) =>
   (dispatch) => {
